@@ -1,3 +1,7 @@
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
 const firebaseConfig = {
   apiKey: 'AIzaSyDVJ82_OcSP7aKgrEGJHnvuW4OJYKVOcBs',
   authDomain: 'instagram-clone-c8823.firebaseapp.com',
@@ -6,3 +10,11 @@ const firebaseConfig = {
   messagingSenderId: '803963430553',
   appId: '1:803963430553:web:6e84f018f45d0719d3fa08',
 };
+
+const projectFirebase = initializeApp(firebaseConfig);
+
+const projectFirestore = getFirestore(projectFirebase);
+
+const projectAuth = getAuth(projectFirebase);
+
+export { projectFirestore, projectAuth };
