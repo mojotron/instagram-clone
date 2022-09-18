@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 
 const App = () => {
@@ -6,7 +7,12 @@ const App = () => {
 
   return (
     <div className="App">
-      <p>instagram clone</p>
+      <BrowserRouter>
+        <p>instagram clone</p>
+        <Routes>
+          <Route path="/signup" element={<p>Hello</p>} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
