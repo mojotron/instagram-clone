@@ -30,6 +30,7 @@ const Signup = () => {
         placeholder="Email"
         onChange={handleChange}
         value={formData.email}
+        required
       />
       <input
         type="text"
@@ -37,6 +38,7 @@ const Signup = () => {
         placeholder="Full Name"
         onChange={handleChange}
         value={formData.fullName}
+        required
       />
       <input
         type="text"
@@ -44,6 +46,7 @@ const Signup = () => {
         placeholder="Username"
         onChange={handleChange}
         value={formData.userName}
+        required
       />
       <input
         type="password"
@@ -51,6 +54,7 @@ const Signup = () => {
         placeholder="Password"
         onChange={handleChange}
         value={formData.password}
+        required
       />
 
       <p>
