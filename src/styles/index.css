@@ -1,8 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
 html {
   font-size: 10px;
-  font-family: monospace;
+  font-family: 'Roboto', monospace;
   font-weight: 400;
   box-sizing: border-box;
+}
+:root {
+  --gray-border: 1px solid rgb(219, 219, 219);
+  --black: #262626;
+  --gray: #8e8e8e;
+  --blue: #0095f6;
 }
 *,
 *::before,
@@ -14,4 +22,9 @@ html {
 body {
   width: 100vw;
   min-height: 10vh;
+  color: var(--gray);
+  background-color: #fafafa;
+}
+.gray {
+  opacity: 0.5;
 }

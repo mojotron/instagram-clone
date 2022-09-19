@@ -1,0 +1,71 @@
+.SignUp {
+  background-color: white;
+  padding: 5rem 0;
+  width: 35rem;
+  border: var(--gray-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.SignUp h1 {
+  font-family: 'Oleo Script', monospace;
+  color: var(--black);
+  font-size: 3.5rem;
+  font-weight: 700;
+  padding-bottom: 2rem;
+}
+.SignUp h2 {
+  padding: 0 1rem 2.5rem;
+  font-size: 1.7rem;
+  width: 26rem;
+}
+.SignUp input {
+  font-family: inherit;
+  font-size: 1.6rem;
+  line-height: 1.8rem;
+  border: var(--gray-border);
+  border-radius: 0.3rem;
+  width: 26.8rem;
+  height: 3.6rem;
+  overflow: hidden;
+  padding: 0.9rem 0.8rem;
+  margin-bottom: 0.5rem;
+}
+.SignUp input::placeholder {
+  color: #aeaeae;
+}
+.SignUp p {
+  padding: 1rem 0.5rem 0;
+  font-size: 1.4rem;
+  width: 26rem;
+}
+.SignUp__terms {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.SignUp input[type='checkbox'] {
+  height: 2rem;
+  width: 2rem;
+  position: relative;
+  top: 0.2rem;
+}
+.SignUp label {
+  font-size: 1.4rem;
+  padding: 0 2rem;
+}
+.btn--auth {
+  background: none;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  font-family: inherit;
+  font-weight: 700;
+  width: 26.8rem;
+  height: 3rem;
+  font-size: 1.6rem;
+  border-radius: 0.5rem;
+}
