@@ -1,0 +1,12 @@
+.InputWithError {
+  position: relative;
+}
+.validate-icon {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+}
+.validation-error {
+  position: relative;
+  bottom: 1.2rem;
+}

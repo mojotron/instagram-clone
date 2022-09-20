@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import './styles/Signup.css';
+import InputWithError from './InputWithError';
+import * as Validation from '../../utils/inputValidation';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    fullName: '',
-    userName: '',
-    password: '',
+    email: null,
+    fullName: null,
+    userName: null,
+    password: null,
   });
   const [termsDisabled, setTermsDisabled] = useState(true);
 
@@ -14,47 +16,51 @@ const Signup = () => {
     setTermsDisabled(oldValue => !oldValue);
   };
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData(oldData => ({ ...oldData, [name]: value }));
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (
+      formData.email &&
+      formData.fullName &&
+      formData.userName &&
+      formData.password
+    ) {
+      console.log(formData);
+    }
   };
 
   return (
-    <form className="SignUp">
+    <form className="SignUp" onSubmit={handleSubmit}>
       <h1>Instagram Clone</h1>
       <h2>Sign up to see photos and videos from your friends.</h2>
 
-      <input
+      <InputWithError
         type="email"
         name="email"
         placeholder="Email"
-        onChange={handleChange}
-        value={formData.email}
-        required
+        setFormData={setFormData}
+        handleValidation={Validation.emailValidation}
       />
-      <input
+
+      <InputWithError
         type="text"
         name="fullName"
         placeholder="Full Name"
-        onChange={handleChange}
-        value={formData.fullName}
-        required
+        setFormData={setFormData}
+        handleValidation={Validation.fullNameValidation}
       />
-      <input
+      <InputWithError
         type="text"
         name="userName"
         placeholder="Username"
-        onChange={handleChange}
-        value={formData.userName}
-        required
+        setFormData={setFormData}
+        handleValidation={Validation.userNameValidation}
       />
-      <input
+      <InputWithError
         type="password"
         name="password"
         placeholder="Password"
-        onChange={handleChange}
-        value={formData.password}
-        required
+        setFormData={setFormData}
+        handleValidation={Validation.passwordValidation}
       />
 
       <p>

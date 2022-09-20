@@ -69,5 +69,3 @@ describe('Signup page', () => {
   // add tests for input check up protect form bad users
   // error
 });
-//^[a-z]([-']?[a-z]+)*( [a-z]([-']?[a-z]+)*)+$
-///^[a-zA-Z]+( [a-zA-Z]+)+$/
