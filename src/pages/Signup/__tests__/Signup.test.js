@@ -15,42 +15,34 @@ describe('Signup page', () => {
 
   test('input field email', async () => {
     render(<Signup />);
-    const user = userEvent.setup();
     const emailInput = screen.getByPlaceholderText(/email/i);
-    expect(emailInput).toHaveValue('');
-    await user.clear(emailInput);
-    await user.type(emailInput, 'temp@example.com');
-    expect(emailInput).toHaveValue('temp@example.com');
+    expect(emailInput).toBeInTheDocument('');
   });
 
   test('input field full name', async () => {
     render(<Signup />);
-    const user = userEvent.setup();
     const fullNameInput = screen.getByPlaceholderText(/full name/i);
-    expect(fullNameInput).toHaveValue('');
-    await user.clear(fullNameInput);
-    await user.type(fullNameInput, 'Neo Anderson');
-    expect(fullNameInput).toHaveValue('Neo Anderson');
+    expect(fullNameInput).toBeInTheDocument('');
   });
 
   test('input field username', async () => {
     render(<Signup />);
-    const user = userEvent.setup();
     const usernameInput = screen.getByPlaceholderText(/username/i);
-    expect(usernameInput).toHaveValue('');
-    await user.clear(usernameInput);
-    await user.type(usernameInput, 'Neo Anderson');
-    expect(usernameInput).toHaveValue('Neo Anderson');
+    expect(usernameInput).toBeInTheDocument('');
   });
 
   test('input field password', async () => {
     render(<Signup />);
-    const user = userEvent.setup();
     const passwordInput = screen.getByPlaceholderText(/password/i);
-    expect(passwordInput).toHaveValue('');
-    await user.clear(passwordInput);
-    await user.type(passwordInput, 'abcdef');
-    expect(passwordInput).toHaveValue('abcdef');
+    expect(passwordInput).toBeInTheDocument('');
+  });
+
+  test('renders terms and conditions paragraphs', () => {
+    render(<Signup />);
+    const terms1 = screen.getByText(/by signing/i);
+    const terms2 = screen.getByText(/please use dummy data/i);
+    expect(terms1).toBeInTheDocument();
+    expect(terms2).toBeInTheDocument();
   });
 
   test('terms of condition', async () => {
@@ -65,7 +57,53 @@ describe('Signup page', () => {
     expect(signupBtn).toBeEnabled();
   });
 
-  // test('submit/create user', () => {});
-  // add tests for input check up protect form bad users
-  // error
+  describe('happy path, all valid inputs', () => {
+    test('all inputs are valid', async () => {
+      render(<Signup />);
+      const user = userEvent.setup();
+      const emailInput = screen.getByPlaceholderText(/email/i);
+      const fullNameInput = screen.getByPlaceholderText(/full name/i);
+      const usernameInput = screen.getByPlaceholderText(/username/i);
+      const passwordInput = screen.getByPlaceholderText(/password/i);
+      await user.clear(emailInput);
+      await user.type(emailInput, 'test@example.com');
+      await user.clear(fullNameInput);
+      await user.type(fullNameInput, 'John Dow');
+      await user.clear(usernameInput);
+      await user.type(usernameInput, '_jd_');
+      await user.clear(passwordInput);
+      await user.type(passwordInput, 'abc1ABC!');
+      const checkIcons = screen.getAllByAltText('valid input');
+      expect(checkIcons).toHaveLength(4);
+    });
+  });
+
+  describe('2 invalid inputs two valid', () => {
+    test('all inputs are valid', async () => {
+      render(<Signup />);
+      const user = userEvent.setup();
+      const emailInput = screen.getByPlaceholderText(/email/i);
+      const fullNameInput = screen.getByPlaceholderText(/full name/i);
+      const usernameInput = screen.getByPlaceholderText(/username/i);
+      const passwordInput = screen.getByPlaceholderText(/password/i);
+      await user.clear(emailInput);
+      await user.type(emailInput, 'test@example.com');
+      await user.clear(fullNameInput);
+      await user.type(fullNameInput, 'John');
+      await user.clear(usernameInput);
+      await user.type(usernameInput, '_jd_');
+      await user.clear(passwordInput);
+      await user.type(passwordInput, 'abc1ABC');
+      const checkIcons = screen.getAllByAltText('valid input');
+      expect(checkIcons).toHaveLength(2);
+      const errorIcons = screen.getAllByAltText('invalid input');
+      expect(errorIcons).toHaveLength(2);
+      expect(
+        screen.getByText('input full name, like "John Dow"')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('a special character #?!@$%^&*-')
+      ).toBeInTheDocument();
+    });
+  });
 });
