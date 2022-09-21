@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './styles/Signup.css';
 import InputWithError from './InputWithError';
 import * as Validation from '../../utils/inputValidation';
 
@@ -29,7 +28,7 @@ const Signup = () => {
   };
 
   return (
-    <form className="SignUp" onSubmit={handleSubmit}>
+    <form className="authForm" onSubmit={handleSubmit}>
       <h1>Instagram Clone</h1>
       <h2>Sign up to see photos and videos from your friends.</h2>
 
@@ -72,7 +71,7 @@ const Signup = () => {
         responsibility.
       </p>
 
-      <div className="SignUp__terms">
+      <div className="authForm__terms">
         <label htmlFor="terms-and-conditions">Agree to Terms</label>
         <input
           type="checkbox"

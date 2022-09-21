@@ -1,4 +1,4 @@
-.SignUp {
+.authForm {
   background-color: white;
   padding: 5rem 0;
   width: 35rem;
@@ -9,19 +9,19 @@
   justify-content: center;
   text-align: center;
 }
-.SignUp h1 {
+.authForm h1 {
   font-family: 'Oleo Script', monospace;
   color: var(--black);
   font-size: 3.5rem;
   font-weight: 700;
   padding-bottom: 2rem;
 }
-.SignUp h2 {
+.authForm h2 {
   padding: 0 1rem 2.5rem;
   font-size: 1.7rem;
   width: 26rem;
 }
-.SignUp input {
+.authForm input {
   font-family: inherit;
   font-size: 1.6rem;
   line-height: 1.8rem;
@@ -34,29 +34,29 @@
   margin-bottom: 0.5rem;
   color: var(--black);
 }
-.SignUp input::placeholder {
+.authForm input::placeholder {
   color: #aeaeae;
   font-size: 1.4rem;
 }
-.SignUp p {
+.authForm p {
   padding: 1rem 0.5rem 0;
   font-size: 1.4rem;
   width: 26rem;
 }
-.SignUp__terms {
-  padding: 2rem;
+.authForm__terms {
+  padding: 2rem 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.SignUp input[type='checkbox'] {
+.authForm input[type='checkbox'] {
   cursor: pointer;
   height: 2rem;
   width: 2rem;
   position: relative;
   top: 0.2rem;
 }
-.SignUp label {
+.authForm label {
   font-size: 1.4rem;
   padding: 0 2rem;
 }
@@ -72,6 +72,7 @@
   height: 3rem;
   font-size: 1.6rem;
   border-radius: 0.5rem;
+  margin-top: 2rem;
 }
 .btn--auth:disabled {
   cursor: default;

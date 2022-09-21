@@ -1,0 +1,26 @@
+.AuthLink {
+  background-color: white;
+  padding: 2.5rem 0;
+  width: 35rem;
+  border: var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--black);
+  margin-top: 1rem;
+}
+.AuthLink h3 {
+  font-weight: 400;
+  font-size: 1.6rem;
+}
+.AuthLink a {
+  font-size: 1.6rem;
+  padding-left: 0.7rem;
+  color: var(--blue);
+  text-decoration: none;
+  font-weight: 700;
+}
+.AuthLink a:active {
+  opacity: 0.5;
+}
