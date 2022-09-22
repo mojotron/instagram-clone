@@ -7,9 +7,9 @@ export const AuthContext = createContext();
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
-      return {};
+      return { ...state, user: action.payload };
     case 'LOGOUT':
-      return {};
+      return { ...state, user: null };
     case 'AUTH_IS_READY':
       return { ...state, user: action.payload, authIsReady: true };
     default:
@@ -22,6 +22,8 @@ export const AuthContextProvider = ({ children }) => {
     user: null,
     authIsReady: false,
   });
+
+  console.log(state);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(projectAuth, user => {

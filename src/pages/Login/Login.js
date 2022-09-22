@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useLogin } from '../../hooks/useLogin';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  const { isPending, error, login } = useLogin();
 
   useEffect(() => {
     // toggle disable for login button
@@ -24,8 +27,13 @@ const Login = () => {
     setFormData(oldData => ({ ...oldData, [name]: value }));
   };
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    await login(formData.email, formData.password);
+  };
+
   return (
-    <form className="authForm">
+    <form className="authForm" onSubmit={handleSubmit}>
       <h1>Instagram Clone</h1>
       <input
         type="email"

@@ -21,9 +21,17 @@ html {
 }
 body {
   width: 100vw;
-  min-height: 10vh;
+  min-height: 100vh;
   color: var(--gray);
   background-color: #fafafa;
+}
+.App {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 .gray {
   opacity: 0.5;

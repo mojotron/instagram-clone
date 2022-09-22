@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputWithError from './InputWithError';
 import * as Validation from '../../utils/inputValidation';
+import { useSignup } from '../../hooks/useSignup';
+import { useFirestore } from '../../hooks/useFirestore';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -11,11 +14,13 @@ const Signup = () => {
   });
   const [termsDisabled, setTermsDisabled] = useState(true);
 
+  const { isPending, error, signup } = useSignup();
+
   const toggleTerms = () => {
     setTermsDisabled(oldValue => !oldValue);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (
       formData.email &&
@@ -23,7 +28,14 @@ const Signup = () => {
       formData.userName &&
       formData.password
     ) {
-      console.log(formData);
+      const userAccount = {
+        userName: formData.userName,
+        fullName: formData.fullName,
+        emailAddress: formData.email,
+        following: [],
+        followers: [],
+      };
+      await signup(formData.email, formData.password, userAccount);
     }
   };
 
@@ -85,7 +97,7 @@ const Signup = () => {
         type="submit"
         disabled={termsDisabled}
       >
-        Signup
+        {isPending ? 'Loading' : 'Signup'}
       </button>
     </form>
   );
