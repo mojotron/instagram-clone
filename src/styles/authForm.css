@@ -43,6 +43,11 @@
   font-size: 1.4rem;
   width: 26rem;
 }
+.authForm .auth-error {
+  color: var(--red);
+  font-size: 1.4rem;
+}
+
 .authForm__terms {
   padding: 2rem 0 0;
   display: flex;

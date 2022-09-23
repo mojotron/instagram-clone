@@ -55,8 +55,10 @@ const Login = () => {
         type="submit"
         disabled={btnDisabled}
       >
-        Log In
+        {!isPending ? 'Log in' : 'Loading'}
       </button>
+
+      {error && <p className="auth-error">{error}</p>}
     </form>
   );
 };

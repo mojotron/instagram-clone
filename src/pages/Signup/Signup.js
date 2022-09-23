@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import InputWithError from './InputWithError';
 import * as Validation from '../../utils/inputValidation';
 import { useSignup } from '../../hooks/useSignup';
-import { useFirestore } from '../../hooks/useFirestore';
-import { useAuthContext } from '../../hooks/useAuthContext';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -97,8 +95,10 @@ const Signup = () => {
         type="submit"
         disabled={termsDisabled}
       >
-        {isPending ? 'Loading' : 'Signup'}
+        {!isPending ? 'Sign up' : 'Loading'}
       </button>
+
+      {error && <p className="auth-error">{error}</p>}
     </form>
   );
 };
