@@ -1,9 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // context
 import { useAuthContext } from './hooks/useAuthContext';
 // pages
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
+import ForgotPassword from './pages/Login/ForgotPassword';
 // components
 import AuthLink from './components/AuthLink';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -57,6 +58,9 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/login/reset" element={<ForgotPassword />} />
+
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
       )}

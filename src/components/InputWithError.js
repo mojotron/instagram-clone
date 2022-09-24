@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import checkIcon from '../../images/circle-check.svg';
-import cancelIcon from '../../images/circle-cancel.svg';
+import checkIcon from '../images/circle-check.svg';
+import cancelIcon from '../images/circle-cancel.svg';
 import './styles/InputWithError.css';
 
 const InputWithError = ({
@@ -28,6 +28,12 @@ const InputWithError = ({
 
   const handleChange = e => {
     setValue(e.target.value);
+    // if handleValidation prop is null skip validation and validation messages
+    if (handleValidation === null) {
+      setValidation(true);
+      return;
+    }
+    // test
     try {
       handleValidation(e.target.value);
       setValidationError(null);
@@ -55,7 +61,7 @@ const InputWithError = ({
       {validationError && <p className="validation-error">{validationError}</p>}
 
       <div className="validation-container">
-        {validation && (
+        {validation && handleValidation !== null && (
           <img className="validate-icon" src={checkIcon} alt="valid input" />
         )}
         {validationError && (

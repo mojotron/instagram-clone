@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import InputWithError from './InputWithError';
+import InputWithError from '../../components/InputWithError';
 import * as Validation from '../../utils/inputValidation';
 import { useSignup } from '../../hooks/useSignup';
 

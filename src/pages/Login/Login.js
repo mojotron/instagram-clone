@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLogin } from '../../hooks/useLogin';
+import InputWithError from '../../components/InputWithError';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,11 +23,6 @@ const Login = () => {
 
   const [btnDisabled, setBtnDisabled] = useState(true);
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData(oldData => ({ ...oldData, [name]: value }));
-  };
-
   const handleSubmit = async e => {
     e.preventDefault();
     await login(formData.email, formData.password);
@@ -35,19 +31,19 @@ const Login = () => {
   return (
     <form className="authForm" onSubmit={handleSubmit}>
       <h1>Instagram Clone</h1>
-      <input
+      <InputWithError
         type="email"
         name="email"
         placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
+        setFormData={setFormData}
+        handleValidation={null}
       />
-      <input
+      <InputWithError
         type="password"
         name="password"
         placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
+        setFormData={setFormData}
+        handleValidation={null}
       />
 
       <button
