@@ -69,4 +69,42 @@ describe('InputWithError component', () => {
     expect(errorElement).toBeInTheDocument();
     expect(errorElement).toHaveAttribute('class', 'validation-error');
   });
+
+  test('toggle password display', async () => {
+    render(
+      <InputWithError
+        type="password"
+        name="password"
+        placeholder="Password"
+        setFormData={jest.fn()}
+        handleValidation={jest.fn(() => {
+          throw new Error('invalid email');
+        })}
+      />
+    );
+    const user = userEvent.setup();
+    const inputElement = screen.getByPlaceholderText(/password/i);
+    // empty input no show/hide toggle
+    expect(screen.queryByText(/show/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/hide/i)).not.toBeInTheDocument();
+    await user.clear(inputElement);
+    await user.type(inputElement, 'hello');
+    // after input display show
+    expect(screen.getByText(/show/i)).toBeInTheDocument();
+    expect(inputElement).toHaveAttribute('type', 'password');
+    await user.click(screen.getByText(/show/i));
+    // after toggle display hide
+    expect(inputElement).toHaveAttribute('type', 'text');
+    expect(screen.getByText(/hide/i)).toBeInTheDocument();
+    expect(screen.queryByText(/show/i)).not.toBeInTheDocument();
+    await user.clear(inputElement);
+    expect(screen.queryByText(/hide/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/show/i)).not.toBeInTheDocument();
+    await user.type(inputElement, 'h');
+    // after clearing element last value of hide/show
+    expect(screen.getByText(/hide/i)).toBeInTheDocument();
+    expect(screen.queryByText(/show/i)).not.toBeInTheDocument();
+    await user.click(screen.getByText(/hide/i));
+    expect(inputElement).toHaveAttribute('type', 'password');
+  });
 });

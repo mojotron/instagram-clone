@@ -10,6 +10,8 @@ const InputWithError = ({
   setFormData,
   handleValidation,
 }) => {
+  // for hide/show password option
+  const [inputType, setInputType] = useState(type);
   const [value, setValue] = useState('');
   const [validation, setValidation] = useState(null);
   const [validationError, setValidationError] = useState(null);
@@ -36,24 +38,36 @@ const InputWithError = ({
     }
   };
 
+  const togglePassword = () => {
+    setInputType(oldValue => (oldValue === 'password' ? 'text' : 'password'));
+  };
+
   return (
     <div className="InputWithError">
       <input
-        type={type}
+        type={inputType}
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
         value={value}
         required
-      ></input>
+      />
       {validationError && <p className="validation-error">{validationError}</p>}
-      {validation && (
-        <img className="validate-icon" src={checkIcon} alt="valid input" />
-      )}
 
-      {validationError && (
-        <img className="validate-icon" src={cancelIcon} alt="invalid input" />
-      )}
+      <div className="validation-container">
+        {validation && (
+          <img className="validate-icon" src={checkIcon} alt="valid input" />
+        )}
+        {validationError && (
+          <img className="validate-icon" src={cancelIcon} alt="invalid input" />
+        )}
+
+        {type === 'password' && value.length > 0 && (
+          <span className="password-display" onClick={togglePassword}>
+            {inputType === 'password' ? 'Show' : 'Hide'}
+          </span>
+        )}
+      </div>
     </div>
   );
 };

@@ -34,6 +34,10 @@
   margin-bottom: 0.5rem;
   color: var(--black);
 }
+.authForm input[name='password'] {
+  padding: 0.9rem 8rem 0.9rem 0.8rem;
+}
+
 .authForm input::placeholder {
   color: #aeaeae;
   font-size: 1.4rem;

@@ -1,12 +1,24 @@
 .InputWithError {
   position: relative;
 }
-.validate-icon {
+.validation-container {
   position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   top: 0.5rem;
   right: 1rem;
+}
+.validate-icon {
 }
 .validation-error {
   position: relative;
   bottom: 1.2rem;
+}
+.password-display {
+  padding-left: 0.2rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--black);
 }
