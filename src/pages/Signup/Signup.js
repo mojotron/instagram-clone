@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import InputWithError from '../../components/InputWithError';
 import * as Validation from '../../utils/inputValidation';
 import { useSignup } from '../../hooks/useSignup';
@@ -11,6 +11,8 @@ const Signup = () => {
     password: null,
   });
   const [termsDisabled, setTermsDisabled] = useState(true);
+
+  const usernameInputRef = useRef();
 
   const { isPending, error, signup } = useSignup();
 
@@ -33,7 +35,15 @@ const Signup = () => {
         following: [],
         followers: [],
       };
-      await signup(formData.email, formData.password, userAccount);
+      try {
+        await signup(formData.email, formData.password, userAccount);
+      } catch (error) {
+        if (
+          error.message === 'Username already exist, please try another one!'
+        ) {
+          usernameInputRef.current.focus();
+        }
+      }
     }
   };
 
@@ -63,6 +73,7 @@ const Signup = () => {
         placeholder="Username"
         setFormData={setFormData}
         handleValidation={Validation.userNameValidation}
+        reference={usernameInputRef}
       />
       <InputWithError
         type="password"

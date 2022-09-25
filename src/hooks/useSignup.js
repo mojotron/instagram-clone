@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { projectAuth } from '../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuthContext } from '../hooks/useAuthContext';
-//
+// import firestore hook do create rational database auth -> users
 import { useFirestore } from './useFirestore';
 
 export const useSignup = () => {
@@ -11,12 +11,17 @@ export const useSignup = () => {
   const [error, setError] = useState(null);
   const { dispatch } = useAuthContext();
 
-  const { addDocument } = useFirestore('users');
+  const { addDocument, checkIfUserExists } = useFirestore('users');
 
   const signup = async (email, password, data) => {
     setError(null);
     setIsPending(true);
     try {
+      // check if username is already used
+      const usernameExist = await checkIfUserExists(data.userName);
+      if (usernameExist)
+        throw new Error('Username already exist, please try another one!');
+
       const response = await createUserWithEmailAndPassword(
         projectAuth,
         email,

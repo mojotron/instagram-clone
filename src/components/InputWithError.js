@@ -9,6 +9,7 @@ const InputWithError = ({
   placeholder,
   setFormData,
   handleValidation,
+  reference,
 }) => {
   // for hide/show password option
   const [inputType, setInputType] = useState(type);
@@ -57,6 +58,7 @@ const InputWithError = ({
         onChange={handleChange}
         value={value}
         required
+        ref={reference}
       />
       {validationError && <p className="validation-error">{validationError}</p>}
 

@@ -1,6 +1,13 @@
 import { useState, useEffect, useReducer } from 'react';
 import { projectFirestore } from '../firebase/config';
-import { addDoc, collection, Timestamp } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  Timestamp,
+  where,
+} from 'firebase/firestore';
 
 const initialState = {
   document: null,
@@ -55,9 +62,24 @@ export const useFirestore = collectionName => {
     }
   };
 
+  const checkIfUserExists = async username => {
+    // helper function in useSignup
+    try {
+      const querySnapshot = await getDocs(colRef);
+      let userExist = false;
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.userName === username) userExist = true;
+      });
+      return userExist;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   useEffect(() => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { response, addDocument };
+  return { response, addDocument, checkIfUserExists };
 };
