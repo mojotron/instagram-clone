@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLogin } from '../../hooks/useLogin';
 import InputWithError from '../../components/InputWithError';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -55,6 +56,8 @@ const Login = () => {
       </button>
 
       {error && <p className="auth-error">{error}</p>}
+
+      <Link to="/login/reset">Forgot password?</Link>
     </form>
   );
 };

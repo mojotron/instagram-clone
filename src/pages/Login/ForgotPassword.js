@@ -1,13 +1,16 @@
-import lockImg from '../../images/lock.svg';
-import InputWithError from '../../components/InputWithError';
-import './styles/ForgotPassword.css';
-import { Link } from 'react-router-dom';
-import { emailValidation } from '../../utils/inputValidation';
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { emailValidation } from '../../utils/inputValidation';
+import InputWithError from '../../components/InputWithError';
+import lockImg from '../../images/lock.svg';
+import './styles/ForgotPassword.css';
+import { usePasswordReset } from '../../hooks/usePasswordReset';
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({ email: '' });
   const [btnDisabled, setBtnDisabled] = useState(true);
+  const { isPending, error, passwordReset } = usePasswordReset();
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -17,9 +20,15 @@ const ForgotPassword = () => {
       setBtnDisabled(true);
     }
   }, [formData]);
-  const handleSubmit = e => {
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      await passwordReset(formData.email);
+    } catch (error) {
+      console.log(error.message);
+    }
+    navigate('/login');
   };
 
   return (
@@ -42,8 +51,9 @@ const ForgotPassword = () => {
         type="submit"
         disabled={btnDisabled}
       >
-        Send Login Link
+        {!isPending ? 'Send Login Link' : 'Loading'}
       </button>
+      {error && <p className="auth-error">{error}</p>}
       <h2 id="separator">OR</h2>
       <Link className="ForgotPassword__link--signup" to="/signup">
         Create New Account

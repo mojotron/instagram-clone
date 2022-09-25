@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from '../context/AuthContext';
 
 // mock on onAuthStateChanged
@@ -12,7 +13,7 @@ jest.mock('firebase/auth', () => {
 const ContextProvider = ({ children }) => {
   return (
     <AuthContextProvider value={{ authIsReady: true, user: true }}>
-      {children}
+      <BrowserRouter>{children}</BrowserRouter>
     </AuthContextProvider>
   );
 };

@@ -23,6 +23,9 @@ describe('Login page', () => {
       name: /instagram clone/i,
     });
     expect(headingElement).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /forgot password/i })
+    ).toHaveAttribute('href', '/login/reset');
   });
 
   test('email input', async () => {

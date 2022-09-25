@@ -1,6 +1,6 @@
 .authForm {
   background-color: white;
-  padding: 5rem 0;
+  padding: 5rem 0 3rem;
   width: 35rem;
   border: var(--gray-border);
   display: flex;
@@ -68,6 +68,12 @@
 .authForm label {
   font-size: 1.4rem;
   padding: 0 2rem;
+}
+.authForm a {
+  text-decoration: none;
+  color: #0e4173;
+  padding-top: 4rem;
+  font-size: 1.4rem;
 }
 .btn--auth {
   cursor: pointer;
