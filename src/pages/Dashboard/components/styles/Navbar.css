@@ -1,0 +1,12 @@
+.Navbar {
+}
+.Navbar ul {
+  list-style: none;
+}
+.Navbar__icon {
+  height: 2.2rem;
+  width: 2.2rem;
+}
+.Navbar .active {
+  opacity: 0.8;
+}
