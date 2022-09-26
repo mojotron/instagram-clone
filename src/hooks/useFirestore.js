@@ -3,10 +3,10 @@ import { projectFirestore } from '../firebase/config';
 import {
   addDoc,
   collection,
-  getDocs,
-  query,
-  Timestamp,
   where,
+  Timestamp,
+  query,
+  getDocs,
 } from 'firebase/firestore';
 
 const initialState = {
@@ -63,15 +63,14 @@ export const useFirestore = collectionName => {
   };
 
   const checkIfUserExists = async username => {
-    // helper function in useSignup
+    // helper function for useSignup hook
     try {
-      const querySnapshot = await getDocs(colRef);
-      let userExist = false;
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        if (data.userName === username) userExist = true;
-      });
-      return userExist;
+      const q = query(colRef, where('userName', '==', username));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
+      console.log(querySnapshot.empty);
+      // negate empty to be more in function name spirit
+      return !querySnapshot.empty;
     } catch (error) {
       throw error;
     }
