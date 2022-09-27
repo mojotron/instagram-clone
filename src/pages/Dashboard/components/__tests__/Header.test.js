@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../../test-utils/testing-library-utils';
 import Header from '../Header';
 
 describe('Dashboard Header component', () => {

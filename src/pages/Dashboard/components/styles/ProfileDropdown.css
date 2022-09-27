@@ -1,0 +1,53 @@
+.ProfileDropdown {
+  position: absolute;
+  top: 4rem;
+  right: -3rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  width: 23rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: var(--black);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.ProfileDropdown::after {
+  content: '';
+  background-color: white;
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+  top: -0.5rem;
+  right: 3.5rem;
+  transform: rotate(45deg);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px -3px 5px;
+}
+.ProfileDropdown li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 1rem 2rem;
+  margin: 0;
+  cursor: pointer;
+}
+.ProfileDropdown li:hover {
+  background-color: #efefef;
+}
+.ProfileDropdown img {
+  height: 1.6rem;
+  width: 1.6rem;
+}
+.ProfileDropdown span {
+  padding-left: 1.5rem;
+}
+
+.ProfileDropdown li:last-child {
+  border-top: var(--gray-border);
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logout-error {
+  color: var(--red);
+}

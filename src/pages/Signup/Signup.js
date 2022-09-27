@@ -32,8 +32,13 @@ const Signup = () => {
         userName: formData.userName,
         fullName: formData.fullName,
         emailAddress: formData.email,
-        following: [],
-        followers: [],
+        // setup default data, user can update them on the settings page
+        following: [], // user ids
+        followers: [], // user ids
+        posts: [], // post ids
+        avatarUrl: null,
+        bio: null,
+        website: null,
       };
       try {
         await signup(formData.email, formData.password, userAccount);

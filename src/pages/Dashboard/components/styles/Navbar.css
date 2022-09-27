@@ -1,7 +1,12 @@
 .Navbar {
+  position: relative;
 }
 .Navbar ul {
   list-style: none;
+  display: flex;
+}
+.Navbar li {
+  margin-left: 2rem;
 }
 .Navbar__icon {
   height: 2.2rem;

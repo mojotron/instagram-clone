@@ -1,0 +1,19 @@
+.Avatar {
+  border: 2px solid var(--gray);
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+.Avatar--small {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+.Avatar__img {
+  width: inherit;
+  height: inherit;
+  object-fit: fill;
+}

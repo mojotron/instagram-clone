@@ -9,13 +9,9 @@ import Dashboard from './pages/Dashboard/Dashboard';
 // components
 import AuthLink from './components/AuthLink';
 import ProtectedRoute from './components/ProtectedRoute';
-// temp TODO move to nav
-import { useLogout } from './hooks/useLogout';
 
 const App = () => {
   const { authIsReady, user } = useAuthContext();
-  // temp TODO move to nav
-  const { logout } = useLogout();
 
   return (
     <div className="App">
@@ -59,18 +55,6 @@ const App = () => {
 
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-
-          {/*TODO remove button to nav */}
-          {user && (
-            <button
-              className="btn--auth"
-              onClick={() => {
-                logout();
-              }}
-            >
-              Logout
-            </button>
-          )}
         </BrowserRouter>
       )}
     </div>
