@@ -1,0 +1,77 @@
+.ChangeProfilePhoto__overlay {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ChangeProfilePhoto {
+  width: 40rem;
+  background-color: white;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.ChangeProfilePhoto h2 {
+  color: var(--black);
+  padding: 3rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.ChangeProfilePhoto__btn {
+  border: none;
+  background: none;
+  width: 100%;
+  border-top: var(--gray-border);
+  padding: 1.5rem 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-weight: 100;
+}
+.ChangeProfilePhoto form {
+  width: 100%;
+  border-top: var(--gray-border);
+  padding: 1.5rem 2rem;
+  font-size: 1.5rem;
+}
+.ChangeProfilePhoto input[type='file'] {
+  width: 350px;
+  max-width: 100%;
+  color: #444;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  border: var(--gray-border);
+}
+.ChangeProfilePhoto input[type='file']::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: var(--gray);
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.ChangeProfilePhoto input[type='file']::file-selector-button:hover {
+  background-color: var(--blue);
+}
+.btn--blue {
+  color: var(--blue);
+  font-weight: 600;
+  border: none;
+}
+.btn--red {
+  color: var(--red);
+  font-weight: 600;
+}
+.ChangeProfilePhoto__error {
+  text-align: center;
+  color: var(--red);
+}

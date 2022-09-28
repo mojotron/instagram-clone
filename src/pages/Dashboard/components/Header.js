@@ -1,11 +1,11 @@
 import './styles/Header.css';
 import Navbar from './Navbar';
 
-const Header = () => {
+const Header = ({ userData }) => {
   return (
     <header className="Header">
       <h1>Instagram Clone</h1>
-      <Navbar />
+      <Navbar userData={userData} />
     </header>
   );
 };

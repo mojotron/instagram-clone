@@ -10,11 +10,23 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import AuthLink from './components/AuthLink';
 import ProtectedRoute from './components/ProtectedRoute';
 
+//TODO
+import Settings from './pages/Settings/Settings';
+import ChangeProfilePhoto from './components/ChangeProfilePhoto';
+import { useState } from 'react';
+
 const App = () => {
   const { authIsReady, user } = useAuthContext();
-
+  //temp
+  const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
+  const handleDisplay = () => setShowChangeProfilePhoto(oldValue => !oldValue);
   return (
     <div className="App">
+      <button onClick={handleDisplay}>Show</button>
+      {showChangeProfilePhoto && (
+        <ChangeProfilePhoto handleDisplay={handleDisplay} />
+      )}
+
       {authIsReady && (
         <BrowserRouter>
           <Routes>
@@ -26,6 +38,25 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute condition={user} goto="login">
+                  <Settings
+                    userData={{
+                      userName: '_jd_',
+                      fullName: 'John Dow',
+                      emailAddress: 'johndow@example.com',
+                      avatarUrl: '',
+                      bio: '',
+                      website: '',
+                    }}
+                  />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/signup"
               element={

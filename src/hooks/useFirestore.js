@@ -27,6 +27,13 @@ const firestoreReducer = (state, action) => {
         error: null,
         success: true,
       };
+    case 'GET_DOCUMENT':
+      return {
+        document: action.payload,
+        isPending: false,
+        error: null,
+        success: true,
+      };
     case 'ERROR':
       return {
         document: null,
@@ -62,13 +69,28 @@ export const useFirestore = collectionName => {
     }
   };
 
+  const getDocument = async uid => {
+    dispatch({ type: 'IS_PENDING' });
+    try {
+      const q = query(colRef, where('uid', '==', uid));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) throw new Error('User not found!');
+      let userDocument;
+      querySnapshot.forEach(doc => {
+        userDocument = doc.data();
+        return;
+      });
+      dispatchIfNotCancelled({ type: 'GET_DOCUMENT', payload: userDocument });
+    } catch (error) {
+      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+    }
+  };
+
   const checkIfUserExists = async username => {
     // helper function for useSignup hook
     try {
       const q = query(colRef, where('userName', '==', username));
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot);
-      console.log(querySnapshot.empty);
       // negate empty to be more in function name spirit
       return !querySnapshot.empty;
     } catch (error) {
@@ -80,5 +102,5 @@ export const useFirestore = collectionName => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { response, addDocument, checkIfUserExists };
+  return { response, addDocument, getDocument, checkIfUserExists };
 };

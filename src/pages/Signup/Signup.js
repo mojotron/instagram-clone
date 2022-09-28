@@ -36,9 +36,9 @@ const Signup = () => {
         following: [], // user ids
         followers: [], // user ids
         posts: [], // post ids
-        avatarUrl: null,
-        bio: null,
-        website: null,
+        avatarUrl: '',
+        bio: '',
+        website: '',
       };
       try {
         await signup(formData.email, formData.password, userAccount);
