@@ -12,21 +12,23 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 //TODO
 import Settings from './pages/Settings/Settings';
-import ChangeProfilePhoto from './components/ChangeProfilePhoto';
-import { useState } from 'react';
+import { useFirestore } from './hooks/useFirestore';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 const App = () => {
   const { authIsReady, user } = useAuthContext();
   //temp
-  const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
-  const handleDisplay = () => setShowChangeProfilePhoto(oldValue => !oldValue);
+  const { response, getDocument } = useFirestore('users');
+  const loadDocument = useRef(uid => getDocument(uid)).current;
+
+  useEffect(() => {
+    if (!authIsReady) return;
+    loadDocument(user.uid);
+  }, [loadDocument, authIsReady, user]);
+
   return (
     <div className="App">
-      <button onClick={handleDisplay}>Show</button>
-      {showChangeProfilePhoto && (
-        <ChangeProfilePhoto handleDisplay={handleDisplay} />
-      )}
-
       {authIsReady && (
         <BrowserRouter>
           <Routes>
@@ -43,16 +45,9 @@ const App = () => {
               path="/settings"
               element={
                 <ProtectedRoute condition={user} goto="login">
-                  <Settings
-                    userData={{
-                      userName: '_jd_',
-                      fullName: 'John Dow',
-                      emailAddress: 'johndow@example.com',
-                      avatarUrl: '',
-                      bio: '',
-                      website: '',
-                    }}
-                  />
+                  {response.document && (
+                    <Settings userData={response.document} />
+                  )}
                 </ProtectedRoute>
               }
             />

@@ -7,6 +7,8 @@ import {
   Timestamp,
   query,
   getDocs,
+  doc,
+  updateDoc,
 } from 'firebase/firestore';
 
 const initialState = {
@@ -28,6 +30,13 @@ const firestoreReducer = (state, action) => {
         success: true,
       };
     case 'GET_DOCUMENT':
+      return {
+        document: action.payload,
+        isPending: false,
+        error: null,
+        success: true,
+      };
+    case 'UPDATE_DOCUMENT':
       return {
         document: action.payload,
         isPending: false,
@@ -77,10 +86,23 @@ export const useFirestore = collectionName => {
       if (querySnapshot.empty) throw new Error('User not found!');
       let userDocument;
       querySnapshot.forEach(doc => {
-        userDocument = doc.data();
+        userDocument = { ...doc.data(), id: doc.id };
         return;
       });
       dispatchIfNotCancelled({ type: 'GET_DOCUMENT', payload: userDocument });
+    } catch (error) {
+      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+    }
+  };
+
+  const updateDocument = async (uid, data) => {
+    console.log(data);
+    dispatch({ type: 'IS_PENDING' });
+    try {
+      const docRef = doc(colRef, uid);
+      await updateDoc(docRef, data);
+
+      dispatchIfNotCancelled({ type: 'UPDATE_DOCUMENT', payload: null });
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }
@@ -102,5 +124,11 @@ export const useFirestore = collectionName => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { response, addDocument, getDocument, checkIfUserExists };
+  return {
+    response,
+    addDocument,
+    getDocument,
+    updateDocument,
+    checkIfUserExists,
+  };
 };

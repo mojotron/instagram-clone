@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import './styles/ChangeProfilePhoto.css';
+import { useSetAvatar } from '../hooks/useSetAvatar';
 
-const ChangeProfilePhoto = ({ handleDisplay }) => {
+const ChangeProfilePhoto = ({ userId, handleDisplay }) => {
   const [imageFile, setImageFile] = useState(null);
   const [uploadError, setUploadError] = useState(null);
-
-  // to do upload image to avatars
-  // set link from avatars to user profile
-  // delete image on vatars update image profils
+  const { isPending, error, addAvatar } = useSetAvatar(userId, handleDisplay);
 
   const handleUploadFile = e => {
     setUploadError(null);
@@ -20,24 +18,28 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
     setImageFile(file);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log(imageFile);
+    await addAvatar(imageFile);
   };
 
   return (
     <div className="ChangeProfilePhoto__overlay">
       <div className="ChangeProfilePhoto">
         <h2>Change Profile Photo</h2>
+
         <form onSubmit={handleSubmit}>
           <input type="file" onChange={handleUploadFile} accept="image/*" />
           {uploadError && (
             <p className="ChangeProfilePhoto__error">{uploadError}</p>
           )}
-          <button className="ChangeProfilePhoto__btn btn--blue" type="submit">
-            Set New Image
-          </button>
+          {imageFile && (
+            <button className="ChangeProfilePhoto__btn btn--blue" type="submit">
+              Set New Image
+            </button>
+          )}
         </form>
+
         <button
           onClick={() => console.log('Remove pic')}
           className="ChangeProfilePhoto__btn btn--red"
@@ -45,6 +47,7 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
         >
           Remove Current Photo
         </button>
+
         <button
           onClick={handleDisplay}
           className="ChangeProfilePhoto__btn"
@@ -52,6 +55,11 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
         >
           Cancel
         </button>
+
+        {isPending && (
+          <p style={{ fontSize: '16px', paddingBottom: '10px' }}>Loading...</p>
+        )}
+        {error && <p className="ChangeProfilePhoto__error">{error}</p>}
       </div>
     </div>
   );

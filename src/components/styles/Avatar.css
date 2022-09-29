@@ -12,6 +12,14 @@
   width: 2.2rem;
   height: 2.2rem;
 }
+.Avatar--mid {
+  width: 3.8rem;
+  height: 3.8rem;
+}
+.Avatar--big {
+  width: 15rem;
+  height: 15rem;
+}
 .Avatar__img {
   width: inherit;
   height: inherit;
