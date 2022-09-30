@@ -1,0 +1,58 @@
+.Settings {
+  width: 60rem;
+  padding: 2rem 3rem 2rem 4rem;
+  border: var(--gray-border);
+  display: flex;
+  flex-direction: column;
+}
+.Settings__heading {
+  color: var(--black);
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+.Settings__section {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  padding-top: 2rem;
+}
+
+.Settings h1 {
+  color: var(--black);
+  font-size: 2.2rem;
+  font-weight: 400;
+  padding-bottom: 0.5rem;
+}
+.Settings__link {
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.Settings label {
+  text-align: right;
+  margin-right: 1.5rem;
+}
+.Settings input,
+.Settings textarea {
+  font-family: inherit;
+  font-size: 1.6rem;
+  line-height: 1.8rem;
+  border: var(--gray-border);
+  border-radius: 0.3rem;
+  width: 35.8rem;
+  height: 3.6rem;
+  overflow: hidden;
+  padding: 0.9rem 2.8rem 0.9rem 0.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--black);
+}
+.Settings textarea {
+  min-height: 6rem;
+}
+.Settings p {
+  width: 35.8rem;
+  font-size: 1.4rem;
+}
+.Settings button {
+  margin: 4rem auto 2rem;
+}

@@ -67,6 +67,8 @@ export const useStorage = () => {
   };
 
   const remove = async (directory, fileName) => {
+    console.log(2);
+    console.log(directory, fileName);
     dispatch({ type: 'IS_PENDING' });
     try {
       const storageRef = ref(projectStorage, `${directory}/${fileName}`);

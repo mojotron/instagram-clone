@@ -27,7 +27,7 @@ const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
   };
 
   const handleRemove = async () => {
-    removeAvatar(useSetAvatar.fileName);
+    removeAvatar(userAvatar.fileName);
   };
 
   return (
@@ -63,9 +63,7 @@ const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
           Cancel
         </button>
 
-        {isPending && (
-          <p style={{ fontSize: '16px', paddingBottom: '10px' }}>Loading...</p>
-        )}
+        {isPending && <p className="ChangeProfilePhoto__pending">Loading...</p>}
         {error && <p className="ChangeProfilePhoto__error">{error}</p>}
       </div>
     </div>
