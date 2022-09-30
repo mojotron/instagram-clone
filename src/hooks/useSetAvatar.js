@@ -1,15 +1,17 @@
-import { useRef } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+// hooks
 import { useFirestore } from './useFirestore';
 import { useStorage } from './useStorage';
 
 export const useSetAvatar = (userId, handleDisplay) => {
   const [userUpdated, setUserUpdated] = useState(false);
+  const [fileName, setFileName] = useState(null);
+
   const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-  const { response: storageResponse, upload } = useStorage();
+  const { response: storageResponse, upload, remove } = useStorage();
   const { updateDocument } = useFirestore('users');
 
   const updateUserAvatar = useRef(async (docId, data) =>
@@ -17,18 +19,23 @@ export const useSetAvatar = (userId, handleDisplay) => {
   ).current;
 
   useEffect(() => {
-    console.log('effect');
     if (userUpdated) return;
     if (storageResponse.success === false) return;
 
-    updateUserAvatar(userId, { avatarUrl: storageResponse.imageUrls })
+    const updateData = fileName
+      ? { url: storageResponse.imageUrls, fileName: fileName }
+      : { url: '', fileName: '' };
+
+    updateUserAvatar(userId, {
+      avatar: updateData,
+    })
       .then(() => {
         setUserUpdated(true);
         if (isCancelled) {
           setIsPending(false);
           setError(null);
         }
-        // close popup
+        // close popup passed from parent element
         handleDisplay();
       })
       .catch(error => {
@@ -44,13 +51,30 @@ export const useSetAvatar = (userId, handleDisplay) => {
     userUpdated,
     isCancelled,
     handleDisplay,
+    fileName,
   ]);
 
   const addAvatar = async file => {
+    setFileName(null);
     setIsPending(true);
     setError(null);
     try {
       await upload('avatars', file);
+      setFileName(file.name);
+    } catch (error) {
+      if (!isCancelled) {
+        setError(error.message);
+        isPending(null);
+      }
+    }
+  };
+
+  const removeAvatar = async fileName => {
+    setFileName(null);
+    setIsPending(true);
+    setError(null);
+    try {
+      await remove('avatars', fileName);
     } catch (error) {
       if (!isCancelled) {
         setError(error.message);
@@ -63,5 +87,5 @@ export const useSetAvatar = (userId, handleDisplay) => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { isPending, error, addAvatar };
+  return { isPending, error, addAvatar, removeAvatar };
 };

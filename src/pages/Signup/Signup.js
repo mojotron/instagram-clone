@@ -36,7 +36,10 @@ const Signup = () => {
         following: [], // user ids
         followers: [], // user ids
         posts: [], // post ids
-        avatarUrl: '',
+        avatar: {
+          url: '',
+          fileName: '', // for deleting avatar when user remove image
+        },
         bio: '',
         website: '',
       };

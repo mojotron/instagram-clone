@@ -1,6 +1,11 @@
 import { useReducer, useState, useEffect } from 'react';
 import { projectStorage } from '../firebase/config';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
 
 const initialState = {
   isPending: false,
@@ -26,6 +31,13 @@ const storageReducer = (state, action) => {
         error: null,
         success: true,
         imageUrls: action.payload,
+      };
+    case 'DELETE_IMAGE':
+      return {
+        isPending: false,
+        error: null,
+        success: true,
+        imageUrls: null,
       };
     default:
       return state;
@@ -54,9 +66,20 @@ export const useStorage = () => {
     }
   };
 
+  const remove = async (directory, fileName) => {
+    dispatch({ type: 'IS_PENDING' });
+    try {
+      const storageRef = ref(projectStorage, `${directory}/${fileName}`);
+      await deleteObject(storageRef);
+      dispatchIfNotCancelled({ type: 'DELETE_IMAGE' });
+    } catch (error) {
+      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+    }
+  };
+
   useEffect(() => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { response, upload };
+  return { response, upload, remove };
 };

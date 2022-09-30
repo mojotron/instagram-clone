@@ -23,6 +23,7 @@ const Settings = ({ userData }) => {
       {changeAvatar && (
         <ChangeProfilePhoto
           userId={userData.id}
+          userAvatar={userData.avatar}
           handleDisplay={handleChangeAvatar}
         />
       )}
@@ -30,7 +31,7 @@ const Settings = ({ userData }) => {
         <h2>Edit profile</h2>
         <Avatar
           size="mid"
-          url={userData.avatarUrl}
+          url={userData.avatar.url}
           handleClick={handleChangeAvatar}
         />
 

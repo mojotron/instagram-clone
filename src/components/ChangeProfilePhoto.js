@@ -2,10 +2,13 @@ import { useState } from 'react';
 import './styles/ChangeProfilePhoto.css';
 import { useSetAvatar } from '../hooks/useSetAvatar';
 
-const ChangeProfilePhoto = ({ userId, handleDisplay }) => {
+const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
   const [imageFile, setImageFile] = useState(null);
   const [uploadError, setUploadError] = useState(null);
-  const { isPending, error, addAvatar } = useSetAvatar(userId, handleDisplay);
+  const { isPending, error, addAvatar, removeAvatar } = useSetAvatar(
+    userId,
+    handleDisplay
+  );
 
   const handleUploadFile = e => {
     setUploadError(null);
@@ -21,6 +24,10 @@ const ChangeProfilePhoto = ({ userId, handleDisplay }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     await addAvatar(imageFile);
+  };
+
+  const handleRemove = async () => {
+    removeAvatar(useSetAvatar.fileName);
   };
 
   return (
@@ -41,7 +48,7 @@ const ChangeProfilePhoto = ({ userId, handleDisplay }) => {
         </form>
 
         <button
-          onClick={() => console.log('Remove pic')}
+          onClick={handleRemove}
           className="ChangeProfilePhoto__btn btn--red"
           type="button"
         >

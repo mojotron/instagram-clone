@@ -23,9 +23,9 @@ const App = () => {
   const loadDocument = useRef(uid => getDocument(uid)).current;
 
   useEffect(() => {
-    if (!authIsReady) return;
+    if (user === null) return;
     loadDocument(user.uid);
-  }, [loadDocument, authIsReady, user]);
+  }, [loadDocument, user]);
 
   return (
     <div className="App">
