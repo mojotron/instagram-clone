@@ -23,7 +23,7 @@ const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    await addAvatar(imageFile);
+    await addAvatar(imageFile, userAvatar.fileName);
   };
 
   const handleRemove = async () => {

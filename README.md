@@ -1,4 +1,4 @@
 # Instagram Clone
 
 sign up user validation
-TODO forget password
+TODO navigate after setting submit

@@ -54,11 +54,15 @@ export const useSetAvatar = (userId, handleDisplay) => {
     fileName,
   ]);
 
-  const addAvatar = async file => {
+  const addAvatar = async (file, userAvatarFileName) => {
     setFileName(null);
     setIsPending(true);
     setError(null);
     try {
+      // delete current image from server to keep server clean
+      if (userAvatarFileName !== '')
+        await remove('avatars', userAvatarFileName);
+      // add new file
       await upload('avatars', file);
       setFileName(file.name);
     } catch (error) {

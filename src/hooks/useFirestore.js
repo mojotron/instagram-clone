@@ -95,11 +95,10 @@ export const useFirestore = collectionName => {
     }
   };
 
-  const updateDocument = async (uid, data) => {
-    console.log(data);
+  const updateDocument = async (docId, data) => {
     dispatch({ type: 'IS_PENDING' });
     try {
-      const docRef = doc(colRef, uid);
+      const docRef = doc(colRef, docId);
       await updateDoc(docRef, data);
 
       dispatchIfNotCancelled({ type: 'UPDATE_DOCUMENT', payload: null });

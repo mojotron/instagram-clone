@@ -56,3 +56,6 @@
 .Settings button {
   margin: 4rem auto 2rem;
 }
+.error {
+  color: var(--red);
+}

@@ -3,9 +3,13 @@ import Avatar from '../../components/Avatar';
 import ChangeProfilePhoto from '../../components/ChangeProfilePhoto';
 import './styles/Settings.css';
 
+import { userNameValidation } from '../../utils/inputValidation';
+import { useFirestore } from '../../hooks/useFirestore';
+
 const Settings = ({ userData }) => {
   const [changeAvatar, setChangeAvatar] = useState(false);
-  const handleChangeAvatar = () => setChangeAvatar(oldValue => !oldValue);
+  const [usernameError, setUsernameError] = useState();
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const [formData, setFormData] = useState({
     fullName: userData.fullName,
@@ -14,11 +18,36 @@ const Settings = ({ userData }) => {
     bio: userData.bio,
   });
 
+  const { isPending, error, checkIfUserExists, updateDocument } =
+    useFirestore('users');
+
+  const handleChangeAvatar = () => setChangeAvatar(oldValue => !oldValue);
+
   const handleChange = e => {
+    if (submitDisabled) setSubmitDisabled(false);
     const { name, value } = e.target;
     setFormData(oldData => ({ ...oldData, [name]: value }));
   };
-  // changing user name needs to be checked
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    // changing user name needs to be checked
+    setUsernameError(null);
+    try {
+      if (formData.userName !== userData.userName) {
+        const usernameExist = await checkIfUserExists(formData.userName);
+        if (usernameExist)
+          throw new Error('Username already exist, please try another one!');
+        userNameValidation(formData.userName);
+        // update user info
+        await updateDocument(userData.id, formData);
+      }
+    } catch (err) {
+      console.log(err.message);
+      setUsernameError(err.message);
+    }
+    // navigate
+  };
   return (
     <>
       {changeAvatar && (
@@ -29,11 +58,17 @@ const Settings = ({ userData }) => {
         />
       )}
 
-      <form className="Settings">
+      <form className="Settings" onSubmit={handleSubmit}>
         <h2 className="Settings__heading">Edit profile</h2>
 
         <section className="Settings__section">
-          <div style={{ position: 'relative', left: '50px' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'right',
+              paddingRight: '20px',
+            }}
+          >
             <Avatar
               size="mid"
               url={userData.avatar.url}
@@ -82,6 +117,7 @@ const Settings = ({ userData }) => {
               onChange={handleChange}
               placeholder="Username"
             />
+            {usernameError && <p className="error">{usernameError}</p>}
             <p>Change your username.</p>
           </div>
         </section>
@@ -110,20 +146,25 @@ const Settings = ({ userData }) => {
           <div>
             <textarea
               id="bio"
-              name="userName"
+              name="bio"
               value={formData.bio}
               onChange={handleChange}
               placeholder="Short Bio"
               maxLength="150"
             />
-            <p>{formData.website.length}/150</p>
+            <p>{formData.bio.length}/150</p>
             <p>Write short description about you.</p>
           </div>
         </section>
 
-        <button type="submit" className="btn--auth">
-          Submit
+        <button
+          type="submit"
+          className={`btn--auth ${submitDisabled ? 'gray' : ''}`}
+          disabled={submitDisabled}
+        >
+          {isPending ? 'Loading' : 'Submit'}
         </button>
+        {error && <p className="error">{error}</p>}
       </form>
     </>
   );
