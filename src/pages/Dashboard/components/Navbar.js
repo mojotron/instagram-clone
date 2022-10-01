@@ -18,7 +18,7 @@ const Navbar = ({ userData }) => {
           </NavLink>
         </li>
         <li onClick={() => setShowDropdown(oldValue => !oldValue)}>
-          <Avatar url={userData.avatarUrl} size="small" />
+          <Avatar url={userData.avatar.url} size="small" />
           {showDropdown && <ProfileDropdown />}
         </li>
       </ul>

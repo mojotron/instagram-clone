@@ -5,13 +5,15 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 // components
 import Header from './components/Header';
 import { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Settings from '../Settings/Settings';
+
+import './styles/Dashboard.css';
 
 const Dashboard = () => {
   // get data
   const { user } = useAuthContext();
   const { response, getDocument } = useFirestore('users');
-
-  console.log(user.uid);
 
   const loadDocument = useRef(() => getDocument(user.uid)).current;
 
@@ -20,7 +22,19 @@ const Dashboard = () => {
   }, [loadDocument]);
 
   return (
-    <div>{response.document && <Header userData={response.document} />}</div>
+    <div className="Dashboard">
+      {response.document && (
+        <>
+          <Header userData={response.document} />
+          <Routes>
+            <Route
+              path="/settings"
+              element={<Settings userData={response.document} />}
+            />
+          </Routes>
+        </>
+      )}
+    </div>
   );
 };
 

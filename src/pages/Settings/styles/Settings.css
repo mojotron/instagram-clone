@@ -4,6 +4,7 @@
   border: var(--gray-border);
   display: flex;
   flex-direction: column;
+  margin-top: 3rem;
 }
 .Settings__heading {
   color: var(--black);

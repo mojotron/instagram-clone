@@ -1,4 +1,5 @@
 import './styles/ProfileDropdown.css';
+import { Link } from 'react-router-dom';
 // icons
 import userIcon from '../../../images/user-icon.svg';
 import settingsIcon from '../../../images/settings-icon.svg';
@@ -14,8 +15,10 @@ const ProfileDropdown = () => {
         <span>Profile</span>
       </li>
       <li>
-        <img src={settingsIcon} alt="Settings" />
-        <span>Settings</span>
+        <Link to="/settings">
+          <img src={settingsIcon} alt="Settings" />
+          <span>Settings</span>
+        </Link>
       </li>
       <li>
         <img src={bookmarkIcon} alt="Saved" />

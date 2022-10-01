@@ -10,22 +10,8 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import AuthLink from './components/AuthLink';
 import ProtectedRoute from './components/ProtectedRoute';
 
-//TODO
-import Settings from './pages/Settings/Settings';
-import { useFirestore } from './hooks/useFirestore';
-import { useRef } from 'react';
-import { useEffect } from 'react';
-
 const App = () => {
   const { authIsReady, user } = useAuthContext();
-  //temp
-  const { response, getDocument } = useFirestore('users');
-  const loadDocument = useRef(uid => getDocument(uid)).current;
-
-  useEffect(() => {
-    if (user === null) return;
-    loadDocument(user.uid);
-  }, [loadDocument, user]);
 
   return (
     <div className="App">
@@ -33,25 +19,13 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/"
+              path="/*"
               element={
                 <ProtectedRoute condition={user} goto="login">
                   <Dashboard />
                 </ProtectedRoute>
               }
             />
-
-            <Route
-              path="/settings"
-              element={
-                <ProtectedRoute condition={user} goto="login">
-                  {response.document && (
-                    <Settings userData={response.document} />
-                  )}
-                </ProtectedRoute>
-              }
-            />
-
             <Route
               path="/signup"
               element={
