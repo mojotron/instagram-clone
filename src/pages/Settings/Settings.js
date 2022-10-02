@@ -152,7 +152,7 @@ const Settings = ({ userData }) => {
               placeholder="Short Bio"
               maxLength="150"
             />
-            <p>{formData.bio.length}/150</p>
+            <p data-testid="char-counter">{formData.bio.length}/150</p>
             <p>Write short description about you.</p>
           </div>
         </section>
