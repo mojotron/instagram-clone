@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ProfileDropdown from '../ProfileDropdown';
 import userEvent from '@testing-library/user-event';
 import { useLogout } from '../../../../hooks/useLogout';
+import { MemoryRouter, Routes, Route, BrowserRouter } from 'react-router-dom';
 
 jest.mock('../../../../hooks/useLogout', () => ({
   useLogout: jest.fn(() => ({
@@ -12,20 +13,46 @@ jest.mock('../../../../hooks/useLogout', () => ({
 }));
 
 describe('ProfileDropdown in Navbar component', () => {
-  test('renders list elements', () => {
+  test('settings list item', async () => {
     useLogout.mockImplementation(() => ({
       isPending: false,
       error: null,
       logout: jest.fn(),
     }));
-    render(<ProfileDropdown />);
-    const listElements = screen.getAllByRole('listitem');
-    const imgElements = screen.getAllByRole('img');
-    expect(listElements.length).toBe(4);
-    expect(listElements[0].textContent).toBe(imgElements[0].alt);
-    expect(listElements[1].textContent).toBe(imgElements[1].alt);
-    expect(listElements[2].textContent).toBe(imgElements[2].alt);
-    expect(listElements[3]).toHaveTextContent('Logout');
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<ProfileDropdown />} />
+          <Route path="/settings" element={<h1>Settings page</h1>} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const settingsListItem = screen.getByText(/settings/i);
+    expect(
+      screen.queryByRole('heading', { name: /settings page/i })
+    ).not.toBeInTheDocument();
+    await user.click(settingsListItem);
+    expect(
+      screen.getByRole('heading', { name: /settings page/i })
+    ).toBeInTheDocument();
+  });
+  test('logout user with Logout list item', async () => {
+    const mockLogout = jest.fn();
+    useLogout.mockImplementation(() => ({
+      isPending: false,
+      error: null,
+      logout: mockLogout,
+    }));
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <ProfileDropdown />
+      </BrowserRouter>
+    );
+    const logoutListItem = screen.getByText(/logout/i);
+    await user.click(logoutListItem);
+    expect(mockLogout).toBeCalledTimes(1);
   });
 
   test('pending and error from useLogout', async () => {
@@ -34,7 +61,11 @@ describe('ProfileDropdown in Navbar component', () => {
       error: 'something wrong',
       logout: jest.fn(),
     }));
-    render(<ProfileDropdown />);
+    render(
+      <BrowserRouter>
+        <ProfileDropdown />
+      </BrowserRouter>
+    );
     expect(screen.queryByText('Logout')).not.toBeInTheDocument();
     expect(screen.getByText('Loading')).toBeInTheDocument();
     expect(screen.getByText('something wrong')).toBeInTheDocument();

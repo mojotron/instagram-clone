@@ -3,12 +3,17 @@ import Avatar from '../../components/Avatar';
 import ChangeProfilePhoto from '../../components/ChangeProfilePhoto';
 import './styles/Settings.css';
 
-import { userNameValidation } from '../../utils/inputValidation';
+import {
+  fullNameValidation,
+  userNameValidation,
+} from '../../utils/inputValidation';
 import { useFirestore } from '../../hooks/useFirestore';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = ({ userData }) => {
   const [changeAvatar, setChangeAvatar] = useState(false);
-  const [usernameError, setUsernameError] = useState();
+  const [fullNameError, setFullNameError] = useState(null);
+  const [usernameError, setUsernameError] = useState(null);
   const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const [formData, setFormData] = useState({
@@ -20,6 +25,8 @@ const Settings = ({ userData }) => {
 
   const { isPending, error, checkIfUserExists, updateDocument } =
     useFirestore('users');
+
+  const navigate = useNavigate();
 
   const handleChangeAvatar = () => setChangeAvatar(oldValue => !oldValue);
 
@@ -33,18 +40,27 @@ const Settings = ({ userData }) => {
     e.preventDefault();
     // changing user name needs to be checked
     setUsernameError(null);
+    setFullNameError(null);
     try {
+      if (formData.fullName !== userData.fullName) {
+        fullNameValidation(formData.fullName);
+      }
       if (formData.userName !== userData.userName) {
+        userNameValidation(formData.userName);
         const usernameExist = await checkIfUserExists(formData.userName);
         if (usernameExist)
           throw new Error('Username already exist, please try another one!');
-        userNameValidation(formData.userName);
-        // update user info
-        await updateDocument(userData.id, formData);
       }
+      // update user info
+      await updateDocument(userData.id, formData);
+      navigate('/');
     } catch (err) {
       console.log(err.message);
-      setUsernameError(err.message);
+      if (err.message === 'input full name, like "John Dow"') {
+        setFullNameError(err.message);
+      } else {
+        setUsernameError(err.message);
+      }
     }
     // navigate
   };
@@ -97,6 +113,7 @@ const Settings = ({ userData }) => {
               onChange={handleChange}
               placeholder="Name"
             />
+            {fullNameError && <p className="error">{fullNameError}</p>}
             <p>
               Help people discover your account by using the name you're known
               by: either your full name, nickname, or business name.
@@ -134,6 +151,7 @@ const Settings = ({ userData }) => {
               value={formData.website}
               onChange={handleChange}
               placeholder="Website"
+              maxLength="75"
             />
             <p>Add your personal of business website.</p>
           </div>

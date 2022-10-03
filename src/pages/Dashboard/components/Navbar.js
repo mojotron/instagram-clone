@@ -10,7 +10,7 @@ const Navbar = ({ userData }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div className="Navbar">
+    <nav className="Navbar">
       <ul>
         <li>
           <NavLink to="/">
@@ -22,7 +22,7 @@ const Navbar = ({ userData }) => {
           {showDropdown && <ProfileDropdown />}
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };
 
