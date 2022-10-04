@@ -8,7 +8,7 @@ describe('Dashboard Header component', () => {
   test('home link', async () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>
-        <Header userData={mockUserData} />
+        <Header userData={mockUserData} toggleShowCreatePost={jest.fn()} />
         <Routes>
           <Route path="/" element={<h1>Home page</h1>} />
           <Route path="/settings" element={<h1>Settings Page</h1>} />
@@ -32,7 +32,7 @@ describe('Dashboard Header component', () => {
   test('main heading is link to home', async () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>
-        <Header userData={mockUserData} />
+        <Header userData={mockUserData} toggleShowCreatePost={jest.fn()} />
         <Routes>
           <Route path="/" element={<h1>Home page</h1>} />
           <Route path="/settings" element={<h1>Settings Page</h1>} />
@@ -56,7 +56,7 @@ describe('Dashboard Header component', () => {
   test('header has navbar', async () => {
     render(
       <BrowserRouter>
-        <Header userData={mockUserData} />
+        <Header userData={mockUserData} toggleShowCreatePost={jest.fn()} />
       </BrowserRouter>
     );
     expect(screen.getByRole('navigation')).toBeInTheDocument();

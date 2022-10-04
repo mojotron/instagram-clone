@@ -5,7 +5,7 @@ import mockUserData from '../../../../mocks/userData.json';
 
 describe('Navbar component', () => {
   test('toggle ProfileDropdown', async () => {
-    render(<Navbar userData={mockUserData} />);
+    render(<Navbar userData={mockUserData} toggleShowCreatePost={jest.fn()} />);
     const user = userEvent.setup();
     const userAvatar = screen.getByTestId('avatar');
     expect(screen.queryByText(/logout/i)).not.toBeInTheDocument();

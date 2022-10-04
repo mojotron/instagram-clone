@@ -2,6 +2,7 @@ import { render, screen } from '../../../test-utils/testing-library-utils';
 import Settings from '../Settings';
 import userEvent from '@testing-library/user-event';
 import { useFirestore } from '../../../hooks/useFirestore';
+import mockUserData from '../../../mocks/userData.json';
 
 jest.mock('../../../hooks/useFirestore', () => ({
   useFirestore: jest.fn(() => ({
@@ -11,15 +12,6 @@ jest.mock('../../../hooks/useFirestore', () => ({
     updateDocument: jest.fn(),
   })),
 }));
-
-const mockUserData = {
-  userName: '_jd_',
-  fullName: 'John Dow',
-  emailAddress: 'johndow@example.com',
-  avatar: { url: '', fileName: '' },
-  bio: '',
-  website: '',
-};
 
 describe('Settings page, update user info', () => {
   test('happy path', async () => {

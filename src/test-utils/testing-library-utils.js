@@ -1,18 +1,21 @@
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from '../context/AuthContext';
+import { onAuthStateChanged } from 'firebase/auth';
 
 // mock on onAuthStateChanged
+const temp = jest.fn(() => true);
 jest.mock('firebase/auth', () => {
   return {
-    getAuth: () => jest.fn(),
-    onAuthStateChanged: () => jest.fn(),
+    getAuth: jest.fn(),
+    onAuthStateChanged: jest.fn(),
   };
 });
 
 const ContextProvider = ({ children }) => {
+  onAuthStateChanged.mockImplementation(() => temp);
   return (
-    <AuthContextProvider value={{ authIsReady: true, user: true }}>
+    <AuthContextProvider value={{ authIsReady: true, user: { uid: 1 } }}>
       <BrowserRouter>{children}</BrowserRouter>
     </AuthContextProvider>
   );

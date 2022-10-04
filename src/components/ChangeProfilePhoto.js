@@ -31,7 +31,7 @@ const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
   };
 
   return (
-    <div className="ChangeProfilePhoto__overlay">
+    <div className="overlay">
       <div className="ChangeProfilePhoto">
         <h2>Change Profile Photo</h2>
 
