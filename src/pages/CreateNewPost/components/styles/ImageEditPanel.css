@@ -1,0 +1,37 @@
+.ImageEditPanel {
+  display: flex;
+  justify-content: space-between;
+  height: 43.5rem;
+}
+.ImageEditPanel__image {
+  width: 43.5rem;
+  border-right: var(--gray-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ImageEditPanel__image img {
+  width: 100%;
+}
+.ImageEditPanel__edit {
+  width: 34rem;
+}
+.ImageEditPanel__edit__select {
+  display: flex;
+  justify-content: space-around;
+}
+.ImageEditPanel__edit__select button {
+  width: 50%;
+  border: none;
+  background: none;
+  border-bottom: var(--gray-border);
+  color: var(--gray);
+  font-family: inherit;
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding: 1.5rem 0;
+}
+.ImageEditPanel__edit__select button.active {
+  border-bottom-color: var(--black);
+  color: var(--black);
+}
