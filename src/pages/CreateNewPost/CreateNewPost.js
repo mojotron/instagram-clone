@@ -9,9 +9,21 @@ import './styles/CreateNewPost.css';
 
 const CreateNewPost = () => {
   const [files, setFiles] = useState(null);
+  const [filters, setFilters] = useState({
+    brightness: null,
+    contrast: null,
+    saturation: null,
+  });
+
+  const [layers, setLayers] = useState({
+    temperature: null,
+    fade: null,
+    vignette: null,
+  });
+
   const stage = 'Create New Post';
 
-  console.log(files);
+  console.log(filters, layers);
 
   return (
     <div className="overlay">
@@ -24,7 +36,13 @@ const CreateNewPost = () => {
           <h2>{stage}</h2>
         </header>
         {!files && <FileUploadForm setFiles={setFiles} />}
-        {files && <ImageEditPanel image={files[0]} />}
+        {files && (
+          <ImageEditPanel
+            image={files[0]}
+            setFilters={setFilters}
+            setLayers={setLayers}
+          />
+        )}
       </div>
     </div>
   );

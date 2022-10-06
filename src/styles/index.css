@@ -47,3 +47,8 @@ body {
   justify-content: center;
   align-items: center;
 }
+.btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+}

@@ -9,6 +9,9 @@ import Settings from '../Settings/Settings';
 import CreateNewPost from '../CreateNewPost/CreateNewPost';
 // style
 import './styles/Dashboard.css';
+//temp
+import PostImage from '../../components/PostImage';
+import { getTemperature } from '../../utils/filterLayers';
 
 const Dashboard = () => {
   // get data
@@ -38,7 +41,7 @@ const Dashboard = () => {
           />
           {showCreatePost && <CreateNewPost />}
           <Routes>
-            <Route index element={<h1>timeline</h1>} />
+            <Route index element={<h1>hello</h1>} />
             <Route
               path="/settings"
               element={<Settings userData={response.document} />}

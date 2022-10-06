@@ -2,8 +2,10 @@
   display: flex;
   justify-content: space-between;
   height: 43.5rem;
+  overflow: hidden;
 }
 .ImageEditPanel__image {
+  height: inherit;
   width: 43.5rem;
   border-right: var(--gray-border);
   display: flex;
@@ -15,6 +17,7 @@
 }
 .ImageEditPanel__edit {
   width: 34rem;
+  height: inherit;
 }
 .ImageEditPanel__edit__select {
   display: flex;
@@ -35,3 +38,8 @@
   border-bottom-color: var(--black);
   color: var(--black);
 }
+.ImageEditPanel__edit__options {
+  height: inherit;
+  width: inherit;
+}
+/* AdjustmentBar */

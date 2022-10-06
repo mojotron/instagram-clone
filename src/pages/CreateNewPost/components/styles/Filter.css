@@ -1,0 +1,17 @@
+.Filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0 15px;
+}
+.Filter img {
+  width: 88px;
+  height: 88px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.Filter h3 {
+  padding-top: 0.5rem;
+  font-size: 1.4rem;
+}

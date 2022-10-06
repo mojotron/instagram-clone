@@ -1,0 +1,59 @@
+.AdjustmentBar {
+  width: 100%;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.AdjustmentBar__title {
+  padding-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.AdjustmentBar__title__btn {
+  color: var(--blue);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1.6rem;
+}
+.AdjustmentBar label {
+  text-transform: capitalize;
+  color: var(--black);
+  font-size: 1.8rem;
+}
+.AdjustmentBar__slider {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.AdjustmentBar__slider--slider {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 27.5rem;
+  height: 2px;
+  outline: none;
+  background: #dbdbdb;
+  accent-color: var(--black);
+}
+.AdjustmentBar__slider--slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 2rem;
+  height: 2rem;
+  background: var(--black);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.AdjustmentBar__slider--slider::-moz-range-thumb {
+  width: 2rem;
+  height: 2rem;
+  background: var(--black);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.AdjustmentBar span {
+  color: var(--black);
+  font-size: 1.3rem;
+}

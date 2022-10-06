@@ -1,96 +1,35 @@
 import { useState } from 'react';
 import './styles/ImageEditPanel.css';
+// components
+import FilterWrapper from './FilterWrapper';
+import AdjustmentWrapper from './AdjustmentWrapper';
+import PostImage from '../../../components/PostImage';
 
-import filterImg from '../../../images/ballon-filter.jpg';
+import { useFilters } from '../../../hooks/useFilters';
+import { useEffect } from 'react';
 
-const Filter = ({ filterCss, filterName, setFilter }) => {
-  const filterValue = {
-    brightness: 0,
-    contrast: 0,
-    saturation: 0,
-    temperature: 0,
-    fade: 0,
-    vignette: 0,
-  };
-
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '5px 0 15px',
-      }}
-      onClick={() => setFilter(filterCss)}
-    >
-      <img
-        style={{
-          width: '88px',
-          height: '88px',
-          filter: filterCss,
-          borderRadius: '5px',
-          overflow: 'hidden',
-        }}
-        src={filterImg}
-        alt="filter"
-      />
-      {/* Photo by <a href="https://unsplash.com/@mudaum?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Guilherme Garcia</a> on <a href="https://unsplash.com/s/photos/air-balloons?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a> */}
-      <h3 style={{ paddingTop: '5px', fontSize: '14px' }}>{filterName}</h3>
-    </div>
-  );
-};
-
-const FilterWrapper = ({ setFilter }) => {
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-      <Filter filterCss="" filterName="Normal" setFilter={setFilter} />
-      <Filter
-        filterCss="grayscale(100%)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="sepia(100%)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="saturate(50%)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="contrast(2)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="grayscale(100%)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="sepia(100%)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="saturate(50%)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-      <Filter
-        filterCss="contrast(2)"
-        filterName="Normal"
-        setFilter={setFilter}
-      />
-    </div>
-  );
-};
+// const filters = {
+//   normal: {
+//     name: 'normal',
+//     filterCss:
+//       'contrast(120%) brightness(125%) saturate(100%) sepia(0%) hue-rotate(0deg) grayscale(0%) invert(0%) blur(0px);',
+//   },
+//   clarendon: {},
+//   gingham: {},
+//   moon: {},
+//   lark: {},
+//   reyes: {},
+//   juno: {},
+//   slumber: {},
+//   crema: {},
+//   ludwig: {},
+//   aden: {},
+//   perpetua: {},
+// };
 
 const ImageEditPanel = ({ image }) => {
   const [optionsTab, setOptionsTab] = useState('filters');
+
   const [filter, setFilter] = useState('');
 
   const toggleOptionsTab = () => {
@@ -101,10 +40,11 @@ const ImageEditPanel = ({ image }) => {
   return (
     <div className="ImageEditPanel">
       <section className="ImageEditPanel__image">
-        <img
-          style={{ filter: filter }}
+        <PostImage
           src={URL.createObjectURL(image)}
-          alt=""
+          cssFilter={filter}
+          imagePosition="contain"
+          layers={[]}
         />
       </section>
       <section className="ImageEditPanel__edit">
@@ -125,7 +65,12 @@ const ImageEditPanel = ({ image }) => {
         <div className="ImageEditPanel__edit__options">
           {optionsTab === 'filters' && (
             <>
-              <FilterWrapper setFilter={setFilter} />
+              <FilterWrapper />
+            </>
+          )}
+          {optionsTab === 'adjustments' && (
+            <>
+              <AdjustmentWrapper setFilter={setFilter} />
             </>
           )}
         </div>
