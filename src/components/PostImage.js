@@ -1,17 +1,14 @@
-import img from '../images/ballon-filter.jpg';
 import './styles/PostImage.css';
 
 const PostImage = ({ src, cssFilter, imagePosition, layers }) => {
+  const styles = { filter: cssFilter, objectFit: imagePosition };
+
   return (
     <div className="PostImage">
-      <img
-        style={{ ...cssFilter, objectFit: imagePosition }}
-        src={src}
-        alt=""
-      />
+      <img style={styles} src={src} alt="" />
       {layers &&
-        layers.map(effect => (
-          <div key={effect} className="PostImage__overlay" style={effect}></div>
+        layers.map((effect, i) => (
+          <div key={i} className="PostImage__overlay" style={effect}></div>
         ))}
     </div>
   );

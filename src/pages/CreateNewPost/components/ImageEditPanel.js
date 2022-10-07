@@ -5,7 +5,7 @@ import FilterWrapper from './FilterWrapper';
 import AdjustmentWrapper from './AdjustmentWrapper';
 import PostImage from '../../../components/PostImage';
 
-import { useFilters } from '../../../hooks/useFilters';
+import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
 import { useEffect } from 'react';
 
 // const filters = {
@@ -31,6 +31,14 @@ const ImageEditPanel = ({ image }) => {
   const [optionsTab, setOptionsTab] = useState('filters');
 
   const [filter, setFilter] = useState('');
+  const [layers, setLayers] = useState([]);
+
+  const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
+
+  useEffect(() => {
+    setFilter(createCssFilter());
+    setLayers(createCssLayers());
+  }, [createCssFilter, createCssLayers]);
 
   const toggleOptionsTab = () => {
     setOptionsTab(oldValue =>
@@ -43,8 +51,8 @@ const ImageEditPanel = ({ image }) => {
         <PostImage
           src={URL.createObjectURL(image)}
           cssFilter={filter}
-          imagePosition="contain"
-          layers={[]}
+          imagePosition="cover"
+          layers={layers}
         />
       </section>
       <section className="ImageEditPanel__edit">
