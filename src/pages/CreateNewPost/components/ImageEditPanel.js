@@ -8,25 +8,6 @@ import PostImage from '../../../components/PostImage';
 import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
 import { useEffect } from 'react';
 
-// const filters = {
-//   normal: {
-//     name: 'normal',
-//     filterCss:
-//       'contrast(120%) brightness(125%) saturate(100%) sepia(0%) hue-rotate(0deg) grayscale(0%) invert(0%) blur(0px);',
-//   },
-//   clarendon: {},
-//   gingham: {},
-//   moon: {},
-//   lark: {},
-//   reyes: {},
-//   juno: {},
-//   slumber: {},
-//   crema: {},
-//   ludwig: {},
-//   aden: {},
-//   perpetua: {},
-// };
-
 const ImageEditPanel = ({ image }) => {
   const [optionsTab, setOptionsTab] = useState('filters');
 

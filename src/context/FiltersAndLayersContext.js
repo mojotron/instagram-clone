@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createContext } from 'react';
-import { getTemperature, getFade, getVignette } from '../utils/filterLayers';
+import { getFilter, getLayers } from '../utils/filterLayers';
 
 export const FiltersAndLayersContext = createContext();
 
@@ -13,8 +13,6 @@ const initialState = {
   vignette: '0',
 };
 
-const getFilterValue = value => parseInt(value) / 100 + 1;
-
 export const FiltersAndLayersContextProvider = ({ children }) => {
   const [state, setState] = useState(initialState);
 
@@ -23,19 +21,11 @@ export const FiltersAndLayersContextProvider = ({ children }) => {
   };
 
   const createCssFilter = () => {
-    const brightness = getFilterValue(state.brightness);
-    const contrast = getFilterValue(state.contrast);
-    const saturation = getFilterValue(state.saturation);
-
-    return `brightness(${brightness}) contrast(${contrast}) saturate(${saturation})`;
+    return getFilter(state.brightness, state.contrast, state.saturation);
   };
 
   const createCssLayers = () => {
-    const temperature = getTemperature(state.temperature);
-    const fade = getFade(state.fade);
-    const vignette = getVignette(state.vignette);
-
-    return [temperature, fade, vignette];
+    return getLayers(state.temperature, state.fade, state.vignette);
   };
 
   return (

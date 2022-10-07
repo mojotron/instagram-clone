@@ -4,23 +4,34 @@ import './styles/AdjustmentBar.css';
 const AdjustmentBar = ({ title, values, changeState }) => {
   const [bold, setBold] = useState(false);
   const [showResetBtn, setShowResetBtn] = useState(false);
+  // local state because sometimes live adjustment change crash browser
+  const [rangeValue, setRangeValue] = useState(values.current);
 
   const handleChange = e => {
     handleBtnDisplay();
-    changeState(title, e.target.value);
+    //changeState(title, e.target.value);
+    setRangeValue(e.target.value);
   };
 
   const handleReset = () => {
     changeState(title, '0');
+    setRangeValue('0');
+  };
+
+  const handleApplyChange = () => {
+    // local state because sometimes live adjustment change crash browser
+    // and range slider slides smooth
+    setBold(false);
+    changeState(title, rangeValue);
   };
 
   useEffect(() => {
-    if (values.current !== '0') return;
+    if (rangeValue !== '0') return;
     setShowResetBtn(false);
-  }, [title, values]);
+  }, [rangeValue]);
 
   const handleBtnDisplay = () => {
-    if (values.current === '0') return;
+    if (rangeValue === '0') return;
     setShowResetBtn(true);
   };
 
@@ -47,16 +58,14 @@ const AdjustmentBar = ({ title, values, changeState }) => {
           id={`slider-${title}`}
           type="range"
           name={title}
-          value={values.current}
+          value={rangeValue}
           min={values.min}
           max={values.max}
           onChange={handleChange}
           onMouseDown={() => setBold(true)}
-          onMouseUp={() => setBold(false)}
+          onMouseUp={handleApplyChange}
         />
-        <span style={{ fontWeight: bold ? '700' : '400' }}>
-          {values.current}
-        </span>
+        <span style={{ fontWeight: bold ? '700' : '400' }}>{rangeValue}</span>
       </div>
     </div>
   );

@@ -4,14 +4,17 @@
   justify-content: center;
   align-items: center;
   padding: 5px 0 15px;
-}
-.Filter img {
   width: 88px;
   height: 88px;
+}
+.Filter img {
+  width: inherit;
+  height: inherit;
   border-radius: 5px;
   overflow: hidden;
 }
 .Filter h3 {
   padding-top: 0.5rem;
   font-size: 1.4rem;
+  text-transform: capitalize;
 }
