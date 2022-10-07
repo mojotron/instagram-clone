@@ -1,20 +1,19 @@
 .Filter {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 5px 0 15px;
-  width: 88px;
-  height: 88px;
+  cursor: pointer;
 }
 .Filter img {
-  width: inherit;
-  height: inherit;
+  border: 3px solid black;
+  width: 88px;
+  height: 88px;
+  position: relative;
   border-radius: 5px;
   overflow: hidden;
 }
+
 .Filter h3 {
   padding-top: 0.5rem;
   font-size: 1.4rem;
   text-transform: capitalize;
+  text-align: center;
 }

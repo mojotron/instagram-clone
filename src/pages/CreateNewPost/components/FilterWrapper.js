@@ -5,9 +5,16 @@ const FilterWrapper = ({ setFilter }) => {
   return (
     <div
       style={{
-        display: 'grid',
+        height: 'inherit',
+        width: 'inherit',
+        display: 'flex',
+        flexFlow: 'wrap',
+        justifyContent: 'space-around',
+        alignItems: 'center',
         gridTemplateColumns: '1fr 1fr 1fr',
         gridTemplateRows: 'auto',
+        overflowY: 'scroll',
+        paddingBottom: '70px',
       }}
     >
       {filters.map(filter => (
