@@ -3,28 +3,20 @@ import { useState } from 'react';
 import closeIcon from '../../images/close-icon.svg';
 // components
 import FileUploadForm from './components/FileUploadForm';
+import ImageSizePanel from './components/ImageSizePanel';
 import ImageEditPanel from './components/ImageEditPanel';
 // style
 import './styles/CreateNewPost.css';
 import { FiltersAndLayersContextProvider } from '../../context/FiltersAndLayersContext';
 
 const CreateNewPost = () => {
+  // stage 1 select image(s)
   const [files, setFiles] = useState(null);
-  const [filters, setFilters] = useState({
-    brightness: null,
-    contrast: null,
-    saturation: null,
-  });
-
-  const [layers, setLayers] = useState({
-    temperature: null,
-    fade: null,
-    vignette: null,
-  });
-
+  // stage 2 image size
+  const [imageSize, setImageSize] = useState(null);
+  // stage 3 filters and layers
+  // stage 4 caption hashtags ats and location
   const stage = 'Create New Post';
-
-  console.log(filters, layers);
 
   return (
     <FiltersAndLayersContextProvider>
@@ -38,13 +30,11 @@ const CreateNewPost = () => {
             <h2>{stage}</h2>
           </header>
           {!files && <FileUploadForm setFiles={setFiles} />}
-          {files && (
-            <ImageEditPanel
-              image={files[0]}
-              setFilters={setFilters}
-              setLayers={setLayers}
-            />
+          {files && !imageSize && (
+            <ImageSizePanel image={URL.createObjectURL(files[0])} />
           )}
+
+          {/* {files && <ImageEditPanel image={files[0]} />} */}
         </div>
       </div>
     </FiltersAndLayersContextProvider>

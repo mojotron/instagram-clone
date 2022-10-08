@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 
 const ImageEditPanel = ({ image }) => {
   const [optionsTab, setOptionsTab] = useState('filters');
-
+  const [activeFilter, setActiveFilter] = useState('original');
   const [filter, setFilter] = useState('');
   const [layers, setLayers] = useState([]);
 
@@ -54,7 +54,10 @@ const ImageEditPanel = ({ image }) => {
         <div className="ImageEditPanel__edit__options">
           {optionsTab === 'filters' && (
             <>
-              <FilterWrapper />
+              <FilterWrapper
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+              />
             </>
           )}
           {optionsTab === 'adjustments' && (

@@ -28,9 +28,19 @@ export const FiltersAndLayersContextProvider = ({ children }) => {
     return getLayers(state.temperature, state.fade, state.vignette);
   };
 
+  const applyFilter = data => {
+    setState(data);
+  };
+
   return (
     <FiltersAndLayersContext.Provider
-      value={{ state, changeState, createCssFilter, createCssLayers }}
+      value={{
+        state,
+        changeState,
+        createCssFilter,
+        createCssLayers,
+        applyFilter,
+      }}
     >
       {children}
     </FiltersAndLayersContext.Provider>

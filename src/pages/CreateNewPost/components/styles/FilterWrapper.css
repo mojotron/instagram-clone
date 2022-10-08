@@ -1,0 +1,12 @@
+.FilterWrapper {
+  height: inherit;
+  width: inherit;
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  overflow-y: scroll;
+  padding-bottom: 70px;
+}

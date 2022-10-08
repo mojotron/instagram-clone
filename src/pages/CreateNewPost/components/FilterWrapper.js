@@ -1,24 +1,18 @@
 import Filter from './Filter';
 import filters from '../../../data/filters.json';
+import './styles/FilterWrapper.css';
 
-const FilterWrapper = ({ setFilter }) => {
+const FilterWrapper = ({ activeFilter, setActiveFilter }) => {
   return (
-    <div
-      style={{
-        height: 'inherit',
-        width: 'inherit',
-        display: 'flex',
-        flexFlow: 'wrap',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gridTemplateRows: 'auto',
-        overflowY: 'scroll',
-        paddingBottom: '70px',
-      }}
-    >
+    <div className="FilterWrapper">
       {filters.map(filter => (
-        <Filter key={filter.id} filterData={filter} />
+        <Filter
+          key={filter.id}
+          filterName={filter.title}
+          filterData={filter.data}
+          active={filter.title === activeFilter}
+          setActiveFilter={setActiveFilter}
+        />
       ))}
     </div>
   );

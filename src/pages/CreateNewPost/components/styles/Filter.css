@@ -1,19 +1,30 @@
 .Filter {
-  padding: 5px 0 15px;
+  margin-top: 1.5rem;
   cursor: pointer;
 }
-.Filter img {
-  border: 3px solid black;
-  width: 88px;
-  height: 88px;
-  position: relative;
-  border-radius: 5px;
+.Filter__image-wrapper {
+  height: 8.8rem;
+  width: 8.8rem;
   overflow: hidden;
+  border: 3px solid white;
+  border-radius: 0.3rem;
 }
-
+.Filter__image-wrapper.active {
+  border-color: var(--blue);
+}
+.Filter__image-wrapper .PostImage img {
+  overflow: hidden;
+  border-radius: 0.3rem;
+}
+.Filter__image-wrapper.active .PostImage img {
+  border-radius: 0;
+}
 .Filter h3 {
-  padding-top: 0.5rem;
+  margin-top: 0.5rem;
   font-size: 1.4rem;
   text-transform: capitalize;
   text-align: center;
+}
+.Filter h3.active {
+  color: var(--blue);
 }

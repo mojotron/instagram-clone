@@ -1,122 +1,146 @@
 [
   {
     "id": 0,
-    "title": "normal",
-    "brightness": "0",
-    "contrast": "0",
-    "saturation": "0",
-    "temperature": "0",
-    "fade": "0",
-    "vignette": "0"
+    "title": "original",
+    "data": {
+      "brightness": "0",
+      "contrast": "0",
+      "saturation": "0",
+      "temperature": "0",
+      "fade": "0",
+      "vignette": "0"
+    }
   },
   {
     "id": 1,
     "title": "clarendon",
-    "brightness": "65",
-    "contrast": "20",
-    "saturation": "25",
-    "temperature": "0",
-    "fade": "0",
-    "vignette": "0"
+    "data": {
+      "brightness": "65",
+      "contrast": "20",
+      "saturation": "25",
+      "temperature": "0",
+      "fade": "0",
+      "vignette": "0"
+    }
   },
   {
     "id": 2,
     "title": "gingham",
-    "brightness": "65",
-    "contrast": "50",
-    "saturation": "25",
-    "temperature": "5",
-    "fade": "-10",
-    "vignette": "0"
+    "data": {
+      "brightness": "65",
+      "contrast": "50",
+      "saturation": "25",
+      "temperature": "5",
+      "fade": "-10",
+      "vignette": "0"
+    }
   },
   {
     "id": 3,
     "title": "moon",
-    "brightness": "0",
-    "contrast": "0",
-    "saturation": "-100",
-    "temperature": "0",
-    "fade": "25",
-    "vignette": "0"
+    "data": {
+      "brightness": "0",
+      "contrast": "0",
+      "saturation": "-100",
+      "temperature": "0",
+      "fade": "25",
+      "vignette": "0"
+    }
   },
   {
     "id": 4,
     "title": "lark",
-    "brightness": "30",
-    "contrast": "20",
-    "saturation": "25",
-    "temperature": "25",
-    "fade": "0",
-    "vignette": "0"
+    "data": {
+      "brightness": "30",
+      "contrast": "20",
+      "saturation": "25",
+      "temperature": "25",
+      "fade": "0",
+      "vignette": "0"
+    }
   },
   {
     "id": 5,
     "title": "reyes",
-    "brightness": "25",
-    "contrast": "-25",
-    "saturation": "40",
-    "temperature": "20",
-    "fade": "25",
-    "vignette": "0"
+    "data": {
+      "brightness": "25",
+      "contrast": "-25",
+      "saturation": "40",
+      "temperature": "20",
+      "fade": "25",
+      "vignette": "0"
+    }
   },
   {
     "id": 6,
     "title": "juno",
-    "brightness": "50",
-    "contrast": "15",
-    "saturation": "80",
-    "temperature": "35",
-    "fade": "0",
-    "vignette": "0"
+    "data": {
+      "brightness": "50",
+      "contrast": "15",
+      "saturation": "80",
+      "temperature": "35",
+      "fade": "0",
+      "vignette": "0"
+    }
   },
   {
     "id": 7,
     "title": "slumber",
-    "brightness": "0",
-    "contrast": "25",
-    "saturation": "25",
-    "temperature": "35",
-    "fade": "30",
-    "vignette": "0"
+    "data": {
+      "brightness": "0",
+      "contrast": "25",
+      "saturation": "25",
+      "temperature": "35",
+      "fade": "30",
+      "vignette": "0"
+    }
   },
   {
     "id": 8,
     "title": "crema",
-    "brightness": "15",
-    "contrast": "25",
-    "saturation": "-10",
-    "temperature": "5",
-    "fade": "5",
-    "vignette": "0"
+    "data": {
+      "brightness": "15",
+      "contrast": "25",
+      "saturation": "-10",
+      "temperature": "5",
+      "fade": "5",
+      "vignette": "0"
+    }
   },
   {
     "id": 9,
     "title": "ludwig",
-    "brightness": "5",
-    "contrast": "5",
-    "saturation": "100",
-    "temperature": "25",
-    "fade": "25",
-    "vignette": "0"
+    "data": {
+      "brightness": "5",
+      "contrast": "5",
+      "saturation": "100",
+      "temperature": "25",
+      "fade": "5",
+      "vignette": "0"
+    }
   },
   {
     "id": 10,
     "title": "aden",
-    "brightness": "15",
-    "contrast": "0",
-    "saturation": "40",
-    "temperature": "20",
-    "fade": "25",
-    "vignette": "0"
+    "data": {
+      "brightness": "15",
+      "contrast": "0",
+      "saturation": "40",
+      "temperature": "20",
+      "fade": "25",
+      "vignette": "0"
+    }
   },
   {
     "id": 11,
     "title": "perpetua",
-    "brightness": "25",
-    "contrast": "10",
-    "saturation": "10",
-    "temperature": "10",
-    "fade": "10",
-    "vignette": "0"
+    "data": {
+      "brightness": "25",
+      "contrast": "10",
+      "saturation": "10",
+      "temperature": "10",
+      "fade": "10",
+      "vignette": "0"
+    }
   }
 ]
