@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import './styles/ImageSizePanel.css';
+// icons
+import changeSizeIcon from '../../../images/change-size-icon.svg';
+import zoomInIcon from '../../../images/zoom-in-icon.svg';
+import multipleFilesIcon from '../../../images/multiple-files.svg';
+
+const maxMove = currentZoom => {
+  const percentIncrease = ((currentZoom - 1) / 1) * 100; // 1 is original zoom value (min value)
+  return (percentIncrease / 2).toFixed(1);
+};
 
 const ImageSizePanel = ({ image }) => {
   // const imgUrl = URL.createObjectURL(image); outside for smoother animations
@@ -11,8 +20,10 @@ const ImageSizePanel = ({ image }) => {
   //
   //for zoom level, zoom inner element with transform scale css
   // property, parent element has overflow hidden to hide spilling element
+  //
+  // image position use inner div with bg image and move it around, stop if you
+  // get to parent rect. To calculate max move percent increase formula divide by 2
   const parentElementRef = useRef();
-  const imageElementRef = useRef();
 
   const [originalRatio, setOriginalRatio] = useState(null);
   const [error, setError] = useState(null);
@@ -21,11 +32,33 @@ const ImageSizePanel = ({ image }) => {
   // reposition image
   const [repositionActive, setRepositionActive] = useState(false);
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
-  const [temp, setTemp] = useState({ x: 0, y: 0 });
+  const [moveStart, setMoveStart] = useState({ x: null, y: null });
+  // display options
+  const [showSizes, setShowSizes] = useState(false);
+  const [showZoomRange, setShowZoomRange] = useState(false);
+  const [showMultiImages, setShowMultiImages] = useState(false);
+  const [activeSize, setActiveSize] = useState('1:1');
 
-  useEffect(() => {
-    document.addEventListener('onmouseup', () => {});
-  }, [zoomLevel]);
+  const closeAllOptions = () => {
+    setShowSizes(false);
+    setShowZoomRange(false);
+    setShowMultiImages(false);
+  };
+
+  const handleShowSize = () => {
+    closeAllOptions();
+    setShowSizes(true);
+  };
+
+  const handleShowZoomRange = () => {
+    closeAllOptions();
+    setShowZoomRange(true);
+  };
+
+  const handleShowMultiImages = () => {
+    closeAllOptions();
+    setShowMultiImages(true);
+  };
 
   useEffect(() => {
     if (originalRatio) return;
@@ -59,47 +92,124 @@ const ImageSizePanel = ({ image }) => {
 
   const handleReposition = e => {
     if (!repositionActive) return;
-    console.log('yo');
     const parent = parentElementRef.current.getBoundingClientRect();
-    const child = imageElementRef.current.getBoundingClientRect();
+    // get last position of user mouse move
+    const lastX = ((moveStart.x - parent.left) / parent.width) * 100;
+    const lastY = ((moveStart.y - parent.top) / parent.width) * 100;
+    // get current position
+    const x = ((e.clientX - parent.left) / parent.width) * 100;
+    const y = ((e.clientY - parent.top) / parent.height) * 100;
+    // calculate current move(mouse walk)
+    const moveX = lastX - x;
+    const moveY = lastY - y;
 
-    const moveX = e.clientX - temp.x;
-    const moveY = e.clientY - temp.y;
+    const obj = {};
+    // use maxMove to stop child pass parent container
+    const maxImageMove = maxMove(zoomLevel);
 
-    setImagePosition(oldValue => {
-      return { x: e.clientX - parent.left, y: parent.top - e.clientY };
-    });
+    if (Math.abs(moveX) >= maxImageMove) {
+      if (moveX > 0) obj.x = maxImageMove;
+      else obj.x = -maxImageMove;
+    } else {
+      obj.x = moveX;
+    }
+
+    if (Math.abs(moveY) >= maxImageMove) {
+      if (moveY > 0) obj.y = maxImageMove;
+      else obj.y = -maxImageMove;
+    } else {
+      obj.y = moveY;
+    }
+
+    setImagePosition({ ...obj });
   };
-
+  // TODO size reset on new ratio
   return (
     <div className="ImageSizePanel">
-      <div className="ImageSizePanel__size-buttons">
-        {!error && (
-          <button onClick={() => setImageSize(originalRatio)}>original</button>
-        )}
-        <button onClick={() => setImageSize({ width: '100%', height: '100%' })}>
-          1-1
-        </button>
-        <button onClick={() => setImageSize({ width: '80%', height: '100%' })}>
-          4-5
-        </button>
-        <button
-          onClick={() => setImageSize({ width: '100%', height: '56.25%' })}
-        >
-          16-9
-        </button>
+      <div className="ImageSizePanel__options">
+        <div className="ImageSizePanel__options__left">
+          <button
+            className={`btn ${showSizes ? 'active' : ''}`}
+            onClick={handleShowSize}
+          >
+            <img src={changeSizeIcon} alt="change size" />
+          </button>
 
-        <div>
+          <button
+            className={`btn ${showZoomRange ? 'active' : ''}`}
+            onClick={handleShowZoomRange}
+          >
+            <img src={zoomInIcon} alt="zoom in" />
+          </button>
+        </div>
+
+        <button
+          className={`btn ${showMultiImages ? 'active' : ''}`}
+          onClick={handleShowMultiImages}
+        >
+          <img src={multipleFilesIcon} alt="zoom in" />
+        </button>
+      </div>
+
+      {showSizes && (
+        <div className="ImageSizePanel__size__list">
+          {!error && (
+            <button
+              className={`btn ${activeSize === 'original' ? 'active' : ''}`}
+              onClick={() => {
+                setImagePosition({ x: 0, y: 0 });
+                setImageSize(originalRatio);
+                setActiveSize('original');
+              }}
+            >
+              original
+            </button>
+          )}
+          <button
+            className={`btn ${activeSize === '1:1' ? 'active' : ''}`}
+            onClick={() => {
+              setImageSize({ width: '100%', height: '100%' });
+              setActiveSize('1:1');
+            }}
+          >
+            1:1
+          </button>
+          <button
+            className={`btn ${activeSize === '4:5' ? 'active' : ''}`}
+            onClick={() => {
+              setImageSize({ width: '80%', height: '100%' });
+              setActiveSize('4:5');
+            }}
+          >
+            4:5
+          </button>
+          <button
+            className={`btn ${activeSize === '16:9' ? 'active' : ''}`}
+            onClick={() => {
+              setImageSize({ width: '100%', height: '56.25%' });
+              setActiveSize('16:9');
+            }}
+          >
+            16:9
+          </button>
+        </div>
+      )}
+
+      {showZoomRange && (
+        <div className="ImageSizePanel__zoom-range">
           <input
             type="range"
             value={zoomLevel}
-            onChange={e => setZoomLevel(e.target.value)}
+            onChange={e => {
+              setZoomLevel(e.target.value);
+              setImagePosition({ x: 0, y: 0 });
+            }}
             min="1"
             max="2"
             step="0.01"
           />
         </div>
-      </div>
+      )}
 
       <div
         ref={parentElementRef}
@@ -108,20 +218,22 @@ const ImageSizePanel = ({ image }) => {
           width: imageSize.width,
           height: imageSize.height,
         }}
+        onClick={closeAllOptions}
       >
         <div
-          ref={imageElementRef}
           className="ImageSizePanel__imageContainer__image"
           style={{
             transform: `scale(${zoomLevel})`,
             backgroundImage: `url("${image}")`,
-            backgroundPosition: `center center`,
-            top: `${imagePosition.y}px`,
-            left: `${imagePosition.x}px`,
+            backgroundPosition: 'center center',
+            top: `${imagePosition.y}%`, //
+            left: `${imagePosition.x}%`, //
           }}
           onMouseDown={e => {
-            setTemp({ x: e.clientX, y: e.clientY });
-            setRepositionActive(true);
+            if (zoomLevel !== '1') {
+              setMoveStart({ x: e.clientX, y: e.clientY });
+              setRepositionActive(true);
+            }
           }}
           onMouseUp={e => setRepositionActive(false)}
           onMouseMove={e => handleReposition(e)}

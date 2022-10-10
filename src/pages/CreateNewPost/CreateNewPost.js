@@ -5,6 +5,7 @@ import closeIcon from '../../images/close-icon.svg';
 import FileUploadForm from './components/FileUploadForm';
 import ImageSizePanel from './components/ImageSizePanel';
 import ImageEditPanel from './components/ImageEditPanel';
+import ImageInfoPanel from './components/ImageInfoPanel';
 // style
 import './styles/CreateNewPost.css';
 import { FiltersAndLayersContextProvider } from '../../context/FiltersAndLayersContext';
@@ -30,11 +31,13 @@ const CreateNewPost = () => {
             <h2>{stage}</h2>
           </header>
           {!files && <FileUploadForm setFiles={setFiles} />}
-          {files && !imageSize && (
+          {/* {files && !imageSize && (
             <ImageSizePanel image={URL.createObjectURL(files[0])} />
-          )}
+          )} */}
 
           {/* {files && <ImageEditPanel image={files[0]} />} */}
+
+          {files && <ImageInfoPanel image={URL.createObjectURL(files[0])} />}
         </div>
       </div>
     </FiltersAndLayersContextProvider>

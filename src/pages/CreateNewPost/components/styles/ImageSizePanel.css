@@ -1,6 +1,7 @@
 :root {
   --height: 43.5rem;
   --width: 43.5rem;
+  --bg-color: rgba(30, 30, 30, 0.8);
 }
 .ImageSizePanel {
   height: var(--height);
@@ -21,9 +22,99 @@
   background-repeat: no-repeat;
   position: relative;
 }
-.ImageSizePanel__size-buttons {
+.ImageSizePanel__size__list {
+  width: 12.8rem;
+  height: 19.5rem;
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 8rem;
+  left: 2rem;
   z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--bg-color);
+  border-radius: 1rem;
+}
+.ImageSizePanel__size__list button {
+  color: var(--gray);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.8rem;
+  border-bottom: 1px solid white;
+  padding: 1.3rem 0;
+}
+.ImageSizePanel__size__list button:last-child {
+  border: none;
+}
+.ImageSizePanel__size__list button.active {
+  color: white;
+}
+.ImageSizePanel__zoom-range {
+  position: absolute;
+  bottom: 8rem;
+  left: 6rem;
+  z-index: 3;
+  background-color: var(--bg-color);
+  padding: 1rem 1rem 1.5rem;
+  border-radius: 1rem;
+}
+/* slider */
+.ImageSizePanel__zoom-range input[type='range'] {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 1px;
+  outline: none;
+  background: var(--gray);
+  accent-color: var(--gray);
+}
+.ImageSizePanel__zoom-range input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 2rem;
+  height: 2rem;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.ImageSizePanel__zoom-range input[type='range']::-moz-range-thumb {
+  width: 2rem;
+  height: 2rem;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.ImageSizePanel__options {
+  padding: 0 2rem;
+  width: 100%;
+  position: absolute;
+  bottom: 3rem;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+}
+.ImageSizePanel__options__left {
+  display: flex;
+  justify-content: space-between;
+  width: 8rem;
+}
+.ImageSizePanel__options button {
+  height: 3.2rem;
+  width: 3.2rem;
+  background-color: var(--bg-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ImageSizePanel__options button:hover {
+  opacity: 0.7;
+}
+.ImageSizePanel__options button.active {
+  filter: invert(100%);
+}
+.ImageSizePanel__options img {
+  height: 2rem;
+  width: 2rem;
 }

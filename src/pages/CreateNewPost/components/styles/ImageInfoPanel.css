@@ -1,0 +1,11 @@
+.ImageInfoPanel {
+  display: flex;
+}
+.ImageInfoPanel__image {
+  height: 36.7rem;
+  width: 36.7rem;
+}
+.ImageInfoPanel__info {
+  height: 36.7rem;
+  width: 36.7rem;
+}
