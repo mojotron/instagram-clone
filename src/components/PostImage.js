@@ -1,15 +1,48 @@
 import './styles/PostImage.css';
 
-const PostImage = ({ src, cssFilter, imagePosition, layers }) => {
-  const styles = { filter: cssFilter, objectFit: imagePosition };
-
+const PostImage = ({
+  postSize,
+  src,
+  aspectRatio,
+  zoomLevel,
+  position,
+  cssFilter,
+  layers,
+}) => {
+  console.log(
+    'xxx',
+    postSize,
+    src,
+    aspectRatio,
+    zoomLevel,
+    position,
+    cssFilter,
+    layers
+  );
+  const childStyles = {
+    filter: cssFilter,
+    transform: `scale(${zoomLevel})`,
+    top: `${position.y}%`, //
+    left: `${position.x}%`, //
+  };
   return (
-    <div className="PostImage">
-      <img style={styles} src={src} alt="" />
-      {layers &&
-        layers.map((effect, i) => (
-          <div key={i} className="PostImage__overlay" style={effect}></div>
-        ))}
+    <div className="PostImage" style={{ height: postSize, width: postSize }}>
+      <div
+        className="PostImage__container"
+        style={{ height: aspectRatio.height, width: aspectRatio.width }}
+      >
+        <img
+          className="PostImage__container__image"
+          style={childStyles}
+          src={src}
+          alt="alt"
+        />
+
+        {layers &&
+          layers.map((effect, i) => (
+            <div key={i} className="PostImage__overlay" style={effect}></div>
+          ))}
+      </div>
     </div>
   );
 };

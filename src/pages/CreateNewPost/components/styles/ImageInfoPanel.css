@@ -8,4 +8,5 @@
 .ImageInfoPanel__info {
   height: 36.7rem;
   width: 36.7rem;
+  border-left: var(--gray-border);
 }

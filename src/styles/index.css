@@ -51,4 +51,5 @@ body {
   border: none;
   background: none;
   cursor: pointer;
+  font-family: inherit;
 }

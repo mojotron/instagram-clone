@@ -1,0 +1,27 @@
+.CreatePostHeader {
+  width: 100%;
+  height: 4.2rem;
+  text-align: center;
+  border-bottom: var(--gray-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem 0 1.5rem;
+}
+.CreatePostHeader h2 {
+  font-size: 1.8rem;
+  color: var(--black);
+}
+.CreatePostHeader__back-button {
+  height: 3.2rem;
+  width: 3.2rem;
+}
+.CreatePostHeader__back-button img {
+  height: inherit;
+  width: inherit;
+}
+.CreatePostHeader__next-button {
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 1.6rem;
+}

@@ -5,12 +5,14 @@ import changeSizeIcon from '../../../images/change-size-icon.svg';
 import zoomInIcon from '../../../images/zoom-in-icon.svg';
 import multipleFilesIcon from '../../../images/multiple-files.svg';
 
+import CreatePostHeader from './CreatePostHeader';
+
 const maxMove = currentZoom => {
   const percentIncrease = ((currentZoom - 1) / 1) * 100; // 1 is original zoom value (min value)
   return (percentIncrease / 2).toFixed(1);
 };
 
-const ImageSizePanel = ({ image }) => {
+const ImageSizePanel = ({ image, handleSetSizeData }) => {
   // const imgUrl = URL.createObjectURL(image); outside for smoother animations
   //
   // using 1:1, 4:5(height/1.25:height), 16:9(width:width*0.5625)
@@ -125,122 +127,132 @@ const ImageSizePanel = ({ image }) => {
   };
   // TODO size reset on new ratio
   return (
-    <div className="ImageSizePanel">
-      <div className="ImageSizePanel__options">
-        <div className="ImageSizePanel__options__left">
-          <button
-            className={`btn ${showSizes ? 'active' : ''}`}
-            onClick={handleShowSize}
-          >
-            <img src={changeSizeIcon} alt="change size" />
-          </button>
+    <>
+      <CreatePostHeader
+        title="Crop"
+        btnText="Next"
+        handleNext={() =>
+          handleSetSizeData(imageSize, zoomLevel, imagePosition)
+        }
+      />
+
+      <div className="ImageSizePanel">
+        <div className="ImageSizePanel__options">
+          <div className="ImageSizePanel__options__left">
+            <button
+              className={`btn ${showSizes ? 'active' : ''}`}
+              onClick={handleShowSize}
+            >
+              <img src={changeSizeIcon} alt="change size" />
+            </button>
+
+            <button
+              className={`btn ${showZoomRange ? 'active' : ''}`}
+              onClick={handleShowZoomRange}
+            >
+              <img src={zoomInIcon} alt="zoom in" />
+            </button>
+          </div>
 
           <button
-            className={`btn ${showZoomRange ? 'active' : ''}`}
-            onClick={handleShowZoomRange}
+            className={`btn ${showMultiImages ? 'active' : ''}`}
+            onClick={handleShowMultiImages}
           >
-            <img src={zoomInIcon} alt="zoom in" />
+            <img src={multipleFilesIcon} alt="zoom in" />
           </button>
         </div>
 
-        <button
-          className={`btn ${showMultiImages ? 'active' : ''}`}
-          onClick={handleShowMultiImages}
-        >
-          <img src={multipleFilesIcon} alt="zoom in" />
-        </button>
-      </div>
-
-      {showSizes && (
-        <div className="ImageSizePanel__size__list">
-          {!error && (
+        {showSizes && (
+          <div className="ImageSizePanel__size__list">
+            {!error && (
+              <button
+                className={`btn ${activeSize === 'original' ? 'active' : ''}`}
+                onClick={() => {
+                  setImagePosition({ x: 0, y: 0 });
+                  setImageSize(originalRatio);
+                  setActiveSize('original');
+                }}
+              >
+                original
+              </button>
+            )}
             <button
-              className={`btn ${activeSize === 'original' ? 'active' : ''}`}
+              className={`btn ${activeSize === '1:1' ? 'active' : ''}`}
               onClick={() => {
-                setImagePosition({ x: 0, y: 0 });
-                setImageSize(originalRatio);
-                setActiveSize('original');
+                setImageSize({ width: '100%', height: '100%' });
+                setActiveSize('1:1');
               }}
             >
-              original
+              1:1
             </button>
-          )}
-          <button
-            className={`btn ${activeSize === '1:1' ? 'active' : ''}`}
-            onClick={() => {
-              setImageSize({ width: '100%', height: '100%' });
-              setActiveSize('1:1');
-            }}
-          >
-            1:1
-          </button>
-          <button
-            className={`btn ${activeSize === '4:5' ? 'active' : ''}`}
-            onClick={() => {
-              setImageSize({ width: '80%', height: '100%' });
-              setActiveSize('4:5');
-            }}
-          >
-            4:5
-          </button>
-          <button
-            className={`btn ${activeSize === '16:9' ? 'active' : ''}`}
-            onClick={() => {
-              setImageSize({ width: '100%', height: '56.25%' });
-              setActiveSize('16:9');
-            }}
-          >
-            16:9
-          </button>
-        </div>
-      )}
+            <button
+              className={`btn ${activeSize === '4:5' ? 'active' : ''}`}
+              onClick={() => {
+                setImageSize({ width: '80%', height: '100%' });
+                setActiveSize('4:5');
+              }}
+            >
+              4:5
+            </button>
+            <button
+              className={`btn ${activeSize === '16:9' ? 'active' : ''}`}
+              onClick={() => {
+                setImageSize({ width: '100%', height: '56.25%' });
+                setActiveSize('16:9');
+              }}
+            >
+              16:9
+            </button>
+          </div>
+        )}
 
-      {showZoomRange && (
-        <div className="ImageSizePanel__zoom-range">
-          <input
-            type="range"
-            value={zoomLevel}
-            onChange={e => {
-              setZoomLevel(e.target.value);
-              setImagePosition({ x: 0, y: 0 });
-            }}
-            min="1"
-            max="2"
-            step="0.01"
-          />
-        </div>
-      )}
+        {showZoomRange && (
+          <div className="ImageSizePanel__zoom-range">
+            <input
+              type="range"
+              value={zoomLevel}
+              onChange={e => {
+                setZoomLevel(e.target.value);
+                setImagePosition({ x: 0, y: 0 });
+              }}
+              min="1"
+              max="2"
+              step="0.01"
+            />
+          </div>
+        )}
 
-      <div
-        ref={parentElementRef}
-        className="ImageSizePanel__imageContainer"
-        style={{
-          width: imageSize.width,
-          height: imageSize.height,
-        }}
-        onClick={closeAllOptions}
-      >
         <div
-          className="ImageSizePanel__imageContainer__image"
+          ref={parentElementRef}
+          className="ImageSizePanel__imageContainer"
           style={{
-            transform: `scale(${zoomLevel})`,
-            backgroundImage: `url("${image}")`,
-            backgroundPosition: 'center center',
-            top: `${imagePosition.y}%`, //
-            left: `${imagePosition.x}%`, //
+            width: imageSize.width,
+            height: imageSize.height,
           }}
-          onMouseDown={e => {
-            if (zoomLevel !== '1') {
-              setMoveStart({ x: e.clientX, y: e.clientY });
-              setRepositionActive(true);
-            }
-          }}
-          onMouseUp={e => setRepositionActive(false)}
-          onMouseMove={e => handleReposition(e)}
-          onMouseLeave={() => setRepositionActive(false)}
-        ></div>
+          onClick={closeAllOptions}
+        >
+          <div
+            className="ImageSizePanel__imageContainer__image"
+            style={{
+              transform: `scale(${zoomLevel})`,
+              backgroundImage: `url("${image}")`,
+              backgroundPosition: 'center center',
+              top: `${imagePosition.y}%`, //
+              left: `${imagePosition.x}%`, //
+            }}
+            onMouseDown={e => {
+              if (zoomLevel !== '1') {
+                setMoveStart({ x: e.clientX, y: e.clientY });
+                setRepositionActive(true);
+              }
+            }}
+            onMouseUp={e => setRepositionActive(false)}
+            onMouseMove={e => handleReposition(e)}
+            onMouseLeave={() => setRepositionActive(false)}
+          ></div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

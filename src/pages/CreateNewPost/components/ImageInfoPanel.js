@@ -5,7 +5,9 @@ const ImageInfoPanel = ({ image }) => {
   return (
     <div className="ImageInfoPanel">
       <section className="ImageInfoPanel__image"></section>
-      <section className="ImageInfoPanel__info"></section>
+      <section className="ImageInfoPanel__info">
+        <form></form>
+      </section>
     </div>
   );
 };

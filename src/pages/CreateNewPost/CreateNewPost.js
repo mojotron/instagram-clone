@@ -11,13 +11,29 @@ import './styles/CreateNewPost.css';
 import { FiltersAndLayersContextProvider } from '../../context/FiltersAndLayersContext';
 
 const CreateNewPost = () => {
+  const [currentStage, setCurrentStage] = useState('load-files');
   // stage 1 select image(s)
   const [files, setFiles] = useState(null);
   // stage 2 image size
-  const [imageSize, setImageSize] = useState(null);
+  const [imageSizeData, setImageSizeData] = useState(null);
   // stage 3 filters and layers
   // stage 4 caption hashtags ats and location
-  const stage = 'Create New Post';
+  const handleSetFiles = files => {
+    setFiles(files);
+    setCurrentStage('size-position');
+  };
+  console.log('image size data', imageSizeData);
+
+  const handleSetSizeData = (aspectRatio, zoomLevel, position) => {
+    console.log(aspectRatio, zoomLevel, position);
+    alert();
+    setImageSizeData({
+      aspectRatio: aspectRatio,
+      zoomLevel: zoomLevel,
+      position: position,
+    });
+    setCurrentStage('filters-layers');
+  };
 
   return (
     <FiltersAndLayersContextProvider>
@@ -27,17 +43,35 @@ const CreateNewPost = () => {
         </button>
 
         <div data-testid="create-post" className="CreateNewPost">
-          <header className="CreateNewPost__header">
-            <h2>{stage}</h2>
-          </header>
-          {!files && <FileUploadForm setFiles={setFiles} />}
-          {/* {files && !imageSize && (
-            <ImageSizePanel image={URL.createObjectURL(files[0])} />
-          )} */}
-
-          {/* {files && <ImageEditPanel image={files[0]} />} */}
-
-          {files && <ImageInfoPanel image={URL.createObjectURL(files[0])} />}
+          {currentStage === 'load-files' && (
+            <FileUploadForm handleSetFiles={handleSetFiles} />
+          )}
+          {currentStage === 'size-position' && (
+            <ImageSizePanel
+              image={URL.createObjectURL(files[0])}
+              handleSetSizeData={handleSetSizeData}
+            />
+          )}
+          {/* postSize,
+        src,
+        aspectRatio,
+        zoomLevel,
+        position,
+        cssFilter,
+        layers, */}
+          {imageSizeData && currentStage === 'filters-layers' && (
+            <ImageEditPanel
+              imageData={{
+                src: URL.createObjectURL(files[0]),
+                aspectRatio: imageSizeData.aspectRatio,
+                zoomLevel: imageSizeData.zoomLevel,
+                position: imageSizeData.position,
+              }}
+            />
+          )}
+          {currentStage === 'caption-info' && (
+            <ImageInfoPanel image={URL.createObjectURL(files[0])} />
+          )}
         </div>
       </div>
     </FiltersAndLayersContextProvider>

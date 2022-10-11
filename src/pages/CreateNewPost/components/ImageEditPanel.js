@@ -8,7 +8,7 @@ import PostImage from '../../../components/PostImage';
 import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
 import { useEffect } from 'react';
 
-const ImageEditPanel = ({ image }) => {
+const ImageEditPanel = ({ imageData }) => {
   const [optionsTab, setOptionsTab] = useState('filters');
   const [activeFilter, setActiveFilter] = useState('original');
   const [filter, setFilter] = useState('');
@@ -26,13 +26,16 @@ const ImageEditPanel = ({ image }) => {
       oldValue === 'filters' ? 'adjustments' : 'filters'
     );
   };
+  console.log('imagedata', imageData);
   return (
     <div className="ImageEditPanel">
       <section className="ImageEditPanel__image">
         <PostImage
-          src={URL.createObjectURL(image)}
+          src={imageData.src}
+          aspectRatio={imageData.aspectRatio}
+          zoomLevel={imageData.zoomLevel}
+          position={imageData.position}
           cssFilter={filter}
-          imagePosition="cover"
           layers={layers}
         />
       </section>
