@@ -2,6 +2,7 @@
   min-width: 43.5rem;
   background-color: white;
   border-radius: 1rem;
+  overflow: hidden;
 }
 .CreateNewPost__btn--close {
   position: absolute;

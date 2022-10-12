@@ -1,7 +1,6 @@
 import './styles/PostImage.css';
 
 const PostImage = ({
-  postSize,
   src,
   aspectRatio,
   zoomLevel,
@@ -9,16 +8,6 @@ const PostImage = ({
   cssFilter,
   layers,
 }) => {
-  console.log(
-    'xxx',
-    postSize,
-    src,
-    aspectRatio,
-    zoomLevel,
-    position,
-    cssFilter,
-    layers
-  );
   const childStyles = {
     filter: cssFilter,
     transform: `scale(${zoomLevel})`,
@@ -26,7 +15,7 @@ const PostImage = ({
     left: `${position.x}%`, //
   };
   return (
-    <div className="PostImage" style={{ height: postSize, width: postSize }}>
+    <div className="PostImage">
       <div
         className="PostImage__container"
         style={{ height: aspectRatio.height, width: aspectRatio.width }}

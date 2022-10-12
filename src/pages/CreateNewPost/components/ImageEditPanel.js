@@ -7,8 +7,16 @@ import PostImage from '../../../components/PostImage';
 
 import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
 import { useEffect } from 'react';
+import CreatePostHeader from './CreatePostHeader';
 
-const ImageEditPanel = ({ imageData }) => {
+const ImageEditPanel = ({
+  postSize,
+  src,
+  aspectRatio,
+  zoomLevel,
+  position,
+  setCurrentStage,
+}) => {
   const [optionsTab, setOptionsTab] = useState('filters');
   const [activeFilter, setActiveFilter] = useState('original');
   const [filter, setFilter] = useState('');
@@ -26,51 +34,60 @@ const ImageEditPanel = ({ imageData }) => {
       oldValue === 'filters' ? 'adjustments' : 'filters'
     );
   };
-  console.log('imagedata', imageData);
+
   return (
-    <div className="ImageEditPanel">
-      <section className="ImageEditPanel__image">
-        <PostImage
-          src={imageData.src}
-          aspectRatio={imageData.aspectRatio}
-          zoomLevel={imageData.zoomLevel}
-          position={imageData.position}
-          cssFilter={filter}
-          layers={layers}
-        />
-      </section>
-      <section className="ImageEditPanel__edit">
-        <div className="ImageEditPanel__edit__select">
-          <button
-            className={optionsTab === 'filters' ? 'active' : ''}
-            onClick={toggleOptionsTab}
-          >
-            Filters
-          </button>
-          <button
-            className={optionsTab === 'adjustments' ? 'active' : ''}
-            onClick={toggleOptionsTab}
-          >
-            Adjustments
-          </button>
-        </div>
-        <div className="ImageEditPanel__edit__options">
-          {optionsTab === 'filters' && (
-            <>
-              <FilterWrapper
-                activeFilter={activeFilter}
-                setActiveFilter={setActiveFilter}
-              />
-            </>
-          )}
-          {optionsTab === 'adjustments' && (
-            <>
-              <AdjustmentWrapper setFilter={setFilter} />
-            </>
-          )}
-        </div>
-      </section>
-    </div>
+    <>
+      <CreatePostHeader
+        title="Edit"
+        btnText="Next"
+        handleNext={() => setCurrentStage('caption-info')}
+      />
+
+      <div className="ImageEditPanel">
+        <section className="ImageEditPanel__image">
+          <PostImage
+            postSize={postSize}
+            src={src}
+            aspectRatio={aspectRatio}
+            zoomLevel={zoomLevel}
+            position={position}
+            cssFilter={filter}
+            layers={layers}
+          />
+        </section>
+        <section className="ImageEditPanel__edit">
+          <div className="ImageEditPanel__edit__select">
+            <button
+              className={optionsTab === 'filters' ? 'active' : ''}
+              onClick={toggleOptionsTab}
+            >
+              Filters
+            </button>
+            <button
+              className={optionsTab === 'adjustments' ? 'active' : ''}
+              onClick={toggleOptionsTab}
+            >
+              Adjustments
+            </button>
+          </div>
+          <div className="ImageEditPanel__edit__options">
+            {optionsTab === 'filters' && (
+              <>
+                <FilterWrapper
+                  activeFilter={activeFilter}
+                  setActiveFilter={setActiveFilter}
+                />
+              </>
+            )}
+            {optionsTab === 'adjustments' && (
+              <>
+                <AdjustmentWrapper setFilter={setFilter} />
+              </>
+            )}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 

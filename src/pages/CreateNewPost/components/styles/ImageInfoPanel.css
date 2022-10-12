@@ -9,4 +9,161 @@
   height: 36.7rem;
   width: 36.7rem;
   border-left: var(--gray-border);
+  overflow: scroll;
+  padding-bottom: 2rem;
+}
+.ImageInfoPanel__info__user {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1.5rem 1.5rem 0;
+}
+.ImageInfoPanel__info__user h2 {
+  color: var(--black);
+  padding-left: 1.5rem;
+  font-size: 1.8rem;
+  font-size: 700;
+}
+.ImageInfoPanel__info__form textarea {
+  resize: none;
+  width: 100%;
+  height: 16rem;
+  border: none;
+  padding: 1.5rem;
+  font-family: inherit;
+  outline: none;
+}
+.ImageInfoPanel__info__form label {
+  border-bottom: var(--gray-border);
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ImageInfoPanel__info__form input {
+  outline: none;
+  border: none;
+  width: 90%;
+  font-size: 1.8rem;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.ImageInfoPanel__info__form__emoji {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: var(--gray-border);
+}
+.ImageInfoPanel__info__form__emoji p {
+  font-size: 1.4rem;
+}
+.label-icon {
+  position: absolute;
+  right: 1.5rem;
+}
+.ImageInfoPanel__info__form__dropdown {
+  width: 100%;
+  padding: 1.5rem;
+}
+.ImageInfoPanel__info__form__dropdown header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ImageInfoPanel__info__form__dropdown h3 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--black);
+  cursor: pointer;
+}
+.ImageInfoPanel__expand p {
+  font-size: 1.4rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+}
+.ImageInfoPanel__expand__input {
+  height: 4rem;
+  display: flex;
+  border: var(--gray-border);
+}
+.ImageInfoPanel__expand__input input {
+  width: 90%;
+  overflow: hidden;
+}
+.expand-container header {
+  display: grid;
+  grid-template-columns: 5fr 1.1fr;
+}
+.expand-container h3 {
+  padding-top: 1.5rem;
+  font-weight: 400;
+}
+.expand-container p {
+  font-size: 1.4rem;
+  text-align: left;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

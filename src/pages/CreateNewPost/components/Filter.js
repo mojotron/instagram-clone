@@ -18,12 +18,14 @@ const Filter = ({ filterName, filterData, active, setActiveFilter }) => {
       <div className={`Filter__image-wrapper ${active ? 'active' : ''}`}>
         <PostImage
           src={filterImg}
+          aspectRatio={{ width: '100%', height: '100%' }}
+          zoomLevel={'1'}
+          position={{ x: 0, y: 0 }}
           cssFilter={getFilter(
             filterData.brightness,
             filterData.contrast,
             filterData.saturation
           )}
-          imagePosition={'cover'}
           layers={getLayers(
             filterData.temperature,
             filterData.fade,

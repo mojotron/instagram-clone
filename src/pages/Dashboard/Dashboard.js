@@ -9,10 +9,6 @@ import Settings from '../Settings/Settings';
 import CreateNewPost from '../CreateNewPost/CreateNewPost';
 // style
 import './styles/Dashboard.css';
-//temp
-import testImage from '../../images/ballon-filter.jpg';
-import PostImage from '../../components/PostImage';
-import { getFilter, getLayers } from '../../utils/filterLayers';
 
 const Dashboard = () => {
   // get data
@@ -40,7 +36,7 @@ const Dashboard = () => {
             userData={response.document}
             toggleShowCreatePost={toggleShowCreatePost}
           />
-          {showCreatePost && <CreateNewPost />}
+          {showCreatePost && <CreateNewPost userData={response.document} />}
           <Routes>
             <Route index element={<h1>hello</h1>} />
             <Route
@@ -48,16 +44,6 @@ const Dashboard = () => {
               element={<Settings userData={response.document} />}
             />
           </Routes>
-
-          <PostImage
-            postSize="400px"
-            src={testImage}
-            aspectRatio={{ width: '80%', height: '100%' }}
-            zoomLevel={'1'}
-            position={{ x: 0, y: 0 }}
-            cssFilter={getFilter('30', '20', '25')}
-            layers={getLayers('25', '10', '25')}
-          />
         </>
       )}
     </div>
