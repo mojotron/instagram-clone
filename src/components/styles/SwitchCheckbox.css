@@ -1,0 +1,46 @@
+.SwitchCheckbox {
+  position: relative;
+  width: 6rem;
+  height: 3.4rem;
+  display: block;
+}
+.SwitchCheckbox input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.SwitchCheckbox__slider {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--gray);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 3.5rem;
+}
+.SwitchCheckbox__slider::before {
+  content: '';
+  position: absolute;
+  height: 2.6rem;
+  width: 2.6rem;
+  left: 0.4rem;
+  top: 0.4rem;
+  border-radius: 50%;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.SwitchCheckbox input:checked + .SwitchCheckbox__slider {
+  background-color: var(--blue);
+}
+.SwitchCheckbox input:focus + .SwitchCheckbox__slider {
+  box-shadow: 0 0 1px var(--blue);
+}
+.SwitchCheckbox input:checked + .SwitchCheckbox__slider:before {
+  -webkit-transform: translateX(2.6rem);
+  -ms-transform: translateX(2.6rem);
+  transform: translateX(2.6rem);
+}

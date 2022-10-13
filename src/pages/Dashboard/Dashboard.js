@@ -9,6 +9,7 @@ import Settings from '../Settings/Settings';
 import CreateNewPost from '../CreateNewPost/CreateNewPost';
 // style
 import './styles/Dashboard.css';
+//temp
 
 const Dashboard = () => {
   // get data

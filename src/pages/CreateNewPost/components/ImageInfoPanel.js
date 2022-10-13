@@ -1,37 +1,44 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './styles/ImageInfoPanel.css';
 import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
+import EmojiPicker from 'emoji-picker-react';
 // components
 import CreatePostHeader from './CreatePostHeader';
 import PostImage from '../../../components/PostImage';
 import Avatar from '../../../components/Avatar';
+import SwitchCheckbox from '../../../components/SwitchCheckbox';
 // icons
 import smileIcon from '../../../images/smile-icon.svg';
 import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
-const SliderCheckBox = () => {
-  return (
-    <label className="switch">
-      <input type="checkbox" />
-      <span className="slider round"></span>
-    </label>
-  );
-};
-
 const ImageInfoPanel = ({ postData, userData }) => {
   const [caption, setCaption] = useState('');
   const [location, setLocation] = useState('');
   const [altText, setAltText] = useState('');
 
+  const [disableLikes, setDisableLikes] = useState(false);
+  const [disableComments, setDisableComments] = useState(false);
+
+  const [showEmojis, setShowEmojis] = useState(false);
   const [showAccessibility, setShowAccessibility] = useState(false);
   const [showAdvanceSettings, setShowAdvanceSettings] = useState(false);
 
   const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
+
+  const textareaRef = useRef();
+
+  const handleEmojiClick = e => {
+    const emoji = e.emoji;
+    setCaption(oldValue => oldValue + emoji);
+    setShowEmojis(false);
+    textareaRef.current.focus();
+  };
+
   return (
     <>
-      <CreatePostHeader title="Create New Post" />
+      <CreatePostHeader title="Create New Post" btnText="Share" />
 
       <div className="ImageInfoPanel">
         <section className="ImageInfoPanel__image">
@@ -57,12 +64,24 @@ const ImageInfoPanel = ({ postData, userData }) => {
               minLength="0"
               maxLength="2200"
               placeholder="Write a caption..."
+              autoCorrect="off"
+              ref={textareaRef}
             />
 
             <div className="ImageInfoPanel__info__form__emoji">
-              <button className="btn">
+              <button
+                type="button"
+                className="btn"
+                onClick={() => setShowEmojis(oldValue => !oldValue)}
+              >
                 <img src={smileIcon} alt="emojis" />
               </button>
+              {showEmojis && (
+                <EmojiPicker
+                  emojiStyle="native"
+                  onEmojiClick={handleEmojiClick}
+                />
+              )}
               <p>{caption.length}/2200</p>
             </div>
 
@@ -137,7 +156,12 @@ const ImageInfoPanel = ({ postData, userData }) => {
                   <div className="expand-container">
                     <header>
                       <h3>Hide like and view counts on this post</h3>
-                      <SliderCheckBox />
+                      <SwitchCheckbox
+                        value={disableLikes}
+                        handleChange={() =>
+                          setDisableLikes(oldValue => !oldValue)
+                        }
+                      />
                     </header>
                     <p>
                       Only you will see the total number of likes and views on
@@ -149,7 +173,12 @@ const ImageInfoPanel = ({ postData, userData }) => {
                   <div className="expand-container">
                     <header>
                       <h3>Turn off commenting</h3>
-                      <SliderCheckBox />
+                      <SwitchCheckbox
+                        value={disableComments}
+                        handleChange={() =>
+                          setDisableComments(oldValue => !oldValue)
+                        }
+                      />
                     </header>
                     <p>
                       You can change this later by going to the ··· menu at the
