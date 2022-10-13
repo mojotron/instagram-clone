@@ -6,12 +6,14 @@ import FileUploadForm from './components/FileUploadForm';
 import ImageSizePanel from './components/ImageSizePanel';
 import ImageEditPanel from './components/ImageEditPanel';
 import ImageInfoPanel from './components/ImageInfoPanel';
+import DiscardPost from './components/DiscardPost';
 // style
 import './styles/CreateNewPost.css';
 import { FiltersAndLayersContextProvider } from '../../context/FiltersAndLayersContext';
 import { useFiltersAndLayersContext } from '../../hooks/useFiltersAndLayersContext';
 
-const CreateNewPost = ({ userData }) => {
+const CreateNewPost = ({ userData, setShowCreatePost }) => {
+  const [showDiscard, setShowDiscard] = useState(false);
   const [currentStage, setCurrentStage] = useState('load-files');
   // stage 1 select image(s)
   const [files, setFiles] = useState(null);
@@ -32,8 +34,19 @@ const CreateNewPost = ({ userData }) => {
 
   return (
     <FiltersAndLayersContextProvider>
+      {showDiscard && (
+        <DiscardPost
+          handleCancel={() => setShowDiscard(false)}
+          handleDiscard={() => setShowCreatePost(false)}
+        />
+      )}
+
       <div className="overlay">
-        <button type="button" className="CreateNewPost__btn--close">
+        <button
+          type="button"
+          className="CreateNewPost__btn--close"
+          onClick={() => setShowDiscard(true)}
+        >
           <img src={closeIcon} alt="close" />
         </button>
 

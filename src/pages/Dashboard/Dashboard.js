@@ -37,7 +37,14 @@ const Dashboard = () => {
             userData={response.document}
             toggleShowCreatePost={toggleShowCreatePost}
           />
-          {showCreatePost && <CreateNewPost userData={response.document} />}
+
+          {showCreatePost && (
+            <CreateNewPost
+              userData={response.document}
+              setShowCreatePost={setShowCreatePost}
+            />
+          )}
+
           <Routes>
             <Route index element={<h1>hello</h1>} />
             <Route
