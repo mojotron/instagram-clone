@@ -13,7 +13,7 @@ import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
-const ImageInfoPanel = ({ postData, userData }) => {
+const ImageInfoPanel = ({ postData, userData, handleUploadPost }) => {
   const [caption, setCaption] = useState('');
   const [location, setLocation] = useState('');
   const [altText, setAltText] = useState('');
@@ -38,7 +38,19 @@ const ImageInfoPanel = ({ postData, userData }) => {
 
   return (
     <>
-      <CreatePostHeader title="Create New Post" btnText="Share" />
+      <CreatePostHeader
+        title="Create New Post"
+        btnText="Share"
+        handleNext={() =>
+          handleUploadPost({
+            caption,
+            location,
+            altText,
+            disableLikes,
+            disableComments,
+          })
+        }
+      />
 
       <div className="ImageInfoPanel">
         <section className="ImageInfoPanel__image">

@@ -9,7 +9,8 @@ import Settings from '../Settings/Settings';
 import CreateNewPost from '../CreateNewPost/CreateNewPost';
 // style
 import './styles/Dashboard.css';
-//temp
+// context provider
+import { FiltersAndLayersContextProvider } from '../../context/FiltersAndLayersContext';
 
 const Dashboard = () => {
   // get data
@@ -39,10 +40,12 @@ const Dashboard = () => {
           />
 
           {showCreatePost && (
-            <CreateNewPost
-              userData={response.document}
-              setShowCreatePost={setShowCreatePost}
-            />
+            <FiltersAndLayersContextProvider>
+              <CreateNewPost
+                userData={response.document}
+                setShowCreatePost={setShowCreatePost}
+              />
+            </FiltersAndLayersContextProvider>
           )}
 
           <Routes>

@@ -9,7 +9,6 @@ import ImageInfoPanel from './components/ImageInfoPanel';
 import DiscardPost from './components/DiscardPost';
 // style
 import './styles/CreateNewPost.css';
-import { FiltersAndLayersContextProvider } from '../../context/FiltersAndLayersContext';
 import { useFiltersAndLayersContext } from '../../hooks/useFiltersAndLayersContext';
 
 const CreateNewPost = ({ userData, setShowCreatePost }) => {
@@ -20,8 +19,10 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
   // stage 2 image size
   const [imageSizeData, setImageSizeData] = useState(null);
   // stage 3 filters and layers
+  const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
+  // stage 4 caption hashtags @ and location
+  const [postInfoData, setPostInfoData] = useState(null);
 
-  // stage 4 caption hashtags ats and location
   const handleSetFiles = files => {
     setFiles(files);
     setCurrentStage('size-position');
@@ -31,9 +32,15 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
     setImageSizeData({ aspectRatio, zoomLevel, position });
     setCurrentStage('filters-layers');
   };
+  // no need for handle filters and layers they are in context, just pass setCurrentStage
+  const handleUploadPost = data => {
+    setPostInfoData({ ...data });
+  };
+
+  console.log(postInfoData);
 
   return (
-    <FiltersAndLayersContextProvider>
+    <>
       {showDiscard && (
         <DiscardPost
           handleCancel={() => setShowDiscard(false)}
@@ -78,11 +85,12 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
                 position: imageSizeData.position,
               }}
               userData={userData}
+              handleUploadPost={handleUploadPost}
             />
           )}
         </div>
       </div>
-    </FiltersAndLayersContextProvider>
+    </>
   );
 };
 
