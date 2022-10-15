@@ -53,3 +53,9 @@ body {
   cursor: pointer;
   font-family: inherit;
 }
+.error {
+  color: var(--red);
+  font-size: 1.6rem;
+  padding-top: 1rem;
+  font-weight: bold;
+}

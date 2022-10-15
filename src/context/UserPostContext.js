@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useState } from 'react';
 import { getFilter, getLayers } from '../utils/filterLayers';
 
 export const UserPostContext = createContext();
@@ -35,13 +35,21 @@ const initialState = {
   },
 };
 
-const userPostReducer = (state, action) => {};
+// const userPostReducer = (state, action) => {};
 
 export const UserPostContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(userPostReducer, {});
+  // const [state, dispatch] = useReducer(userPostReducer, {});
+  const [files, setFiles] = useState(null);
+
+  const createTempUrls = () => {
+    // this is helper function to use PostImage component in other stages of post creation
+    return [...files].map(file => {
+      return URL.createObjectURL(file);
+    });
+  };
 
   return (
-    <UserPostContext.Provider value={{ state, dispatch }}>
+    <UserPostContext.Provider value={{ files, setFiles, createTempUrls }}>
       {children}
     </UserPostContext.Provider>
   );

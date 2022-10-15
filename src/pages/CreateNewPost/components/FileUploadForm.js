@@ -5,7 +5,14 @@ import './styles/FileUploadForm.css';
 
 import CreatePostHeader from './CreatePostHeader';
 
-const FileUploadForm = ({ handleSetFiles }) => {
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
+
+const FileUploadForm = () => {
+  const { setFiles } = useUserPostContext();
+
+  const [error, setError] = useState(null);
+  console.log(error);
+
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef(null);
 
@@ -21,16 +28,28 @@ const FileUploadForm = ({ handleSetFiles }) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      console.log(e.dataTransfer.files);
-      console.log('setting files');
-      handleSetFiles(e.dataTransfer.files);
+    try {
+      setError(null);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        if (e.dataTransfer.files.length > 3)
+          throw new Error('Maximum 3 images');
+        setFiles(e.dataTransfer.files);
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   const handleChange = e => {
-    if (e.target.files && e.target.files[0]) {
-      handleSetFiles(e.target.files);
+    try {
+      setError(null);
+      if (e.target.files && e.target.files[0]) {
+        if (e.target.files.length > 3) alert('ouch');
+        if (e.target.files.length > 3) throw new Error('Maximum 3 images');
+        setFiles(e.target.files);
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -61,6 +80,7 @@ const FileUploadForm = ({ handleSetFiles }) => {
             >
               Select from computer
             </button>
+            {error && <p className="error">{error}</p>}
           </div>
         </label>
         {/* prevent screen flickering */}

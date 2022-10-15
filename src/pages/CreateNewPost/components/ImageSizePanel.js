@@ -4,15 +4,26 @@ import './styles/ImageSizePanel.css';
 import changeSizeIcon from '../../../images/change-size-icon.svg';
 import zoomInIcon from '../../../images/zoom-in-icon.svg';
 import multipleFilesIcon from '../../../images/multiple-files.svg';
-
+import navigateLeftIcon from '../../../images/navigate-left-icon.svg';
+import navigateRightIcon from '../../../images/navigate-right-icon.svg';
+// components
 import CreatePostHeader from './CreatePostHeader';
+import ImageButton from '../../../components/ImageButton';
+// context
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
 const maxMove = currentZoom => {
   const percentIncrease = ((currentZoom - 1) / 1) * 100; // 1 is original zoom value (min value)
   return (percentIncrease / 2).toFixed(1);
 };
 
-const ImageSizePanel = ({ image, handleSetSizeData }) => {
+const aspectRatios = [
+  { ratio: '1:1', value: { width: '100%', height: '100%' } },
+  { ratio: '4:5', value: { width: '80%', height: '100%' } },
+  { ratio: '16:9', value: { width: '100%', height: '56.25%' } },
+];
+
+const ImageSizePanel = ({ handleSetSizeData }) => {
   // const imgUrl = URL.createObjectURL(image); outside for smoother animations
   //
   // using 1:1, 4:5(height/1.25:height), 16:9(width:width*0.5625)
@@ -25,6 +36,10 @@ const ImageSizePanel = ({ image, handleSetSizeData }) => {
   //
   // image position use inner div with bg image and move it around, stop if you
   // get to parent rect. To calculate max move percent increase formula divide by 2
+  const { createTempUrls } = useUserPostContext();
+  const [imageUrls, setImageUrls] = useState(createTempUrls());
+  const [currentImage, setCurrentImage] = useState(0);
+
   const parentElementRef = useRef();
 
   const [originalRatio, setOriginalRatio] = useState(null);
@@ -63,12 +78,11 @@ const ImageSizePanel = ({ image, handleSetSizeData }) => {
   };
 
   useEffect(() => {
-    if (originalRatio) return;
     setError(null);
-    // get size of upload file to calculate original ratio
+    // get size of upload file to calculate original aspect ratio
     const naturalImageSize = () => {
       const img = document.createElement('img');
-      img.src = image;
+      img.src = imageUrls[currentImage];
 
       const promise = new Promise((resolve, reject) => {
         img.onload = () => {
@@ -90,7 +104,7 @@ const ImageSizePanel = ({ image, handleSetSizeData }) => {
         console.log(err);
         setError('Unable to get original aspect ratio');
       });
-  }, [image, originalRatio]);
+  }, [currentImage, imageUrls, originalRatio]);
 
   const handleReposition = e => {
     if (!repositionActive) return;
@@ -138,7 +152,30 @@ const ImageSizePanel = ({ image, handleSetSizeData }) => {
 
       <div className="ImageSizePanel">
         <div className="ImageSizePanel__options">
+          {/* image navigation */}
+          {currentImage !== 0 && (
+            <button
+              className="btn navigate-left"
+              onClick={() => setCurrentImage(value => value - 1)}
+            >
+              <img src={navigateLeftIcon} alt="previous" />
+            </button>
+          )}
+          {currentImage < imageUrls.length - 1 && (
+            <button
+              className="btn navigate-right"
+              onClick={() => setCurrentImage(value => value + 1)}
+            >
+              <img src={navigateRightIcon} alt="next" />
+            </button>
+          )}
+
           <div className="ImageSizePanel__options__left">
+            <ImageButton
+              icon={changeSizeIcon}
+              alt="change size"
+              onClick={handleShowSize}
+            />
             <button
               className={`btn ${showSizes ? 'active' : ''}`}
               onClick={handleShowSize}
@@ -176,33 +213,17 @@ const ImageSizePanel = ({ image, handleSetSizeData }) => {
                 original
               </button>
             )}
-            <button
-              className={`btn ${activeSize === '1:1' ? 'active' : ''}`}
-              onClick={() => {
-                setImageSize({ width: '100%', height: '100%' });
-                setActiveSize('1:1');
-              }}
-            >
-              1:1
-            </button>
-            <button
-              className={`btn ${activeSize === '4:5' ? 'active' : ''}`}
-              onClick={() => {
-                setImageSize({ width: '80%', height: '100%' });
-                setActiveSize('4:5');
-              }}
-            >
-              4:5
-            </button>
-            <button
-              className={`btn ${activeSize === '16:9' ? 'active' : ''}`}
-              onClick={() => {
-                setImageSize({ width: '100%', height: '56.25%' });
-                setActiveSize('16:9');
-              }}
-            >
-              16:9
-            </button>
+            {aspectRatios.map(ar => (
+              <button
+                className={`btn ${activeSize === ar.ratio ? 'active' : ''}`}
+                onClick={() => {
+                  setImageSize(ar.value);
+                  setActiveSize(ar.ratio);
+                }}
+              >
+                {ar.ratio}
+              </button>
+            ))}
           </div>
         )}
 
@@ -235,8 +256,9 @@ const ImageSizePanel = ({ image, handleSetSizeData }) => {
             className="ImageSizePanel__imageContainer__image"
             style={{
               transform: `scale(${zoomLevel})`,
-              backgroundImage: `url("${image}")`,
+              backgroundImage: `url("${imageUrls[currentImage]}")`,
               backgroundPosition: 'center center',
+              backgroundSize: 'cover',
               top: `${imagePosition.y}%`, //
               left: `${imagePosition.x}%`, //
             }}

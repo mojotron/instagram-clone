@@ -118,3 +118,13 @@
   height: 2rem;
   width: 2rem;
 }
+.btn.navigate-left {
+  position: absolute;
+  left: 1rem;
+  top: -500%;
+}
+.btn.navigate-right {
+  position: absolute;
+  right: 1rem;
+  top: -500%;
+}

@@ -1,0 +1,19 @@
+.ImageButton {
+  height: 3.2rem;
+  width: 3.2rem;
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ImageButton:hover {
+  opacity: 0.7;
+}
+.ImageButton.active {
+  filter: invert(100%);
+}
+.ImageButton img {
+  height: 2rem;
+  width: 2rem;
+}

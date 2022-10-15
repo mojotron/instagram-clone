@@ -9,13 +9,21 @@ import ImageInfoPanel from './components/ImageInfoPanel';
 import DiscardPost from './components/DiscardPost';
 // style
 import './styles/CreateNewPost.css';
+// hooks
 import { useFiltersAndLayersContext } from '../../hooks/useFiltersAndLayersContext';
+import { useUserPostContext } from '../../hooks/useUserPostContext';
 
 const CreateNewPost = ({ userData, setShowCreatePost }) => {
+  // test with new context
+  const { files, createTempUrls } = useUserPostContext();
+
+  if (files) console.log(createTempUrls());
+  // test end
   const [showDiscard, setShowDiscard] = useState(false);
   const [currentStage, setCurrentStage] = useState('load-files');
+
   // stage 1 select image(s)
-  const [files, setFiles] = useState(null);
+  // const [files, setFiles] = useState(null);
   // stage 2 image size
   const [imageSizeData, setImageSizeData] = useState(null);
   // stage 3 filters and layers
@@ -23,10 +31,10 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
   // stage 4 caption hashtags @ and location
   const [postInfoData, setPostInfoData] = useState(null);
 
-  const handleSetFiles = files => {
-    setFiles(files);
-    setCurrentStage('size-position');
-  };
+  // const handleSetFiles = files => {
+  //   setFiles(files);
+  //   setCurrentStage('size-position');
+  // };
 
   const handleSetSizeData = (aspectRatio, zoomLevel, position) => {
     setImageSizeData({ aspectRatio, zoomLevel, position });
@@ -36,8 +44,6 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
   const handleUploadPost = data => {
     setPostInfoData({ ...data });
   };
-
-  console.log(postInfoData);
 
   return (
     <>
@@ -58,15 +64,9 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
         </button>
 
         <div data-testid="create-post" className="CreateNewPost">
-          {currentStage === 'load-files' && (
-            <FileUploadForm handleSetFiles={handleSetFiles} />
-          )}
-          {currentStage === 'size-position' && (
-            <ImageSizePanel
-              image={URL.createObjectURL(files[0])}
-              handleSetSizeData={handleSetSizeData}
-            />
-          )}
+          {!files && <FileUploadForm />}
+
+          {files && <ImageSizePanel handleSetSizeData={handleSetSizeData} />}
           {currentStage === 'filters-layers' && (
             <ImageEditPanel
               src={URL.createObjectURL(files[0])}

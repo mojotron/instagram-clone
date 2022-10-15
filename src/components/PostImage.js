@@ -1,6 +1,7 @@
 import './styles/PostImage.css';
 
 const PostImage = ({
+  imagesData,
   src,
   aspectRatio,
   zoomLevel,
