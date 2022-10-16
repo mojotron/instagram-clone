@@ -1,0 +1,10 @@
+.ImageDotNavigation {
+  width: 10rem;
+  height: 3rem;
+}
+.ImageDotNavigation span {
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  color: red;
+}

@@ -4,11 +4,11 @@ import './styles/ImageSizePanel.css';
 import changeSizeIcon from '../../../images/change-size-icon.svg';
 import zoomInIcon from '../../../images/zoom-in-icon.svg';
 import multipleFilesIcon from '../../../images/multiple-files.svg';
-import navigateLeftIcon from '../../../images/navigate-left-icon.svg';
-import navigateRightIcon from '../../../images/navigate-right-icon.svg';
 // components
 import CreatePostHeader from './CreatePostHeader';
 import ImageButton from '../../../components/ImageButton';
+import ImageNavigation from '../../../components/ImageNavigation';
+import ImageDotNavigation from '../../../components/ImageDotNavigation';
 // context
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
@@ -36,10 +36,10 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
   //
   // image position use inner div with bg image and move it around, stop if you
   // get to parent rect. To calculate max move percent increase formula divide by 2
-  const { createTempUrls } = useUserPostContext();
-  const [imageUrls, setImageUrls] = useState(createTempUrls());
-  const [currentImage, setCurrentImage] = useState(0);
+  const { tempImageUrls } = useUserPostContext();
 
+  const [currentImage, setCurrentImage] = useState(0);
+  // urls problem
   const parentElementRef = useRef();
 
   const [originalRatio, setOriginalRatio] = useState(null);
@@ -78,11 +78,12 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
   };
 
   useEffect(() => {
+    if (tempImageUrls.length === 0) return;
     setError(null);
     // get size of upload file to calculate original aspect ratio
     const naturalImageSize = () => {
       const img = document.createElement('img');
-      img.src = imageUrls[currentImage];
+      img.src = tempImageUrls[currentImage];
 
       const promise = new Promise((resolve, reject) => {
         img.onload = () => {
@@ -104,7 +105,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
         console.log(err);
         setError('Unable to get original aspect ratio');
       });
-  }, [currentImage, imageUrls, originalRatio]);
+  }, [tempImageUrls, currentImage, originalRatio]);
 
   const handleReposition = e => {
     if (!repositionActive) return;
@@ -151,54 +152,36 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
       />
 
       <div className="ImageSizePanel">
+        <ImageNavigation
+          index={currentImage}
+          setIndex={setCurrentImage}
+          numOfImgs={tempImageUrls.length}
+        />
+        {/* <ImageDotNavigation index={currentImage} numOfImgs={imageUrls.length} /> */}
+        {/* dimension edit options */}
         <div className="ImageSizePanel__options">
-          {/* image navigation */}
-          {currentImage !== 0 && (
-            <button
-              className="btn navigate-left"
-              onClick={() => setCurrentImage(value => value - 1)}
-            >
-              <img src={navigateLeftIcon} alt="previous" />
-            </button>
-          )}
-          {currentImage < imageUrls.length - 1 && (
-            <button
-              className="btn navigate-right"
-              onClick={() => setCurrentImage(value => value + 1)}
-            >
-              <img src={navigateRightIcon} alt="next" />
-            </button>
-          )}
-
           <div className="ImageSizePanel__options__left">
             <ImageButton
               icon={changeSizeIcon}
               alt="change size"
-              onClick={handleShowSize}
+              active={showSizes}
+              handleClick={handleShowSize}
             />
-            <button
-              className={`btn ${showSizes ? 'active' : ''}`}
-              onClick={handleShowSize}
-            >
-              <img src={changeSizeIcon} alt="change size" />
-            </button>
-
-            <button
-              className={`btn ${showZoomRange ? 'active' : ''}`}
-              onClick={handleShowZoomRange}
-            >
-              <img src={zoomInIcon} alt="zoom in" />
-            </button>
+            <ImageButton
+              icon={zoomInIcon}
+              alt="zoom slider"
+              active={showZoomRange}
+              handleClick={handleShowZoomRange}
+            />
           </div>
-
-          <button
-            className={`btn ${showMultiImages ? 'active' : ''}`}
-            onClick={handleShowMultiImages}
-          >
-            <img src={multipleFilesIcon} alt="zoom in" />
-          </button>
+          <ImageButton
+            icon={multipleFilesIcon}
+            alt="add and arrange images"
+            active={showMultiImages}
+            handleClick={handleShowMultiImages}
+          />
         </div>
-
+        {/* aspect ratio dropdown */}
         {showSizes && (
           <div className="ImageSizePanel__size__list">
             {!error && (
@@ -213,8 +196,9 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
                 original
               </button>
             )}
-            {aspectRatios.map(ar => (
+            {aspectRatios.map((ar, i) => (
               <button
+                key={i}
                 className={`btn ${activeSize === ar.ratio ? 'active' : ''}`}
                 onClick={() => {
                   setImageSize(ar.value);
@@ -226,7 +210,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
             ))}
           </div>
         )}
-
+        {/* zoom range input*/}
         {showZoomRange && (
           <div className="ImageSizePanel__zoom-range">
             <input
@@ -256,9 +240,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
             className="ImageSizePanel__imageContainer__image"
             style={{
               transform: `scale(${zoomLevel})`,
-              backgroundImage: `url("${imageUrls[currentImage]}")`,
-              backgroundPosition: 'center center',
-              backgroundSize: 'cover',
+              backgroundImage: `url("${tempImageUrls[currentImage]}")`,
               top: `${imagePosition.y}%`, //
               left: `${imagePosition.x}%`, //
             }}

@@ -20,6 +20,8 @@
   height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
   position: relative;
 }
 .ImageSizePanel__size__list {
@@ -99,32 +101,7 @@
   justify-content: space-between;
   width: 8rem;
 }
-.ImageSizePanel__options button {
-  height: 3.2rem;
-  width: 3.2rem;
-  background-color: var(--bg-color);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.ImageSizePanel__options button:hover {
-  opacity: 0.7;
-}
-.ImageSizePanel__options button.active {
-  filter: invert(100%);
-}
 .ImageSizePanel__options img {
   height: 2rem;
   width: 2rem;
-}
-.btn.navigate-left {
-  position: absolute;
-  left: 1rem;
-  top: -500%;
-}
-.btn.navigate-right {
-  position: absolute;
-  right: 1rem;
-  top: -500%;
 }

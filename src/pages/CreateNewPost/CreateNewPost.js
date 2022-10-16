@@ -10,14 +10,14 @@ import DiscardPost from './components/DiscardPost';
 // style
 import './styles/CreateNewPost.css';
 // hooks
-import { useFiltersAndLayersContext } from '../../hooks/useFiltersAndLayersContext';
+// import { useFiltersAndLayersContext } from '../../hooks/useFiltersAndLayersContext';
 import { useUserPostContext } from '../../hooks/useUserPostContext';
 
 const CreateNewPost = ({ userData, setShowCreatePost }) => {
   // test with new context
-  const { files, createTempUrls } = useUserPostContext();
+  const { files } = useUserPostContext();
 
-  if (files) console.log(createTempUrls());
+  // if (files) console.log(createTempUrls());
   // test end
   const [showDiscard, setShowDiscard] = useState(false);
   const [currentStage, setCurrentStage] = useState('load-files');
@@ -27,7 +27,7 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
   // stage 2 image size
   const [imageSizeData, setImageSizeData] = useState(null);
   // stage 3 filters and layers
-  const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
+  // const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
   // stage 4 caption hashtags @ and location
   const [postInfoData, setPostInfoData] = useState(null);
 
