@@ -1,0 +1,66 @@
+.ManageImagePopup {
+  position: absolute;
+  z-index: 15;
+  bottom: 8rem;
+  right: 1.5rem;
+  padding: 1.5rem;
+  background-color: rgba(30, 30, 30, 0.8);
+  color: white;
+  display: flex;
+  align-items: center;
+  border-radius: 1rem;
+}
+.ManageImagePopup__image {
+  position: relative;
+  width: 9rem;
+  height: 9rem;
+  margin-right: 1rem;
+}
+.ManageImagePopup__image img {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+  cursor: grab;
+}
+.ManageImagePopup__image img:active {
+  cursor: grabbing;
+}
+.btn--remove,
+.btn--add {
+  color: white;
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 50%;
+  font-weight: 100;
+  position: absolute;
+  display: inline-block;
+  vertical-align: middle;
+}
+.btn--remove {
+  height: 2rem;
+  width: 2rem;
+  font-size: 1.8rem;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+.btn--add {
+  position: relative;
+  top: -1rem;
+  height: 6rem;
+  width: 6rem;
+  border: 1px solid white;
+  font-size: 4rem;
+  text-align: center;
+  line-height: 5.5rem;
+}
+.ManageImagePopup input {
+  display: none;
+}
+.ManageImagePopup p.error {
+  position: absolute;
+  padding: 1rem;
+  width: 100%;
+  right: 0;
+  bottom: -1rem;
+  font-size: 1.3rem;
+  text-align: right;
+}

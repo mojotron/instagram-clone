@@ -9,6 +9,7 @@ import CreatePostHeader from './CreatePostHeader';
 import ImageButton from '../../../components/ImageButton';
 import ImageNavigation from '../../../components/ImageNavigation';
 import ImageDotNavigation from '../../../components/ImageDotNavigation';
+import ManageImagePopup from './ManageImagePopup';
 // context
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
@@ -42,10 +43,16 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
   // urls problem
   const parentElementRef = useRef();
 
+  console.log('running');
+
   const [originalRatio, setOriginalRatio] = useState(null);
+  const [calcOriginalRatio, setCalcOriginalRatio] = useState(true);
   const [error, setError] = useState(null);
+
   const [imageSize, setImageSize] = useState({ width: '100%', height: '100%' });
   const [zoomLevel, setZoomLevel] = useState('1');
+  const [activeSize, setActiveSize] = useState('1:1');
+
   // reposition image
   const [repositionActive, setRepositionActive] = useState(false);
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
@@ -53,13 +60,12 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
   // display options
   const [showSizes, setShowSizes] = useState(false);
   const [showZoomRange, setShowZoomRange] = useState(false);
-  const [showMultiImages, setShowMultiImages] = useState(false);
-  const [activeSize, setActiveSize] = useState('1:1');
+  const [showManageImages, setShowManageImages] = useState(false);
 
   const closeAllOptions = () => {
     setShowSizes(false);
     setShowZoomRange(false);
-    setShowMultiImages(false);
+    setShowManageImages(false);
   };
 
   const handleShowSize = () => {
@@ -72,13 +78,14 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
     setShowZoomRange(true);
   };
 
-  const handleShowMultiImages = () => {
+  const handleShowManageImages = () => {
     closeAllOptions();
-    setShowMultiImages(true);
+    setShowManageImages(true);
   };
 
   useEffect(() => {
     if (tempImageUrls.length === 0) return;
+    if (calcOriginalRatio === false) return;
     setError(null);
     // get size of upload file to calculate original aspect ratio
     const naturalImageSize = () => {
@@ -98,14 +105,21 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
 
     naturalImageSize()
       .then(({ width, height }) => {
-        const ratio = 100 / (width / height);
-        setOriginalRatio({ width: '100%', height: `${ratio}%` });
+        const ratio =
+          width > height ? 100 / (width / height) : 100 / (height / width);
+        if (width > height) {
+          setOriginalRatio({ width: '100%', height: `${ratio}%` });
+        } else {
+          setOriginalRatio({ width: `${ratio}%`, height: '100%' });
+        }
+        setCalcOriginalRatio(false);
       })
       .catch(err => {
         console.log(err);
         setError('Unable to get original aspect ratio');
+        setCalcOriginalRatio(false);
       });
-  }, [tempImageUrls, currentImage, originalRatio]);
+  }, [tempImageUrls, currentImage, originalRatio, calcOriginalRatio]);
 
   const handleReposition = e => {
     if (!repositionActive) return;
@@ -140,7 +154,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
 
     setImagePosition({ ...obj });
   };
-  // TODO size reset on new ratio
+
   return (
     <>
       <CreatePostHeader
@@ -151,13 +165,27 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
         }
       />
 
-      <div className="ImageSizePanel">
+      <div
+        className="ImageSizePanel"
+        onMouseUp={() => setRepositionActive(false)}
+        onMouseLeave={() => setRepositionActive(false)}
+        onMouseDown={e => {
+          // handler on parent element because button containers
+          if (zoomLevel !== '1') {
+            setMoveStart({ x: e.clientX, y: e.clientY });
+            setRepositionActive(true);
+          }
+        }}
+      >
         <ImageNavigation
           index={currentImage}
           setIndex={setCurrentImage}
           numOfImgs={tempImageUrls.length}
         />
-        {/* <ImageDotNavigation index={currentImage} numOfImgs={imageUrls.length} /> */}
+        <ImageDotNavigation
+          index={currentImage}
+          numOfImgs={tempImageUrls.length}
+        />
         {/* dimension edit options */}
         <div className="ImageSizePanel__options">
           <div className="ImageSizePanel__options__left">
@@ -177,8 +205,8 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
           <ImageButton
             icon={multipleFilesIcon}
             alt="add and arrange images"
-            active={showMultiImages}
-            handleClick={handleShowMultiImages}
+            active={showManageImages}
+            handleClick={handleShowManageImages}
           />
         </div>
         {/* aspect ratio dropdown */}
@@ -188,6 +216,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
               <button
                 className={`btn ${activeSize === 'original' ? 'active' : ''}`}
                 onClick={() => {
+                  setCalcOriginalRatio(true);
                   setImagePosition({ x: 0, y: 0 });
                   setImageSize(originalRatio);
                   setActiveSize('original');
@@ -226,9 +255,14 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
             />
           </div>
         )}
+        {/* manage images */}
+        {showManageImages && (
+          <ManageImagePopup setCurrentImage={setCurrentImage} />
+        )}
 
         <div
           ref={parentElementRef}
+          title="Zoom image then reposition!"
           className="ImageSizePanel__imageContainer"
           style={{
             width: imageSize.width,
@@ -244,15 +278,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
               top: `${imagePosition.y}%`, //
               left: `${imagePosition.x}%`, //
             }}
-            onMouseDown={e => {
-              if (zoomLevel !== '1') {
-                setMoveStart({ x: e.clientX, y: e.clientY });
-                setRepositionActive(true);
-              }
-            }}
-            onMouseUp={e => setRepositionActive(false)}
             onMouseMove={e => handleReposition(e)}
-            onMouseLeave={() => setRepositionActive(false)}
           ></div>
         </div>
       </div>

@@ -40,6 +40,7 @@ const initialState = {
 
 export const UserPostContextProvider = ({ children }) => {
   // const [state, dispatch] = useReducer(userPostReducer, {});
+  const fileLimit = 3;
   const [files, setFiles] = useState(null);
   const [tempImageUrls, setTempImageUrls] = useState([]);
 
@@ -50,8 +51,42 @@ export const UserPostContextProvider = ({ children }) => {
     setTempImageUrls([...files].map(file => URL.createObjectURL(file)));
   }, [files]);
 
+  const addFile = fileList => {
+    const newFileList = new DataTransfer();
+    [...files, ...fileList].forEach(file => newFileList.items.add(file));
+    setFiles(newFileList.files);
+  };
+
+  const deleteFile = index => {
+    console.log('x', index);
+    const newFileList = new DataTransfer();
+    [...files].forEach((file, i) => {
+      if (i !== index) newFileList.items.add(file);
+    });
+    if (newFileList.files.length === 0) setFiles(null);
+    else setFiles(newFileList.files);
+  };
+
+  const reorderFiles = newIndexes => {
+    const newFileList = new DataTransfer();
+    newIndexes
+      .map(index => files.item(index))
+      .forEach(file => newFileList.items.add(file));
+    setFiles(newFileList.files);
+  };
+
   return (
-    <UserPostContext.Provider value={{ files, setFiles, tempImageUrls }}>
+    <UserPostContext.Provider
+      value={{
+        files,
+        setFiles,
+        tempImageUrls,
+        fileLimit,
+        addFile,
+        deleteFile,
+        reorderFiles,
+      }}
+    >
       {children}
     </UserPostContext.Provider>
   );

@@ -4,7 +4,7 @@ import ImageButton from './ImageButton';
 import navigateLeftIcon from '../images/navigate-left-icon.svg';
 import navigateRightIcon from '../images/navigate-right-icon.svg';
 
-const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
+const ImageNavigation = ({ index, setIndex, numOfImgs, buttonHandler }) => {
   return (
     <div className="ImageNavigation">
       <ImageButton
@@ -12,7 +12,10 @@ const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
         alt="previous"
         active=""
         hidden={index === 0}
-        handleClick={() => setIndex(oldValue => oldValue - 1)}
+        handleClick={() => {
+          setIndex(oldValue => oldValue - 1);
+          buttonHandler && buttonHandler();
+        }}
       />
 
       <ImageButton
@@ -20,7 +23,10 @@ const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
         alt="next"
         active=""
         hidden={index === numOfImgs - 1}
-        handleClick={() => setIndex(oldValue => oldValue + 1)}
+        handleClick={() => {
+          setIndex(oldValue => oldValue + 1);
+          buttonHandler && buttonHandler();
+        }}
       />
     </div>
   );
