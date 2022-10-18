@@ -14,35 +14,12 @@ import './styles/CreateNewPost.css';
 import { useUserPostContext } from '../../hooks/useUserPostContext';
 
 const CreateNewPost = ({ userData, setShowCreatePost }) => {
-  // test with new context
-  const { files } = useUserPostContext();
-
-  // if (files) console.log(createTempUrls());
-  // test end
+  const { currentStage } = useUserPostContext();
   const [showDiscard, setShowDiscard] = useState(false);
-  const [currentStage, setCurrentStage] = useState('load-files');
 
-  // stage 1 select image(s)
-  // const [files, setFiles] = useState(null);
-  // stage 2 image size
-  const [imageSizeData, setImageSizeData] = useState(null);
-  // stage 3 filters and layers
-  // const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
-  // stage 4 caption hashtags @ and location
-  const [postInfoData, setPostInfoData] = useState(null);
-
-  // const handleSetFiles = files => {
-  //   setFiles(files);
-  //   setCurrentStage('size-position');
-  // };
-
-  const handleSetSizeData = (aspectRatio, zoomLevel, position) => {
-    setImageSizeData({ aspectRatio, zoomLevel, position });
-    setCurrentStage('filters-layers');
-  };
-  // no need for handle filters and layers they are in context, just pass setCurrentStage
-  const handleUploadPost = data => {
-    setPostInfoData({ ...data });
+  const handleCloseBtn = () => {
+    if (currentStage === 'choose-files') setShowCreatePost(false);
+    setShowDiscard(true);
   };
 
   return (
@@ -58,35 +35,20 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
         <button
           type="button"
           className="CreateNewPost__btn--close"
-          onClick={() => setShowDiscard(true)}
+          onClick={handleCloseBtn}
         >
           <img src={closeIcon} alt="close" />
         </button>
 
         <div data-testid="create-post" className="CreateNewPost">
-          {!files && <FileUploadForm />}
+          {currentStage === 'choose-files' && <FileUploadForm />}
 
-          {files && <ImageSizePanel handleSetSizeData={handleSetSizeData} />}
-          {currentStage === 'filters-layers' && (
-            <ImageEditPanel
-              src={URL.createObjectURL(files[0])}
-              aspectRatio={imageSizeData.aspectRatio}
-              zoomLevel={imageSizeData.zoomLevel}
-              position={imageSizeData.position}
-              setCurrentStage={setCurrentStage}
-            />
-          )}
-          {currentStage === 'caption-info' && (
-            <ImageInfoPanel
-              postData={{
-                src: URL.createObjectURL(files[0]),
-                aspectRatio: imageSizeData.aspectRatio,
-                zoomLevel: imageSizeData.zoomLevel,
-                position: imageSizeData.position,
-              }}
-              userData={userData}
-              handleUploadPost={handleUploadPost}
-            />
+          {currentStage === 'set-dimensions' && <ImageSizePanel />}
+
+          {currentStage === 'set-filter-layers' && <ImageEditPanel />}
+
+          {currentStage === 'post-information' && (
+            <ImageInfoPanel userData={userData} />
           )}
         </div>
       </div>

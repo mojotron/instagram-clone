@@ -13,7 +13,11 @@ import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
+
 const ImageInfoPanel = ({ postData, userData, handleUploadPost }) => {
+  const { dimensions, imagesData } = useUserPostContext();
+
   const [caption, setCaption] = useState('');
   const [location, setLocation] = useState('');
   const [altText, setAltText] = useState('');
@@ -54,15 +58,7 @@ const ImageInfoPanel = ({ postData, userData, handleUploadPost }) => {
 
       <div className="ImageInfoPanel">
         <section className="ImageInfoPanel__image">
-          <PostImage
-            postSize={postData.postSize}
-            src={postData.src}
-            aspectRatio={postData.aspectRatio}
-            zoomLevel={postData.zoomLevel}
-            position={postData.position}
-            cssFilter={createCssFilter()}
-            layers={createCssLayers()}
-          />
+          <PostImage dimensions={dimensions} imagesData={imagesData} />
         </section>
         <section className="ImageInfoPanel__info">
           <div className="ImageInfoPanel__info__user">

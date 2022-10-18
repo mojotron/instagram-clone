@@ -15,6 +15,10 @@
   width: 9rem;
   height: 9rem;
   margin-right: 1rem;
+  opacity: 0.6;
+}
+.ManageImagePopup__image.active {
+  opacity: 1;
 }
 .ManageImagePopup__image img {
   width: inherit;

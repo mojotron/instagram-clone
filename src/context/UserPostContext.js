@@ -4,52 +4,63 @@ import { getFilter, getLayers } from '../utils/filterLayers';
 
 export const UserPostContext = createContext();
 
-// post data
-// single file
-// collective properties
-
-const initialFile = {
-  file: null,
-  edits: {
-    brightness: '0',
-    contrast: '0',
-    saturation: '0',
-    temperature: '0',
-    fade: '0',
-    vignette: '0',
-  },
-  alt: '',
+const initialAdjustments = {
+  brightness: '0',
+  contrast: '0',
+  saturation: '0',
+  temperature: '0',
+  fade: '0',
+  vignette: '0',
 };
 
-const initialState = {
-  files: [],
-  dimensions: {
-    aspectRatio: { width: '100%', height: '100%' },
-    zoomLevel: '1',
-    position: { x: 0, y: 0 },
-  },
-  postInfo: {
-    caption: '',
-    location: '',
-    disabledLikes: false,
-    disabledComments: false,
-  },
+const initialDimensions = {
+  aspectRatio: { width: '100%', height: '100%' },
+  zoomLevel: '1',
+  position: { x: 0, y: 0 },
 };
-
-// const userPostReducer = (state, action) => {};
 
 export const UserPostContextProvider = ({ children }) => {
-  // const [state, dispatch] = useReducer(userPostReducer, {});
   const fileLimit = 3;
+  const [currentStage, setCurrentStage] = useState('choose-files');
+  // files
   const [files, setFiles] = useState(null);
   const [tempImageUrls, setTempImageUrls] = useState([]);
+  // dimensions
+  const [dimensions, setDimensions] = useState(null);
+  // image data
+  const [imagesData, setImagesData] = useState(null);
 
-  // this is helper function to use PostImage component in other stages of post creation
+  console.log(currentStage);
 
   useEffect(() => {
+    // this is helper functionality to use PostImage
+    // component in other stages of post creation
     if (files === null) return;
     setTempImageUrls([...files].map(file => URL.createObjectURL(file)));
   }, [files]);
+  // if current stage is choose-files reset all other fields
+  useEffect(() => {
+    if (currentStage === 'choose-files') {
+      setDimensions({ ...initialDimensions });
+      return;
+    }
+    if (currentStage === 'set-dimensions') {
+      setImagesData(
+        tempImageUrls.map(url => ({
+          url,
+          alt: '',
+          // for edit panel
+          imageAdjustments: { ...initialAdjustments },
+          // for post image
+          filter: '',
+          layers: [],
+          // for active filter
+          filterName: 'original',
+        }))
+      );
+      return;
+    }
+  }, [currentStage, tempImageUrls]);
 
   const addFile = fileList => {
     const newFileList = new DataTransfer();
@@ -58,7 +69,6 @@ export const UserPostContextProvider = ({ children }) => {
   };
 
   const deleteFile = index => {
-    console.log('x', index);
     const newFileList = new DataTransfer();
     [...files].forEach((file, i) => {
       if (i !== index) newFileList.items.add(file);
@@ -75,16 +85,42 @@ export const UserPostContextProvider = ({ children }) => {
     setFiles(newFileList.files);
   };
 
+  const updateFiltersAndLayers = () => {
+    setImagesData(oldData => {
+      const temp = oldData.map(ele => ({
+        ...ele,
+        filter: getFilter(
+          ele.imageAdjustments.brightness,
+          ele.imageAdjustments.contrast,
+          ele.imageAdjustments.saturation
+        ),
+        layers: getLayers(
+          ele.imageAdjustments.temperature,
+          ele.imageAdjustments.fade,
+          ele.imageAdjustments.vignette
+        ),
+      }));
+      return temp;
+    });
+  };
+
   return (
     <UserPostContext.Provider
       value={{
+        fileLimit,
         files,
         setFiles,
         tempImageUrls,
-        fileLimit,
         addFile,
         deleteFile,
         reorderFiles,
+        dimensions,
+        setDimensions,
+        currentStage,
+        setCurrentStage,
+        imagesData,
+        setImagesData,
+        updateFiltersAndLayers,
       }}
     >
       {children}

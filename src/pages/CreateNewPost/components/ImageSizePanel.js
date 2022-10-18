@@ -24,7 +24,7 @@ const aspectRatios = [
   { ratio: '16:9', value: { width: '100%', height: '56.25%' } },
 ];
 
-const ImageSizePanel = ({ handleSetSizeData }) => {
+const ImageSizePanel = () => {
   // const imgUrl = URL.createObjectURL(image); outside for smoother animations
   //
   // using 1:1, 4:5(height/1.25:height), 16:9(width:width*0.5625)
@@ -37,25 +37,16 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
   //
   // image position use inner div with bg image and move it around, stop if you
   // get to parent rect. To calculate max move percent increase formula divide by 2
-  const { tempImageUrls } = useUserPostContext();
-
+  const { tempImageUrls, dimensions, setDimensions, setCurrentStage } =
+    useUserPostContext();
   const [currentImage, setCurrentImage] = useState(0);
-  // urls problem
   const parentElementRef = useRef();
-
-  console.log('running');
-
   const [originalRatio, setOriginalRatio] = useState(null);
   const [calcOriginalRatio, setCalcOriginalRatio] = useState(true);
   const [error, setError] = useState(null);
-
-  const [imageSize, setImageSize] = useState({ width: '100%', height: '100%' });
-  const [zoomLevel, setZoomLevel] = useState('1');
   const [activeSize, setActiveSize] = useState('1:1');
-
   // reposition image
   const [repositionActive, setRepositionActive] = useState(false);
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [moveStart, setMoveStart] = useState({ x: null, y: null });
   // display options
   const [showSizes, setShowSizes] = useState(false);
@@ -136,7 +127,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
 
     const obj = {};
     // use maxMove to stop child pass parent container
-    const maxImageMove = maxMove(zoomLevel);
+    const maxImageMove = maxMove(dimensions.zoomLevel);
 
     if (Math.abs(moveX) >= maxImageMove) {
       if (moveX > 0) obj.x = maxImageMove;
@@ -152,7 +143,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
       obj.y = moveY;
     }
 
-    setImagePosition({ ...obj });
+    setDimensions(oldValue => ({ ...oldValue, position: obj }));
   };
 
   return (
@@ -160,9 +151,8 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
       <CreatePostHeader
         title="Crop"
         btnText="Next"
-        handleNext={() =>
-          handleSetSizeData(imageSize, zoomLevel, imagePosition)
-        }
+        handleNext={() => setCurrentStage('set-filter-layers')}
+        handlePrev={() => setCurrentStage('choose-files')}
       />
 
       <div
@@ -171,7 +161,7 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
         onMouseLeave={() => setRepositionActive(false)}
         onMouseDown={e => {
           // handler on parent element because button containers
-          if (zoomLevel !== '1') {
+          if (dimensions.zoomLevel !== '1') {
             setMoveStart({ x: e.clientX, y: e.clientY });
             setRepositionActive(true);
           }
@@ -217,8 +207,11 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
                 className={`btn ${activeSize === 'original' ? 'active' : ''}`}
                 onClick={() => {
                   setCalcOriginalRatio(true);
-                  setImagePosition({ x: 0, y: 0 });
-                  setImageSize(originalRatio);
+                  setDimensions(oldValue => ({
+                    ...oldValue,
+                    aspectRatio: originalRatio,
+                    position: { x: 0, y: 0 },
+                  }));
                   setActiveSize('original');
                 }}
               >
@@ -230,7 +223,10 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
                 key={i}
                 className={`btn ${activeSize === ar.ratio ? 'active' : ''}`}
                 onClick={() => {
-                  setImageSize(ar.value);
+                  setDimensions(oldValue => ({
+                    ...oldValue,
+                    aspectRatio: ar.value,
+                  }));
                   setActiveSize(ar.ratio);
                 }}
               >
@@ -244,10 +240,13 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
           <div className="ImageSizePanel__zoom-range">
             <input
               type="range"
-              value={zoomLevel}
+              value={dimensions.zoomLevel}
               onChange={e => {
-                setZoomLevel(e.target.value);
-                setImagePosition({ x: 0, y: 0 });
+                setDimensions(oldValue => ({
+                  ...oldValue,
+                  zoomLevel: e.target.value,
+                  position: { x: 0, y: 0 },
+                }));
               }}
               min="1"
               max="2"
@@ -257,7 +256,10 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
         )}
         {/* manage images */}
         {showManageImages && (
-          <ManageImagePopup setCurrentImage={setCurrentImage} />
+          <ManageImagePopup
+            currentImage={currentImage}
+            setCurrentImage={setCurrentImage}
+          />
         )}
 
         <div
@@ -265,18 +267,18 @@ const ImageSizePanel = ({ handleSetSizeData }) => {
           title="Zoom image then reposition!"
           className="ImageSizePanel__imageContainer"
           style={{
-            width: imageSize.width,
-            height: imageSize.height,
+            width: dimensions.aspectRatio.width,
+            height: dimensions.aspectRatio.height,
           }}
           onClick={closeAllOptions}
         >
           <div
             className="ImageSizePanel__imageContainer__image"
             style={{
-              transform: `scale(${zoomLevel})`,
+              transform: `scale(${dimensions.zoomLevel})`,
               backgroundImage: `url("${tempImageUrls[currentImage]}")`,
-              top: `${imagePosition.y}%`, //
-              left: `${imagePosition.x}%`, //
+              top: `${dimensions.position.y}%`, //
+              left: `${dimensions.position.x}%`, //
             }}
             onMouseMove={e => handleReposition(e)}
           ></div>

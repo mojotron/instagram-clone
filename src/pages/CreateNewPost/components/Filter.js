@@ -4,38 +4,79 @@ import filterImg from '../../../images/ballon-filter.jpg';
 import './styles/Filter.css';
 import { getFilter, getLayers } from '../../../utils/filterLayers';
 import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
-const Filter = ({ filterName, filterData, active, setActiveFilter }) => {
+const Filter = ({ filterName, filterData, active, currentIndex }) => {
   const { applyFilter } = useFiltersAndLayersContext();
+  const { imagesData, setImagesData } = useUserPostContext();
 
   const handelClick = () => {
-    setActiveFilter(filterName);
     applyFilter(filterData);
+    setImagesData(oldData => {
+      // need current index
+      const temp = oldData.map((ele, i) => {
+        if (i !== currentIndex) return ele;
+        else
+          return {
+            ...ele,
+            filterName,
+            imageAdjustments: filterData,
+            filter: getFilter(
+              filterData.brightness,
+              filterData.contrast,
+              filterData.saturation
+            ),
+            layers: getLayers(
+              filterData.temperature,
+              filterData.fade,
+              filterData.vignette
+            ),
+          };
+      });
+      return temp;
+    });
   };
 
+  if (!imagesData) return;
   return (
     <div className="Filter" onClick={handelClick}>
-      <div className={`Filter__image-wrapper ${active ? 'active' : ''}`}>
+      <div
+        className={`Filter__image-wrapper ${
+          imagesData[currentIndex].filterName === filterName ? 'active' : ''
+        }`}
+      >
         <PostImage
-          src={filterImg}
-          aspectRatio={{ width: '100%', height: '100%' }}
-          zoomLevel={'1'}
-          position={{ x: 0, y: 0 }}
-          cssFilter={getFilter(
-            filterData.brightness,
-            filterData.contrast,
-            filterData.saturation
-          )}
-          layers={getLayers(
-            filterData.temperature,
-            filterData.fade,
-            filterData.vignette
-          )}
+          dimensions={{
+            aspectRatio: { width: '100%', height: '100%' },
+            zoomLevel: '1',
+            position: { x: 0, y: 0 },
+          }}
+          imagesData={[
+            {
+              url: filterImg,
+              alt: 'premade filter',
+              filter: getFilter(
+                filterData.brightness,
+                filterData.contrast,
+                filterData.saturation
+              ),
+              layers: getLayers(
+                filterData.temperature,
+                filterData.fade,
+                filterData.vignette
+              ),
+            },
+          ]}
         />
       </div>
 
-      {/* <img style={{ filter: filterCss }} src={filterImg} alt="filter" /> */}
-      <h3 className={`${active ? 'active' : ''}`}>{filterName}</h3>
+      <h3
+        className={`${
+          imagesData[currentIndex].filterName === filterName ? 'active' : ''
+        }`}
+      >
+        {filterName}
+      </h3>
     </div>
   );
 };

@@ -4,30 +4,17 @@ import './styles/ImageEditPanel.css';
 import FilterWrapper from './FilterWrapper';
 import AdjustmentWrapper from './AdjustmentWrapper';
 import PostImage from '../../../components/PostImage';
-
-import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
-import { useEffect } from 'react';
 import CreatePostHeader from './CreatePostHeader';
+// context
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
-const ImageEditPanel = ({
-  postSize,
-  src,
-  aspectRatio,
-  zoomLevel,
-  position,
-  setCurrentStage,
-}) => {
+const ImageEditPanel = () => {
+  const { dimensions, imagesData, setCurrentStage } = useUserPostContext();
+
+  const [imageIndex, setImageIndex] = useState(0);
+
   const [optionsTab, setOptionsTab] = useState('filters');
   const [activeFilter, setActiveFilter] = useState('original');
-  const [filter, setFilter] = useState('');
-  const [layers, setLayers] = useState([]);
-
-  const { createCssFilter, createCssLayers } = useFiltersAndLayersContext();
-
-  useEffect(() => {
-    setFilter(createCssFilter());
-    setLayers(createCssLayers());
-  }, [createCssFilter, createCssLayers]);
 
   const toggleOptionsTab = () => {
     setOptionsTab(oldValue =>
@@ -40,20 +27,18 @@ const ImageEditPanel = ({
       <CreatePostHeader
         title="Edit"
         btnText="Next"
-        handleNext={() => setCurrentStage('caption-info')}
+        handleNext={() => setCurrentStage('post-information')}
       />
 
       <div className="ImageEditPanel">
         <section className="ImageEditPanel__image">
-          <PostImage
-            postSize={postSize}
-            src={src}
-            aspectRatio={aspectRatio}
-            zoomLevel={zoomLevel}
-            position={position}
-            cssFilter={filter}
-            layers={layers}
-          />
+          {imagesData && (
+            <PostImage
+              imagesData={imagesData}
+              dimensions={dimensions}
+              getImageIndex={setImageIndex}
+            />
+          )}
         </section>
         <section className="ImageEditPanel__edit">
           <div className="ImageEditPanel__edit__select">
@@ -74,6 +59,7 @@ const ImageEditPanel = ({
             {optionsTab === 'filters' && (
               <>
                 <FilterWrapper
+                  currentIndex={imageIndex}
                   activeFilter={activeFilter}
                   setActiveFilter={setActiveFilter}
                 />
@@ -81,7 +67,7 @@ const ImageEditPanel = ({
             )}
             {optionsTab === 'adjustments' && (
               <>
-                <AdjustmentWrapper setFilter={setFilter} />
+                <AdjustmentWrapper currentIndex={imageIndex} />
               </>
             )}
           </div>

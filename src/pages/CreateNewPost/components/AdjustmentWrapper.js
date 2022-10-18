@@ -1,6 +1,7 @@
 import AdjustmentBar from './AdjustmentBar';
 import './styles/AdjustmentWrapper.css';
-import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
+// context
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
 const adjustments = [
   { id: 0, title: 'brightness', min: -100, max: 100 },
@@ -11,8 +12,9 @@ const adjustments = [
   { id: 5, title: 'vignette', min: 0, max: 100 },
 ];
 
-const AdjustmentWrapper = () => {
-  const { state, changeState } = useFiltersAndLayersContext();
+const AdjustmentWrapper = ({ currentIndex }) => {
+  const { imagesData, setImagesData, updateFiltersAndLayers } =
+    useUserPostContext();
 
   return (
     <div className="AdjustmentWrapper">
@@ -23,9 +25,12 @@ const AdjustmentWrapper = () => {
           values={{
             min: adjustment.min,
             max: adjustment.max,
-            current: state[adjustment.title],
+            current:
+              imagesData[currentIndex].imageAdjustments[adjustment.title],
           }}
-          changeState={changeState}
+          changeState={setImagesData}
+          currentIndex={currentIndex}
+          updateFiltersAndLayers={updateFiltersAndLayers}
         />
       ))}
     </div>

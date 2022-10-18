@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import './styles/AdjustmentBar.css';
 
-const AdjustmentBar = ({ title, values, changeState }) => {
+const AdjustmentBar = ({
+  title,
+  values,
+  changeState,
+  currentIndex,
+  updateFiltersAndLayers,
+}) => {
   const [bold, setBold] = useState(false);
   const [showResetBtn, setShowResetBtn] = useState(false);
   // local state because sometimes live adjustment change crash browser
@@ -14,7 +20,20 @@ const AdjustmentBar = ({ title, values, changeState }) => {
   };
 
   const handleReset = () => {
-    changeState(title, '0');
+    changeState(oldState => {
+      const temp = oldState.map((ele, i) => {
+        if (i === currentIndex) {
+          return {
+            ...ele,
+            imageAdjustments: { ...ele.imageAdjustments, [title]: '0' },
+          };
+        } else {
+          return ele;
+        }
+      });
+      return temp;
+    });
+    updateFiltersAndLayers();
     setRangeValue('0');
   };
 
@@ -22,7 +41,21 @@ const AdjustmentBar = ({ title, values, changeState }) => {
     // local state because sometimes live adjustment change crash browser
     // and range slider slides smooth
     setBold(false);
-    changeState(title, rangeValue);
+    // changeState(title, rangeValue);
+    changeState(oldState => {
+      const temp = oldState.map((ele, i) => {
+        if (i === currentIndex) {
+          return {
+            ...ele,
+            imageAdjustments: { ...ele.imageAdjustments, [title]: rangeValue },
+          };
+        } else {
+          return ele;
+        }
+      });
+      return temp;
+    });
+    updateFiltersAndLayers();
   };
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 const createArrOfIndexes = length =>
   Array.from({ length: length }, (_, i) => i);
 
-const ManageImagePopup = ({ setCurrentImage }) => {
+const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
   const { tempImageUrls, fileLimit, addFile, deleteFile, reorderFiles } =
     useUserPostContext();
   const [error, setError] = useState(null);
@@ -48,8 +48,6 @@ const ManageImagePopup = ({ setCurrentImage }) => {
 
   const handleDragDrop = e => {
     const orderCopy = [...arrayOrder];
-    console.log(orderCopy);
-
     const target = orderCopy[dragItem.current];
     orderCopy.splice(dragItem.current, 1);
     orderCopy.splice(dragOverItem.current, 0, target);
@@ -57,7 +55,6 @@ const ManageImagePopup = ({ setCurrentImage }) => {
     reorderFiles(orderCopy);
 
     setCurrentImage(dragOverItem.current);
-
     dragItem.current = null;
     dragOverItem.current = null;
   };
@@ -68,7 +65,9 @@ const ManageImagePopup = ({ setCurrentImage }) => {
         <div
           draggable
           key={ele}
-          className="ManageImagePopup__image"
+          className={`ManageImagePopup__image ${
+            currentImage === i ? 'active' : ''
+          }`}
           onClick={() => setCurrentImage(i)}
           onDragStart={e => handleDragStart(e, i)}
           onDragEnter={e => handleDragEnter(e, i)}

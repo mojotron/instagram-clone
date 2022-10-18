@@ -7,11 +7,17 @@ import CreatePostHeader from './CreatePostHeader';
 
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
+const checkImageSize = fileList => {
+  [...fileList].forEach(file => {
+    if (file.size > 5000000) throw new Error('File size to big, limit 5MB');
+  });
+  return true;
+};
+
 const FileUploadForm = () => {
-  const { setFiles } = useUserPostContext();
+  const { setFiles, fileLimit, setCurrentStage } = useUserPostContext();
 
   const [error, setError] = useState(null);
-  console.log(error);
 
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef(null);
@@ -31,9 +37,10 @@ const FileUploadForm = () => {
     try {
       setError(null);
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        if (e.dataTransfer.files.length > 3)
+        if (e.dataTransfer.files.length > fileLimit)
           throw new Error('Maximum 3 images');
         setFiles(e.dataTransfer.files);
+        setCurrentStage('set-dimensions');
       }
     } catch (error) {
       setError(error.message);
@@ -44,9 +51,11 @@ const FileUploadForm = () => {
     try {
       setError(null);
       if (e.target.files && e.target.files[0]) {
-        if (e.target.files.length > 3) alert('ouch');
-        if (e.target.files.length > 3) throw new Error('Maximum 3 images');
+        if (e.target.files.length > fileLimit)
+          throw new Error('Maximum 3 images');
+        checkImageSize(e.target.files);
         setFiles(e.target.files);
+        setCurrentStage('set-dimensions');
       }
     } catch (error) {
       setError(error.message);
@@ -55,7 +64,12 @@ const FileUploadForm = () => {
 
   return (
     <>
-      <CreatePostHeader title="Create new post" />
+      <CreatePostHeader
+        title="Create new post"
+        btnText=""
+        handleNext={null}
+        handlePrev={null}
+      />
       <form className="FileUploadForm" onDragEnter={handleDrag}>
         <input
           ref={inputRef}
