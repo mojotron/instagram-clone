@@ -1,21 +1,18 @@
+import { useRef, useState } from 'react';
+// style
+import './styles/FileUploadForm.css';
+// icons
 import uploadPhotoIconBlack from '../../../images/upload-photo-icon-black.svg';
 import uploadPhotoIconBlue from '../../../images/upload-photo-icon-blue.svg';
-import { useRef, useState } from 'react';
-import './styles/FileUploadForm.css';
-
+// components
 import CreatePostHeader from './CreatePostHeader';
-
+// context
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
-
-const checkImageSize = fileList => {
-  [...fileList].forEach(file => {
-    if (file.size > 5000000) throw new Error('File size to big, limit 5MB');
-  });
-  return true;
-};
+// utility helpers
+import checkImages from '../../../utils/checkImageSize';
 
 const FileUploadForm = () => {
-  const { setFiles, fileLimit, setCurrentStage } = useUserPostContext();
+  const { setFiles, setCurrentStage } = useUserPostContext();
 
   const [error, setError] = useState(null);
 
@@ -37,10 +34,8 @@ const FileUploadForm = () => {
     try {
       setError(null);
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        if (e.dataTransfer.files.length > fileLimit)
-          throw new Error('Maximum 3 images');
+        checkImages(e.dataTransfer.files);
         setFiles(e.dataTransfer.files);
-        setCurrentStage('set-dimensions');
       }
     } catch (error) {
       setError(error.message);
@@ -51,11 +46,8 @@ const FileUploadForm = () => {
     try {
       setError(null);
       if (e.target.files && e.target.files[0]) {
-        if (e.target.files.length > fileLimit)
-          throw new Error('Maximum 3 images');
-        checkImageSize(e.target.files);
+        checkImages(e.target.files);
         setFiles(e.target.files);
-        setCurrentStage('set-dimensions');
       }
     } catch (error) {
       setError(error.message);
@@ -74,7 +66,7 @@ const FileUploadForm = () => {
         <input
           ref={inputRef}
           type="file"
-          accept=""
+          accept="image/*"
           required
           id="file-input"
           multiple={true}

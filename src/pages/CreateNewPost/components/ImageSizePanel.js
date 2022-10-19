@@ -37,8 +37,16 @@ const ImageSizePanel = () => {
   //
   // image position use inner div with bg image and move it around, stop if you
   // get to parent rect. To calculate max move percent increase formula divide by 2
-  const { tempImageUrls, dimensions, setDimensions, setCurrentStage } =
-    useUserPostContext();
+  const {
+    setFiles,
+    tempImageUrls,
+    dimensions,
+    setDimensions,
+    setCurrentStage,
+  } = useUserPostContext();
+
+  console.log(dimensions);
+
   const [currentImage, setCurrentImage] = useState(0);
   const parentElementRef = useRef();
   const [originalRatio, setOriginalRatio] = useState(null);
@@ -152,7 +160,10 @@ const ImageSizePanel = () => {
         title="Crop"
         btnText="Next"
         handleNext={() => setCurrentStage('set-filter-layers')}
-        handlePrev={() => setCurrentStage('choose-files')}
+        handlePrev={() => {
+          setFiles(null);
+          setCurrentStage('choose-files');
+        }}
       />
 
       <div

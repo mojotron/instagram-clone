@@ -3,15 +3,13 @@ import filterImg from '../../../images/ballon-filter.jpg';
 // Photo by <a href="https://unsplash.com/@mudaum?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Guilherme Garcia</a> on <a href="https://unsplash.com/s/photos/air-balloons?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a> */
 import './styles/Filter.css';
 import { getFilter, getLayers } from '../../../utils/filterLayers';
-import { useFiltersAndLayersContext } from '../../../hooks/useFiltersAndLayersContext';
+
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
-const Filter = ({ filterName, filterData, active, currentIndex }) => {
-  const { applyFilter } = useFiltersAndLayersContext();
+const Filter = ({ filterName, filterData, currentIndex }) => {
   const { imagesData, setImagesData } = useUserPostContext();
 
   const handelClick = () => {
-    applyFilter(filterData);
     setImagesData(oldData => {
       // need current index
       const temp = oldData.map((ele, i) => {

@@ -10,7 +10,6 @@ import DiscardPost from './components/DiscardPost';
 // style
 import './styles/CreateNewPost.css';
 // hooks
-// import { useFiltersAndLayersContext } from '../../hooks/useFiltersAndLayersContext';
 import { useUserPostContext } from '../../hooks/useUserPostContext';
 
 const CreateNewPost = ({ userData, setShowCreatePost }) => {

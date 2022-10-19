@@ -14,9 +14,15 @@ import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
-const ImageInfoPanel = ({ postData, userData }) => {
-  const { dimensions, imagesData, setImagesData, postInfo, setPostInfo } =
-    useUserPostContext();
+const ImageInfoPanel = ({ userData }) => {
+  const {
+    dimensions,
+    imagesData,
+    setImagesData,
+    postInfo,
+    setPostInfo,
+    setCurrentStage,
+  } = useUserPostContext();
 
   const [showEmojis, setShowEmojis] = useState(false);
   const [showAccessibility, setShowAccessibility] = useState(false);
@@ -56,7 +62,8 @@ const ImageInfoPanel = ({ postData, userData }) => {
       <CreatePostHeader
         title="Create New Post"
         btnText="Share"
-        handleNext={() => {}}
+        handleNext={() => console.log('DONE!')}
+        handlePrev={() => setCurrentStage('set-filter-layers')}
       />
 
       <div className="ImageInfoPanel">

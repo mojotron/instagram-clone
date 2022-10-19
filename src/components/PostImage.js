@@ -4,14 +4,6 @@ import ImageDotNavigation from './ImageDotNavigation';
 import ImageNavigation from './ImageNavigation';
 import './styles/PostImage.css';
 
-// imagesData,src,aspectRatio,zoomLevel,position,cssFilter,layers,
-// const childStyles = {
-//   filter: cssFilter,
-//   transform: `scale(${zoomLevel})`,
-//   top: `${position.y}%`, //
-//   left: `${position.x}%`, //
-// };
-
 const PostImage = ({ imagesData, dimensions, getImageIndex }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 

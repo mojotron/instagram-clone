@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { createContext, useReducer, useState } from 'react';
+import { useCallback } from 'react';
+import { createContext, useState } from 'react';
 import { getFilter, getLayers } from '../utils/filterLayers';
 
 export const UserPostContext = createContext();
@@ -27,8 +28,8 @@ const initialPostInfo = {
 };
 
 export const UserPostContextProvider = ({ children }) => {
-  const fileLimit = 3;
   const [currentStage, setCurrentStage] = useState('choose-files');
+
   // files
   const [files, setFiles] = useState(null);
   const [tempImageUrls, setTempImageUrls] = useState([]);
@@ -40,37 +41,37 @@ export const UserPostContextProvider = ({ children }) => {
   const [postInfo, setPostInfo] = useState(null);
 
   console.log(currentStage);
+  console.log(files);
+
+  const setup = useCallback(() => {
+    setTempImageUrls([...files].map(file => URL.createObjectURL(file)));
+    setDimensions({ ...initialDimensions });
+    setImagesData(
+      [...files].map(file => ({
+        url: URL.createObjectURL(file),
+        alt: '',
+        // for edit panel
+        imageAdjustments: { ...initialAdjustments },
+        // for post image
+        filter: '',
+        layers: [],
+        // for active filter
+        filterName: 'original',
+      }))
+    );
+    setPostInfo({ ...initialPostInfo });
+    setCurrentStage('set-dimensions');
+  }, [files]);
+
+  console.log(dimensions);
 
   useEffect(() => {
-    // this is helper functionality to use PostImage
-    // component in other stages of post creation
+    console.log('here is UE');
     if (files === null) return;
-    setTempImageUrls([...files].map(file => URL.createObjectURL(file)));
-  }, [files]);
+    console.log('GOOOOOOOOOO');
+    setup();
+  }, [files, setup]);
   // if current stage is choose-files reset all other fields
-  useEffect(() => {
-    if (currentStage === 'choose-files') {
-      setDimensions({ ...initialDimensions });
-      return;
-    }
-    if (currentStage === 'set-dimensions') {
-      setImagesData(
-        tempImageUrls.map(url => ({
-          url,
-          alt: '',
-          // for edit panel
-          imageAdjustments: { ...initialAdjustments },
-          // for post image
-          filter: '',
-          layers: [],
-          // for active filter
-          filterName: 'original',
-        }))
-      );
-      setPostInfo({ ...initialPostInfo });
-      return;
-    }
-  }, [currentStage, tempImageUrls]);
 
   const addFile = fileList => {
     const newFileList = new DataTransfer();
@@ -117,7 +118,6 @@ export const UserPostContextProvider = ({ children }) => {
   return (
     <UserPostContext.Provider
       value={{
-        fileLimit,
         files,
         setFiles,
         tempImageUrls,

@@ -10,11 +10,11 @@ import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
 const ImageEditPanel = () => {
   const { dimensions, imagesData, setCurrentStage } = useUserPostContext();
+  console.log(dimensions, imagesData);
 
   const [imageIndex, setImageIndex] = useState(0);
 
   const [optionsTab, setOptionsTab] = useState('filters');
-  const [activeFilter, setActiveFilter] = useState('original');
 
   const toggleOptionsTab = () => {
     setOptionsTab(oldValue =>
@@ -27,6 +27,7 @@ const ImageEditPanel = () => {
       <CreatePostHeader
         title="Edit"
         btnText="Next"
+        handlePrev={() => setCurrentStage('set-dimensions')}
         handleNext={() => setCurrentStage('post-information')}
       />
 
@@ -58,11 +59,7 @@ const ImageEditPanel = () => {
           <div className="ImageEditPanel__edit__options">
             {optionsTab === 'filters' && (
               <>
-                <FilterWrapper
-                  currentIndex={imageIndex}
-                  activeFilter={activeFilter}
-                  setActiveFilter={setActiveFilter}
-                />
+                <FilterWrapper currentIndex={imageIndex} />
               </>
             )}
             {optionsTab === 'adjustments' && (
