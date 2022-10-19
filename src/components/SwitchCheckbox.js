@@ -1,9 +1,14 @@
 import './styles/SwitchCheckbox.css';
 
-const SwitchCheckbox = ({ value, handleChange }) => {
+const SwitchCheckbox = ({ value, name, handleChange }) => {
   return (
     <label className="SwitchCheckbox">
-      <input type="checkbox" value={value} onChange={handleChange} />
+      <input
+        type="checkbox"
+        value={value}
+        name={name}
+        onChange={handleChange}
+      />
       <span className="SwitchCheckbox__slider"></span>
     </label>
   );

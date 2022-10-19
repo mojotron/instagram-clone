@@ -19,6 +19,13 @@ const initialDimensions = {
   position: { x: 0, y: 0 },
 };
 
+const initialPostInfo = {
+  caption: '',
+  location: '',
+  disableLikes: false,
+  disableComments: false,
+};
+
 export const UserPostContextProvider = ({ children }) => {
   const fileLimit = 3;
   const [currentStage, setCurrentStage] = useState('choose-files');
@@ -29,6 +36,8 @@ export const UserPostContextProvider = ({ children }) => {
   const [dimensions, setDimensions] = useState(null);
   // image data
   const [imagesData, setImagesData] = useState(null);
+  // post info
+  const [postInfo, setPostInfo] = useState(null);
 
   console.log(currentStage);
 
@@ -58,6 +67,7 @@ export const UserPostContextProvider = ({ children }) => {
           filterName: 'original',
         }))
       );
+      setPostInfo({ ...initialPostInfo });
       return;
     }
   }, [currentStage, tempImageUrls]);
@@ -121,6 +131,8 @@ export const UserPostContextProvider = ({ children }) => {
         imagesData,
         setImagesData,
         updateFiltersAndLayers,
+        postInfo,
+        setPostInfo,
       }}
     >
       {children}
