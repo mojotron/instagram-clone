@@ -45,8 +45,6 @@ const ImageSizePanel = () => {
     setCurrentStage,
   } = useUserPostContext();
 
-  console.log(dimensions);
-
   const [currentImage, setCurrentImage] = useState(0);
   const parentElementRef = useRef();
   const [originalRatio, setOriginalRatio] = useState(null);

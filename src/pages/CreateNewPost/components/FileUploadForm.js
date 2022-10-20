@@ -9,10 +9,10 @@ import CreatePostHeader from './CreatePostHeader';
 // context
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 // utility helpers
-import checkImages from '../../../utils/checkImageSize';
+import filesCheck from '../../../utils/filesCheck';
 
 const FileUploadForm = () => {
-  const { setFiles, setCurrentStage } = useUserPostContext();
+  const { setFiles } = useUserPostContext();
 
   const [error, setError] = useState(null);
 
@@ -34,7 +34,7 @@ const FileUploadForm = () => {
     try {
       setError(null);
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        checkImages(e.dataTransfer.files);
+        filesCheck(e.dataTransfer.files);
         setFiles(e.dataTransfer.files);
       }
     } catch (error) {
@@ -46,7 +46,7 @@ const FileUploadForm = () => {
     try {
       setError(null);
       if (e.target.files && e.target.files[0]) {
-        checkImages(e.target.files);
+        filesCheck(e.target.files);
         setFiles(e.target.files);
       }
     } catch (error) {

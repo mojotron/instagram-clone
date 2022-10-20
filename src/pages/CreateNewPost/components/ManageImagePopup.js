@@ -60,7 +60,10 @@ const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
   };
 
   return (
-    <div className="ManageImagePopup">
+    <div
+      className="ManageImagePopup"
+      title="Managing files will reset current image filter, adjustments and alt text"
+    >
       {tempImageUrls.map((ele, i) => (
         <div
           draggable

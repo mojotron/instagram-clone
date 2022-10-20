@@ -14,19 +14,6 @@ const initialAdjustments = {
   vignette: '0',
 };
 
-const initialDimensions = {
-  aspectRatio: { width: '100%', height: '100%' },
-  zoomLevel: '1',
-  position: { x: 0, y: 0 },
-};
-
-const initialPostInfo = {
-  caption: '',
-  location: '',
-  disableLikes: false,
-  disableComments: false,
-};
-
 export const UserPostContextProvider = ({ children }) => {
   const [currentStage, setCurrentStage] = useState('choose-files');
 
@@ -34,44 +21,44 @@ export const UserPostContextProvider = ({ children }) => {
   const [files, setFiles] = useState(null);
   const [tempImageUrls, setTempImageUrls] = useState([]);
   // dimensions
-  const [dimensions, setDimensions] = useState(null);
+  const [dimensions, setDimensions] = useState({
+    aspectRatio: { width: '100%', height: '100%' },
+    zoomLevel: '1',
+    position: { x: 0, y: 0 },
+  });
   // image data
   const [imagesData, setImagesData] = useState(null);
   // post info
-  const [postInfo, setPostInfo] = useState(null);
-
-  console.log(currentStage);
-  console.log(files);
+  const [postInfo, setPostInfo] = useState({
+    caption: '',
+    location: '',
+    disableLikes: false,
+    disableComments: false,
+  });
 
   const setup = useCallback(() => {
+    console.log('called setup');
     setTempImageUrls([...files].map(file => URL.createObjectURL(file)));
-    setDimensions({ ...initialDimensions });
+
     setImagesData(
       [...files].map(file => ({
         url: URL.createObjectURL(file),
         alt: '',
-        // for edit panel
         imageAdjustments: { ...initialAdjustments },
-        // for post image
         filter: '',
         layers: [],
-        // for active filter
         filterName: 'original',
       }))
     );
-    setPostInfo({ ...initialPostInfo });
+
     setCurrentStage('set-dimensions');
   }, [files]);
 
-  console.log(dimensions);
-
   useEffect(() => {
-    console.log('here is UE');
+    // reset all other fields when files upload and current files are null
     if (files === null) return;
-    console.log('GOOOOOOOOOO');
     setup();
   }, [files, setup]);
-  // if current stage is choose-files reset all other fields
 
   const addFile = fileList => {
     const newFileList = new DataTransfer();

@@ -10,7 +10,6 @@ import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
 const ImageEditPanel = () => {
   const { dimensions, imagesData, setCurrentStage } = useUserPostContext();
-  console.log(dimensions, imagesData);
 
   const [imageIndex, setImageIndex] = useState(0);
 
