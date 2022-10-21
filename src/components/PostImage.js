@@ -22,6 +22,7 @@ const PostImage = ({ imagesData, dimensions, getImageIndex }) => {
 
       <ImageDotNavigation index={currentIndex} numOfImgs={imagesData.length} />
       <div
+        data-testid="post-image-container"
         className="PostImage__container"
         style={{
           height: dimensions.aspectRatio.height,
@@ -41,7 +42,12 @@ const PostImage = ({ imagesData, dimensions, getImageIndex }) => {
         />
 
         {imagesData[currentIndex].layers.map((effect, i) => (
-          <div key={i} className="PostImage__overlay" style={effect}></div>
+          <div
+            data-testid="post-image-layer"
+            key={i}
+            className="PostImage__overlay"
+            style={effect}
+          ></div>
         ))}
       </div>
     </div>

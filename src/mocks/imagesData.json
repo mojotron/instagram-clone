@@ -1,0 +1,21 @@
+[
+  {
+    "url": "/images/img1.jpg",
+    "alt": "temp text img1",
+    "filter": "brightness(1.25) contrast(1.25) saturate(1.25)",
+    "layers": [
+      { "backgroundColor": "rgba(25,25,0,0.25)" },
+      { "backgroundColor": "rgba(255,255,255,0.25)" }
+    ]
+  },
+  {
+    "url": "/images/img2.jpg",
+    "alt": "temp text img2",
+    "filter": "brightness(1.5) contrast(1.5) saturate(1.5)",
+    "layers": [
+      { "backgroundColor": "rgba(25,25,0,0.25)" },
+      { "backgroundColor": "rgba(255,255,255,0.25)" },
+      { "boxShadow": "inset 0px 0px 75px black" }
+    ]
+  }
+]
