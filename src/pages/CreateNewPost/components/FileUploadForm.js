@@ -64,6 +64,7 @@ const FileUploadForm = () => {
       />
       <form className="FileUploadForm" onDragEnter={handleDrag}>
         <input
+          data-testid="file-input"
           ref={inputRef}
           type="file"
           accept="image/*"
@@ -78,7 +79,7 @@ const FileUploadForm = () => {
               src={dragActive ? uploadPhotoIconBlue : uploadPhotoIconBlack}
               alt="upload files"
             />
-            <span>Drag photo and videos here.</span>
+            <span>Drag photos here.</span>
             <button
               type="button"
               className="btn--select-file"

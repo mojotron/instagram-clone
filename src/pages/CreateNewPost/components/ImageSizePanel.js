@@ -210,7 +210,10 @@ const ImageSizePanel = () => {
         </div>
         {/* aspect ratio dropdown */}
         {showSizes && (
-          <div className="ImageSizePanel__size__list">
+          <div
+            data-testid="change-size-popup"
+            className="ImageSizePanel__size__list"
+          >
             {!error && (
               <button
                 className={`btn ${activeSize === 'original' ? 'active' : ''}`}
@@ -246,8 +249,12 @@ const ImageSizePanel = () => {
         )}
         {/* zoom range input*/}
         {showZoomRange && (
-          <div className="ImageSizePanel__zoom-range">
+          <div
+            data-testid="zoom-level-popup"
+            className="ImageSizePanel__zoom-range"
+          >
             <input
+              data-testid="zoom-level-input"
               type="range"
               value={dimensions.zoomLevel}
               onChange={e => {
@@ -272,6 +279,7 @@ const ImageSizePanel = () => {
         )}
 
         <div
+          data-testid="size-panel-parent"
           ref={parentElementRef}
           title="Zoom image then reposition!"
           className="ImageSizePanel__imageContainer"
@@ -282,6 +290,7 @@ const ImageSizePanel = () => {
           onClick={closeAllOptions}
         >
           <div
+            data-testid="size-panel-child"
             className="ImageSizePanel__imageContainer__image"
             style={{
               transform: `scale(${dimensions.zoomLevel})`,
