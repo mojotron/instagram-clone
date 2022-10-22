@@ -120,6 +120,7 @@ const ImageSizePanel = () => {
 
   const handleReposition = e => {
     if (!repositionActive) return;
+    console.log('moving');
     const parent = parentElementRef.current.getBoundingClientRect();
     // get last position of user mouse move
     const lastX = ((moveStart.x - parent.left) / parent.width) * 100;
@@ -148,7 +149,7 @@ const ImageSizePanel = () => {
     } else {
       obj.y = moveY;
     }
-
+    console.log(obj);
     setDimensions(oldValue => ({ ...oldValue, position: obj }));
   };
 
@@ -165,6 +166,7 @@ const ImageSizePanel = () => {
       />
 
       <div
+        data-testid="image-size-panel"
         className="ImageSizePanel"
         onMouseUp={() => setRepositionActive(false)}
         onMouseLeave={() => setRepositionActive(false)}

@@ -2,9 +2,21 @@ import React from 'react';
 import {
   render,
   screen,
+  fireEvent,
 } from '../../../../test-utils/testing-library-userPostContext';
 import userEvent from '@testing-library/user-event';
 import ImageSizePanel from '../ImageSizePanel';
+
+// import { useUserPostContext } from '../../../../hooks/useUserPostContext';
+// jest.mock('../../../../hooks/useUserPostContext', () => ({
+//   useUserPostContext: jest.fn(() => ({
+//     setFiles: jest.fn(),
+//     tempImageUrls: [],
+//     dimensions: {},
+//     setDimensions: jest.fn(),
+//     setCurrentStage: jest.fn(),
+//   })),
+// }));
 
 describe('ImageSizePanel component', () => {
   test('change aspect ratio', async () => {
@@ -37,7 +49,26 @@ describe('ImageSizePanel component', () => {
     expect(screen.getByTestId('zoom-level-popup')).toBeInTheDocument();
     const panelChild = screen.getByTestId('size-panel-child');
     expect(panelChild).toHaveStyle('transform: scale(1)');
-    await user.type(screen.getByTestId('zoom-level-input'), '2');
-    expect(panelChild).toHaveStyle('transform: scale(2)');
+    const slider = screen.getByTestId('zoom-level-input');
+    fireEvent.change(slider, { target: { value: 1.8 } });
+    expect(panelChild).toHaveStyle('transform: scale(1.8)');
+  });
+
+  test('change image position', async () => {
+    render(<ImageSizePanel />);
+    const user = userEvent.setup();
+    const toggleZoomLevel = screen.getByAltText(/zoom slider/i);
+    const panelMain = screen.getByTestId('image-size-panel');
+    const panelChild = screen.getByTestId('size-panel-child');
+    expect(panelChild).toHaveStyle('top: 0%');
+    await user.click(toggleZoomLevel);
+    const slider = screen.getByTestId('zoom-level-input');
+    fireEvent.change(slider, { target: { value: 1.5 } });
+    fireEvent.mouseDown(panelMain);
+    fireEvent.mouseMove(panelMain, { target: { clientX: 10, clientY: 20 } });
+    fireEvent.mouseUp(panelMain);
+    expect(panelChild).toHaveStyle('transform: scale(1.5)');
+    expect(panelChild).toHaveStyle('top: 5%');
+    expect(panelChild).toHaveStyle('left: 5%');
   });
 });

@@ -1,13 +1,13 @@
 import './styles/ManageImagePopup.css';
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
-import { useState, useRef } from 'react';
-import { useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { MAX_UPLOAD_LIMIT } from '../../../constants/constants';
 
 const createArrOfIndexes = length =>
   Array.from({ length: length }, (_, i) => i);
 
 const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
-  const { tempImageUrls, fileLimit, addFile, deleteFile, reorderFiles } =
+  const { tempImageUrls, addFile, deleteFile, reorderFiles } =
     useUserPostContext();
   const [error, setError] = useState(null);
 
@@ -22,7 +22,7 @@ const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
 
   const handleChange = e => {
     setError(null);
-    if (fileLimit === tempImageUrls.length) {
+    if (MAX_UPLOAD_LIMIT === tempImageUrls.length) {
       setError('Maximum 3 images');
       return;
     }

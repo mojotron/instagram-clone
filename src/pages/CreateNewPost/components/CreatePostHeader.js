@@ -21,7 +21,7 @@ const CreatePostHeader = ({ title, btnText, handleNext, handlePrev }) => {
         onClick={handleNext}
         className="btn CreatePostHeader__next-button"
       >
-        {btnText}
+        {btnText || 'next'}
       </button>
     </header>
   );
