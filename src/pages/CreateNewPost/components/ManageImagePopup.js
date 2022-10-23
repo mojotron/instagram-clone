@@ -61,6 +61,7 @@ const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
 
   return (
     <div
+      data-testid="manage-files"
       className="ManageImagePopup"
       title="Managing files will reset current image filter, adjustments and alt text"
     >

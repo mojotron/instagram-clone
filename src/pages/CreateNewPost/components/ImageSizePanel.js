@@ -12,11 +12,7 @@ import ImageDotNavigation from '../../../components/ImageDotNavigation';
 import ManageImagePopup from './ManageImagePopup';
 // context
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
-
-const maxMove = currentZoom => {
-  const percentIncrease = ((currentZoom - 1) / 1) * 100; // 1 is original zoom value (min value)
-  return (percentIncrease / 2).toFixed(1);
-};
+import { calcReposition } from '../../../utils/repositionElement';
 
 const aspectRatios = [
   { ratio: '1:1', value: { width: '100%', height: '100%' } },
@@ -25,18 +21,6 @@ const aspectRatios = [
 ];
 
 const ImageSizePanel = () => {
-  // const imgUrl = URL.createObjectURL(image); outside for smoother animations
-  //
-  // using 1:1, 4:5(height/1.25:height), 16:9(width:width*0.5625)
-  // original ratio create dom image -> take natural height and width =>
-  // calculate aspect ratio with them => make width/height with percentages
-  // with that aspect ratio
-  //
-  //for zoom level, zoom inner element with transform scale css
-  // property, parent element has overflow hidden to hide spilling element
-  //
-  // image position use inner div with bg image and move it around, stop if you
-  // get to parent rect. To calculate max move percent increase formula divide by 2
   const {
     setFiles,
     tempImageUrls,
@@ -120,37 +104,13 @@ const ImageSizePanel = () => {
 
   const handleReposition = e => {
     if (!repositionActive) return;
-    console.log('moving');
-    const parent = parentElementRef.current.getBoundingClientRect();
-    // get last position of user mouse move
-    const lastX = ((moveStart.x - parent.left) / parent.width) * 100;
-    const lastY = ((moveStart.y - parent.top) / parent.width) * 100;
-    // get current position
-    const x = ((e.clientX - parent.left) / parent.width) * 100;
-    const y = ((e.clientY - parent.top) / parent.height) * 100;
-    // calculate current move(mouse walk)
-    const moveX = lastX - x;
-    const moveY = lastY - y;
-
-    const obj = {};
-    // use maxMove to stop child pass parent container
-    const maxImageMove = maxMove(dimensions.zoomLevel);
-
-    if (Math.abs(moveX) >= maxImageMove) {
-      if (moveX > 0) obj.x = maxImageMove;
-      else obj.x = -maxImageMove;
-    } else {
-      obj.x = moveX;
-    }
-
-    if (Math.abs(moveY) >= maxImageMove) {
-      if (moveY > 0) obj.y = maxImageMove;
-      else obj.y = -maxImageMove;
-    } else {
-      obj.y = moveY;
-    }
-    console.log(obj);
-    setDimensions(oldValue => ({ ...oldValue, position: obj }));
+    const newPosition = calcReposition(
+      { x: e.clientX, y: e.clientY },
+      parentElementRef.current.getBoundingClientRect(),
+      moveStart,
+      dimensions.zoomLevel
+    );
+    setDimensions(oldValue => ({ ...oldValue, position: newPosition }));
   };
 
   return (

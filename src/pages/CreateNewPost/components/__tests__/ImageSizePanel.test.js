@@ -55,20 +55,42 @@ describe('ImageSizePanel component', () => {
   });
 
   test('change image position', async () => {
+    // mock getBoundingClientRec
+    Element.prototype.getBoundingClientRect = jest.fn(() => {
+      return {
+        width: 100,
+        height: 100,
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+      };
+    });
+
     render(<ImageSizePanel />);
     const user = userEvent.setup();
     const toggleZoomLevel = screen.getByAltText(/zoom slider/i);
     const panelMain = screen.getByTestId('image-size-panel');
     const panelChild = screen.getByTestId('size-panel-child');
     expect(panelChild).toHaveStyle('top: 0%');
+    expect(panelChild).toHaveStyle('left: 0%');
     await user.click(toggleZoomLevel);
     const slider = screen.getByTestId('zoom-level-input');
     fireEvent.change(slider, { target: { value: 1.5 } });
-    fireEvent.mouseDown(panelMain);
-    fireEvent.mouseMove(panelMain, { target: { clientX: 10, clientY: 20 } });
-    fireEvent.mouseUp(panelMain);
+    fireEvent.mouseDown(panelMain, { clientX: 50, clientY: 50 });
+    fireEvent.mouseMove(panelChild, { clientX: 75, clientY: 75 });
+    fireEvent.mouseUp(panelMain, { clientX: 75, clientY: 75 });
     expect(panelChild).toHaveStyle('transform: scale(1.5)');
-    expect(panelChild).toHaveStyle('top: 5%');
-    expect(panelChild).toHaveStyle('left: 5%');
+    expect(panelChild).toHaveStyle('top: -25%');
+    expect(panelChild).toHaveStyle('left: -25%');
+  });
+
+  test('Manage files', async () => {
+    render(<ImageSizePanel />);
+    const user = userEvent.setup();
+    const toggleManageFiles = screen.getByAltText(/add and arrange images/i);
+    expect(screen.queryByTestId('manage-files')).not.toBeInTheDocument();
+    await user.click(toggleManageFiles);
+    expect(screen.getByTestId('manage-files')).toBeInTheDocument();
   });
 });
