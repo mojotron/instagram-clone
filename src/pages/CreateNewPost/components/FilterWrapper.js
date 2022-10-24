@@ -11,7 +11,6 @@ const FilterWrapper = ({ currentIndex }) => {
           key={filter.id}
           filterName={filter.title}
           filterData={filter.data}
-          
         />
       ))}
     </div>

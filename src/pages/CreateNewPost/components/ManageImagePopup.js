@@ -9,13 +9,15 @@ const createArrOfIndexes = length =>
 const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
   const { tempImageUrls, addFile, deleteFile, reorderFiles } =
     useUserPostContext();
+
   const [error, setError] = useState(null);
 
-  const [arrayOrder, setArrayOrder] = useState([]);
+  const [arrayOrder, setArrayOrder] = useState(null);
 
   useEffect(() => {
+    if (arrayOrder) return;
     setArrayOrder(createArrOfIndexes(tempImageUrls.length));
-  }, [tempImageUrls]);
+  }, [tempImageUrls, arrayOrder]);
 
   const dragItem = useRef();
   const dragOverItem = useRef();
@@ -31,10 +33,12 @@ const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
       return;
     }
     addFile(e.target.files);
+    setArrayOrder(null);
   };
 
   const handleDoubleClick = (e, index) => {
     deleteFile(index);
+    setArrayOrder(null);
     setCurrentImage(0);
   };
 
@@ -53,7 +57,7 @@ const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
     orderCopy.splice(dragOverItem.current, 0, target);
 
     reorderFiles(orderCopy);
-
+    setArrayOrder(null);
     setCurrentImage(dragOverItem.current);
     dragItem.current = null;
     dragOverItem.current = null;
@@ -65,28 +69,30 @@ const ManageImagePopup = ({ currentImage, setCurrentImage }) => {
       className="ManageImagePopup"
       title="Managing files will reset current image filter, adjustments and alt text"
     >
-      {tempImageUrls.map((ele, i) => (
-        <div
-          draggable
-          key={ele}
-          className={`ManageImagePopup__image ${
-            currentImage === i ? 'active' : ''
-          }`}
-          onClick={() => setCurrentImage(i)}
-          onDragStart={e => handleDragStart(e, i)}
-          onDragEnter={e => handleDragEnter(e, i)}
-          onDragEnd={handleDragDrop}
-        >
-          <button
-            className="btn btn--remove"
-            type="button"
-            onDoubleClick={e => handleDoubleClick(e, i)}
+      {tempImageUrls &&
+        tempImageUrls.map((ele, i) => (
+          <div
+            data-testid="manage-files-item"
+            draggable
+            key={ele}
+            className={`ManageImagePopup__image ${
+              currentImage === i ? 'active' : ''
+            }`}
+            onClick={() => setCurrentImage(i)}
+            onDragStart={e => handleDragStart(e, i)}
+            onDragEnter={e => handleDragEnter(e, i)}
+            onDragEnd={handleDragDrop}
           >
-            x
-          </button>
-          <img src={ele} alt="temp" />
-        </div>
-      ))}
+            <button
+              className="btn btn--remove"
+              type="button"
+              onDoubleClick={e => handleDoubleClick(e, i)}
+            >
+              x
+            </button>
+            <img src={ele} alt="temp" />
+          </div>
+        ))}
 
       <form>
         <label className="btn btn--add">

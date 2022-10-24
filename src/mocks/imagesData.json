@@ -6,7 +6,16 @@
     "layers": [
       { "backgroundColor": "rgba(25,25,0,0.25)" },
       { "backgroundColor": "rgba(255,255,255,0.25)" }
-    ]
+    ],
+    "imageAdjustments": {
+      "brightness": "0",
+      "contrast": "0",
+      "saturation": "0",
+      "temperature": "0",
+      "fade": "0",
+      "vignette": "0"
+    },
+    "filterName": "test-filter"
   },
   {
     "url": "/images/img2.jpg",
@@ -16,6 +25,15 @@
       { "backgroundColor": "rgba(25,25,0,0.25)" },
       { "backgroundColor": "rgba(255,255,255,0.25)" },
       { "boxShadow": "inset 0px 0px 75px black" }
-    ]
+    ],
+    "imageAdjustments": {
+      "brightness": "0",
+      "contrast": "0",
+      "saturation": "0",
+      "temperature": "0",
+      "fade": "0",
+      "vignette": "0"
+    },
+    "filterName": "test-filter2"
   }
 ]
