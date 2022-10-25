@@ -2,7 +2,7 @@
   "userName": "_jd_",
   "fullName": "John Dow",
   "emailAddress": "johndow@example.com",
-  "avatar": { "url": "", "fileName": "" },
+  "avatar": { "url": "./image/john.png", "fileName": "john.png" },
   "bio": "",
   "website": ""
 }

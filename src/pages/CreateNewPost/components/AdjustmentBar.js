@@ -98,7 +98,12 @@ const AdjustmentBar = ({
           onMouseDown={() => setBold(true)}
           onMouseUp={handleApplyChange}
         />
-        <span style={{ fontWeight: bold ? '700' : '400' }}>{rangeValue}</span>
+        <span
+          data-testid="adjustment-number"
+          style={{ fontWeight: bold ? '700' : '400' }}
+        >
+          {rangeValue}
+        </span>
       </div>
     </div>
   );

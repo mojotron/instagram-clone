@@ -103,7 +103,9 @@ const ImageInfoPanel = ({ userData }) => {
                   onEmojiClick={handleEmojiClick}
                 />
               )}
-              <p>{postInfo.caption.length}/2200</p>
+              <p data-testid="caption-char-count">
+                {postInfo.caption.length}/2200
+              </p>
             </div>
 
             <label>
@@ -128,7 +130,7 @@ const ImageInfoPanel = ({ userData }) => {
                 <span>
                   <img
                     src={showAccessibility ? expandHideIcon : expandShowIcon}
-                    alt="expand"
+                    alt={`${showAccessibility ? 'hide' : 'expand'}`}
                   />
                 </span>
               </header>
@@ -146,6 +148,7 @@ const ImageInfoPanel = ({ userData }) => {
                       <div key={i}>
                         <PostImage dimensions={dimensions} imagesData={[ele]} />
                         <input
+                          data-testid="alt-input"
                           value={imagesData[i].alt}
                           onChange={e => handleAltChange(e, i)}
                           placeholder="Write alt text"
@@ -166,7 +169,7 @@ const ImageInfoPanel = ({ userData }) => {
                 <span>
                   <img
                     src={showAdvanceSettings ? expandHideIcon : expandShowIcon}
-                    alt="expand"
+                    alt={`${showAdvanceSettings ? 'hide' : 'expand'}`}
                   />
                 </span>
               </header>
