@@ -9,7 +9,6 @@ import mockUserData from '../../../../mocks/userData.json';
 import mockPostInfo from '../../../../mocks/postInfoData.json';
 // import EmojiPicker from 'emoji-picker-react';
 import { useUserPostContext } from '../../../../hooks/useUserPostContext';
-import { useTransition } from 'react';
 jest.mock('../../../../hooks/useUserPostContext');
 // jest.mock('emoji-picker-react');
 
@@ -26,7 +25,7 @@ describe('AdjustmentWrapper component', () => {
 
     render(
       <UserPostContextProvider>
-        <ImageInfoPanel userData={mockUserData} />
+        <ImageInfoPanel userData={mockUserData} handleCreatePost={jest.fn()} />
       </UserPostContextProvider>
     );
     expect(
@@ -49,7 +48,12 @@ describe('AdjustmentWrapper component', () => {
 
     render(
       <UserPostContextProvider>
-        <ImageInfoPanel userData={mockUserData} />
+        <ImageInfoPanel
+          userData={mockUserData}
+          handleCreatePost={jest.fn()}
+          error={null}
+          isPending={false}
+        />
       </UserPostContextProvider>
     );
     const user = userEvent.setup();
@@ -76,7 +80,12 @@ describe('AdjustmentWrapper component', () => {
 
     render(
       <UserPostContextProvider>
-        <ImageInfoPanel userData={mockUserData} />
+        <ImageInfoPanel
+          userData={mockUserData}
+          handleCreatePost={jest.fn()}
+          error={null}
+          isPending={false}
+        />
       </UserPostContextProvider>
     );
     const user = userEvent.setup();
@@ -108,7 +117,12 @@ describe('AdjustmentWrapper component', () => {
 
     render(
       <UserPostContextProvider>
-        <ImageInfoPanel userData={mockUserData} />
+        <ImageInfoPanel
+          userData={mockUserData}
+          handleCreatePost={jest.fn()}
+          error={null}
+          isPending={false}
+        />
       </UserPostContextProvider>
     );
     const user = userEvent.setup();
@@ -125,5 +139,30 @@ describe('AdjustmentWrapper component', () => {
     expect(updatePostInfo).toBeCalledTimes(2);
     await user.click(tab);
     expect(screen.getAllByAltText('expand').length).toBe(2);
+  });
+
+  test('create post pending and loading', () => {
+    useUserPostContext.mockImplementation(() => ({
+      dimensions: mockDimensions,
+      imagesData: mockImagesData,
+      setImagesData: jest.fn(),
+      postInfo: mockPostInfo,
+      setPostInfo: jest.fn(),
+      setCurrentStage: jest.fn(),
+    }));
+
+    render(
+      <UserPostContextProvider>
+        <ImageInfoPanel
+          userData={mockUserData}
+          handleCreatePost={jest.fn()}
+          error={'Ops!'}
+          isPending={true}
+        />
+      </UserPostContextProvider>
+    );
+
+    expect(screen.getByText('Ops!')).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 });

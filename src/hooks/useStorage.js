@@ -6,12 +6,14 @@ import {
   getDownloadURL,
   deleteObject,
 } from 'firebase/storage';
+// unique id
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
   isPending: false,
   error: null,
   success: false,
-  imageUrls: null,
+  imageUrl: null,
 };
 
 const storageReducer = (state, action) => {
@@ -23,21 +25,21 @@ const storageReducer = (state, action) => {
         isPending: false,
         error: action.payload,
         success: false,
-        imageUrls: null,
+        imageUrl: null,
       };
     case 'UPLOAD_IMAGE':
       return {
         isPending: false,
         error: null,
         success: true,
-        imageUrls: action.payload,
+        imageUrl: action.payload,
       };
     case 'DELETE_IMAGE':
       return {
         isPending: false,
         error: null,
         success: true,
-        imageUrls: null,
+        imageUrl: null,
       };
     default:
       return state;
@@ -57,10 +59,12 @@ export const useStorage = () => {
   const upload = async (directory, file) => {
     dispatch({ type: 'IS_PENDING' });
     try {
-      const storageRef = ref(projectStorage, `${directory}/${file.name}`);
+      const fileName = `${directory}/${uuidv4()}-${file.name}`;
+      const storageRef = ref(projectStorage, fileName);
       await uploadBytes(storageRef, file);
       const snapUrl = await getDownloadURL(storageRef);
       dispatchIfNotCancelled({ type: 'UPLOAD_IMAGE', payload: snapUrl });
+      return { url: snapUrl, name: fileName };
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }

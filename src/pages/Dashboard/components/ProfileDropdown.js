@@ -6,13 +6,15 @@ import settingsIcon from '../../../images/settings-icon.svg';
 import bookmarkIcon from '../../../images/bookmark-icon.svg';
 import { useLogout } from '../../../hooks/useLogout';
 
-const ProfileDropdown = () => {
+const ProfileDropdown = ({ userName }) => {
   const { isPending, error, logout } = useLogout();
   return (
     <ul className="ProfileDropdown">
       <li>
-        <img src={userIcon} alt="Profile" />
-        <span>Profile</span>
+        <Link to={`/${userName}`}>
+          <img src={userIcon} alt="Profile" />
+          <span>Profile</span>
+        </Link>
       </li>
       <li>
         <Link to="/settings">

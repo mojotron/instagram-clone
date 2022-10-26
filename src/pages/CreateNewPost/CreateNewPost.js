@@ -11,14 +11,60 @@ import DiscardPost from './components/DiscardPost';
 import './styles/CreateNewPost.css';
 // hooks
 import { useUserPostContext } from '../../hooks/useUserPostContext';
+import { useStorage } from '../../hooks/useStorage';
+import { useFirestore } from '../../hooks/useFirestore';
 
 const CreateNewPost = ({ userData, setShowCreatePost }) => {
-  const { currentStage } = useUserPostContext();
+  const { files, dimensions, imagesData, postInfo, currentStage } =
+    useUserPostContext();
   const [showDiscard, setShowDiscard] = useState(false);
+  //
+  const { upload } = useStorage();
+  const { addDocument } = useFirestore('posts');
+  //
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(false);
 
   const handleCloseBtn = () => {
     if (currentStage === 'choose-files') setShowCreatePost(false);
     setShowDiscard(true);
+  };
+
+  const handleCreatePost = async () => {
+    if (isPending) return; // stop user to make additional call when create post starts
+    setError(null);
+    setIsPending(true);
+    try {
+      // upload images to the fire storage and create image object
+      const images = [];
+      for (const [i, file] of Object.entries([...files])) {
+        const urlAndName = await upload('postImages', file);
+        images.push({
+          ...urlAndName,
+          alt: imagesData[i].alt,
+          filter: imagesData[i].filter,
+          layers: imagesData[i].layers,
+        });
+      }
+      // create document layout with image object and other data
+      const post = {
+        images,
+        dimensions,
+        ...postInfo,
+        comments: [],
+        likesCount: 0,
+        uid: userData.uid,
+      };
+      // add document to post repo and close create post page
+      await addDocument(post);
+      setError(null);
+      setIsPending(false);
+      setShowCreatePost(false);
+    } catch (error) {
+      console.log('ERROR', error.message);
+      setError('Connection lost, please try again later!');
+      setIsPending(false);
+    }
   };
 
   return (
@@ -47,7 +93,12 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
           {currentStage === 'set-filter-layers' && <ImageEditPanel />}
 
           {currentStage === 'post-information' && (
-            <ImageInfoPanel userData={userData} />
+            <ImageInfoPanel
+              userData={userData}
+              handleCreatePost={handleCreatePost}
+              error={error}
+              isPending={isPending}
+            />
           )}
         </div>
       </div>

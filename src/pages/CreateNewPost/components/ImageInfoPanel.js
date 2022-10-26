@@ -11,10 +11,10 @@ import smileIcon from '../../../images/smile-icon.svg';
 import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
-
+// hooks
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
 
-const ImageInfoPanel = ({ userData }) => {
+const ImageInfoPanel = ({ userData, handleCreatePost, error, isPending }) => {
   const {
     dimensions,
     imagesData,
@@ -60,9 +60,9 @@ const ImageInfoPanel = ({ userData }) => {
   return (
     <>
       <CreatePostHeader
-        title="Create New Post"
-        btnText="Share"
-        handleNext={() => console.log('DONE!')}
+        title={`${error ? error : 'Create New Post'}`}
+        btnText={`${isPending ? 'Loading...' : 'Share'}`}
+        handleNext={handleCreatePost}
         handlePrev={() => setCurrentStage('set-filter-layers')}
       />
 

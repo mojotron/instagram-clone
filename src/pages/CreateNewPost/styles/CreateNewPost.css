@@ -20,3 +20,10 @@
   width: 2.5rem;
   height: 2.5rem;
 }
+.create-post-error {
+  z-index: 100;
+  color: var(--red);
+  font-size: 2rem;
+  position: absolute;
+  top: 15%;
+}

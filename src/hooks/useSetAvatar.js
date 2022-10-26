@@ -23,7 +23,7 @@ export const useSetAvatar = (userId, handleDisplay) => {
     if (storageResponse.success === false) return;
 
     const updateData = fileName
-      ? { url: storageResponse.imageUrls, fileName: fileName }
+      ? { url: storageResponse.imageUrl, fileName: fileName }
       : { url: '', fileName: '' };
 
     updateUserAvatar(userId, {

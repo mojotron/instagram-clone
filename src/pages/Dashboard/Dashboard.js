@@ -7,6 +7,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
 import CreateNewPost from '../CreateNewPost/CreateNewPost';
+import Profile from '../Profile/Profile';
 // style
 import './styles/Dashboard.css';
 // context provider
@@ -53,6 +54,10 @@ const Dashboard = () => {
             <Route
               path="/settings"
               element={<Settings userData={response.document} />}
+            />
+            <Route
+              path="/:userName"
+              element={<Profile userData={response.document} />}
             />
           </Routes>
         </>

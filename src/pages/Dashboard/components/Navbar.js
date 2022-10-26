@@ -11,7 +11,6 @@ import './styles/Navbar.css';
 
 const Navbar = ({ userData, toggleShowCreatePost }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showAddNewPost, setShowAddNewPost] = useState(false);
 
   return (
     <nav className="Navbar">
@@ -26,7 +25,7 @@ const Navbar = ({ userData, toggleShowCreatePost }) => {
         </li>
         <li onClick={() => setShowDropdown(oldValue => !oldValue)}>
           <Avatar url={userData.avatar.url} size="small" />
-          {showDropdown && <ProfileDropdown />}
+          {showDropdown && <ProfileDropdown userName={userData.userName} />}
         </li>
       </ul>
     </nav>
