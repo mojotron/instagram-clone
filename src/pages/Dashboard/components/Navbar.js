@@ -25,7 +25,7 @@ const Navbar = ({ userData, toggleShowCreatePost }) => {
         </li>
         <li onClick={() => setShowDropdown(oldValue => !oldValue)}>
           <Avatar url={userData.avatar.url} size="small" />
-          {showDropdown && <ProfileDropdown userName={userData.userName} />}
+          {showDropdown && <ProfileDropdown userData={userData} />}
         </li>
       </ul>
     </nav>
