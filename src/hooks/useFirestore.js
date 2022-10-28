@@ -108,11 +108,14 @@ export const useFirestore = collectionName => {
   };
 
   const checkIfUserExists = async username => {
+    console.log(username);
     // helper function for useSignup hook
     try {
       const q = query(colRef, where('userName', '==', username));
       const querySnapshot = await getDocs(q);
       // negate empty to be more in function name spirit
+      querySnapshot.forEach(doc => console.log({ ...doc.data(), id: doc.id }));
+
       return !querySnapshot.empty;
     } catch (error) {
       throw error;

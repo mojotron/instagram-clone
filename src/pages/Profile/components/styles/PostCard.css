@@ -1,7 +1,9 @@
 .PostCard {
-  height: 25rem;
-  width: 25rem;
+  height: 30rem;
+  width: 30rem;
   position: relative;
+  cursor: pointer;
+  margin: 2rem 0;
 }
 
 .PostCard__icon {

@@ -1,0 +1,66 @@
+.Profile__user {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.Profile__user__avatar {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Profile__user__info {
+  flex-grow: 4;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5rem;
+}
+.Profile__user__info div {
+  display: flex;
+}
+.Profile__user__info div:first-child {
+  padding-bottom: 3rem;
+  justify-self: flex-start;
+  align-items: center;
+}
+.Profile__user__info div:last-child {
+  flex-direction: column;
+}
+.Profile__user__info div:last-child p {
+  padding-bottom: 2rem;
+}
+.Profile__user__info h2 {
+  font-size: 3rem;
+  font-weight: 400;
+  padding-right: 3rem;
+}
+.Profile__user__info p {
+  font-size: 1.6rem;
+  padding-right: 3rem;
+}
+.Profile__user__info span {
+  font-weight: 700;
+}
+.btn--profile {
+  font-weight: 700;
+  border: var(--gray-border);
+  border-radius: 0.5rem;
+  font-size: 1.6rem;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem;
+  min-width: 10rem;
+}
+.icon {
+  padding: 0;
+}
+.btn--profile-blue {
+  background: none;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.5rem 2rem;
+  font-size: 1.6rem;
+  border-radius: 0.5rem;
+}

@@ -15,15 +15,18 @@ const Navbar = ({ userData, toggleShowCreatePost }) => {
   return (
     <nav className="Navbar">
       <ul>
-        <li>
+        <li className="Navbar__item">
           <NavLink to="/">
             <img className="Navbar__icon" src={homeIcon} alt="home" />
           </NavLink>
         </li>
-        <li onClick={toggleShowCreatePost}>
+        <li className="Navbar__item" onClick={toggleShowCreatePost}>
           <img className="Navbar__icon" src={addPostIcon} alt="add post" />
         </li>
-        <li onClick={() => setShowDropdown(oldValue => !oldValue)}>
+        <li
+          className="Navbar__item"
+          onClick={() => setShowDropdown(oldValue => !oldValue)}
+        >
           <Avatar url={userData.avatar.url} size="small" />
           {showDropdown && <ProfileDropdown userData={userData} />}
         </li>
