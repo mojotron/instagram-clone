@@ -14,7 +14,6 @@ export const useCollectPosts = userID => {
 
     const getDocuments = async () => {
       try {
-        console.log(userID);
         const col = collection(projectFirestore, 'posts');
         const q = query(col, where('uid', '==', userID));
         unsubscribe = onSnapshot(q, snapshot => {
@@ -22,7 +21,6 @@ export const useCollectPosts = userID => {
           snapshot.forEach(doc => {
             posts.push({ ...doc.data(), id: doc.id });
           });
-          console.log(posts);
           setDocuments(posts);
           setIsPending(false);
           setError(null);

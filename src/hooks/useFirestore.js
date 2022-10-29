@@ -9,6 +9,7 @@ import {
   getDocs,
   doc,
   updateDoc,
+  getDoc,
 } from 'firebase/firestore';
 
 const initialState = {
@@ -100,23 +101,30 @@ export const useFirestore = collectionName => {
     try {
       const docRef = doc(colRef, docId);
       await updateDoc(docRef, data);
+      const docSnap = await getDoc(
+        doc(projectFirestore, collectionName, docId)
+      );
 
-      dispatchIfNotCancelled({ type: 'UPDATE_DOCUMENT', payload: null });
+      dispatchIfNotCancelled({
+        type: 'UPDATE_DOCUMENT',
+        payload: { ...docSnap.data(), id: docSnap.id },
+      });
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }
   };
 
   const checkIfUserExists = async username => {
-    console.log(username);
     // helper function for useSignup hook
+    // helper function for checking friend profile in Profile page
     try {
       const q = query(colRef, where('userName', '==', username));
       const querySnapshot = await getDocs(q);
       // negate empty to be more in function name spirit
-      querySnapshot.forEach(doc => console.log({ ...doc.data(), id: doc.id }));
-
-      return !querySnapshot.empty;
+      if (querySnapshot.empty) return false;
+      const users = [];
+      querySnapshot.forEach(doc => users.push({ ...doc.data(), id: doc.id }));
+      return users[0];
     } catch (error) {
       throw error;
     }

@@ -14,19 +14,23 @@ import { useCollectPosts } from '../../hooks/useCollectPosts';
 import gridIcon from '../../images/grid-icon.svg';
 import bookmarkIcon from '../../images/bookmark-icon.svg';
 
-const Profile = ({ userData }) => {
+const Profile = ({ userData, handleUpdateUser }) => {
   const navigate = useNavigate();
   const { userName } = useParams();
-  console.log(userName);
   // can ne own, friend, other
   const [profileType, setProfileType] = useState(null);
   const [profileData, setProfileData] = useState(null);
 
-  const { checkIfUserExists, getDocument } = useFirestore('users');
+  useEffect(() => {
+    // if user inspecting other of friend acc and wants go back to own
+    setProfileType(null);
+    setProfileData(null);
+  }, [userName]);
+
+  const { checkIfUserExists, updateDocument } = useFirestore('users');
 
   const { documents } = useCollectPosts(profileData?.uid);
-
-  console.log(documents);
+  // console.log(documents);
   // determine profile to display
   useEffect(() => {
     if (profileData) return;
@@ -36,12 +40,40 @@ const Profile = ({ userData }) => {
       setProfileType('own');
       return;
     }
-    checkIfUserExists(userName);
 
-    navigate('/');
+    const checkForUser = async () => {
+      try {
+        const user = await checkIfUserExists(userName);
+        if (user === false) navigate('/');
+        // find is friend or other
+        const friend = await userData.following.find(
+          friendUid => friendUid === user.uid
+        );
+        friend ? setProfileType('friend') : setProfileType('other');
+        setProfileData(user);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checkForUser();
   }, [navigate, userName, userData, profileData, checkIfUserExists]);
 
-  if (documents === null) return;
+  const handleFollowAccount = async () => {
+    try {
+      const ownAccFollowing = [...userData.following, profileData.uid];
+      const inspectingAccFollowers = [...profileData.followers, userData.id];
+
+      await updateDocument(profileData.id, {
+        followers: inspectingAccFollowers,
+      });
+      await handleUpdateUser(userData.id, { following: ownAccFollowing });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (profileData === null || documents === null) return;
 
   return (
     <div className="Profile">
@@ -49,6 +81,7 @@ const Profile = ({ userData }) => {
         userData={profileData}
         accountType={profileType}
         postsCount={documents.length}
+        handleFollowAccount={handleFollowAccount}
       />
 
       <section className="Profile__collections">

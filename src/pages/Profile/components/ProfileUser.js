@@ -4,12 +4,20 @@ import Avatar from '../../../components/Avatar';
 import ChangeProfilePhoto from '../../../components/ChangeProfilePhoto';
 import './styles/ProfileUser.css';
 import userCheckIcon from '../../../images/user-check-icon.svg';
+import ConfirmUnfollow from './ConfirmUnfollow';
 
-const ProfileUser = ({ userData, accountType, postsCount }) => {
+const ProfileUser = ({
+  userData,
+  accountType,
+  postsCount,
+  handleFollowAccount,
+}) => {
   const navigate = useNavigate();
   const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
+  const [showConfirmUnfollow, setShowConfirmUnfollow] = useState(false);
   const toggleUpdateAvatar = () =>
     setShowChangeProfilePhoto(oldvalue => !oldvalue);
+
   return (
     <section className="Profile__user">
       {showChangeProfilePhoto && (
@@ -17,6 +25,13 @@ const ProfileUser = ({ userData, accountType, postsCount }) => {
           userId={userData.uid}
           userAvatar={userData.avatar}
           handleDisplay={toggleUpdateAvatar}
+        />
+      )}
+
+      {showConfirmUnfollow && (
+        <ConfirmUnfollow
+          userData={userData}
+          handleCancel={() => setShowConfirmUnfollow(false)}
         />
       )}
 
@@ -43,7 +58,10 @@ const ProfileUser = ({ userData, accountType, postsCount }) => {
           {accountType === 'friend' && (
             <>
               <button className="btn btn--profile">Message</button>
-              <button className="btn btn--profile icon">
+              <button
+                className="btn btn--profile icon"
+                onClick={() => setShowConfirmUnfollow(true)}
+              >
                 <img src={userCheckIcon} alt="un follow account" />
               </button>
             </>
@@ -52,7 +70,12 @@ const ProfileUser = ({ userData, accountType, postsCount }) => {
           {accountType === 'other' && (
             <>
               <button className="btn btn--profile">Message</button>
-              <button className="btn btn--profile-blue">Follow</button>
+              <button
+                onClick={handleFollowAccount}
+                className="btn btn--profile-blue"
+              >
+                Follow
+              </button>
             </>
           )}
         </div>

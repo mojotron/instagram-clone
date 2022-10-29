@@ -17,7 +17,7 @@ const Dashboard = () => {
   // get data
   const { user } = useAuthContext();
 
-  const { response, getDocument } = useFirestore('users');
+  const { response, getDocument, updateDocument } = useFirestore('users');
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
 
@@ -57,7 +57,12 @@ const Dashboard = () => {
             />
             <Route
               path="/:userName"
-              element={<Profile userData={response.document} />}
+              element={
+                <Profile
+                  userData={response.document}
+                  handleUpdateUser={updateDocument}
+                />
+              }
             />
           </Routes>
         </>

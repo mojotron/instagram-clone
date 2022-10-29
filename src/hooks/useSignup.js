@@ -19,7 +19,7 @@ export const useSignup = () => {
     try {
       // check if username is already used
       const usernameExist = await checkIfUserExists(data.userName);
-      if (usernameExist)
+      if (usernameExist !== false)
         throw new Error('Username already exist, please try another one!');
 
       const response = await createUserWithEmailAndPassword(
