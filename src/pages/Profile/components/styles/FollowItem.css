@@ -1,0 +1,28 @@
+.FollowItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: var(--black);
+}
+.FollowItem__user {
+  display: flex;
+}
+.FollowItem__user__name {
+  padding-left: 1rem;
+}
+.FollowItem__user__name h2 {
+  font-size: 1.6rem;
+}
+.FollowItem__user__name h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--gray);
+}
+.FollowItem button {
+  border: var(--gray-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 1.6rem;
+}

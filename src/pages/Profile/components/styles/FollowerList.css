@@ -1,0 +1,27 @@
+.FollowerList {
+  background-color: white;
+  height: 40rem;
+  width: 40rem;
+  border-radius: 1rem;
+}
+.FollowerList__header {
+  border-bottom: var(--gray-border);
+  width: 100%;
+  height: 4.2rem;
+  padding: 0 3rem;
+  position: relative;
+}
+.FollowerList__header h2 {
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 1.8rem;
+  padding-top: 1rem;
+}
+.FollowerList__header button {
+  position: absolute;
+  right: 2rem;
+  top: 1rem;
+}
+.FollowerList__header img {
+  filter: invert(100%);
+}

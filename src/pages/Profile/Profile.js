@@ -5,7 +5,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import './styles/Profile.css';
 // components
 import ProfileUser from './components/ProfileUser';
-
+import FollowerList from './components/FollowerList';
 import PostCard from './components/PostCard';
 //hooks
 import { useFirestore } from '../../hooks/useFirestore';
@@ -62,8 +62,26 @@ const Profile = ({ userData, handleUpdateUser }) => {
   const handleFollowAccount = async () => {
     try {
       const ownAccFollowing = [...userData.following, profileData.uid];
-      const inspectingAccFollowers = [...profileData.followers, userData.id];
+      const inspectingAccFollowers = [...profileData.followers, userData.uid];
 
+      await updateDocument(profileData.id, {
+        followers: inspectingAccFollowers,
+      });
+      await handleUpdateUser(userData.id, { following: ownAccFollowing });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUnfollowAccount = async () => {
+    try {
+      const ownAccFollowing = [...userData.following].filter(
+        acc => acc !== profileData.uid
+      );
+      const inspectingAccFollowers = [...profileData.followers].filter(
+        acc => acc !== userData.uid
+      );
+      console.log(ownAccFollowing, inspectingAccFollowers);
       await updateDocument(profileData.id, {
         followers: inspectingAccFollowers,
       });
@@ -77,11 +95,14 @@ const Profile = ({ userData, handleUpdateUser }) => {
 
   return (
     <div className="Profile">
+      <FollowerList type="following" userList={profileData.following} />
+
       <ProfileUser
         userData={profileData}
         accountType={profileType}
         postsCount={documents.length}
         handleFollowAccount={handleFollowAccount}
+        handleUnfollowAccount={handleUnfollowAccount}
       />
 
       <section className="Profile__collections">

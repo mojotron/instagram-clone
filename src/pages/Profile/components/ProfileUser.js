@@ -1,16 +1,22 @@
 import { useState } from 'react';
+// react router
 import { useNavigate } from 'react-router-dom';
+// components
 import Avatar from '../../../components/Avatar';
-import ChangeProfilePhoto from '../../../components/ChangeProfilePhoto';
-import './styles/ProfileUser.css';
-import userCheckIcon from '../../../images/user-check-icon.svg';
 import ConfirmUnfollow from './ConfirmUnfollow';
+import ChangeProfilePhoto from '../../../components/ChangeProfilePhoto';
+import FormatCount from './FormatCount';
+// style
+import './styles/ProfileUser.css';
+// icons
+import userCheckIcon from '../../../images/user-check-icon.svg';
 
 const ProfileUser = ({
   userData,
   accountType,
   postsCount,
   handleFollowAccount,
+  handleUnfollowAccount,
 }) => {
   const navigate = useNavigate();
   const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
@@ -32,6 +38,7 @@ const ProfileUser = ({
         <ConfirmUnfollow
           userData={userData}
           handleCancel={() => setShowConfirmUnfollow(false)}
+          handleUnfollowAccount={handleUnfollowAccount}
         />
       )}
 
@@ -80,15 +87,17 @@ const ProfileUser = ({
           )}
         </div>
         <div>
-          <p>
-            <span>{postsCount}</span> posts
-          </p>
-          <p>
-            <span>{userData.followers.length}</span> followers
-          </p>
-          <p>
-            <span>{userData.following.length}</span> following
-          </p>
+          <FormatCount num={postsCount} title="post" />
+          <FormatCount
+            num={userData.followers.length}
+            title="follower"
+            handleClick={() => {}}
+          />
+          <FormatCount
+            num={userData.following.length}
+            title="following"
+            handleClick={() => {}}
+          />
         </div>
         <div>
           <p>{userData.name}</p>
