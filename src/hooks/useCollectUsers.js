@@ -8,7 +8,7 @@ export const useCollectUsers = userIDList => {
   const [documents, setDocuments] = useState(null);
 
   useEffect(() => {
-    if (!userIDList) return;
+    if (userIDList.length < 1) return;
     setIsPending(true);
 
     const getDocuments = async () => {
@@ -21,7 +21,6 @@ export const useCollectUsers = userIDList => {
 
         const users = [];
         querySnapshot.forEach(doc => {
-          console.log(doc.data());
           users.push({ ...doc.data(), id: doc.id });
         });
         setDocuments(users);

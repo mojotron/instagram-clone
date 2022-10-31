@@ -10,17 +10,22 @@ import FormatCount from './FormatCount';
 import './styles/ProfileUser.css';
 // icons
 import userCheckIcon from '../../../images/user-check-icon.svg';
+import FollowerList from './FollowerList';
 
 const ProfileUser = ({
   userData,
+  targetData,
   accountType,
   postsCount,
-  handleFollowAccount,
-  handleUnfollowAccount,
+  handlers,
 }) => {
   const navigate = useNavigate();
   const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
   const [showConfirmUnfollow, setShowConfirmUnfollow] = useState(false);
+
+  const [showFollowerList, setShowFollowerList] = useState(false);
+  const [showFollowingList, setShowFollowingList] = useState(false);
+
   const toggleUpdateAvatar = () =>
     setShowChangeProfilePhoto(oldvalue => !oldvalue);
 
@@ -28,30 +33,51 @@ const ProfileUser = ({
     <section className="Profile__user">
       {showChangeProfilePhoto && (
         <ChangeProfilePhoto
-          userId={userData.uid}
-          userAvatar={userData.avatar}
+          userId={targetData.uid}
+          userAvatar={targetData.avatar}
           handleDisplay={toggleUpdateAvatar}
         />
       )}
 
       {showConfirmUnfollow && (
         <ConfirmUnfollow
-          userData={userData}
+          targetData={targetData}
           handleCancel={() => setShowConfirmUnfollow(false)}
-          handleUnfollowAccount={handleUnfollowAccount}
+          handleUnfollowAccount={handlers.unfollow}
+        />
+      )}
+
+      {showFollowerList && (
+        <FollowerList
+          user={userData.uid === targetData.uid}
+          type="followers"
+          userList={userData.followers}
+          targetList={targetData.followers}
+          followHandlers={handlers}
+          closeHandler={() => setShowFollowerList(false)}
+        />
+      )}
+      {showFollowingList && (
+        <FollowerList
+          user={userData.uid === targetData.uid}
+          type="following"
+          userList={userData.following}
+          targetList={targetData.following}
+          followHandlers={handlers}
+          closeHandler={() => setShowFollowingList(false)}
         />
       )}
 
       <div className="Profile__user__avatar" title="Change profile photo">
         <Avatar
-          url={userData.avatar.url}
+          url={targetData.avatar.url}
           size="big"
           handleClick={toggleUpdateAvatar}
         />
       </div>
       <div className="Profile__user__info">
         <div>
-          <h2>{userData.userName}</h2>
+          <h2>{targetData.userName}</h2>
 
           {accountType === 'own' && (
             <button
@@ -69,7 +95,7 @@ const ProfileUser = ({
                 className="btn btn--profile icon"
                 onClick={() => setShowConfirmUnfollow(true)}
               >
-                <img src={userCheckIcon} alt="un follow account" />
+                <img src={userCheckIcon} alt="unfollow account" />
               </button>
             </>
           )}
@@ -78,7 +104,7 @@ const ProfileUser = ({
             <>
               <button className="btn btn--profile">Message</button>
               <button
-                onClick={handleFollowAccount}
+                onClick={handlers.follow}
                 className="btn btn--profile-blue"
               >
                 Follow
@@ -89,20 +115,20 @@ const ProfileUser = ({
         <div>
           <FormatCount num={postsCount} title="post" />
           <FormatCount
-            num={userData.followers.length}
+            num={targetData.followers.length}
             title="follower"
-            handleClick={() => {}}
+            handleClick={() => setShowFollowerList(true)}
           />
           <FormatCount
-            num={userData.following.length}
+            num={targetData.following.length}
             title="following"
-            handleClick={() => {}}
+            handleClick={() => setShowFollowingList(true)}
           />
         </div>
         <div>
-          <p>{userData.name}</p>
-          <p>{userData.bio}</p>
-          <p>{userData.website}</p>
+          <p>{targetData.name}</p>
+          <p>{targetData.bio}</p>
+          <p>{targetData.website}</p>
         </div>
       </div>
     </section>

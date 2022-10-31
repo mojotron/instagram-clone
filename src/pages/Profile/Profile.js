@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 // react router
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 // styles
 import './styles/Profile.css';
 // components
 import ProfileUser from './components/ProfileUser';
-import FollowerList from './components/FollowerList';
 import PostCard from './components/PostCard';
 //hooks
 import { useFirestore } from '../../hooks/useFirestore';
@@ -91,18 +90,36 @@ const Profile = ({ userData, handleUpdateUser }) => {
     }
   };
 
+  const handleRemoveFollower = async (userId, userFollowing, docId) => {
+    // user data is collected via FollowerList useCollectUsers hook
+    try {
+      const ownAccFollowing = [...userData.followers].filter(
+        acc => acc !== userId
+      );
+      const inspectingAccFollowers = [...userFollowing].filter(
+        acc => acc !== userData.uid
+      );
+      await updateDocument(docId, {
+        following: inspectingAccFollowers,
+      });
+      await handleUpdateUser(userData.id, { followers: ownAccFollowing });
+    } catch (error) {}
+  };
+
   if (profileData === null || documents === null) return;
 
   return (
     <div className="Profile">
-      <FollowerList type="following" userList={profileData.following} />
-
       <ProfileUser
-        userData={profileData}
+        userData={userData}
+        targetData={profileData}
         accountType={profileType}
         postsCount={documents.length}
-        handleFollowAccount={handleFollowAccount}
-        handleUnfollowAccount={handleUnfollowAccount}
+        handlers={{
+          follow: handleFollowAccount,
+          unfollow: handleUnfollowAccount,
+          remove: handleRemoveFollower,
+        }}
       />
 
       <section className="Profile__collections">

@@ -12,6 +12,7 @@ import Profile from '../Profile/Profile';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
+import { UserDataContextProvider } from '../../context/UserDataContext';
 
 const Dashboard = () => {
   // get data
@@ -53,6 +54,7 @@ const Dashboard = () => {
             <Route index element={<h1>hello</h1>} />
             <Route
               path="/settings"
+              // to do move to context
               element={<Settings userData={response.document} />}
             />
             <Route
