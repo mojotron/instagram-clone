@@ -1,8 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 // hooks
-import { useFirestore } from '../../hooks/useFirestore';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
 // components
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
@@ -12,21 +11,14 @@ import Profile from '../Profile/Profile';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
-import { UserDataContextProvider } from '../../context/UserDataContext';
 
 const Dashboard = () => {
   // get data
-  const { user } = useAuthContext();
+  const { response, updateDocument } = useUserDataContext();
+  console.log('temp is -> ', response);
 
-  const { response, getDocument, updateDocument } = useFirestore('users');
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
-
-  const loadDocument = useRef(() => getDocument(user.uid)).current;
-
-  useEffect(() => {
-    loadDocument();
-  }, [loadDocument]);
 
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
@@ -59,12 +51,7 @@ const Dashboard = () => {
             />
             <Route
               path="/:userName"
-              element={
-                <Profile
-                  userData={response.document}
-                  handleUpdateUser={updateDocument}
-                />
-              }
+              element={<Profile handleUpdateUser={updateDocument} />}
             />
           </Routes>
         </>

@@ -1,7 +1,23 @@
 import { createContext } from 'react';
+import { useFirestore } from '../hooks/useFirestore';
+import { useAuthContext } from '../hooks/useAuthContext';
+import { useEffect, useRef } from 'react';
 
 export const UserDataContext = createContext();
 
 export const UserDataContextProvider = ({ children }) => {
-  return <UserDataContext.Provider>{children}</UserDataContext.Provider>;
+  const { user } = useAuthContext();
+  const { response, getDocument, updateDocument } = useFirestore('users');
+
+  const loadDocument = useRef(() => getDocument(user.uid)).current;
+
+  useEffect(() => {
+    loadDocument();
+  }, [loadDocument]);
+
+  return (
+    <UserDataContext.Provider value={{ response, updateDocument }}>
+      {children}
+    </UserDataContext.Provider>
+  );
 };

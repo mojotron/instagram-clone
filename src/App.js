@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // context
 import { useAuthContext } from './hooks/useAuthContext';
+// context provider
+import { UserDataContextProvider } from './context/UserDataContext';
 // pages
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
@@ -22,7 +24,9 @@ const App = () => {
               path="/*"
               element={
                 <ProtectedRoute condition={user} goto="login">
-                  <Dashboard />
+                  <UserDataContextProvider>
+                    <Dashboard />
+                  </UserDataContextProvider>
                 </ProtectedRoute>
               }
             />

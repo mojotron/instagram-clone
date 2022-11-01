@@ -12,8 +12,11 @@ import { useCollectPosts } from '../../hooks/useCollectPosts';
 // icons
 import gridIcon from '../../images/grid-icon.svg';
 import bookmarkIcon from '../../images/bookmark-icon.svg';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
 
-const Profile = ({ userData, handleUpdateUser }) => {
+const Profile = () => {
+  const { response, updateDocument: handleUpdateUser } = useUserDataContext();
+
   const navigate = useNavigate();
   const { userName } = useParams();
   // can ne own, friend, other
@@ -29,13 +32,12 @@ const Profile = ({ userData, handleUpdateUser }) => {
   const { checkIfUserExists, updateDocument } = useFirestore('users');
 
   const { documents } = useCollectPosts(profileData?.uid);
-  // console.log(documents);
-  // determine profile to display
+
   useEffect(() => {
     if (profileData) return;
-    if (userName === userData.userName) {
+    if (userName === response.document.userName) {
       // users inspecting own profile
-      setProfileData(userData);
+      setProfileData(response.document);
       setProfileType('own');
       return;
     }
@@ -45,7 +47,7 @@ const Profile = ({ userData, handleUpdateUser }) => {
         const user = await checkIfUserExists(userName);
         if (user === false) navigate('/');
         // find is friend or other
-        const friend = await userData.following.find(
+        const friend = await response.document.following.find(
           friendUid => friendUid === user.uid
         );
         friend ? setProfileType('friend') : setProfileType('other');
@@ -56,53 +58,59 @@ const Profile = ({ userData, handleUpdateUser }) => {
     };
 
     checkForUser();
-  }, [navigate, userName, userData, profileData, checkIfUserExists]);
+  }, [navigate, userName, response, profileData, checkIfUserExists]);
 
-  const handleFollowAccount = async () => {
+  const handleFollowAccount = async (userId, userFollowers, docId) => {
+    console.log(userFollowers);
     try {
-      const ownAccFollowing = [...userData.following, profileData.uid];
-      const inspectingAccFollowers = [...profileData.followers, userData.uid];
-
-      await updateDocument(profileData.id, {
+      const ownAccFollowing = [...response.document.following, userId];
+      const inspectingAccFollowers = [...userFollowers, response.document.uid];
+      await updateDocument(docId, {
         followers: inspectingAccFollowers,
       });
-      await handleUpdateUser(userData.id, { following: ownAccFollowing });
+      await handleUpdateUser(response.document.id, {
+        following: ownAccFollowing,
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUnfollowAccount = async () => {
+  const handleUnfollowAccount = async (userId, userFollowers, docId) => {
     try {
-      const ownAccFollowing = [...userData.following].filter(
-        acc => acc !== profileData.uid
+      const ownAccFollowing = [...response.document.following].filter(
+        acc => acc !== userId
       );
-      const inspectingAccFollowers = [...profileData.followers].filter(
-        acc => acc !== userData.uid
+      const inspectingAccFollowers = [...userFollowers].filter(
+        acc => acc !== response.document.uid
       );
       console.log(ownAccFollowing, inspectingAccFollowers);
-      await updateDocument(profileData.id, {
+      await updateDocument(docId, {
         followers: inspectingAccFollowers,
       });
-      await handleUpdateUser(userData.id, { following: ownAccFollowing });
+      await handleUpdateUser(response.document.id, {
+        following: ownAccFollowing,
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleRemoveFollower = async (userId, userFollowing, docId) => {
-    // user data is collected via FollowerList useCollectUsers hook
+    //user data is collected via FollowerList useCollectUsers hook
     try {
-      const ownAccFollowing = [...userData.followers].filter(
+      const ownAccFollowing = [...response.document.followers].filter(
         acc => acc !== userId
       );
       const inspectingAccFollowers = [...userFollowing].filter(
-        acc => acc !== userData.uid
+        acc => acc !== response.document.uid
       );
       await updateDocument(docId, {
         following: inspectingAccFollowers,
       });
-      await handleUpdateUser(userData.id, { followers: ownAccFollowing });
+      await handleUpdateUser(response.document.id, {
+        followers: ownAccFollowing,
+      });
     } catch (error) {}
   };
 
@@ -111,7 +119,6 @@ const Profile = ({ userData, handleUpdateUser }) => {
   return (
     <div className="Profile">
       <ProfileUser
-        userData={userData}
         targetData={profileData}
         accountType={profileType}
         postsCount={documents.length}

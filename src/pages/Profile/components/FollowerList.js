@@ -3,14 +3,7 @@ import closeIcon from '../../../images/close-icon.svg';
 import { useCollectUsers } from '../../../hooks/useCollectUsers';
 import FollowItem from './FollowItem';
 
-const FollowerList = ({
-  user,
-  type,
-  userList,
-  targetList,
-  closeHandler,
-  followHandlers,
-}) => {
+const FollowerList = ({ type, targetList, closeHandler, followHandlers }) => {
   const { documents } = useCollectUsers(targetList);
 
   return (
@@ -26,7 +19,6 @@ const FollowerList = ({
           {documents &&
             documents.map(ele => (
               <FollowItem
-                user={user}
                 type={type}
                 key={ele.id}
                 userData={ele}

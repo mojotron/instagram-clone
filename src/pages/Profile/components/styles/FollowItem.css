@@ -23,7 +23,14 @@
 .FollowItem button {
   border: var(--gray-border);
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2rem;
   font-weight: 700;
   font-size: 1.6rem;
+  text-transform: capitalize;
+}
+.FollowItem button.btn--blue {
+  border: var(--bray-border);
+  background: none;
+  color: white;
+  background-color: var(--blue);
 }

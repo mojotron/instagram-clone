@@ -1,13 +1,9 @@
 import Avatar from '../../../components/Avatar';
 // use styling of Pages => CreatePost => DiscardPost css
-const ConfirmUnfollow = ({
-  targetData,
-  handleCancel,
-  handleUnfollowAccount,
-}) => {
+const ConfirmPopup = ({ text, targetData, handleCancel, handleAction }) => {
   const handleUnfollow = async () => {
     try {
-      await handleUnfollowAccount();
+      await handleAction();
       handleCancel();
     } catch (error) {
       console.log(error);
@@ -17,9 +13,11 @@ const ConfirmUnfollow = ({
     <div className="overlay">
       <div className="DiscardPost" style={{ paddingTop: '20px' }}>
         <Avatar url={targetData.avatar.url} size="mid-2" />
-        <p style={{ paddingTop: '20px' }}>Unfollow @{targetData.userName}?</p>
+        <p style={{ paddingTop: '20px' }}>
+          {text} @{targetData.userName}?
+        </p>
         <button onClick={handleUnfollow} className="btn discard">
-          Unfollow
+          {text}
         </button>
         <button onClick={handleCancel} className="btn">
           Cancel
@@ -29,4 +27,4 @@ const ConfirmUnfollow = ({
   );
 };
 
-export default ConfirmUnfollow;
+export default ConfirmPopup;

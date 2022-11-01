@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // components
 import Avatar from '../../../components/Avatar';
-import ConfirmUnfollow from './ConfirmUnfollow';
+import ConfirmPopup from './ConfirmUnfollow';
 import ChangeProfilePhoto from '../../../components/ChangeProfilePhoto';
 import FormatCount from './FormatCount';
 // style
@@ -12,14 +12,9 @@ import './styles/ProfileUser.css';
 import userCheckIcon from '../../../images/user-check-icon.svg';
 import FollowerList from './FollowerList';
 
-const ProfileUser = ({
-  userData,
-  targetData,
-  accountType,
-  postsCount,
-  handlers,
-}) => {
+const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
   const navigate = useNavigate();
+
   const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
   const [showConfirmUnfollow, setShowConfirmUnfollow] = useState(false);
 
@@ -40,18 +35,23 @@ const ProfileUser = ({
       )}
 
       {showConfirmUnfollow && (
-        <ConfirmUnfollow
+        <ConfirmPopup
+          text="unfollow"
           targetData={targetData}
           handleCancel={() => setShowConfirmUnfollow(false)}
-          handleUnfollowAccount={handlers.unfollow}
+          handleAction={() =>
+            handlers.unfollow(
+              targetData.uid,
+              targetData.followers,
+              targetData.id
+            )
+          }
         />
       )}
 
       {showFollowerList && (
         <FollowerList
-          user={userData.uid === targetData.uid}
           type="followers"
-          userList={userData.followers}
           targetList={targetData.followers}
           followHandlers={handlers}
           closeHandler={() => setShowFollowerList(false)}
@@ -59,9 +59,7 @@ const ProfileUser = ({
       )}
       {showFollowingList && (
         <FollowerList
-          user={userData.uid === targetData.uid}
           type="following"
-          userList={userData.following}
           targetList={targetData.following}
           followHandlers={handlers}
           closeHandler={() => setShowFollowingList(false)}
@@ -104,7 +102,13 @@ const ProfileUser = ({
             <>
               <button className="btn btn--profile">Message</button>
               <button
-                onClick={handlers.follow}
+                onClick={() =>
+                  handlers.follow(
+                    targetData.uid,
+                    targetData.followers,
+                    targetData.id
+                  )
+                }
                 className="btn btn--profile-blue"
               >
                 Follow
