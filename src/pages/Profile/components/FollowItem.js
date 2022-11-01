@@ -80,16 +80,16 @@ const FollowItem = ({ type, userData, followHandlers }) => {
     }
   };
 
-  const temp = determineButton();
+  const currentButton = determineButton();
 
   return (
     <div className="FollowItem">
       {showConfirmPopup && (
         <ConfirmPopup
-          text={temp.text === 'remove' ? 'remove' : 'unfollow'}
+          text={currentButton.text === 'remove' ? 'remove' : 'unfollow'}
           targetData={userData}
           handleCancel={() => setShowConfirmPopup(false)}
-          handleAction={temp.handler}
+          handleAction={currentButton.handler}
         />
       )}
 
@@ -105,13 +105,17 @@ const FollowItem = ({ type, userData, followHandlers }) => {
       </div>
       {userData.userName !== response.document.userName && (
         <button
-          className={`btn ${temp.text === 'follow' ? 'btn--blue' : ''}`}
+          className={`btn ${
+            currentButton.text === 'follow' ? 'btn--blue' : ''
+          }`}
           // follow without confirm popup, remove and unfollow with popup
           onClick={() =>
-            temp.text === 'follow' ? temp.handler() : setShowConfirmPopup(true)
+            currentButton.text === 'follow'
+              ? currentButton.handler()
+              : setShowConfirmPopup(true)
           }
         >
-          {temp.text}
+          {currentButton.text}
         </button>
       )}
     </div>

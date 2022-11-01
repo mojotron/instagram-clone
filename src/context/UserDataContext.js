@@ -7,7 +7,8 @@ export const UserDataContext = createContext();
 
 export const UserDataContextProvider = ({ children }) => {
   const { user } = useAuthContext();
-  const { response, getDocument, updateDocument } = useFirestore('users');
+  const { response, getDocument, updateDocument, checkIfUserExists } =
+    useFirestore('users');
 
   const loadDocument = useRef(() => getDocument(user.uid)).current;
 
@@ -16,7 +17,9 @@ export const UserDataContextProvider = ({ children }) => {
   }, [loadDocument]);
 
   return (
-    <UserDataContext.Provider value={{ response, updateDocument }}>
+    <UserDataContext.Provider
+      value={{ response, updateDocument, checkIfUserExists }}
+    >
       {children}
     </UserDataContext.Provider>
   );

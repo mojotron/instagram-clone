@@ -9,22 +9,22 @@ import {
 } from '../../utils/inputValidation';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useNavigate } from 'react-router-dom';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
 
-const Settings = ({ userData }) => {
+const Settings = () => {
+  const { response, updateDocument, checkIfUserExists } = useUserDataContext();
+
   const [changeAvatar, setChangeAvatar] = useState(false);
   const [fullNameError, setFullNameError] = useState(null);
   const [usernameError, setUsernameError] = useState(null);
   const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const [formData, setFormData] = useState({
-    fullName: userData.fullName,
-    userName: userData.userName,
-    website: userData.website,
-    bio: userData.bio,
+    fullName: response.document.fullName,
+    userName: response.document.userName,
+    website: response.document.website,
+    bio: response.document.bio,
   });
-
-  const { isPending, error, checkIfUserExists, updateDocument } =
-    useFirestore('users');
 
   const navigate = useNavigate();
 
@@ -42,18 +42,18 @@ const Settings = ({ userData }) => {
     setUsernameError(null);
     setFullNameError(null);
     try {
-      if (formData.fullName !== userData.fullName) {
+      if (formData.fullName !== response.document.fullName) {
         fullNameValidation(formData.fullName);
       }
-      if (formData.userName !== userData.userName) {
+      if (formData.userName !== response.document.userName) {
         userNameValidation(formData.userName);
         const usernameExist = await checkIfUserExists(formData.userName);
         if (usernameExist)
           throw new Error('Username already exist, please try another one!');
       }
       // update user info
-      await updateDocument(userData.id, formData);
-      navigate('/');
+      await updateDocument(response.document.id, formData);
+      // navigate('/');
     } catch (err) {
       console.log(err.message);
       if (err.message === 'input full name, like "John Dow"') {
@@ -68,8 +68,8 @@ const Settings = ({ userData }) => {
     <>
       {changeAvatar && (
         <ChangeProfilePhoto
-          userId={userData.id}
-          userAvatar={userData.avatar}
+          userId={response.document.id}
+          userAvatar={response.document.avatar}
           handleDisplay={handleChangeAvatar}
         />
       )}
@@ -87,13 +87,13 @@ const Settings = ({ userData }) => {
           >
             <Avatar
               size="mid"
-              url={userData.avatar.url}
+              url={response.document.avatar.url}
               handleClick={handleChangeAvatar}
             />
           </div>
 
           <div>
-            <h1>{userData.userName}</h1>
+            <h1>{response.document.userName}</h1>
             <p className="Settings__link" onClick={handleChangeAvatar}>
               Change profile photo
             </p>
@@ -180,9 +180,9 @@ const Settings = ({ userData }) => {
           className={`btn--auth ${submitDisabled ? 'gray' : ''}`}
           disabled={submitDisabled}
         >
-          {isPending ? 'Loading' : 'Submit'}
+          {response.isPending ? 'Loading' : 'Submit'}
         </button>
-        {error && <p className="error">{error}</p>}
+        {response.error && <p className="error">{response.error}</p>}
       </form>
     </>
   );

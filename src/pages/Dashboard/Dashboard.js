@@ -14,9 +14,7 @@ import { UserPostContextProvider } from '../../context/UserPostContext';
 
 const Dashboard = () => {
   // get data
-  const { response, updateDocument } = useUserDataContext();
-  console.log('temp is -> ', response);
-
+  const { response } = useUserDataContext();
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
 
@@ -28,31 +26,18 @@ const Dashboard = () => {
     <div className="Dashboard">
       {response.document && (
         <>
-          <Header
-            userData={response.document}
-            toggleShowCreatePost={toggleShowCreatePost}
-          />
+          <Header toggleShowCreatePost={toggleShowCreatePost} />
 
           {showCreatePost && (
             <UserPostContextProvider>
-              <CreateNewPost
-                userData={response.document}
-                setShowCreatePost={setShowCreatePost}
-              />
+              <CreateNewPost setShowCreatePost={setShowCreatePost} />
             </UserPostContextProvider>
           )}
 
           <Routes>
             <Route index element={<h1>hello</h1>} />
-            <Route
-              path="/settings"
-              // to do move to context
-              element={<Settings userData={response.document} />}
-            />
-            <Route
-              path="/:userName"
-              element={<Profile handleUpdateUser={updateDocument} />}
-            />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/:userName" element={<Profile />} />
           </Routes>
         </>
       )}

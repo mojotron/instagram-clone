@@ -13,8 +13,10 @@ import './styles/CreateNewPost.css';
 import { useUserPostContext } from '../../hooks/useUserPostContext';
 import { useStorage } from '../../hooks/useStorage';
 import { useFirestore } from '../../hooks/useFirestore';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
 
-const CreateNewPost = ({ userData, setShowCreatePost }) => {
+const CreateNewPost = ({ setShowCreatePost }) => {
+  const { response } = useUserDataContext();
   const { files, dimensions, imagesData, postInfo, currentStage } =
     useUserPostContext();
   const [showDiscard, setShowDiscard] = useState(false);
@@ -53,7 +55,7 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
         ...postInfo,
         comments: [],
         likesCount: 0,
-        uid: userData.uid,
+        uid: response.document.uid,
       };
       // add document to post repo and close create post page
       await addDocument(post);
@@ -94,7 +96,6 @@ const CreateNewPost = ({ userData, setShowCreatePost }) => {
 
           {currentStage === 'post-information' && (
             <ImageInfoPanel
-              userData={userData}
               handleCreatePost={handleCreatePost}
               error={error}
               isPending={isPending}

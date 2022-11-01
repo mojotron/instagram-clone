@@ -13,8 +13,10 @@ import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 // hooks
 import { useUserPostContext } from '../../../hooks/useUserPostContext';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const ImageInfoPanel = ({ userData, handleCreatePost, error, isPending }) => {
+const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
+  const { response } = useUserDataContext();
   const {
     dimensions,
     imagesData,
@@ -73,8 +75,8 @@ const ImageInfoPanel = ({ userData, handleCreatePost, error, isPending }) => {
 
         <section className="ImageInfoPanel__info">
           <div className="ImageInfoPanel__info__user">
-            <Avatar url={userData.avatar.url} size="mid" />
-            <h2>{userData.userName}</h2>
+            <Avatar url={response.document.avatar.url} size="mid" />
+            <h2>{response.document.userName}</h2>
           </div>
 
           <form className="ImageInfoPanel__info__form">

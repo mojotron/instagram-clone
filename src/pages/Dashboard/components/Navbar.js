@@ -8,8 +8,10 @@ import homeIcon from '../../../images/home-filled.svg';
 import addPostIcon from '../../../images/add-icon.svg';
 // style
 import './styles/Navbar.css';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const Navbar = ({ userData, toggleShowCreatePost }) => {
+const Navbar = ({ toggleShowCreatePost }) => {
+  const { response } = useUserDataContext();
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -27,8 +29,8 @@ const Navbar = ({ userData, toggleShowCreatePost }) => {
           className="Navbar__item"
           onClick={() => setShowDropdown(oldValue => !oldValue)}
         >
-          <Avatar url={userData.avatar.url} size="small" />
-          {showDropdown && <ProfileDropdown userData={userData} />}
+          <Avatar url={response.document.avatar.url} size="small" />
+          {showDropdown && <ProfileDropdown />}
         </li>
       </ul>
     </nav>

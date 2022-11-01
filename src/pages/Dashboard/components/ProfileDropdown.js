@@ -5,13 +5,18 @@ import userIcon from '../../../images/user-icon.svg';
 import settingsIcon from '../../../images/settings-icon.svg';
 import bookmarkIcon from '../../../images/bookmark-icon.svg';
 import { useLogout } from '../../../hooks/useLogout';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const ProfileDropdown = ({ userData }) => {
+const ProfileDropdown = () => {
+  const { response } = useUserDataContext();
   const { isPending, error, logout } = useLogout();
   return (
     <ul className="ProfileDropdown">
       <li>
-        <Link to={`/${userData.userName}`} state={{ userID: userData.uid }}>
+        <Link
+          to={`/${response.document.userName}`}
+          state={{ userID: response.document.uid }}
+        >
           <img src={userIcon} alt="Profile" />
           <span>Profile</span>
         </Link>
