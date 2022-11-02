@@ -2,13 +2,10 @@ import { useState } from 'react';
 import './styles/ChangeProfilePhoto.css';
 import { useSetAvatar } from '../hooks/useSetAvatar';
 
-const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
+const ChangeProfilePhoto = ({ handleDisplay }) => {
   const [imageFile, setImageFile] = useState(null);
   const [uploadError, setUploadError] = useState(null);
-  const { isPending, error, addAvatar, removeAvatar } = useSetAvatar(
-    userId,
-    handleDisplay
-  );
+  const { isPending, error, addAvatar, removeAvatar } = useSetAvatar();
 
   const handleUploadFile = e => {
     setUploadError(null);
@@ -23,11 +20,13 @@ const ChangeProfilePhoto = ({ userId, userAvatar, handleDisplay }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    await addAvatar(imageFile, userAvatar.fileName);
+    await addAvatar(imageFile);
+    handleDisplay();
   };
 
   const handleRemove = async () => {
-    removeAvatar(userAvatar.fileName);
+    await removeAvatar();
+    handleDisplay();
   };
 
   return (

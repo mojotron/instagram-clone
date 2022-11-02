@@ -27,11 +27,7 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
   return (
     <section className="Profile__user">
       {showChangeProfilePhoto && (
-        <ChangeProfilePhoto
-          userId={targetData.uid}
-          userAvatar={targetData.avatar}
-          handleDisplay={toggleUpdateAvatar}
-        />
+        <ChangeProfilePhoto handleDisplay={toggleUpdateAvatar} />
       )}
 
       {showConfirmUnfollow && (

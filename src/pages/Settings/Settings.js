@@ -7,8 +7,6 @@ import {
   fullNameValidation,
   userNameValidation,
 } from '../../utils/inputValidation';
-import { useFirestore } from '../../hooks/useFirestore';
-import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 const Settings = () => {
@@ -25,8 +23,6 @@ const Settings = () => {
     website: response.document.website,
     bio: response.document.bio,
   });
-
-  const navigate = useNavigate();
 
   const handleChangeAvatar = () => setChangeAvatar(oldValue => !oldValue);
 
@@ -67,11 +63,7 @@ const Settings = () => {
   return (
     <>
       {changeAvatar && (
-        <ChangeProfilePhoto
-          userId={response.document.id}
-          userAvatar={response.document.avatar}
-          handleDisplay={handleChangeAvatar}
-        />
+        <ChangeProfilePhoto handleDisplay={handleChangeAvatar} />
       )}
 
       <form className="Settings" onSubmit={handleSubmit}>

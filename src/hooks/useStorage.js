@@ -64,16 +64,16 @@ export const useStorage = () => {
       await uploadBytes(storageRef, file);
       const snapUrl = await getDownloadURL(storageRef);
       dispatchIfNotCancelled({ type: 'UPLOAD_IMAGE', payload: snapUrl });
-      return { url: snapUrl, name: fileName };
+      return { url: snapUrl, fileName: fileName };
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }
   };
 
-  const remove = async (directory, fileName) => {
+  const remove = async fileName => {
     dispatch({ type: 'IS_PENDING' });
     try {
-      const storageRef = ref(projectStorage, `${directory}/${fileName}`);
+      const storageRef = ref(projectStorage, `${fileName}`);
       await deleteObject(storageRef);
       dispatchIfNotCancelled({ type: 'DELETE_IMAGE' });
     } catch (error) {

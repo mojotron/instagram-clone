@@ -1,88 +1,56 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 // hooks
-import { useFirestore } from './useFirestore';
 import { useStorage } from './useStorage';
+import { useUserDataContext } from './useUserDataContext';
 
-export const useSetAvatar = (userId, handleDisplay) => {
-  const [userUpdated, setUserUpdated] = useState(false);
-  const [fileName, setFileName] = useState(null);
+export const useSetAvatar = () => {
+  const { response, updateDocument } = useUserDataContext();
+  const { upload, remove } = useStorage();
 
   const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-  const { response: storageResponse, upload, remove } = useStorage();
-  const { updateDocument } = useFirestore('users');
-
-  const updateUserAvatar = useRef(async (docId, data) =>
-    updateDocument(docId, data)
-  ).current;
-
-  useEffect(() => {
-    if (userUpdated) return;
-    if (storageResponse.success === false) return;
-
-    const updateData = fileName
-      ? { url: storageResponse.imageUrl, fileName: fileName }
-      : { url: '', fileName: '' };
-
-    updateUserAvatar(userId, {
-      avatar: updateData,
-    })
-      .then(() => {
-        setUserUpdated(true);
-        if (isCancelled) {
-          setIsPending(false);
-          setError(null);
-        }
-        // close popup passed from parent element
-        handleDisplay();
-      })
-      .catch(error => {
-        if (!isCancelled) {
-          setIsPending(false);
-          setError(error.message);
-        }
-      });
-  }, [
-    storageResponse,
-    updateUserAvatar,
-    userId,
-    userUpdated,
-    isCancelled,
-    handleDisplay,
-    fileName,
-  ]);
-
-  const addAvatar = async (file, userAvatarFileName) => {
-    setFileName(null);
+  const addAvatar = async file => {
     setIsPending(true);
     setError(null);
     try {
-      // delete current image from server to keep server clean
-      if (userAvatarFileName !== '')
-        await remove('avatars', userAvatarFileName);
-      // add new file
-      await upload('avatars', file);
-      setFileName(file.name);
+      // clean old image if there is one
+      if (response.document.avatar.fileName !== '') {
+        await remove(response.document.avatar.fileName);
+      }
+      const snapshot = await upload('avatars', file);
+      await updateDocument(response.document.id, { avatar: { ...snapshot } });
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(null);
+      }
     } catch (error) {
       if (!isCancelled) {
+        setIsPending(false);
         setError(error.message);
-        isPending(null);
       }
     }
   };
 
-  const removeAvatar = async fileName => {
-    setFileName(null);
+  const removeAvatar = async () => {
     setIsPending(true);
     setError(null);
     try {
-      await remove('avatars', fileName);
+      if (response.document.avatar.fileName !== '') {
+        await remove(response.document.avatar.fileName);
+        await updateDocument(response.document.id, {
+          avatar: { fileName: '', url: '' },
+        });
+      }
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(null);
+      }
     } catch (error) {
       if (!isCancelled) {
+        setIsPending(false);
         setError(error.message);
-        isPending(null);
       }
     }
   };
