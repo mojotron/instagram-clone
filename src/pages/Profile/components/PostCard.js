@@ -2,20 +2,23 @@ import PostImage from '../../../components/PostImage';
 import './styles/PostCard.css';
 //icons
 import multiImageIcon from '../../../images/multiple-files.svg';
-import likeIcon from '../../../images/heart-icon.svg';
+import likeIcon from '../../../images/heart-black-icon.svg';
 import commentIcon from '../../../images/comment-icon.svg';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const PostCard = ({ imagesData, dimensions }) => {
+const PostCard = ({ imagesData, dimensions, linkState }) => {
   // make sure image data is array
   const [hoverActive, setHoverActive] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div
       className="PostCard"
       onMouseEnter={() => setHoverActive(true)}
       onMouseLeave={() => setHoverActive(false)}
+      onClick={() => navigate(`/p/${linkState.postId}`, { state: linkState })}
     >
       {imagesData.length > 1 && (
         <img

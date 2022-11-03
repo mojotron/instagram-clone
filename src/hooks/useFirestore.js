@@ -84,12 +84,25 @@ export const useFirestore = collectionName => {
     try {
       const q = query(colRef, where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
-      if (querySnapshot.empty) throw new Error('User not found!');
+      if (querySnapshot.empty) throw new Error('Document not found!');
       let userDocument;
       querySnapshot.forEach(doc => {
         userDocument = { ...doc.data(), id: doc.id };
         return;
       });
+      dispatchIfNotCancelled({ type: 'GET_DOCUMENT', payload: userDocument });
+    } catch (error) {
+      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+    }
+  };
+
+  const getDocumentById = async docId => {
+    dispatch({ type: 'IS_PENDING' });
+    try {
+      const docRef = doc(projectFirestore, collectionName, docId);
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.empty) throw new Error('Document not found!');
+      const userDocument = { ...docSnapshot.data(), id: docSnapshot.id };
       dispatchIfNotCancelled({ type: 'GET_DOCUMENT', payload: userDocument });
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
@@ -138,6 +151,7 @@ export const useFirestore = collectionName => {
     response,
     addDocument,
     getDocument,
+    getDocumentById,
     updateDocument,
     checkIfUserExists,
   };

@@ -148,6 +148,12 @@ const Profile = () => {
                 key={ele.id}
                 imagesData={ele.images}
                 dimensions={ele.dimensions}
+                // this is minimum data to pass for /p/:postId page
+                linkState={{
+                  userName: profileData.userName,
+                  avatar: profileData.avatar,
+                  postId: ele.id,
+                }}
               />
             ))}
         </div>

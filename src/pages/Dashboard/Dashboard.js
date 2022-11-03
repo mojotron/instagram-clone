@@ -11,6 +11,7 @@ import Profile from '../Profile/Profile';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
+import Post from '../Post/Post';
 
 const Dashboard = () => {
   // get data
@@ -38,6 +39,7 @@ const Dashboard = () => {
             <Route index element={<h1>hello</h1>} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/:userName" element={<Profile />} />
+            <Route path="/p/:postId" element={<Post />} />
           </Routes>
         </>
       )}

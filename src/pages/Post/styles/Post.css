@@ -1,0 +1,22 @@
+.Post {
+  --width: 90vmax;
+  width: var(--width);
+  background-color: white;
+  border: var(--gray-border);
+  border-radius: 1rem;
+  display: flex;
+  overflow: hidden;
+}
+.Post__image-container {
+  background-color: black;
+  width: calc(var(--width) - 50rem);
+  height: calc(var(--width) - 50rem);
+}
+.Post__info {
+  width: 50rem;
+}
+@media only screen and (max-width: 470px) {
+  .Post {
+    width: 100vw;
+  }
+}

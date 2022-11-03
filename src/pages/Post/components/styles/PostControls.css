@@ -1,0 +1,39 @@
+.PostControls {
+  width: 100%;
+  padding: 0 1.5rem 2rem;
+  border-bottom: var(--gray-border);
+}
+.PostControls__icons {
+  padding: 2rem 0 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn--post {
+  height: 2.8rem;
+  width: 2.8rem;
+}
+.btn--post:hover {
+  opacity: 0.5;
+}
+.PostControls__icons__left .btn--post {
+  margin-right: 1.5rem;
+}
+.btn--post img {
+  height: 100%;
+  width: 100%;
+}
+.PostControls__liked-by {
+  color: var(--black);
+  font-weight: 400;
+  font-size: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+.PostControls__liked-by span {
+  font-weight: 700;
+}
+.PostControls__created-at {
+  color: var(--gray);
+  font-weight: 400;
+  font-size: 1.4rem;
+}
