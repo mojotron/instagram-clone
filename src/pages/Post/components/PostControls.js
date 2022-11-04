@@ -5,7 +5,6 @@ import commentIcon from '../../../images/comment-outline-icon.svg';
 import sendIcon from '../../../images/send-icon.svg';
 import bookmarkIcon from '../../../images/bookmark-icon.svg';
 import bookmarkFilledIcon from '../../../images/bookmark-icon-filled.svg';
-import smilyIcon from '../../../images/smile-icon.svg';
 // style
 import './styles/PostControls.css';
 

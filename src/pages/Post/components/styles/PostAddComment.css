@@ -1,0 +1,35 @@
+.PostAddComment {
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.PostAddComment textarea {
+  resize: none;
+  border: none;
+  font-family: inherit;
+  outline: none;
+  overflow-y: scroll;
+}
+.btn--send-comment {
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+.btn--send-comment:disabled {
+  opacity: 0.5;
+}
+.btn--emoji {
+  height: 2.8rem;
+  width: 2.8rem;
+}
+.btn--emoji img {
+  height: 100%;
+  width: 100%;
+  filter: invert(100%);
+}
+.emoji--wrapper {
+  position: absolute;
+  top: 5%;
+  left: 0;
+}

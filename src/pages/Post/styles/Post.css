@@ -1,5 +1,6 @@
 .Post {
   --width: 90vmax;
+  max-height: 50rem;
   width: var(--width);
   background-color: white;
   border: var(--gray-border);
@@ -7,13 +8,23 @@
   display: flex;
   overflow: hidden;
 }
+.Post__image-wrapper {
+  height: inherit;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .Post__image-container {
-  background-color: black;
+  background-color: white;
+
   width: calc(var(--width) - 50rem);
   height: calc(var(--width) - 50rem);
 }
 .Post__info {
   width: 50rem;
+  border-left: var(--gray-border);
+  position: relative; /* for Emojis to be absolute */
 }
 @media only screen and (max-width: 470px) {
   .Post {
