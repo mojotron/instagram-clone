@@ -3,11 +3,18 @@ import EmojiPicker from 'emoji-picker-react';
 import './styles/PostAddComment.css';
 import smileyIcon from '../../../images/smile-icon.svg';
 
-const PostAddComment = () => {
+const PostAddComment = ({ handleAddComment, focusOnComment }) => {
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState('');
 
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (focusOnComment) {
+      console.log(focusOnComment);
+      textareaRef.current.focus();
+    }
+  }, [focusOnComment]);
 
   useEffect(() => {
     textareaRef.current.style.height = '0px';
@@ -21,7 +28,7 @@ const PostAddComment = () => {
   };
 
   const handlePostComment = () => {
-    console.log(text);
+    handleAddComment(text);
     setText('');
   };
   return (

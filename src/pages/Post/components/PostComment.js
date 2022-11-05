@@ -6,9 +6,10 @@ const PostComment = ({ avatarUrl, userName, text, createdAt }) => {
     <div className="PostComment">
       <div className="PostComment__main">
         <Avatar url={avatarUrl} size="mid" handleClick={() => {}} />
+
         <div className="PostComment__main__inner">
           <p>
-            {userName}
+            <span>{userName} </span>
             {text}
           </p>
           <p className="PostComment__created-at">{createdAt}</p>

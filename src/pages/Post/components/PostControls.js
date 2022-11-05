@@ -8,15 +8,43 @@ import bookmarkFilledIcon from '../../../images/bookmark-icon-filled.svg';
 // style
 import './styles/PostControls.css';
 
-const PostControls = () => {
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
+
+const PostControls = ({
+  likes,
+  handleToggleLike,
+  setFocusOnComment,
+  createdAt,
+}) => {
+  const { response } = useUserDataContext();
+  const userLikesPost = likes.find(
+    like => like.userName === response.document.userName
+  );
+
+  const handleLikeClick = () => {
+    // save likes with username and uid, for easier display of friends that liked post
+    // uid is for filtering following list and usernames are for displaying who followed
+    handleToggleLike(
+      !userLikesPost,
+      response.document.userName,
+      response.document.uid
+    );
+  };
+
+  const followingLikes = likes.filter(ele =>
+    response.document.following.includes(ele.uid)
+  );
+
+  console.log(followingLikes);
+
   return (
     <section className="PostControls">
       <div className="PostControls__icons">
         <div className="PostControls__icons__left">
-          <button className="btn btn--post">
-            <img src={heartIcon} alt="like" />
+          <button className="btn btn--post" onClick={handleLikeClick}>
+            <img src={userLikesPost ? heartLikedIcon : heartIcon} alt="like" />
           </button>
-          <button className="btn btn--post">
+          <button className="btn btn--post" onClick={setFocusOnComment}>
             <img src={commentIcon} alt="comment" />
           </button>
           <button className="btn btn--post">
@@ -27,10 +55,27 @@ const PostControls = () => {
           <img src={bookmarkIcon} alt="bookmark" />
         </button>
       </div>
-      <div className="PostControls__liked-by">
-        Liked by <span>Mojo</span> and <span>5 others</span>
+
+      {likes.length > 0 && (
+        <div className="PostControls__liked-by">
+          Liked by <span>{followingLikes[0].userName}</span>
+          <span>
+            {followingLikes > 1
+              ? `and ${followingLikes.length - 1} others`
+              : ''}
+          </span>
+        </div>
+      )}
+
+      <div className="PostControls__created-at">
+        {new Intl.DateTimeFormat('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        })
+          .format(new Date(createdAt * 1000))
+          .toUpperCase()}
       </div>
-      <div className="PostControls__created-at">2 day ago</div>
     </section>
   );
 };

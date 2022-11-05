@@ -146,7 +146,7 @@ const Profile = () => {
             documents.map(ele => (
               <PostCard
                 key={ele.id}
-                imagesData={ele.images}
+                data={ele}
                 dimensions={ele.dimensions}
                 // this is minimum data to pass for /p/:postId page
                 linkState={{

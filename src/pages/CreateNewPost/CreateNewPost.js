@@ -54,7 +54,7 @@ const CreateNewPost = ({ setShowCreatePost }) => {
         dimensions,
         ...postInfo,
         comments: [],
-        likesCount: 0,
+        likes: [],
         uid: response.document.uid,
       };
       // add document to post repo and close create post page

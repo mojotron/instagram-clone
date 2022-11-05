@@ -22,6 +22,7 @@
 .btn--emoji {
   height: 2.8rem;
   width: 2.8rem;
+  margin-right: 1rem;
 }
 .btn--emoji img {
   height: 100%;
@@ -30,6 +31,6 @@
 }
 .emoji--wrapper {
   position: absolute;
-  top: 5%;
+  bottom: calc(0% + 50px);
   left: 0;
 }

@@ -8,7 +8,7 @@ import commentIcon from '../../../images/comment-icon.svg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const PostCard = ({ imagesData, dimensions, linkState }) => {
+const PostCard = ({ data, dimensions, linkState }) => {
   // make sure image data is array
   const [hoverActive, setHoverActive] = useState(false);
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const PostCard = ({ imagesData, dimensions, linkState }) => {
       onMouseLeave={() => setHoverActive(false)}
       onClick={() => navigate(`/p/${linkState.postId}`, { state: linkState })}
     >
-      {imagesData.length > 1 && (
+      {data.images.length > 1 && (
         <img
           className="PostCard__icon multi-file"
           src={multiImageIcon}
@@ -29,7 +29,7 @@ const PostCard = ({ imagesData, dimensions, linkState }) => {
       )}
       <PostImage
         //display only first img and hide navigation
-        imagesData={[imagesData[0]]}
+        imagesData={[data.images[0]]}
         // override aspect ratio to cover whole card
         dimensions={{
           ...dimensions,
@@ -40,10 +40,12 @@ const PostCard = ({ imagesData, dimensions, linkState }) => {
         <div className="PostCard__overlay">
           <div className="PostCard__overlay__icons">
             <p>
-              <img src={likeIcon} alt="likes count" /> <span>{0}</span>
+              <img src={likeIcon} alt="likes count" />{' '}
+              <span>{data.likes.length}</span>
             </p>
             <p>
-              <img src={commentIcon} alt="comments count" /> <span>{0}</span>
+              <img src={commentIcon} alt="comments count" />{' '}
+              <span>{data.comments.length}</span>
             </p>
           </div>
         </div>

@@ -1,4 +1,5 @@
 .PostCommentsList {
+  flex-grow: 2;
   width: 100;
   height: 25rem;
   overflow: hidden;

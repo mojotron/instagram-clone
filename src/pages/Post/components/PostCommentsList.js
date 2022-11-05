@@ -1,53 +1,30 @@
 import './styles/PostCommentsList.css';
 import PostComment from './PostComment';
+import { formatTime } from '../../../utils/formatTime';
 
-const tempText = `
-This is temp comment. Bla bla bla bla. This is temp comment. Bla bla bla bla. This is temp comment. Bla bla bla bla. 
-.
-. 
-Multiline
-`;
-
-const PostCommentsList = () => {
+const PostCommentsList = ({ postData, avatarUrl, userName }) => {
   return (
     <div className="PostCommentsList">
-      <PostComment
-        avatarUrl=""
-        userName="temp_user"
-        text={tempText}
-        createdAt="3 day ago"
-      />
+      {/* first is post caption */}
+      {postData.caption !== '' && (
+        <PostComment
+          avatarUrl={avatarUrl}
+          userName={userName}
+          text={postData.caption}
+          createdAt={formatTime(postData.createdAt.seconds * 1000)}
+        />
+      )}
       {/* comments */}
-      <PostComment
-        avatarUrl=""
-        userName="temp_user"
-        text={tempText}
-        createdAt="3 day ago"
-      />
-      <PostComment
-        avatarUrl=""
-        userName="temp_user"
-        text={tempText}
-        createdAt="3 day ago"
-      />
-      <PostComment
-        avatarUrl=""
-        userName="temp_user"
-        text={tempText}
-        createdAt="3 day ago"
-      />
-      <PostComment
-        avatarUrl=""
-        userName="temp_user"
-        text={tempText}
-        createdAt="3 day ago"
-      />
-      <PostComment
-        avatarUrl=""
-        userName="temp_user"
-        text={tempText}
-        createdAt="3 day ago"
-      />
+      {!postData.disableComments &&
+        postData.comments.map((comment, i) => (
+          <PostComment
+            key={i}
+            avatarUrl={comment.avatarUrl}
+            userName={comment.userName}
+            text={comment.text}
+            createdAt={formatTime(comment.createdAt.seconds * 1000)}
+          />
+        ))}
     </div>
   );
 };
