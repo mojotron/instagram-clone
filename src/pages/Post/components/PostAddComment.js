@@ -3,15 +3,22 @@ import EmojiPicker from 'emoji-picker-react';
 import './styles/PostAddComment.css';
 import smileyIcon from '../../../images/smile-icon.svg';
 
-const PostAddComment = ({ handleAddComment, focusOnComment }) => {
+const PostAddComment = ({ handleAddComment, focusOnComment, replayData }) => {
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState('');
 
   const textareaRef = useRef(null);
 
   useEffect(() => {
+    if (replayData) {
+      setText(`@${replayData.userName} `);
+    } else {
+      setText('');
+    }
+  }, [replayData]);
+
+  useEffect(() => {
     if (focusOnComment) {
-      console.log(focusOnComment);
       textareaRef.current.focus();
     }
   }, [focusOnComment]);

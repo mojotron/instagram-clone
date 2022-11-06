@@ -13,7 +13,7 @@ import { useUserDataContext } from '../../../hooks/useUserDataContext';
 const PostControls = ({
   likes,
   handleToggleLike,
-  setFocusOnComment,
+  handleCommentReset,
   createdAt,
 }) => {
   const { response } = useUserDataContext();
@@ -35,8 +35,6 @@ const PostControls = ({
     response.document.following.includes(ele.uid)
   );
 
-  console.log(followingLikes);
-
   return (
     <section className="PostControls">
       <div className="PostControls__icons">
@@ -44,7 +42,7 @@ const PostControls = ({
           <button className="btn btn--post" onClick={handleLikeClick}>
             <img src={userLikesPost ? heartLikedIcon : heartIcon} alt="like" />
           </button>
-          <button className="btn btn--post" onClick={setFocusOnComment}>
+          <button className="btn btn--post" onClick={handleCommentReset}>
             <img src={commentIcon} alt="comment" />
           </button>
           <button className="btn btn--post">
@@ -56,7 +54,7 @@ const PostControls = ({
         </button>
       </div>
 
-      {likes.length > 0 && (
+      {followingLikes.length > 0 && (
         <div className="PostControls__liked-by">
           Liked by <span>{followingLikes[0].userName}</span>
           <span>

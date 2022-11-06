@@ -2,16 +2,20 @@ import './styles/PostCommentsList.css';
 import PostComment from './PostComment';
 import { formatTime } from '../../../utils/formatTime';
 
-const PostCommentsList = ({ postData, avatarUrl, userName }) => {
+const PostCommentsList = ({ postData, avatarUrl, userName, handleReply }) => {
   return (
     <div className="PostCommentsList">
       {/* first is post caption */}
       {postData.caption !== '' && (
         <PostComment
-          avatarUrl={avatarUrl}
-          userName={userName}
-          text={postData.caption}
-          createdAt={formatTime(postData.createdAt.seconds * 1000)}
+          data={{
+            avatarUrl,
+            userName,
+            text: postData.caption,
+            createdAt: postData.createdAt,
+          }}
+          commentIndex={null}
+          handleReply={null}
         />
       )}
       {/* comments */}
@@ -19,10 +23,9 @@ const PostCommentsList = ({ postData, avatarUrl, userName }) => {
         postData.comments.map((comment, i) => (
           <PostComment
             key={i}
-            avatarUrl={comment.avatarUrl}
-            userName={comment.userName}
-            text={comment.text}
-            createdAt={formatTime(comment.createdAt.seconds * 1000)}
+            data={comment}
+            commentIndex={i}
+            handleReply={handleReply}
           />
         ))}
     </div>

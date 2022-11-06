@@ -8,23 +8,55 @@ import PostControls from './components/PostControls';
 import PostAddComment from './components/PostAddComment';
 import PostCommentsList from './components/PostCommentsList';
 import { useState } from 'react';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useEffect } from 'react';
 
 const Post = () => {
+  const { response: userData } = useUserDataContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
   const { state } = useLocation();
   // post document
-  const { response, addComment, toggleLike } = usePostControl(state.postId);
+  const { response, addComment, toggleLike, addReplay } = usePostControl(
+    state.postId
+  );
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
+  //
+  const [replayData, setReplayData] = useState(null);
+  console.log(replayData);
+
+  useEffect(() => {
+    if (focusOnComment) setFocusOnComment(false);
+  }, [focusOnComment]);
 
   const handleAddComment = async text => {
-    await addComment({
-      text: text,
-      userName: state.userName,
-      avatarUrl: state.avatar.url,
-      replies: [],
-    });
+    if (replayData) {
+      addReplay({
+        userName: userData.document.userName,
+        avatarUrl: userData.document.avatar.url,
+        text,
+        commentIndex: replayData.commentIndex,
+      });
+      console.log(text, replayData);
+    } else {
+      await addComment({
+        text: text,
+        userName: userData.document.userName,
+        avatarUrl: userData.document.avatar.url,
+        replies: [],
+      });
+    }
     setFocusOnComment(false);
+  };
+
+  const handleReplyToComment = async data => {
+    setReplayData(data);
+    setFocusOnComment(true);
+  };
+
+  const handleCommentReset = () => {
+    setReplayData(null);
+    setFocusOnComment(true);
   };
 
   const handleToggleLike = async (userLikesPost, userName, userID) => {
@@ -56,16 +88,18 @@ const Post = () => {
               postData={response.document}
               avatarUrl={state.avatar.url}
               userName={state.userName}
+              handleReply={handleReplyToComment}
             />
             <PostControls
               likes={response.document.likes}
               handleToggleLike={handleToggleLike}
-              setFocusOnComment={() => setFocusOnComment(true)}
+              handleCommentReset={handleCommentReset}
               createdAt={response.document.createdAt.seconds}
             />
             <PostAddComment
               handleAddComment={handleAddComment}
               focusOnComment={focusOnComment}
+              replayData={replayData}
             />
           </div>
         </div>

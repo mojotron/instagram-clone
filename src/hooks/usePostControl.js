@@ -47,5 +47,26 @@ export const usePostControl = postId => {
     await updateDocument(postId, { likes: newLikes });
   };
 
-  return { response, addComment, toggleLike };
+  const addReplay = async data => {
+    if (response.document.comments.length === 3) {
+      alert('Max reply limit');
+      return;
+    }
+    const newComments = [...response.document.comments].map((comment, i) => {
+      if (i === data.commentIndex) {
+        return {
+          ...comment,
+          replies: [
+            ...comment.replies,
+            { ...data, createdAt: Timestamp.fromDate(new Date()) },
+          ],
+        };
+      }
+      return comment;
+    });
+    console.log(newComments);
+    await updateDocument(postId, { comments: newComments });
+  };
+
+  return { response, addComment, toggleLike, addReplay };
 };
