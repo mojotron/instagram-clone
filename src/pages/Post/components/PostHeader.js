@@ -12,7 +12,7 @@ const PostHeader = ({ avatarUrl, userName }) => {
         size="mid"
         handleClick={() => navigate(`/${userName}`)}
       />
-      <h2>{userName}</h2>
+      <h2 onClick={() => navigate(`/${userName}`)}>{userName}</h2>
     </header>
   );
 };

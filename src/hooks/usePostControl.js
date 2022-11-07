@@ -3,7 +3,8 @@ import { useFirestore } from './useFirestore';
 import { Timestamp } from 'firebase/firestore';
 
 const ALERT_MSG = `
-Maximum number of comments is limited to 5!
+Maximum number of comments is limited to 5,
+and maximum number of replies on comment is 3.
 This project is for learning purposes!
 Thank you for inspecting my project!
 `;
@@ -48,8 +49,8 @@ export const usePostControl = postId => {
   };
 
   const addReplay = async data => {
-    if (response.document.comments.length === 3) {
-      alert('Max reply limit');
+    if (response.document.comments[data.commentIndex].replies.length === 3) {
+      alert(ALERT_MSG);
       return;
     }
     const newComments = [...response.document.comments].map((comment, i) => {

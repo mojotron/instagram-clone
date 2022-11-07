@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // components
 import Avatar from '../../../components/Avatar';
-import ConfirmPopup from './ConfirmUnfollow';
+import ConfirmPopup from './ConfirmPopup';
 import ChangeProfilePhoto from '../../../components/ChangeProfilePhoto';
 import FormatCount from './FormatCount';
 // style

@@ -23,7 +23,6 @@ const Post = () => {
   const [focusOnComment, setFocusOnComment] = useState(false);
   //
   const [replayData, setReplayData] = useState(null);
-  console.log(replayData);
 
   useEffect(() => {
     if (focusOnComment) setFocusOnComment(false);

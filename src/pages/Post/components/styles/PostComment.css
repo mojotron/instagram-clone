@@ -21,9 +21,11 @@
 .PostComment__main__inner span {
   font-weight: 700;
   white-space: pre-line;
+  cursor: pointer;
 }
 .PostComment__controls {
   display: flex;
+  align-items: center;
   padding-top: 0.5rem;
   width: 25rem;
 }
@@ -56,4 +58,10 @@
 }
 .replay {
   padding-top: 1rem;
+}
+.btn--options {
+  margin-left: 1rem;
+  filter: invert(50%);
+  position: relative;
+  top: 2px;
 }

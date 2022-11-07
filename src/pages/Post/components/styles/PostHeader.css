@@ -10,4 +10,5 @@
   color: var(--black);
   margin-left: 1.5rem;
   font-size: 1.6rem;
+  cursor: pointer;
 }

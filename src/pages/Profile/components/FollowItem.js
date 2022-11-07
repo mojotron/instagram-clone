@@ -3,7 +3,7 @@ import Avatar from '../../../components/Avatar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
-import ConfirmPopup from './ConfirmUnfollow';
+import ConfirmPopup from './ConfirmPopup';
 
 const FollowItem = ({ type, userData, followHandlers }) => {
   const { response } = useUserDataContext();
