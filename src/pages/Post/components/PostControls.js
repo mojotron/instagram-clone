@@ -11,13 +11,13 @@ import './styles/PostControls.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const PostControls = ({
-  likes,
+  postData,
   handleToggleLike,
   handleCommentReset,
   createdAt,
 }) => {
   const { response } = useUserDataContext();
-  const userLikesPost = likes.find(
+  const userLikesPost = postData.likes.find(
     like => like.userName === response.document.userName
   );
 
@@ -31,7 +31,7 @@ const PostControls = ({
     );
   };
 
-  const followingLikes = likes.filter(ele =>
+  const followingLikes = postData.likes.filter(ele =>
     response.document.following.includes(ele.uid)
   );
 
@@ -39,12 +39,19 @@ const PostControls = ({
     <section className="PostControls">
       <div className="PostControls__icons">
         <div className="PostControls__icons__left">
-          <button className="btn btn--post" onClick={handleLikeClick}>
-            <img src={userLikesPost ? heartLikedIcon : heartIcon} alt="like" />
-          </button>
-          <button className="btn btn--post" onClick={handleCommentReset}>
-            <img src={commentIcon} alt="comment" />
-          </button>
+          {!postData.disableLikes && (
+            <button className="btn btn--post" onClick={handleLikeClick}>
+              <img
+                src={userLikesPost ? heartLikedIcon : heartIcon}
+                alt="like"
+              />
+            </button>
+          )}
+          {!postData.disableComments && (
+            <button className="btn btn--post" onClick={handleCommentReset}>
+              <img src={commentIcon} alt="comment" />
+            </button>
+          )}
           <button className="btn btn--post">
             <img src={sendIcon} alt="send" />
           </button>

@@ -1,7 +1,7 @@
 .Post {
-  --width: 90vw;
+  width: 90vmax;
+  height: 90vmax;
   max-height: 90vh;
-  width: var(--width);
   background-color: white;
   border: var(--gray-border);
   border-radius: 1rem;
@@ -9,19 +9,26 @@
   overflow: hidden;
 }
 .Post__image-wrapper {
-  height: inherit;
-  width: inherit;
+  background-color: white;
+  flex-grow: 2;
+  flex-shrink: 2;
+  min-width: 1px;
+  min-height: 1px;
+
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .Post__image-container {
-  background-color: white;
-  width: calc(var(--width) - 50rem);
-  height: calc(var(--width) - 50rem);
+  height: 100%;
+  width: 100%;
+  /* width: calc(var(--width) - 50rem);
+  height: calc(var(--width) - 50rem); */
 }
 .Post__info {
-  width: 50rem;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 50rem;
   border-left: var(--gray-border);
   position: relative; /* for Emojis to be absolute */
   display: flex;

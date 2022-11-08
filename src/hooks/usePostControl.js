@@ -53,7 +53,7 @@ export const usePostControl = postId => {
       alert(ALERT_MSG);
       return;
     }
-    const newComments = [...response.document.comments].map((comment, i) => {
+    const newComments = response.document.comments.map((comment, i) => {
       if (i === data.commentIndex) {
         return {
           ...comment,
@@ -69,5 +69,31 @@ export const usePostControl = postId => {
     await updateDocument(postId, { comments: newComments });
   };
 
-  return { response, addComment, toggleLike, addReplay };
+  const deleteComment = async commentIndex => {
+    const newComments = response.document.comments.filter(
+      (_, i) => i !== commentIndex
+    );
+
+    await updateDocument(postId, { comments: newComments });
+  };
+
+  const deleteReply = async (commentIndex, replayIndex) => {
+    const newComments = response.document.comments.map((comment, i) => {
+      if (i === commentIndex) {
+        const newReplies = comment.replies.filter((_, i) => i !== replayIndex);
+        return { ...comment, replies: newReplies };
+      }
+      return comment;
+    });
+    await updateDocument(postId, { comments: newComments });
+  };
+
+  return {
+    response,
+    addComment,
+    toggleLike,
+    addReplay,
+    deleteComment,
+    deleteReply,
+  };
 };

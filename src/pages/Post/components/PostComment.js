@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import moreOptions from '../../../images/more-horiz-icon.svg';
 import ConfirmDelete from './ConfirmDelete';
 
+// helper component
 const CheckForAtLink = ({ text, navigate }) => {
   const test = /^@\w+\s/.test(text);
   if (!test) return text;
@@ -24,7 +25,14 @@ const CheckForAtLink = ({ text, navigate }) => {
   );
 };
 
-const PostComment = ({ owner, data, commentIndex, handleReply }) => {
+const PostComment = ({
+  owner,
+  data,
+  commentIndex,
+  handleReply,
+  handleDeleteComment,
+  handleDeleteReply,
+}) => {
   const navigate = useNavigate();
 
   const [showReplies, setShowReplies] = useState(false);
@@ -41,16 +49,39 @@ const PostComment = ({ owner, data, commentIndex, handleReply }) => {
     handleReply(replayData);
   };
 
-  const handleDeleteComment = () => {};
-  const handleDeleteReply = () => {};
+  const [currentCommentIndex, setCurrentCommentIndex] = useState(null);
+  const [currentReplyIndex, setCurrentReplayIndex] = useState(null);
+
+  const resetCurrentIndices = () => {
+    setCurrentCommentIndex(null);
+    setCurrentReplayIndex(null);
+    setShowDeleteComment(false);
+    setShowDeleteReply(false);
+  };
+
+  const handleDeleteCommentClick = async () => {
+    await handleDeleteComment(currentCommentIndex);
+    resetCurrentIndices();
+    setShowDeleteComment(false);
+  };
+  const handleDeleteReplyClick = async () => {
+    await handleDeleteReply(currentCommentIndex, currentReplyIndex);
+    resetCurrentIndices();
+  };
 
   return (
     <div className="PostComment">
       {showDeleteComment && (
-        <ConfirmDelete handleClose={() => setShowDeleteComment(false)} />
+        <ConfirmDelete
+          handleClose={() => setShowDeleteComment(false)}
+          handleDelete={handleDeleteCommentClick}
+        />
       )}
       {showDeleteReply && (
-        <ConfirmDelete handleClose={() => setShowDeleteReply(false)} />
+        <ConfirmDelete
+          handleClose={() => setShowDeleteReply(false)}
+          handleDelete={handleDeleteReplyClick}
+        />
       )}
 
       <div className="PostComment__main">
@@ -80,7 +111,10 @@ const PostComment = ({ owner, data, commentIndex, handleReply }) => {
             {owner && (
               <button
                 className="btn btn--options"
-                onClick={() => setShowDeleteComment(true)}
+                onClick={() => {
+                  setCurrentCommentIndex(commentIndex);
+                  setShowDeleteComment(true);
+                }}
               >
                 <img src={moreOptions} alt="options" />
               </button>
@@ -134,7 +168,11 @@ const PostComment = ({ owner, data, commentIndex, handleReply }) => {
                           {owner && (
                             <button
                               className="btn btn--options"
-                              onClick={() => setShowDeleteReply(true)}
+                              onClick={() => {
+                                setCurrentCommentIndex(commentIndex);
+                                setCurrentReplayIndex(i);
+                                setShowDeleteReply(true);
+                              }}
                             >
                               <img src={moreOptions} alt="options" />
                             </button>

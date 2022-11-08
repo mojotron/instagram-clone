@@ -2,10 +2,15 @@ import './styles/PostCommentsList.css';
 import PostComment from './PostComment';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const PostCommentsList = ({ postData, avatarUrl, userName, handleReply }) => {
-  const { response } = useUserDataContext();
-  const owner = postData.uid === response.document.uid;
-
+const PostCommentsList = ({
+  owner,
+  postData,
+  avatarUrl,
+  userName,
+  handleReply,
+  handleDeleteComment,
+  handleDeleteReply,
+}) => {
   return (
     <div className="PostCommentsList">
       {/* first is post caption */}
@@ -31,6 +36,8 @@ const PostCommentsList = ({ postData, avatarUrl, userName, handleReply }) => {
             data={comment}
             commentIndex={i}
             handleReply={handleReply}
+            handleDeleteComment={handleDeleteComment}
+            handleDeleteReply={handleDeleteReply}
           />
         ))}
     </div>
