@@ -10,6 +10,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 const initialState = {
@@ -50,6 +51,13 @@ const firestoreReducer = (state, action) => {
         isPending: null,
         error: action.payload,
         success: null,
+      };
+    case 'DELETE_DOCUMENT':
+      return {
+        document: null,
+        isPending: false,
+        error: null,
+        success: true,
       };
     default:
       return state;
@@ -127,6 +135,16 @@ export const useFirestore = collectionName => {
     }
   };
 
+  const deleteDocument = async docId => {
+    dispatch({ type: 'IS_PENDING' });
+    dispatchIfNotCancelled({ type: 'DELETE_DOCUMENT' });
+    try {
+      await deleteDoc(doc(projectFirestore, collectionName, docId));
+    } catch (error) {
+      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+    }
+  };
+
   const checkIfUserExists = async username => {
     // helper function for useSignup hook
     // helper function for checking friend profile in Profile page
@@ -154,5 +172,6 @@ export const useFirestore = collectionName => {
     getDocumentById,
     updateDocument,
     checkIfUserExists,
+    deleteDocument,
   };
 };

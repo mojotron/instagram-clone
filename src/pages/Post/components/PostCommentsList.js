@@ -1,6 +1,5 @@
 import './styles/PostCommentsList.css';
 import PostComment from './PostComment';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const PostCommentsList = ({
   owner,

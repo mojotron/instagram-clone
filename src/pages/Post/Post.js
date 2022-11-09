@@ -16,6 +16,7 @@ const Post = () => {
   const { response: userData } = useUserDataContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
   const { state } = useLocation();
+
   // post document
   const {
     response,
@@ -24,6 +25,9 @@ const Post = () => {
     addReplay,
     deleteComment,
     deleteReply,
+    toggleDisplayLikes,
+    toggleDisplayComments,
+    deletePost,
   } = usePostControl(state.postId);
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
@@ -77,6 +81,12 @@ const Post = () => {
     toggleLike(userLikesPost, userName, userID);
   };
 
+  const editPostHandlers = {
+    displayLikes: toggleDisplayLikes,
+    disableComments: toggleDisplayComments,
+    deletePost: deletePost,
+  };
+
   const imageContainerRef = useRef();
 
   const [containerSize, setContainerSize] = useState(null);
@@ -112,8 +122,11 @@ const Post = () => {
 
           <div className="Post__info">
             <PostHeader
+              owner={owner}
+              postData={response.document}
               avatarUrl={state.avatar.url}
               userName={state.userName}
+              handlers={editPostHandlers}
             />
             <PostCommentsList
               owner={owner}

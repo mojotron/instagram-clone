@@ -1,0 +1,52 @@
+.EditPostPanel {
+  width: 100vw;
+  max-width: 70rem;
+  min-width: 30rem;
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.EditPostPanel__header {
+  padding: 0 1.5rem;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--gray-border);
+}
+.EditPostPanel__header h2 {
+  font-size: 1.8rem;
+}
+.EditPostPanel__header button {
+  font-size: 1.6rem;
+}
+.EditPostPanel__body {
+  display: flex;
+  height: 35rem;
+  width: 100%;
+}
+.EditPostPanel__body__image {
+  height: 35rem;
+  width: 35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.EditPostPanel__body__image__container {
+  width: inherit;
+  height: inherit;
+}
+.EditPostPanel__body__edit {
+  width: 50%;
+  border-left: var(--gray-border);
+}
+@media screen and (max-width: 749px) {
+  .EditPostPanel__body__image {
+    height: 100%;
+    width: 50vw;
+  }
+  .EditPostPanel__body__image__container {
+    height: 50vw;
+    width: 50vw;
+  }
+}

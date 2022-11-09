@@ -10,7 +10,8 @@ Thank you for inspecting my project!
 `;
 
 export const usePostControl = postId => {
-  const { response, getDocumentById, updateDocument } = useFirestore('posts');
+  const { response, getDocumentById, updateDocument, deleteDocument } =
+    useFirestore('posts');
 
   const loadDocument = useRef(() => getDocumentById(postId)).current;
 
@@ -88,6 +89,20 @@ export const usePostControl = postId => {
     await updateDocument(postId, { comments: newComments });
   };
 
+  const toggleDisplayLikes = async () => {
+    const oldValue = response.document.disableLikes;
+    await updateDocument(postId, { disableLikes: !oldValue });
+  };
+
+  const toggleDisplayComments = async () => {
+    const oldValue = response.document.disableComments;
+    await updateDocument(postId, { disableComments: !oldValue });
+  };
+
+  const deletePost = async () => {
+    await deleteDocument(postId);
+  };
+
   return {
     response,
     addComment,
@@ -95,5 +110,8 @@ export const usePostControl = postId => {
     addReplay,
     deleteComment,
     deleteReply,
+    toggleDisplayComments,
+    toggleDisplayLikes,
+    deletePost,
   };
 };
