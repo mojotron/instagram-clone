@@ -15,7 +15,7 @@ import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
-const EditPostPanel = ({ postData, closeHandler }) => {
+const EditPostPanel = ({ postData, closeHandler, editPostHandler }) => {
   // console.log(postData);
   const { response } = useUserDataContext();
   const navigate = useNavigate();
@@ -45,6 +45,19 @@ const EditPostPanel = ({ postData, closeHandler }) => {
     });
   };
 
+  const handleEditPost = async () => {
+    const newData = {
+      caption,
+      location,
+      images: postData.images.map((img, i) => ({
+        ...img,
+        alt: altTexts[i],
+      })),
+    };
+
+    await editPostHandler(newData);
+  };
+
   return (
     <div className="child-overlay">
       <div className="EditPostPanel">
@@ -53,10 +66,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
             Cancel
           </button>
           <h2>Edit info</h2>
-          <button
-            className="btn btn--blue"
-            onClick={() => console.log('DO MAGIC NOW')}
-          >
+          <button className="btn btn--blue" onClick={handleEditPost}>
             Done
           </button>
         </header>

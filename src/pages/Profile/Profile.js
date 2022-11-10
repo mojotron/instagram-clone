@@ -153,6 +153,7 @@ const Profile = () => {
                   userName: profileData.userName,
                   avatar: profileData.avatar,
                   postId: ele.id,
+                  profileDocId: profileData.id,
                 }}
               />
             ))}

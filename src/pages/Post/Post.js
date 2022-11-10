@@ -17,6 +17,8 @@ const Post = () => {
   // data minimum data needed to get post document (postID, owner username and avatar url)
   const { state } = useLocation();
 
+  console.log(state.profileDocId);
+
   // post document
   const {
     response,
@@ -28,6 +30,7 @@ const Post = () => {
     toggleDisplayLikes,
     toggleDisplayComments,
     deletePost,
+    editPost,
   } = usePostControl(state.postId);
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
@@ -85,6 +88,7 @@ const Post = () => {
     displayLikes: toggleDisplayLikes,
     disableComments: toggleDisplayComments,
     deletePost: deletePost,
+    editPost: editPost,
   };
 
   const imageContainerRef = useRef();
@@ -127,6 +131,7 @@ const Post = () => {
               avatarUrl={state.avatar.url}
               userName={state.userName}
               handlers={editPostHandlers}
+              profileDocId={state.profileDocId}
             />
             <PostCommentsList
               owner={owner}

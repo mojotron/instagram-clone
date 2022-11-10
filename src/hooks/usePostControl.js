@@ -103,6 +103,10 @@ export const usePostControl = postId => {
     await deleteDocument(postId);
   };
 
+  const editPost = async newData => {
+    await updateDocument(postId, newData);
+  };
+
   return {
     response,
     addComment,
@@ -113,5 +117,6 @@ export const usePostControl = postId => {
     toggleDisplayComments,
     toggleDisplayLikes,
     deletePost,
+    editPost,
   };
 };

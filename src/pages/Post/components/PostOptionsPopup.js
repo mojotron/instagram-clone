@@ -1,6 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
-const PostOptionsPopup = ({ userName, owner, postData, handlers }) => {
+const PostOptionsPopup = ({
+  userName,
+  owner,
+  postData,
+  handlers,
+  isFollowing,
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -41,8 +47,30 @@ const PostOptionsPopup = ({ userName, owner, postData, handlers }) => {
           </button>
         )}
 
+        {!owner && isFollowing && (
+          <button
+            onClick={() => handlers.unfollow()}
+            className="btn discard"
+            style={{ border: 'none' }}
+          >
+            Unfollow
+          </button>
+        )}
+
+        {!owner && !isFollowing && (
+          <button
+            onClick={() => handlers.follow()}
+            className="btn discard"
+            style={{ border: 'none' }}
+          >
+            Follow
+          </button>
+        )}
+
         <button className="btn">Share to...</button>
-        <button className="btn">Go to post</button>
+        <button onClick={() => navigate(`/${userName}`)} className="btn">
+          Go to profile
+        </button>
         <button onClick={() => handlers.close()} className="btn">
           Cancel
         </button>
