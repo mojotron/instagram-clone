@@ -39,6 +39,66 @@
 .EditPostPanel__body__edit {
   width: 50%;
   border-left: var(--gray-border);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.EditPostPanel__body__edit__header {
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+}
+.EditPostPanel__body__edit__form textarea {
+  resize: none;
+  width: 100%;
+  height: 10rem;
+  border: none;
+  padding: 1.5rem;
+  font-family: inherit;
+  outline: none;
+}
+.EditPostPanel__body__edit__form__emoji {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--gray-border);
+}
+.EditPostPanel__body__edit__form__emoji p {
+  font-size: 1.4rem;
+}
+.EditPostPanel__body__edit__form label {
+  border-bottom: var(--gray-border);
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-bottom: var(--gray-border);
+}
+.EditPostPanel__body__edit__form input {
+  outline: none;
+  border: none;
+  width: 90%;
+  font-size: 1.8rem;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+.EditPostPanel__body__edit__form__accessibility {
+  width: 100%;
+  padding: 1.5rem;
+}
+.EditPostPanel__body__edit__form__accessibility header {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.EditPostPanel__body__edit__form__accessibility h3 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--black);
+  cursor: pointer;
 }
 @media screen and (max-width: 749px) {
   .EditPostPanel__body__image {

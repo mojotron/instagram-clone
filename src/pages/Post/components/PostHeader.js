@@ -26,7 +26,12 @@ const PostHeader = ({ owner, postData, avatarUrl, userName, handlers }) => {
         />
       )}
 
-      {showEditPost && <EditPostPanel postData={postData} />}
+      {showEditPost && (
+        <EditPostPanel
+          postData={postData}
+          closeHandler={() => setShowEditPost(false)}
+        />
+      )}
 
       <div className="PostHeader__left">
         <Avatar
