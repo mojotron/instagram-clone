@@ -70,6 +70,16 @@ body {
   cursor: pointer;
   font-family: inherit;
 }
+.btn--close {
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
+  cursor: pointer;
+}
+.btn--close img {
+  height: 2.5rem;
+  width: 2.5rem;
+}
 .error {
   color: var(--red);
   font-size: 1.6rem;

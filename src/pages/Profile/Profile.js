@@ -144,18 +144,7 @@ const Profile = () => {
         <div className="Profile__collections__showcase">
           {documents &&
             documents.map(ele => (
-              <PostCard
-                key={ele.id}
-                data={ele}
-                dimensions={ele.dimensions}
-                // this is minimum data to pass for /p/:postId page
-                linkState={{
-                  userName: profileData.userName,
-                  avatar: profileData.avatar,
-                  postId: ele.id,
-                  profileDocId: profileData.id,
-                }}
-              />
+              <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
             ))}
         </div>
       </section>

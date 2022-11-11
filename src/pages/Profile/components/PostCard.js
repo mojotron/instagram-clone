@@ -8,7 +8,7 @@ import commentIcon from '../../../images/comment-icon.svg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const PostCard = ({ data, dimensions, linkState }) => {
+const PostCard = ({ data, dimensions }) => {
   // make sure image data is array
   const [hoverActive, setHoverActive] = useState(false);
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const PostCard = ({ data, dimensions, linkState }) => {
       className="PostCard"
       onMouseEnter={() => setHoverActive(true)}
       onMouseLeave={() => setHoverActive(false)}
-      onClick={() => navigate(`/p/${linkState.postId}`, { state: linkState })}
+      onClick={() => navigate(`/p/${data.id}`)}
     >
       {data.images.length > 1 && (
         <img

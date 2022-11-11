@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { usePostControl } from '../../hooks/usePostControl';
 import './styles/Post.css';
 // components
@@ -11,13 +11,17 @@ import { useState } from 'react';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+// icon
+import closeIcon from '../../images/close-icon.svg';
 
 const Post = () => {
+  // type: regular, timeline
   const { response: userData } = useUserDataContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
-  const { state } = useLocation();
 
-  console.log(state.profileDocId);
+  const { postId } = useParams();
+
+  const navigate = useNavigate();
 
   // post document
   const {
@@ -31,7 +35,7 @@ const Post = () => {
     toggleDisplayComments,
     deletePost,
     editPost,
-  } = usePostControl(state.postId);
+  } = usePostControl(postId);
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
   //
@@ -105,8 +109,14 @@ const Post = () => {
     return () => window.removeEventListener('resize', watchSize);
   }, []);
 
+  if (!response.document) return;
+
   return (
     <div className="overlay">
+      <button onClick={() => navigate(-1)} className="btn btn--close">
+        <img src={closeIcon} alt="close post" />
+      </button>
+
       {response.document && (
         <div className="Post">
           <div className="Post__image-wrapper" ref={imageContainerRef}>
@@ -128,16 +138,16 @@ const Post = () => {
             <PostHeader
               owner={owner}
               postData={response.document}
-              avatarUrl={state.avatar.url}
-              userName={state.userName}
+              avatarUrl={response.document.creator.avatarUrl}
+              userName={response.document.creator.userName}
               handlers={editPostHandlers}
-              profileDocId={state.profileDocId}
+              profileDocId={response.document.creator.profileDocId}
             />
             <PostCommentsList
               owner={owner}
               postData={response.document}
-              avatarUrl={state.avatar.url}
-              userName={state.userName}
+              avatarUrl={response.document.creator.avatarUrl}
+              userName={response.document.creator.userName}
               handleReply={handleReplyToComment}
               handleDeleteComment={handleDeleteComment}
               handleDeleteReply={handleDeleteReply}

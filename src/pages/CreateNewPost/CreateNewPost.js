@@ -56,6 +56,11 @@ const CreateNewPost = ({ setShowCreatePost }) => {
         comments: [],
         likes: [],
         uid: response.document.uid,
+        creator: {
+          userName: response.document.userName,
+          avatarUrl: response.document.avatar.url,
+          profileDocId: response.document.id,
+        },
       };
       // add document to post repo and close create post page
       await addDocument(post);

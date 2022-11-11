@@ -12,6 +12,10 @@ import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
 import Post from '../Post/Post';
+// temp
+import TimeLinePost from '../Post/TimeLinePost';
+import { useCollectPosts } from '../../hooks/useCollectPosts';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
   // get data
@@ -22,6 +26,8 @@ const Dashboard = () => {
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
   };
+  // temp
+  const { documents } = useCollectPosts(response.document?.uid);
 
   return (
     <div className="Dashboard">
@@ -36,10 +42,20 @@ const Dashboard = () => {
           )}
 
           <Routes>
-            <Route index element={<h1>hello</h1>} />
+            <Route
+              index
+              element={
+                <div>
+                  {documents &&
+                    documents.map(post => (
+                      <TimeLinePost key={post.id} postData={post} />
+                    ))}
+                </div>
+              }
+            />
             <Route path="/settings" element={<Settings />} />
             <Route path="/:userName" element={<Profile />} />
-            <Route path="/p/:postId" element={<Post />} />
+            <Route path="/p/:postId" element={<Post type="regular" />} />
           </Routes>
         </>
       )}

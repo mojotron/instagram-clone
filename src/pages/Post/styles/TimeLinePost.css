@@ -1,0 +1,20 @@
+.TimeLinePost {
+  border: var(--gray-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  max-width: 50rem;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+.TimeLinePost__image-container {
+  height: 50rem;
+  width: 50rem;
+}
+
+@media screen and (max-width: 500px) {
+  .TimeLinePost__image-container {
+    height: 100vw;
+    width: 100vw;
+  }
+}
