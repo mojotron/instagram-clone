@@ -8,14 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useFirestore } from '../../../hooks/useFirestore';
 
-const PostHeader = ({
-  owner,
-  postData,
-  avatarUrl,
-  userName,
-  handlers,
-  profileDocId,
-}) => {
+const PostHeader = ({ owner, postData, handlers, profileDocId }) => {
   const navigate = useNavigate();
   const [showOptions, setShowOptions] = useState(false);
   const [showEditPost, setShowEditPost] = useState(false);
@@ -73,7 +66,6 @@ const PostHeader = ({
     <header className="PostHeader">
       {showOptions && (
         <PostOptionsPopup
-          userName={userName}
           owner={owner}
           postData={postData}
           handlers={{
@@ -97,11 +89,13 @@ const PostHeader = ({
 
       <div className="PostHeader__left">
         <Avatar
-          url={avatarUrl}
+          url={postData.creator.avatarUrl}
           size="mid"
-          handleClick={() => navigate(`/${userName}`)}
+          handleClick={() => navigate(`/${postData.creator.userName}`)}
         />
-        <h2 onClick={() => navigate(`/${userName}`)}>{userName}</h2>
+        <h2 onClick={() => navigate(`/${postData.creator.userName}`)}>
+          {postData.creator.userName}
+        </h2>
       </div>
 
       <button className="btn btn--options" onClick={() => setShowOptions(true)}>

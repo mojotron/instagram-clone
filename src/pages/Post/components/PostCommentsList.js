@@ -1,11 +1,12 @@
 import './styles/PostCommentsList.css';
 import PostComment from './PostComment';
 
+// avatarUrl={response.document.creator.avatarUrl}
+//               userName={response.document.creator.userName}
+
 const PostCommentsList = ({
   owner,
   postData,
-  avatarUrl,
-  userName,
   handleReply,
   handleDeleteComment,
   handleDeleteReply,
@@ -17,8 +18,8 @@ const PostCommentsList = ({
         <PostComment
           owner={false}
           data={{
-            avatarUrl,
-            userName,
+            avatarUrl: postData.creator.avatarUrl,
+            userName: postData.creator.username,
             text: postData.caption,
             createdAt: postData.createdAt,
           }}

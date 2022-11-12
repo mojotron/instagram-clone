@@ -78,7 +78,7 @@ const PostControls = ({
           day: 'numeric',
           year: 'numeric',
         })
-          .format(new Date(createdAt * 1000))
+          .format(new Date(postData.createdAt.seconds * 1000))
           .toUpperCase()}
       </div>
     </section>

@@ -38,11 +38,11 @@ const Post = () => {
   } = usePostControl(postId);
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
-  //
+  // is current comment comment or reply on comment
   const [replayData, setReplayData] = useState(null);
-  // TODO check at the end is owner only used inside PostCommentsList
+  // is current profile user logged in
   const owner = userData.document.uid === response.document?.uid;
-
+  // remove focus from comment input filed on render
   useEffect(() => {
     if (focusOnComment) setFocusOnComment(false);
   }, [focusOnComment]);
@@ -94,18 +94,22 @@ const Post = () => {
     deletePost: deletePost,
     editPost: editPost,
   };
-
-  const imageContainerRef = useRef();
-
+  // control PostImage size to fit in parent container
+  const imageContainerRef = useRef(null);
   const [containerSize, setContainerSize] = useState(null);
-
+  // control PostImage on response change
+  useEffect(() => {
+    if (imageContainerRef.current === null) return;
+    const rect = imageContainerRef.current.getBoundingClientRect();
+    setContainerSize(Math.min(rect.height, rect.width));
+  }, [imageContainerRef, containerSize, response]);
+  // set window resize event if user changes screen size so PostImage is display correctly
   useEffect(() => {
     const watchSize = () => {
       const rect = imageContainerRef.current.getBoundingClientRect();
       setContainerSize(Math.min(rect.height, rect.width));
     };
     window.addEventListener('resize', watchSize);
-
     return () => window.removeEventListener('resize', watchSize);
   }, []);
 
@@ -138,16 +142,12 @@ const Post = () => {
             <PostHeader
               owner={owner}
               postData={response.document}
-              avatarUrl={response.document.creator.avatarUrl}
-              userName={response.document.creator.userName}
               handlers={editPostHandlers}
               profileDocId={response.document.creator.profileDocId}
             />
             <PostCommentsList
               owner={owner}
               postData={response.document}
-              avatarUrl={response.document.creator.avatarUrl}
-              userName={response.document.creator.userName}
               handleReply={handleReplyToComment}
               handleDeleteComment={handleDeleteComment}
               handleDeleteReply={handleDeleteReply}
@@ -157,13 +157,12 @@ const Post = () => {
               postData={response.document}
               handleToggleLike={handleToggleLike}
               handleCommentReset={handleCommentReset}
-              createdAt={response.document.createdAt.seconds}
             />
             {!response.document.disableComments && (
               <PostAddComment
                 handleAddComment={handleAddComment}
                 focusOnComment={focusOnComment}
-                replayData={replayData}
+                replyData={replayData}
               />
             )}
           </div>

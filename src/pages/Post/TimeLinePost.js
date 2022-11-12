@@ -13,8 +13,6 @@ const TimeLinePost = ({ postData }) => {
         owner={false}
         postData={postData}
         handlers={{}}
-        avatarUrl={postData.creator.avatarUrl}
-        userName={postData.creator.userName}
         postDocId={postData.creator.profileDocId}
       />
       <div className="TimeLinePost__image-container">
@@ -27,7 +25,6 @@ const TimeLinePost = ({ postData }) => {
         postData={postData}
         handleToggleLike={() => {}}
         handleCommentReset={() => {}}
-        createdAt={postData.createdAt}
       />
       <PostAddComment />
     </div>

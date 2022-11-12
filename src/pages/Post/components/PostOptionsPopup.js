@@ -1,12 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const PostOptionsPopup = ({
-  userName,
-  owner,
-  postData,
-  handlers,
-  isFollowing,
-}) => {
+const PostOptionsPopup = ({ owner, postData, handlers, isFollowing }) => {
   const navigate = useNavigate();
 
   return (
@@ -17,7 +11,7 @@ const PostOptionsPopup = ({
           <button
             onClick={async () => {
               await handlers.deletePost();
-              navigate(`/${userName}`);
+              navigate(`/${postData.creator.userName}`);
             }}
             className="btn discard"
             style={{ border: 'none' }}
@@ -68,7 +62,10 @@ const PostOptionsPopup = ({
         )}
 
         <button className="btn">Share to...</button>
-        <button onClick={() => navigate(`/${userName}`)} className="btn">
+        <button
+          onClick={() => navigate(`/${postData.creator.userName}`)}
+          className="btn"
+        >
           Go to profile
         </button>
         <button onClick={() => handlers.close()} className="btn">
