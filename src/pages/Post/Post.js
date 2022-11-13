@@ -1,5 +1,5 @@
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { usePostControl } from '../../hooks/usePostControl';
 import './styles/Post.css';
 // components
 import PostHeader from './components/PostHeader';
@@ -7,10 +7,9 @@ import PostImage from '../../components/PostImage';
 import PostControls from './components/PostControls';
 import PostAddComment from './components/PostAddComment';
 import PostCommentsList from './components/PostCommentsList';
-import { useState } from 'react';
+// hooks
+import { usePostControl } from '../../hooks/usePostControl';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
-import { useEffect } from 'react';
-import { useRef } from 'react';
 // icon
 import closeIcon from '../../images/close-icon.svg';
 
@@ -31,6 +30,7 @@ const Post = () => {
     addReplay,
     deleteComment,
     deleteReply,
+
     toggleDisplayLikes,
     toggleDisplayComments,
     deletePost,
@@ -143,7 +143,6 @@ const Post = () => {
               owner={owner}
               postData={response.document}
               handlers={editPostHandlers}
-              profileDocId={response.document.creator.profileDocId}
             />
             <PostCommentsList
               owner={owner}

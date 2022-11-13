@@ -15,7 +15,8 @@ import Post from '../Post/Post';
 // temp
 import TimeLinePost from '../Post/TimeLinePost';
 import { useCollectPosts } from '../../hooks/useCollectPosts';
-import { useEffect } from 'react';
+
+const BRONTO_UID = 'ziNCOCmxVraTwN5EI1KeOXpP0mR2';
 
 const Dashboard = () => {
   // get data
