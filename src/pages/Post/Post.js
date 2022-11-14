@@ -89,7 +89,7 @@ const Post = () => {
   };
 
   const editPostHandlers = {
-    displayLikes: toggleDisplayLikes,
+    disableLikes: toggleDisplayLikes,
     disableComments: toggleDisplayComments,
     deletePost: deletePost,
     editPost: editPost,
@@ -140,6 +140,7 @@ const Post = () => {
 
           <div className="Post__info">
             <PostHeader
+              type="regular"
               owner={owner}
               postData={response.document}
               handlers={editPostHandlers}

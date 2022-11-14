@@ -10,12 +10,7 @@ import './styles/PostControls.css';
 
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const PostControls = ({
-  postData,
-  handleToggleLike,
-  handleCommentReset,
-  createdAt,
-}) => {
+const PostControls = ({ postData, handleToggleLike, handleCommentReset }) => {
   const { response } = useUserDataContext();
   const userLikesPost = postData.likes.find(
     like => like.userName === response.document.userName

@@ -6,8 +6,9 @@ import PostOptionsPopup from './PostOptionsPopup';
 import EditPostPanel from './EditPostPanel';
 import { useState } from 'react';
 
-const PostHeader = ({ owner, postData, handlers }) => {
+const PostHeader = ({ type, owner, postData, handlers }) => {
   const navigate = useNavigate();
+
   const [showOptions, setShowOptions] = useState(false);
   const [showEditPost, setShowEditPost] = useState(false);
 
@@ -15,6 +16,7 @@ const PostHeader = ({ owner, postData, handlers }) => {
     <header className="PostHeader">
       {showOptions && (
         <PostOptionsPopup
+          type={type}
           owner={owner}
           postData={postData}
           handlers={{

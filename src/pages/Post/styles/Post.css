@@ -20,11 +20,14 @@
   align-items: center;
 }
 .Post__image-container {
+  width: 100%;
+  height: 100%;
 }
 .Post__info {
   flex-grow: 1;
   flex-shrink: 1;
   min-width: 50rem;
+  width: 50rem;
   border-left: var(--gray-border);
   position: relative; /* for Emojis to be absolute */
   display: flex;

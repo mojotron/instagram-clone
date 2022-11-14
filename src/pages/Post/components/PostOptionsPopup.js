@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useFirestore } from '../../../hooks/useFirestore';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const PostOptionsPopup = ({ owner, postData, handlers }) => {
+const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
+  // type => regular or timeline
   const navigate = useNavigate();
   const { response, updateDocument } = useUserDataContext();
 
@@ -27,6 +28,7 @@ const PostOptionsPopup = ({ owner, postData, handlers }) => {
   useEffect(() => {
     if (isFollowing !== null) return;
     if (!owner) {
+      console.log('here');
       setIsFollowing(response.document.following.includes(postData.uid));
     }
   }, [owner, postData, response, isFollowing]);
@@ -90,7 +92,7 @@ const PostOptionsPopup = ({ owner, postData, handlers }) => {
           </button>
         )}
         {owner && (
-          <button onClick={handlers.disableLikes()} className="btn">
+          <button onClick={() => handlers.disableLikes()} className="btn">
             {postData.disableLikes ? 'Show' : 'Hide'} Like count
           </button>
         )}
@@ -122,10 +124,14 @@ const PostOptionsPopup = ({ owner, postData, handlers }) => {
 
         <button className="btn">Share to...</button>
         <button
-          onClick={() => navigate(`/${postData.creator.userName}`)}
+          onClick={() => {
+            type === 'regular'
+              ? navigate(`/${postData.creator.userName}`)
+              : navigate(`/p/${postData.id}`);
+          }}
           className="btn"
         >
-          Go to profile
+          Go to {type === 'regular' ? 'profile' : 'post'}
         </button>
         <button onClick={() => handlers.close()} className="btn">
           Cancel
