@@ -10,7 +10,6 @@ const TimeLinePostCommentsList = ({ postData }) => {
   const commentsCount = postData.comments.length;
 
   const yourComments = postData.comments.filter(comment => {
-    console.log(comment.text);
     const match =
       comment.userName === response.document.userName ||
       comment.text.indexOf(`@${response.document.userName}`);
@@ -28,7 +27,7 @@ const TimeLinePostCommentsList = ({ postData }) => {
           data={{ userName: postData.creator.userName, text: postData.caption }}
         />
       )}
-      {commentsCount > 0 && (
+      {!postData.disableComments && commentsCount > 0 && (
         <button
           className="btn btn--comments-count"
           onClick={() => navigate(`/p/${postData.id}`)}
@@ -41,6 +40,7 @@ const TimeLinePostCommentsList = ({ postData }) => {
       {!postData.disableComments &&
         yourComments.map(comment => (
           <TimeLinePostComment
+            key={comment.createdAt.seconds}
             data={{ userName: comment.userName, text: comment.text }}
           />
         ))}

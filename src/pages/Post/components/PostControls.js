@@ -26,9 +26,11 @@ const PostControls = ({ postData, handleToggleLike, handleCommentReset }) => {
     );
   };
 
-  const followingLikes = postData.likes.filter(ele =>
+  const followingLike = postData.likes.find(ele =>
     response.document.following.includes(ele.uid)
   );
+
+  const likesCount = postData.likes.length;
 
   return (
     <section className="PostControls">
@@ -56,14 +58,17 @@ const PostControls = ({ postData, handleToggleLike, handleCommentReset }) => {
         </button>
       </div>
 
-      {followingLikes.length > 0 && (
+      {followingLike && (
         <div className="PostControls__liked-by">
-          Liked by <span>{followingLikes[0].userName}</span>
-          <span>
-            {followingLikes > 1
-              ? `and ${followingLikes.length - 1} others`
-              : ''}
-          </span>
+          Liked by <span>{followingLike.userName}</span>
+          <span>{likesCount > 1 ? `and ${likesCount - 1} others` : ''}</span>
+        </div>
+      )}
+
+      {!followingLike && likesCount > 0 && (
+        <div className="PostControls__liked-by">
+          <span>{likesCount} </span>
+          <span>{likesCount > 1 ? 'likes' : 'like'}</span>
         </div>
       )}
 

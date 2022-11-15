@@ -28,7 +28,7 @@ const Dashboard = () => {
     setShowCreatePost(oldValue => !oldValue);
   };
   // temp
-  const { documents } = useCollectPosts(response.document?.uid);
+  const { documents } = useCollectPosts(BRONTO_UID);
 
   return (
     <div className="Dashboard">

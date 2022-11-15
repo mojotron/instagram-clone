@@ -56,6 +56,7 @@ const EditPostPanel = ({ postData, closeHandler, editPostHandler }) => {
     };
 
     await editPostHandler(newData);
+    closeHandler();
   };
 
   return (

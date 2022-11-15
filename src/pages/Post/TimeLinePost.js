@@ -8,7 +8,7 @@ import './styles/TimeLinePost.css';
 //hooks
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 
-import { doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { doc, updateDoc, Timestamp, deleteDoc } from 'firebase/firestore';
 import { projectFirestore } from '../../firebase/config';
 import TimeLinePostCommentsList from './components/TimeLinePostCommentsList';
 import { useNavigate } from 'react-router-dom';
@@ -53,6 +53,28 @@ const TimeLinePost = ({ postData }) => {
     });
   };
 
+  const handleDisableLikes = async () => {
+    await updateDoc(doc(projectFirestore, 'posts', postData.id), {
+      disableLikes: !postData.disableLikes,
+    });
+  };
+
+  const handleDisableComments = async () => {
+    await updateDoc(doc(projectFirestore, 'posts', postData.id), {
+      disableComments: !postData.disableComments,
+    });
+  };
+
+  const handleDeletePost = async () => {
+    await deleteDoc(doc(projectFirestore, 'posts', postData.id));
+  };
+
+  const handleEditPost = async newData => {
+    await updateDoc(doc(projectFirestore, 'posts', postData.id), {
+      ...newData,
+    });
+  };
+
   return (
     <div className="TimeLinePost">
       <PostHeader
@@ -60,10 +82,10 @@ const TimeLinePost = ({ postData }) => {
         owner={owner}
         postData={postData}
         handlers={{
-          disableLikes: () => {},
-          disableComments: () => {},
-          deletePost: () => {},
-          editPost: () => {},
+          disableLikes: () => handleDisableLikes(),
+          disableComments: () => handleDisableComments(),
+          deletePost: () => handleDeletePost(),
+          editPost: handleEditPost,
         }}
       />
       <div className="TimeLinePost__image-container">
@@ -78,11 +100,13 @@ const TimeLinePost = ({ postData }) => {
         handleCommentReset={() => navigate(`/p/${postData.id}`)} // here is sending to user post not reseting comment focus like in post component
       />
       <TimeLinePostCommentsList postData={postData} />
-      <PostAddComment
-        handleAddComment={handleAddComment}
-        focusOnComment={null}
-        replyData={null}
-      />
+      {!postData.disableComments && (
+        <PostAddComment
+          handleAddComment={handleAddComment}
+          focusOnComment={null}
+          replyData={null}
+        />
+      )}
     </div>
   );
 };

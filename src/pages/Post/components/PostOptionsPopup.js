@@ -72,7 +72,7 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
           <button
             onClick={async () => {
               await handlers.deletePost();
-              navigate(`/${postData.creator.userName}`);
+              if (type === 'regular') navigate(`/${postData.creator.userName}`);
             }}
             className="btn discard"
             style={{ border: 'none' }}

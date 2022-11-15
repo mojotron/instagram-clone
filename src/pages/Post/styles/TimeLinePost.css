@@ -1,4 +1,5 @@
 .TimeLinePost {
+  margin: 1rem 0;
   border: var(--gray-border);
   border-radius: 1rem;
   overflow: hidden;
