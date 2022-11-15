@@ -1,4 +1,5 @@
 .TimeLineComment {
+  width: 100%;
   margin-top: 1rem;
   font-size: 1.6rem;
   color: var(--black);
@@ -6,11 +7,7 @@
   line-height: 2rem;
   letter-spacing: 0;
 }
-.TimeLineComment p {
-  white-space: pre-wrap;
-  color: var(--black);
-}
-.TimeLineComment span {
+.TimeLineComment__username {
   font-weight: 700;
   white-space: pre-line;
   cursor: pointer;

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LinkfyUsernames from '../../../components/LinkfyUsernames';
 import './styles/TimeLinePostComment.css';
 
 const TimeLinePostComment = ({ data }) => {
@@ -12,10 +13,14 @@ const TimeLinePostComment = ({ data }) => {
   return (
     <div className="TimeLineComment">
       <p>
-        <span onClick={() => navigate(`/${data.userName}`)}>
+        <span
+          className="TimeLineComment__username"
+          onClick={() => navigate(`/${data.userName}`)}
+        >
           {data.userName}
         </span>{' '}
-        {hideText ? `${data.text.slice(0, 100)}... ` : data.text}
+        {hideText && <LinkfyUsernames text={data.text.slice(0, 100)} />}
+        {!hideText && <LinkfyUsernames text={data.text} />}
         {hideText ? (
           <button
             className="btn btn--show-text"

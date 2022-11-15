@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moreOptions from '../../../images/more-horiz-icon.svg';
 import ConfirmDelete from './ConfirmDelete';
+import LinkfyUsernames from '../../../components/LinkfyUsernames';
 
 // helper component
 const CheckForAtLink = ({ text, navigate }) => {
