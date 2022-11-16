@@ -7,25 +7,6 @@ import moreOptions from '../../../images/more-horiz-icon.svg';
 import ConfirmDelete from './ConfirmDelete';
 import LinkfyUsernames from '../../../components/LinkfyUsernames';
 
-// helper component
-const CheckForAtLink = ({ text, navigate }) => {
-  const test = /^@\w+\s/.test(text);
-  if (!test) return text;
-
-  const [hash, body] = text.split(/\s+(.*)/);
-  return (
-    <>
-      <span
-        style={{ color: '#265481', fontWeight: '400' }}
-        onClick={() => navigate(`/${hash.slice(1)}`)}
-      >
-        {hash}{' '}
-      </span>
-      {body}
-    </>
-  );
-};
-
 const PostComment = ({
   owner,
   data,
@@ -94,10 +75,13 @@ const PostComment = ({
 
         <div className="PostComment__main__inner">
           <p>
-            <span onClick={() => navigate(`/${data.userName}`)}>
+            <span
+              className="PostComment__main__inner__username"
+              onClick={() => navigate(`/${data.userName}`)}
+            >
               {data.userName}{' '}
             </span>
-            {data.text}
+            <LinkfyUsernames text={data.text} />
           </p>
           <div className="PostComment__controls">
             <p>{formatTime(data.createdAt.seconds * 1000)}</p>
@@ -146,10 +130,7 @@ const PostComment = ({
                           <span onClick={() => navigate(`/${reply.userName}`)}>
                             {reply.userName}{' '}
                           </span>
-                          <CheckForAtLink
-                            text={reply.text}
-                            navigate={navigate}
-                          />
+                          <LinkfyUsernames text={reply.text} />
                         </p>
                         <div className="PostComment__controls">
                           <p>{formatTime(reply.createdAt.seconds * 1000)}</p>

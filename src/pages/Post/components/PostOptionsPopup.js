@@ -2,17 +2,30 @@ import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFirestore } from '../../../hooks/useFirestore';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+// test
+import { usePostHandlers } from '../../../hooks/usePostHandlers';
 
-const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
+const PostOptionsPopup = ({
+  type,
+  owner,
+  postData,
+  handleClose,
+  handleOpenEdit,
+}) => {
   // type => regular or timeline
   const navigate = useNavigate();
-  const { response, updateDocument } = useUserDataContext();
+  const { response } = useUserDataContext();
 
   const {
-    response: profileData,
-    getDocumentById,
-    updateDocument: updateProfile,
-  } = useFirestore('users');
+    followProfile,
+    unfollowProfile,
+    toggleDisableLikes,
+    toggleDisableComments,
+    deletePost,
+    editPost,
+  } = usePostHandlers();
+
+  const { response: profileData, getDocumentById } = useFirestore('users');
 
   const loadDocument = useRef(() =>
     getDocumentById(postData.creator.profileDocId)
@@ -33,37 +46,6 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
     }
   }, [owner, postData, response, isFollowing]);
 
-  const handleFollow = async () => {
-    // add target uid to owner following
-    const ownAccFollowing = [...response.document.following, postData.uid];
-    // add owner uid to target followers
-    const inspectingAccFollowers = [
-      ...profileData.document.followers,
-      response.document.uid,
-    ];
-
-    await updateProfile(postData.creator.profileDocId, {
-      followers: inspectingAccFollowers,
-    });
-    await updateDocument(response.document.id, { following: ownAccFollowing });
-  };
-
-  const handleUnfollow = async () => {
-    // remove target uid from owner following
-    const ownAccFollowing = response.document.following.filter(
-      item => item !== postData.uid
-    );
-    // remove owner uid from target followers
-    const inspectingAccFollowers = profileData.document.followers.filter(
-      item => item !== response.document.uid
-    );
-
-    await updateProfile(postData.creator.profileDocId, {
-      followers: inspectingAccFollowers,
-    });
-    await updateDocument(response.document.id, { following: ownAccFollowing });
-  };
-
   return (
     <div className="child-overlay">
       <div className="DiscardPost">
@@ -71,7 +53,7 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
         {owner && (
           <button
             onClick={async () => {
-              await handlers.deletePost();
+              await deletePost(postData.id);
               if (type === 'regular') navigate(`/${postData.creator.userName}`);
             }}
             className="btn discard"
@@ -83,8 +65,8 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
         {owner && (
           <button
             onClick={() => {
-              handlers.openEdit(true);
-              handlers.close();
+              handleOpenEdit(true);
+              handleClose();
             }}
             className="btn"
           >
@@ -92,19 +74,35 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
           </button>
         )}
         {owner && (
-          <button onClick={() => handlers.disableLikes()} className="btn">
+          <button
+            onClick={() =>
+              toggleDisableLikes(postData.disableLikes, postData.id)
+            }
+            className="btn"
+          >
             {postData.disableLikes ? 'Show' : 'Hide'} Like count
           </button>
         )}
         {owner && (
-          <button onClick={() => handlers.disableComments()} className="btn">
+          <button
+            onClick={async () =>
+              await toggleDisableComments(postData.disableComments, postData.id)
+            }
+            className="btn"
+          >
             Turn {postData.disableComments ? 'on' : 'off'} commenting
           </button>
         )}
 
         {!owner && isFollowing && (
           <button
-            onClick={handleUnfollow}
+            onClick={async () =>
+              await unfollowProfile(
+                postData.uid,
+                profileData.document.followers,
+                postData.creator.profileDocId
+              )
+            }
             className="btn discard"
             style={{ border: 'none' }}
           >
@@ -114,7 +112,13 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
 
         {!owner && !isFollowing && (
           <button
-            onClick={handleFollow}
+            onClick={async () =>
+              await followProfile(
+                postData.uid,
+                profileData.document.followers,
+                postData.creator.profileDocId
+              )
+            }
             className="btn discard"
             style={{ border: 'none' }}
           >
@@ -133,7 +137,7 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
         >
           Go to {type === 'regular' ? 'profile' : 'post'}
         </button>
-        <button onClick={() => handlers.close()} className="btn">
+        <button onClick={() => handleClose()} className="btn">
           Cancel
         </button>
       </div>

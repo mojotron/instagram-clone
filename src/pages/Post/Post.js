@@ -30,12 +30,8 @@ const Post = () => {
     addReplay,
     deleteComment,
     deleteReply,
-
-    toggleDisplayLikes,
-    toggleDisplayComments,
-    deletePost,
-    editPost,
   } = usePostControl(postId);
+
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
   // is current comment comment or reply on comment
@@ -88,21 +84,17 @@ const Post = () => {
     toggleLike(userLikesPost, userName, userID);
   };
 
-  const editPostHandlers = {
-    disableLikes: toggleDisplayLikes,
-    disableComments: toggleDisplayComments,
-    deletePost: deletePost,
-    editPost: editPost,
-  };
   // control PostImage size to fit in parent container
   const imageContainerRef = useRef(null);
   const [containerSize, setContainerSize] = useState(null);
+
   // control PostImage on response change
   useEffect(() => {
     if (imageContainerRef.current === null) return;
     const rect = imageContainerRef.current.getBoundingClientRect();
     setContainerSize(Math.min(rect.height, rect.width));
   }, [imageContainerRef, containerSize, response]);
+
   // set window resize event if user changes screen size so PostImage is display correctly
   useEffect(() => {
     const watchSize = () => {
@@ -143,7 +135,6 @@ const Post = () => {
               type="regular"
               owner={owner}
               postData={response.document}
-              handlers={editPostHandlers}
             />
             <PostCommentsList
               owner={owner}
@@ -153,14 +144,12 @@ const Post = () => {
               handleDeleteReply={handleDeleteReply}
             />
             <PostControls
-              owner={owner}
               postData={response.document}
-              handleToggleLike={handleToggleLike}
               handleCommentReset={handleCommentReset}
             />
             {!response.document.disableComments && (
               <PostAddComment
-                handleAddComment={handleAddComment}
+                postData={response.document}
                 focusOnComment={focusOnComment}
                 replyData={replayData}
               />

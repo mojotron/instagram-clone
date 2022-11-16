@@ -9,22 +9,15 @@ import bookmarkFilledIcon from '../../../images/bookmark-icon-filled.svg';
 import './styles/PostControls.css';
 
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { usePostHandlers } from '../../../hooks/usePostHandlers';
 
-const PostControls = ({ postData, handleToggleLike, handleCommentReset }) => {
+const PostControls = ({ postData, handleCommentReset }) => {
   const { response } = useUserDataContext();
   const userLikesPost = postData.likes.find(
     like => like.userName === response.document.userName
   );
 
-  const handleLikeClick = () => {
-    // save likes with username and uid, for easier display of friends that liked post
-    // uid is for filtering following list and usernames are for displaying who followed
-    handleToggleLike(
-      !userLikesPost,
-      response.document.userName,
-      response.document.uid
-    );
-  };
+  const { toggleLike } = usePostHandlers();
 
   const followingLike = postData.likes.find(ele =>
     response.document.following.includes(ele.uid)
@@ -37,7 +30,12 @@ const PostControls = ({ postData, handleToggleLike, handleCommentReset }) => {
       <div className="PostControls__icons">
         <div className="PostControls__icons__left">
           {!postData.disableLikes && (
-            <button className="btn btn--post" onClick={handleLikeClick}>
+            <button
+              className="btn btn--post"
+              onClick={async () =>
+                await toggleLike(postData.likes, postData.id)
+              }
+            >
               <img
                 src={userLikesPost ? heartLikedIcon : heartIcon}
                 alt="like"

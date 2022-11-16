@@ -1,12 +1,15 @@
-import './styles/PostHeader.css';
-import Avatar from '../../../components/Avatar';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moreOptionsIcon from '../../../images/more-horiz-icon.svg';
+// components
+import Avatar from '../../../components/Avatar';
 import PostOptionsPopup from './PostOptionsPopup';
 import EditPostPanel from './EditPostPanel';
-import { useState } from 'react';
+// styles
+import './styles/PostHeader.css';
+// icon
+import moreOptionsIcon from '../../../images/more-horiz-icon.svg';
 
-const PostHeader = ({ type, owner, postData, handlers }) => {
+const PostHeader = ({ type, owner, postData }) => {
   const navigate = useNavigate();
 
   const [showOptions, setShowOptions] = useState(false);
@@ -19,11 +22,8 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
           type={type}
           owner={owner}
           postData={postData}
-          handlers={{
-            ...handlers,
-            close: () => setShowOptions(false),
-            openEdit: setShowEditPost,
-          }}
+          handleClose={() => setShowOptions(false)}
+          handleOpenEdit={setShowEditPost}
         />
       )}
 
@@ -31,7 +31,7 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
         <EditPostPanel
           postData={postData}
           closeHandler={() => setShowEditPost(false)}
-          editPostHandler={handlers.editPost}
+          // editPostHandler={handlers.editPost}
         />
       )}
 

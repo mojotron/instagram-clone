@@ -19,7 +19,7 @@ const PostCommentsList = ({
           owner={false}
           data={{
             avatarUrl: postData.creator.avatarUrl,
-            userName: postData.creator.username,
+            userName: postData.creator.userName,
             text: postData.caption,
             createdAt: postData.createdAt,
           }}
