@@ -15,7 +15,6 @@ export const usePostHandlers = () => {
   const toggleLike = async (postLikes, docId) => {
     // save likes with username and uid, for easier display of friends that liked post
     // uid is for filtering following list and usernames are for displaying who followed
-
     const userLikesPost = postLikes.find(
       like => like.uid === response.document.uid
     );

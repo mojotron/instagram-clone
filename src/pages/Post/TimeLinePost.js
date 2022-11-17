@@ -15,6 +15,8 @@ const TimeLinePost = ({ postData }) => {
   const { response } = useUserDataContext();
   const owner = postData.uid === response.document.uid;
 
+  console.log('11111');
+
   return (
     <div className="TimeLinePost">
       <PostHeader type="timeline" owner={owner} postData={postData} />

@@ -23,7 +23,7 @@ const PostOptionsPopup = ({
     toggleDisableComments,
     deletePost,
     editPost,
-  } = usePostHandlers();
+  } = usePostHandlers(owner);
 
   const { response: profileData, getDocumentById } = useFirestore('users');
 
