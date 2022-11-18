@@ -2,28 +2,11 @@ import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFirestore } from '../../../hooks/useFirestore';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
-// test
-import { usePostHandlers } from '../../../hooks/usePostHandlers';
 
-const PostOptionsPopup = ({
-  type,
-  owner,
-  postData,
-  handleClose,
-  handleOpenEdit,
-}) => {
+const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
   // type => regular or timeline
   const navigate = useNavigate();
   const { response } = useUserDataContext();
-
-  const {
-    followProfile,
-    unfollowProfile,
-    toggleDisableLikes,
-    toggleDisableComments,
-    deletePost,
-    editPost,
-  } = usePostHandlers(owner);
 
   const { response: profileData, getDocumentById } = useFirestore('users');
 
@@ -53,7 +36,7 @@ const PostOptionsPopup = ({
         {owner && (
           <button
             onClick={async () => {
-              await deletePost(postData.id);
+              await handlers.deletePost(postData.id);
               if (type === 'regular') navigate(`/${postData.creator.userName}`);
             }}
             className="btn discard"
@@ -65,8 +48,8 @@ const PostOptionsPopup = ({
         {owner && (
           <button
             onClick={() => {
-              handleOpenEdit(true);
-              handleClose();
+              handlers.handleOpenEdit(true);
+              handlers.handleClose();
             }}
             className="btn"
           >
@@ -76,7 +59,7 @@ const PostOptionsPopup = ({
         {owner && (
           <button
             onClick={() =>
-              toggleDisableLikes(postData.disableLikes, postData.id)
+              handlers.toggleDisableLikes(postData.disableLikes, postData.id)
             }
             className="btn"
           >
@@ -86,7 +69,10 @@ const PostOptionsPopup = ({
         {owner && (
           <button
             onClick={async () =>
-              await toggleDisableComments(postData.disableComments, postData.id)
+              await handlers.toggleDisableComments(
+                postData.disableComments,
+                postData.id
+              )
             }
             className="btn"
           >
@@ -97,7 +83,7 @@ const PostOptionsPopup = ({
         {!owner && isFollowing && (
           <button
             onClick={async () =>
-              await unfollowProfile(
+              await handlers.unfollowProfile(
                 postData.uid,
                 profileData.document.followers,
                 postData.creator.profileDocId
@@ -113,7 +99,7 @@ const PostOptionsPopup = ({
         {!owner && !isFollowing && (
           <button
             onClick={async () =>
-              await followProfile(
+              await handlers.followProfile(
                 postData.uid,
                 profileData.document.followers,
                 postData.creator.profileDocId
@@ -137,7 +123,7 @@ const PostOptionsPopup = ({
         >
           Go to {type === 'regular' ? 'profile' : 'post'}
         </button>
-        <button onClick={() => handleClose()} className="btn">
+        <button onClick={() => handlers.handleClose()} className="btn">
           Cancel
         </button>
       </div>

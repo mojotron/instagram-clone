@@ -9,7 +9,7 @@ This project is for learning purposes!
 Thank you for inspecting my project!
 `;
 
-export const usePostHandlers = () => {
+export const useTimeLinePostHandlers = () => {
   const { response, updateDocument: updateUserDoc } = useUserDataContext();
 
   const toggleLike = async (postLikes, docId) => {
@@ -66,6 +66,8 @@ export const usePostHandlers = () => {
   };
 
   const editPost = async (newData, docId) => {
+    console.log('hook', newData, docId);
+
     await updateDoc(doc(projectFirestore, 'posts', docId), {
       ...newData,
     });

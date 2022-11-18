@@ -15,7 +15,7 @@ import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
-const EditPostPanel = ({ postData, closeHandler, editPostHandler }) => {
+const EditPostPanel = ({ postData, closeHandler, handleEditPost }) => {
   // console.log(postData);
   const { response } = useUserDataContext();
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const EditPostPanel = ({ postData, closeHandler, editPostHandler }) => {
     });
   };
 
-  const handleEditPost = async () => {
+  const handleClickEditPost = async () => {
     const newData = {
       caption,
       location,
@@ -55,7 +55,7 @@ const EditPostPanel = ({ postData, closeHandler, editPostHandler }) => {
       })),
     };
 
-    await editPostHandler(newData);
+    await handleEditPost(newData, postData.id);
     closeHandler();
   };
 
@@ -67,7 +67,7 @@ const EditPostPanel = ({ postData, closeHandler, editPostHandler }) => {
             Cancel
           </button>
           <h2>Edit info</h2>
-          <button className="btn btn--blue" onClick={handleEditPost}>
+          <button className="btn btn--blue" onClick={handleClickEditPost}>
             Done
           </button>
         </header>

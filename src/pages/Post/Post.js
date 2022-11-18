@@ -15,7 +15,7 @@ import closeIcon from '../../images/close-icon.svg';
 
 const Post = () => {
   // type: regular, timeline
-  const { response: userData } = useUserDataContext();
+  const { response: userData, updateDocument } = useUserDataContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
 
   const { postId } = useParams();
@@ -24,20 +24,29 @@ const Post = () => {
 
   // post document
   const {
-    response,
+    postResponse,
     addComment,
     toggleLike,
     addReplay,
     deleteComment,
     deleteReply,
-  } = usePostControl(postId);
+
+    // toggleLike,
+    // addComment,
+    // toggleDisableLikes,
+    // toggleDisableComments,
+    // deletePost,
+    // editPost,
+    // followProfile,
+    // unfollowProfile,
+  } = usePostControl(postId, updateDocument);
 
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
   // is current comment comment or reply on comment
   const [replayData, setReplayData] = useState(null);
   // is current profile user logged in
-  const owner = userData.document.uid === response.document?.uid;
+  const owner = userData.document.uid === postResponse.document?.uid;
   // remove focus from comment input filed on render
   useEffect(() => {
     if (focusOnComment) setFocusOnComment(false);
@@ -93,7 +102,7 @@ const Post = () => {
     if (imageContainerRef.current === null) return;
     const rect = imageContainerRef.current.getBoundingClientRect();
     setContainerSize(Math.min(rect.height, rect.width));
-  }, [imageContainerRef, containerSize, response]);
+  }, [imageContainerRef, containerSize, postResponse]);
 
   // set window resize event if user changes screen size so PostImage is display correctly
   useEffect(() => {
@@ -105,7 +114,7 @@ const Post = () => {
     return () => window.removeEventListener('resize', watchSize);
   }, []);
 
-  if (!response.document) return;
+  if (!postResponse.document) return;
 
   return (
     <div className="overlay">
@@ -113,7 +122,7 @@ const Post = () => {
         <img src={closeIcon} alt="close post" />
       </button>
 
-      {response.document && (
+      {postResponse.document && (
         <div className="Post">
           <div className="Post__image-wrapper" ref={imageContainerRef}>
             {/* wrapper is for keeping container in middle */}
@@ -121,10 +130,10 @@ const Post = () => {
               className="Post__image-container"
               style={{ width: containerSize, height: containerSize }}
             >
-              {response.document && (
+              {postResponse.document && (
                 <PostImage
-                  imagesData={response.document.images}
-                  dimensions={response.document.dimensions}
+                  imagesData={postResponse.document.images}
+                  dimensions={postResponse.document.dimensions}
                 />
               )}
             </div>
@@ -134,22 +143,23 @@ const Post = () => {
             <PostHeader
               type="regular"
               owner={owner}
-              postData={response.document}
+              postData={postResponse.document}
             />
             <PostCommentsList
               owner={owner}
-              postData={response.document}
+              postData={postResponse.document}
               handleReply={handleReplyToComment}
               handleDeleteComment={handleDeleteComment}
               handleDeleteReply={handleDeleteReply}
             />
             <PostControls
-              postData={response.document}
+              postData={postResponse.document}
               handleCommentReset={handleCommentReset}
+              handleLikePost={toggleLike}
             />
-            {!response.document.disableComments && (
+            {!postResponse.document.disableComments && (
               <PostAddComment
-                postData={response.document}
+                postData={postResponse.document}
                 focusOnComment={focusOnComment}
                 replyData={replayData}
               />

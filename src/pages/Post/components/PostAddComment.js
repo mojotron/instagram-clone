@@ -2,11 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import './styles/PostAddComment.css';
 import smileyIcon from '../../../images/smile-icon.svg';
-import { usePostHandlers } from '../../../hooks/usePostHandlers';
 
-const PostAddComment = ({ postData, focusOnComment, replyData }) => {
-  const { addComment } = usePostHandlers();
-
+const PostAddComment = ({
+  postData,
+  handleAddComment,
+  focusOnComment,
+  replyData,
+}) => {
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState('');
 
@@ -38,7 +40,7 @@ const PostAddComment = ({ postData, focusOnComment, replyData }) => {
   };
 
   const handlePostComment = async () => {
-    await addComment(text, postData.comments, postData.id);
+    await handleAddComment(text, postData.comments, postData.id);
     setText('');
   };
   return (

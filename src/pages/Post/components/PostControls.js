@@ -7,17 +7,15 @@ import bookmarkIcon from '../../../images/bookmark-icon.svg';
 import bookmarkFilledIcon from '../../../images/bookmark-icon-filled.svg';
 // style
 import './styles/PostControls.css';
-
+// hooks
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
-import { usePostHandlers } from '../../../hooks/usePostHandlers';
 
-const PostControls = ({ postData, handleCommentReset }) => {
+const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
+  // in timlinepost handleCommentReset sends user to post page
   const { response } = useUserDataContext();
   const userLikesPost = postData.likes.find(
     like => like.userName === response.document.userName
   );
-
-  const { toggleLike } = usePostHandlers();
 
   const followingLike = postData.likes.find(ele =>
     response.document.following.includes(ele.uid)
@@ -32,9 +30,9 @@ const PostControls = ({ postData, handleCommentReset }) => {
           {!postData.disableLikes && (
             <button
               className="btn btn--post"
-              onClick={async () =>
-                await toggleLike(postData.likes, postData.id)
-              }
+              onClick={async () => {
+                await handleLikePost(postData.likes, postData.id);
+              }}
             >
               <img
                 src={userLikesPost ? heartLikedIcon : heartIcon}

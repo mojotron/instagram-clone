@@ -9,7 +9,7 @@ import './styles/PostHeader.css';
 // icon
 import moreOptionsIcon from '../../../images/more-horiz-icon.svg';
 
-const PostHeader = ({ type, owner, postData }) => {
+const PostHeader = ({ type, owner, postData, handlers }) => {
   const navigate = useNavigate();
 
   const [showOptions, setShowOptions] = useState(false);
@@ -22,8 +22,11 @@ const PostHeader = ({ type, owner, postData }) => {
           type={type}
           owner={owner}
           postData={postData}
-          handleClose={() => setShowOptions(false)}
-          handleOpenEdit={setShowEditPost}
+          handlers={{
+            ...handlers,
+            handleClose: () => setShowOptions(false),
+            handleOpenEdit: () => setShowEditPost(true),
+          }}
         />
       )}
 
@@ -31,7 +34,7 @@ const PostHeader = ({ type, owner, postData }) => {
         <EditPostPanel
           postData={postData}
           closeHandler={() => setShowEditPost(false)}
-          // editPostHandler={handlers.editPost}
+          handleEditPost={handlers.editPost}
         />
       )}
 
