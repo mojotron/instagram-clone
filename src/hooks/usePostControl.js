@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useFirestore } from './useFirestore';
-import { Timestamp } from 'firebase/firestore';
-import { useUserDataContext } from './useUserDataContext';
+import { projectFirestore } from '../firebase/config';
+import { Timestamp, updateDoc, doc } from 'firebase/firestore';
 
 const ALERT_MSG = `
 Maximum number of comments is limited to 5,
@@ -10,8 +10,10 @@ This project is for learning purposes!
 Thank you for inspecting my project!
 `;
 
-export const usePostControl = postId => {
-  const { response: userData } = useUserDataContext();
+export const usePostControl = (postId, userData, updateUserDoc) => {
+  // updateUserDoc if for update userProfileDoc
+  // postResponse -> updateDocument i s for updating postDoc
+  // updateDoc is for updating targetProfileDoc
   const {
     response: postResponse,
     getDocumentById,
@@ -26,22 +28,6 @@ export const usePostControl = postId => {
   }, [loadDocument]);
 
   useEffect(() => {}, [postResponse.document]);
-
-  const addComment = async data => {
-    const oldComments = postResponse.document.comments;
-    if (oldComments.length === 5) {
-      alert(ALERT_MSG);
-      return;
-    }
-    const newComments = [
-      ...oldComments,
-      {
-        ...data,
-        createdAt: Timestamp.fromDate(new Date()),
-      },
-    ];
-    await updateDocument(postId, { comments: newComments });
-  };
 
   const toggleLike = async (postLikes, userId) => {
     const userLikesPost = postResponse.document.likes.find(
@@ -59,6 +45,46 @@ export const usePostControl = postId => {
       );
     }
     await updateDocument(postResponse.document.id, { likes: newLikes });
+  };
+
+  const toggleDisableLikes = async (currentValue, docId) => {
+    await updateDocument(postResponse.document.id, {
+      disableLikes: !postResponse.document.disableLikes,
+    });
+  };
+
+  const toggleDisableComments = async (currentValue, docId) => {
+    await updateDocument(postResponse.document.id, {
+      disableComments: !postResponse.document.disableComments,
+    });
+  };
+
+  const deletePost = async docId => {
+    await deleteDocument(postResponse.document.id);
+  };
+
+  const editPost = async (newData, docId) => {
+    await updateDocument(postResponse.document.id, {
+      ...newData,
+    });
+  };
+
+  //
+
+  const addComment = async data => {
+    const oldComments = postResponse.document.comments;
+    if (oldComments.length === 5) {
+      alert(ALERT_MSG);
+      return;
+    }
+    const newComments = [
+      ...oldComments,
+      {
+        ...data,
+        createdAt: Timestamp.fromDate(new Date()),
+      },
+    ];
+    await updateDocument(postId, { comments: newComments });
   };
 
   const addReplay = async data => {
@@ -80,7 +106,6 @@ export const usePostControl = postId => {
       }
       return comment;
     });
-    console.log(newComments);
     await updateDocument(postId, { comments: newComments });
   };
 
@@ -103,10 +128,48 @@ export const usePostControl = postId => {
     await updateDocument(postId, { comments: newComments });
   };
 
+  const followProfile = async (postUid, profileFollowers, profileDocId) => {
+    console.log('calleds');
+    // add target uid to owner following
+    const ownAccFollowing = [...userData.following, postUid];
+    // add owner uid to target followers
+    const inspectingAccFollowers = [...profileFollowers, userData.uid];
+
+    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
+      followers: inspectingAccFollowers,
+    });
+    await updateUserDoc(userData.id, {
+      following: ownAccFollowing,
+    });
+  };
+
+  const unfollowProfile = async (postUid, profileFollowers, profileDocId) => {
+    // remove target uid from owner following
+    const ownAccFollowing = userData.following.filter(item => item !== postUid);
+    // remove owner uid from target followers
+    const inspectingAccFollowers = profileFollowers.filter(
+      item => item !== userData.uid
+    );
+
+    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
+      followers: inspectingAccFollowers,
+    });
+    await updateUserDoc(userData.id, {
+      following: ownAccFollowing,
+    });
+  };
+
   return {
     postResponse,
-    addComment,
     toggleLike,
+    toggleDisableLikes,
+    toggleDisableComments,
+    deletePost,
+    editPost,
+    followProfile,
+    unfollowProfile,
+    //
+    addComment,
     addReplay,
     deleteComment,
     deleteReply,

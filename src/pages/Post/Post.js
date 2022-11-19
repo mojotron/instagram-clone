@@ -25,21 +25,19 @@ const Post = () => {
   // post document
   const {
     postResponse,
-    addComment,
     toggleLike,
+    toggleDisableLikes,
+    toggleDisableComments,
+    deletePost,
+    editPost,
+    followProfile,
+    unfollowProfile,
+    //
+    addComment,
     addReplay,
     deleteComment,
     deleteReply,
-
-    // toggleLike,
-    // addComment,
-    // toggleDisableLikes,
-    // toggleDisableComments,
-    // deletePost,
-    // editPost,
-    // followProfile,
-    // unfollowProfile,
-  } = usePostControl(postId, updateDocument);
+  } = usePostControl(postId, userData.document, updateDocument);
 
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
@@ -52,25 +50,25 @@ const Post = () => {
     if (focusOnComment) setFocusOnComment(false);
   }, [focusOnComment]);
 
-  const handleAddComment = async text => {
-    if (replayData) {
-      addReplay({
-        userName: userData.document.userName,
-        avatarUrl: userData.document.avatar.url,
-        text,
-        commentIndex: replayData.commentIndex,
-      });
-      console.log(text, replayData);
-    } else {
-      await addComment({
-        text: text,
-        userName: userData.document.userName,
-        avatarUrl: userData.document.avatar.url,
-        replies: [],
-      });
-    }
-    setFocusOnComment(false);
-  };
+  // const handleAddComment = async text => {
+  //   if (replayData) {
+  //     addReplay({
+  //       userName: userData.document.userName,
+  //       avatarUrl: userData.document.avatar.url,
+  //       text,
+  //       commentIndex: replayData.commentIndex,
+  //     });
+  //     console.log(text, replayData);
+  //   } else {
+  //     await addComment({
+  //       text: text,
+  //       userName: userData.document.userName,
+  //       avatarUrl: userData.document.avatar.url,
+  //       replies: [],
+  //     });
+  //   }
+  //   setFocusOnComment(false);
+  // };
 
   const handleReplyToComment = async data => {
     setReplayData(data);
@@ -87,10 +85,6 @@ const Post = () => {
   };
   const handleDeleteReply = async (commentIndex, replayIndex) => {
     await deleteReply(commentIndex, replayIndex);
-  };
-
-  const handleToggleLike = async (userLikesPost, userName, userID) => {
-    toggleLike(userLikesPost, userName, userID);
   };
 
   // control PostImage size to fit in parent container
@@ -144,6 +138,14 @@ const Post = () => {
               type="regular"
               owner={owner}
               postData={postResponse.document}
+              handlers={{
+                toggleDisableLikes,
+                toggleDisableComments,
+                deletePost,
+                editPost,
+                followProfile,
+                unfollowProfile,
+              }}
             />
             <PostCommentsList
               owner={owner}
