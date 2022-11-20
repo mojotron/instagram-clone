@@ -69,7 +69,38 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
     });
   };
 
-  //
+  const followProfile = async (postUid, profileFollowers, profileDocId) => {
+    console.log('calleds');
+    // add target uid to owner following
+    const ownAccFollowing = [...userData.following, postUid];
+    // add owner uid to target followers
+    const inspectingAccFollowers = [...profileFollowers, userData.uid];
+
+    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
+      followers: inspectingAccFollowers,
+    });
+    await updateUserDoc(userData.id, {
+      following: ownAccFollowing,
+    });
+  };
+
+  const unfollowProfile = async (postUid, profileFollowers, profileDocId) => {
+    // remove target uid from owner following
+    const ownAccFollowing = userData.following.filter(item => item !== postUid);
+    // remove owner uid from target followers
+    const inspectingAccFollowers = profileFollowers.filter(
+      item => item !== userData.uid
+    );
+
+    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
+      followers: inspectingAccFollowers,
+    });
+    await updateUserDoc(userData.id, {
+      following: ownAccFollowing,
+    });
+  };
+
+  // TODO
 
   const addComment = async data => {
     const oldComments = postResponse.document.comments;
@@ -126,37 +157,6 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
       return comment;
     });
     await updateDocument(postId, { comments: newComments });
-  };
-
-  const followProfile = async (postUid, profileFollowers, profileDocId) => {
-    console.log('calleds');
-    // add target uid to owner following
-    const ownAccFollowing = [...userData.following, postUid];
-    // add owner uid to target followers
-    const inspectingAccFollowers = [...profileFollowers, userData.uid];
-
-    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
-      followers: inspectingAccFollowers,
-    });
-    await updateUserDoc(userData.id, {
-      following: ownAccFollowing,
-    });
-  };
-
-  const unfollowProfile = async (postUid, profileFollowers, profileDocId) => {
-    // remove target uid from owner following
-    const ownAccFollowing = userData.following.filter(item => item !== postUid);
-    // remove owner uid from target followers
-    const inspectingAccFollowers = profileFollowers.filter(
-      item => item !== userData.uid
-    );
-
-    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
-      followers: inspectingAccFollowers,
-    });
-    await updateUserDoc(userData.id, {
-      following: ownAccFollowing,
-    });
   };
 
   return {

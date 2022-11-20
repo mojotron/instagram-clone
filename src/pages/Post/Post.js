@@ -50,25 +50,25 @@ const Post = () => {
     if (focusOnComment) setFocusOnComment(false);
   }, [focusOnComment]);
 
-  // const handleAddComment = async text => {
-  //   if (replayData) {
-  //     addReplay({
-  //       userName: userData.document.userName,
-  //       avatarUrl: userData.document.avatar.url,
-  //       text,
-  //       commentIndex: replayData.commentIndex,
-  //     });
-  //     console.log(text, replayData);
-  //   } else {
-  //     await addComment({
-  //       text: text,
-  //       userName: userData.document.userName,
-  //       avatarUrl: userData.document.avatar.url,
-  //       replies: [],
-  //     });
-  //   }
-  //   setFocusOnComment(false);
-  // };
+  const handleAddComment = async text => {
+    if (replayData) {
+      addReplay({
+        userName: userData.document.userName,
+        avatarUrl: userData.document.avatar.url,
+        text,
+        commentIndex: replayData.commentIndex,
+      });
+      console.log(text, replayData);
+    } else {
+      await addComment({
+        text: text,
+        userName: userData.document.userName,
+        avatarUrl: userData.document.avatar.url,
+        replies: [],
+      });
+    }
+    setFocusOnComment(false);
+  };
 
   const handleReplyToComment = async data => {
     setReplayData(data);
@@ -145,6 +145,7 @@ const Post = () => {
                 editPost,
                 followProfile,
                 unfollowProfile,
+                addComment: handleAddComment,
               }}
             />
             <PostCommentsList
