@@ -32,10 +32,9 @@ const Post = () => {
     editPost,
     followProfile,
     unfollowProfile,
-    //
     addComment,
-    addReplay,
     deleteComment,
+    addReplay,
     deleteReply,
   } = usePostControl(postId, userData.document, updateDocument);
 
@@ -50,22 +49,12 @@ const Post = () => {
     if (focusOnComment) setFocusOnComment(false);
   }, [focusOnComment]);
 
-  const handleAddComment = async text => {
+  const handleAddComment = async (text, comments, id) => {
     if (replayData) {
-      addReplay({
-        userName: userData.document.userName,
-        avatarUrl: userData.document.avatar.url,
-        text,
-        commentIndex: replayData.commentIndex,
-      });
-      console.log(text, replayData);
+      await addReplay(text, replayData.commentIndex);
+      setReplayData(null);
     } else {
-      await addComment({
-        text: text,
-        userName: userData.document.userName,
-        avatarUrl: userData.document.avatar.url,
-        replies: [],
-      });
+      await addComment(text, comments, id);
     }
     setFocusOnComment(false);
   };
@@ -78,13 +67,6 @@ const Post = () => {
   const handleCommentReset = () => {
     setReplayData(null);
     setFocusOnComment(true);
-  };
-
-  const handleDeleteComment = async commentIndex => {
-    await deleteComment(commentIndex);
-  };
-  const handleDeleteReply = async (commentIndex, replayIndex) => {
-    await deleteReply(commentIndex, replayIndex);
   };
 
   // control PostImage size to fit in parent container
@@ -145,15 +127,14 @@ const Post = () => {
                 editPost,
                 followProfile,
                 unfollowProfile,
-                addComment: handleAddComment,
               }}
             />
             <PostCommentsList
               owner={owner}
               postData={postResponse.document}
               handleReply={handleReplyToComment}
-              handleDeleteComment={handleDeleteComment}
-              handleDeleteReply={handleDeleteReply}
+              handleDeleteComment={deleteComment}
+              handleDeleteReply={deleteReply}
             />
             <PostControls
               postData={postResponse.document}
@@ -163,6 +144,7 @@ const Post = () => {
             {!postResponse.document.disableComments && (
               <PostAddComment
                 postData={postResponse.document}
+                handleAddComment={handleAddComment}
                 focusOnComment={focusOnComment}
                 replyData={replayData}
               />

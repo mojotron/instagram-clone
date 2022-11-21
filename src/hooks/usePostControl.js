@@ -101,43 +101,23 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
   };
 
   // TODO
-
-  const addComment = async data => {
-    const oldComments = postResponse.document.comments;
-    if (oldComments.length === 5) {
+  const addComment = async (text, postComments, docId) => {
+    if (postComments.length === 5) {
       alert(ALERT_MSG);
       return;
     }
-    const newComments = [
-      ...oldComments,
-      {
-        ...data,
-        createdAt: Timestamp.fromDate(new Date()),
-      },
-    ];
-    await updateDocument(postId, { comments: newComments });
-  };
 
-  const addReplay = async data => {
-    if (
-      postResponse.document.comments[data.commentIndex].replies.length === 3
-    ) {
-      alert(ALERT_MSG);
-      return;
-    }
-    const newComments = postResponse.document.comments.map((comment, i) => {
-      if (i === data.commentIndex) {
-        return {
-          ...comment,
-          replies: [
-            ...comment.replies,
-            { ...data, createdAt: Timestamp.fromDate(new Date()) },
-          ],
-        };
-      }
-      return comment;
+    const newComment = {
+      text: text,
+      userName: userData.userName,
+      avatarUrl: userData.avatar.url,
+      replies: [],
+      createdAt: Timestamp.fromDate(new Date()),
+    };
+
+    await updateDocument(postResponse.document.id, {
+      comments: [...postResponse.document.comments, newComment],
     });
-    await updateDocument(postId, { comments: newComments });
   };
 
   const deleteComment = async commentIndex => {
@@ -145,7 +125,32 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
       (_, i) => i !== commentIndex
     );
 
-    await updateDocument(postId, { comments: newComments });
+    await updateDocument(postResponse.document.id, { comments: newComments });
+  };
+
+  const addReplay = async (text, commentIndex) => {
+    if (postResponse.document.comments[commentIndex].replies.length === 3) {
+      alert(ALERT_MSG);
+      return;
+    }
+    const newComments = postResponse.document.comments.map((comment, i) => {
+      if (i === commentIndex) {
+        return {
+          ...comment,
+          replies: [
+            ...comment.replies,
+            {
+              text,
+              userName: userData.userName,
+              avatarUrl: userData.avatar.url,
+              createdAt: Timestamp.fromDate(new Date()),
+            },
+          ],
+        };
+      }
+      return comment;
+    });
+    await updateDocument(postResponse.document.id, { comments: newComments });
   };
 
   const deleteReply = async (commentIndex, replayIndex) => {
@@ -156,7 +161,7 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
       }
       return comment;
     });
-    await updateDocument(postId, { comments: newComments });
+    await updateDocument(postResponse.document.id, { comments: newComments });
   };
 
   return {
