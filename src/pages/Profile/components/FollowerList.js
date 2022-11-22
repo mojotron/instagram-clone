@@ -5,6 +5,7 @@ import FollowItem from './FollowItem';
 
 const FollowerList = ({ type, targetList, closeHandler, followHandlers }) => {
   const { documents } = useCollectUsers(targetList);
+  console.log(documents);
 
   return (
     <div className="overlay">

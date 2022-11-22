@@ -9,10 +9,14 @@ import bookmarkFilledIcon from '../../../images/bookmark-icon-filled.svg';
 import './styles/PostControls.css';
 // hooks
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useState } from 'react';
+import PostLikedBy from './PostLikedBy';
 
 const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
   // in timlinepost handleCommentReset sends user to post page
   const { response } = useUserDataContext();
+  const [showLikedBy, setShowLikedBy] = useState(false);
+
   const userLikesPost = postData.likes.find(
     like => like.userName === response.document.userName
   );
@@ -25,6 +29,13 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
 
   return (
     <section className="PostControls">
+      {showLikedBy && (
+        <PostLikedBy
+          likes={postData.likes.map(ele => ele.uid)}
+          handleClose={() => setShowLikedBy(false)}
+        />
+      )}
+
       <div className="PostControls__icons">
         <div className="PostControls__icons__left">
           {!postData.disableLikes && (
@@ -62,10 +73,13 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
       )}
 
       {!followingLike && likesCount > 0 && (
-        <div className="PostControls__liked-by">
+        <button
+          className="btn PostControls__liked-by"
+          onClick={() => setShowLikedBy(true)}
+        >
           <span>{likesCount} </span>
           <span>{likesCount > 1 ? 'likes' : 'like'}</span>
-        </div>
+        </button>
       )}
 
       <div className="PostControls__created-at">

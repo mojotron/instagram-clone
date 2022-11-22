@@ -1,0 +1,39 @@
+.PostLikedBy {
+  background-color: white;
+  border-radius: 1rem;
+  width: 40rem;
+}
+.PostLikedBy__header {
+  height: 4.3rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.PostLikedBy__header h2 {
+  color: var(--black);
+  font-size: 2rem;
+  font-weight: 600;
+}
+.PostLikedBy__header button {
+  position: absolute;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
+}
+.PostLikedBy__header img {
+  filter: invert(100%);
+  width: inherit;
+  height: inherit;
+}
+
+.PostLikedBy__user {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 400px) {
+  .PostLikedBy {
+    width: 26rem;
+  }
+}
