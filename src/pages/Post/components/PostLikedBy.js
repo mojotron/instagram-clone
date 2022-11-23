@@ -3,10 +3,12 @@ import './styles/PostLikedBy.css';
 import closeIcon from '../../../images/close-icon.svg';
 import Avatar from '../../../components/Avatar';
 import { useCollectUsers } from '../../../hooks/useCollectUsers';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const PostLikedBy = ({ likes, handleClose }) => {
   const { documents } = useCollectUsers(likes);
-  console.log(documents);
+  const { response } = useUserDataContext();
+  console.log(documents, response);
 
   return (
     <div className="child-overlay">
@@ -18,14 +20,34 @@ const PostLikedBy = ({ likes, handleClose }) => {
           </button>
         </header>
         <div>
+          {/* handlers and button text
+              -- follow / unfollow
+              -- click to user profile
+          */}
           {documents &&
-            documents.map((user, i) => (
-              <div className="PostLikedBy__user" key={i}>
-                <Avatar url={user.avatar.url} size="mid" />
-                <h2>{user.userName}</h2>
-                <button>Follow</button>
-              </div>
-            ))}
+            documents.map((user, i) => {
+              const following = response.document.following.find(
+                uid => uid === user.uid
+              );
+              console.log('following', following);
+              return (
+                <div className="PostLikedBy__user" key={i}>
+                  <div className="PostLikedBy__user__info">
+                    <Avatar url={user.avatar.url} size="mid" />
+                    <div className="PostLikedBy__user__info__names">
+                      <h2>{user.userName}</h2>
+                      <h3>{user.fullName}</h3>
+                    </div>
+                  </div>
+                  {following && (
+                    <button className="btn btn--profile">Following</button>
+                  )}
+                  {!following && (
+                    <button className="btn btn--profile-blue">Follow</button>
+                  )}
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom: var(--gray-border);
 }
 .PostLikedBy__header h2 {
   color: var(--black);
@@ -26,12 +27,28 @@
   width: inherit;
   height: inherit;
 }
-
 .PostLikedBy__user {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 }
-
+.PostLikedBy__user__info {
+  display: flex;
+  align-items: center;
+}
+.PostLikedBy__user__info__names {
+  padding-left: 1.5rem;
+}
+.PostLikedBy__user__info__names h2 {
+  color: var(--black);
+  font-size: 1.8rem;
+}
+.PostLikedBy__user__info__names h3 {
+  color: var(--gray);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
 @media (max-width: 400px) {
   .PostLikedBy {
     width: 26rem;

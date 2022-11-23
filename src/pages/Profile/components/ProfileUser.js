@@ -77,6 +77,7 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
             <button
               className="btn btn--profile"
               onClick={() => navigate('/settings')}
+              style={{ margin: '0px 10px' }}
             >
               Edit profile
             </button>

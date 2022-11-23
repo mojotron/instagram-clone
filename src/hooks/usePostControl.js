@@ -31,17 +31,18 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
 
   const toggleLike = async (postLikes, userId) => {
     const userLikesPost = postResponse.document.likes.find(
-      like => like.uid === postResponse.document.uid
+      like => like.uid === userData.uid
     );
+    console.log(userLikesPost);
     let newLikes;
     if (!userLikesPost) {
       newLikes = [
         ...postResponse.document.likes,
-        { userName: userData.document.userName, uid: userData.document.uid },
+        { userName: userData.userName, uid: userData.uid },
       ];
     } else {
       newLikes = postResponse.document.likes.filter(
-        like => like.uid !== userData.document.uid
+        like => like.uid !== userData.uid
       );
     }
     await updateDocument(postResponse.document.id, { likes: newLikes });

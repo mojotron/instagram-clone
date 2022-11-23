@@ -31,6 +31,7 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
     <section className="PostControls">
       {showLikedBy && (
         <PostLikedBy
+          // likes map here to stop infinite rerender
           likes={postData.likes.map(ele => ele.uid)}
           handleClose={() => setShowLikedBy(false)}
         />
@@ -66,10 +67,13 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
       </div>
 
       {followingLike && (
-        <div className="PostControls__liked-by">
+        <button
+          className="btn PostControls__liked-by"
+          onClick={() => setShowLikedBy(true)}
+        >
           Liked by <span>{followingLike.userName}</span>
-          <span>{likesCount > 1 ? `and ${likesCount - 1} others` : ''}</span>
-        </div>
+          <span>{likesCount > 1 ? ` and ${likesCount - 1} others` : ''}</span>
+        </button>
       )}
 
       {!followingLike && likesCount > 0 && (
