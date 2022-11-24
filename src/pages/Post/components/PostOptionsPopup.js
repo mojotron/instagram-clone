@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFirestore } from '../../../hooks/useFirestore';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import ConfirmDelete from './ConfirmDelete';
 
 const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
   // type => regular or timeline
@@ -29,16 +30,27 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
     }
   }, [owner, postData, response, isFollowing]);
 
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
+  const handleDeletePostClick = async () => {
+    await handlers.deletePost(postData.id);
+    if (type === 'regular') navigate(`/${postData.creator.userName}`);
+  };
+
   return (
     <div className="child-overlay">
+      {showConfirmDelete && (
+        <ConfirmDelete
+          handleClose={() => setShowConfirmDelete(false)}
+          handleDelete={handleDeletePostClick}
+        />
+      )}
+
       <div className="DiscardPost">
         {/* TODO follow unfollow */}
         {owner && (
           <button
-            onClick={async () => {
-              await handlers.deletePost(postData.id);
-              if (type === 'regular') navigate(`/${postData.creator.userName}`);
-            }}
+            onClick={() => setShowConfirmDelete(true)}
             className="btn discard"
             style={{ border: 'none' }}
           >
