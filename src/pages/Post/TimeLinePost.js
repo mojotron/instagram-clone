@@ -53,6 +53,8 @@ const TimeLinePost = ({ postData }) => {
         postData={postData}
         handleCommentReset={() => navigate(`/p/${postData.id}`)} // here is sending to user post not reseting comment focus like in post component
         handleLikePost={toggleLike}
+        handleFollow={followProfile}
+        handleUnfollow={unfollowProfile}
       />
       <TimeLinePostCommentsList postData={postData} />
       {!postData.disableComments && (

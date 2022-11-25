@@ -11,8 +11,15 @@ import './styles/PostControls.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
 import PostLikedBy from './PostLikedBy';
+// component
 
-const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
+const PostControls = ({
+  postData,
+  handleCommentReset,
+  handleLikePost,
+  handleFollow,
+  handleUnfollow,
+}) => {
   // in timlinepost handleCommentReset sends user to post page
   const { response } = useUserDataContext();
   const [showLikedBy, setShowLikedBy] = useState(false);
@@ -34,6 +41,8 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
           // likes map here to stop infinite rerender
           likes={postData.likes.map(ele => ele.uid)}
           handleClose={() => setShowLikedBy(false)}
+          handleFollow={handleFollow}
+          handleUnfollow={handleUnfollow}
         />
       )}
 

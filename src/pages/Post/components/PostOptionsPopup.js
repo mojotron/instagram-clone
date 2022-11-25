@@ -41,6 +41,7 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
     <div className="child-overlay">
       {showConfirmDelete && (
         <ConfirmDelete
+          btnText="Delete"
           handleClose={() => setShowConfirmDelete(false)}
           handleDelete={handleDeletePostClick}
         />

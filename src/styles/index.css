@@ -53,7 +53,7 @@ body {
 }
 /* when you need overlay but from parent with relative position*/
 .child-overlay {
-  z-index: 15;
+  z-index: 25;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);

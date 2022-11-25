@@ -140,6 +140,8 @@ const Post = () => {
               postData={postResponse.document}
               handleCommentReset={handleCommentReset}
               handleLikePost={toggleLike}
+              handleFollow={followProfile}
+              handleUnfollow={unfollowProfile}
             />
             {!postResponse.document.disableComments && (
               <PostAddComment
