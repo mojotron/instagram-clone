@@ -17,8 +17,6 @@ const TimeLinePostCommentsList = ({ postData }) => {
     return match !== -1;
   });
 
-  console.log(yourComments);
-
   return (
     <div className="TimeLinePostCommentsList">
       {/* caption */}

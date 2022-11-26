@@ -2,19 +2,18 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 // hooks
 import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useCollectPosts } from '../../hooks/useCollectPosts';
 // components
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
 import CreateNewPost from '../CreateNewPost/CreateNewPost';
 import Profile from '../Profile/Profile';
+import TimeLine from './components/TimeLine';
 // style
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
 import Post from '../Post/Post';
-// temp
-import TimeLinePost from '../Post/TimeLinePost';
-import { useCollectPosts } from '../../hooks/useCollectPosts';
 
 const BRONTO_UID = 'ziNCOCmxVraTwN5EI1KeOXpP0mR2';
 
@@ -35,6 +34,7 @@ const Dashboard = () => {
       {response.document && (
         <>
           <Header toggleShowCreatePost={toggleShowCreatePost} />
+          {documents && <TimeLine posts={documents} />}
 
           {showCreatePost && (
             <UserPostContextProvider>
@@ -43,17 +43,6 @@ const Dashboard = () => {
           )}
 
           <Routes>
-            <Route
-              index
-              element={
-                <div>
-                  {documents &&
-                    documents.map(post => (
-                      <TimeLinePost key={post.id} postData={post} />
-                    ))}
-                </div>
-              }
-            />
             <Route path="/settings" element={<Settings />} />
             <Route path="/:userName" element={<Profile />} />
             <Route path="/p/:postId" element={<Post type="regular" />} />

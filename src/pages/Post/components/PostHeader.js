@@ -44,9 +44,12 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
           size="mid"
           handleClick={() => navigate(`/${postData.creator.userName}`)}
         />
-        <h2 onClick={() => navigate(`/${postData.creator.userName}`)}>
-          {postData.creator.userName}
-        </h2>
+        <div className="PostHeader__left__info">
+          <h2 onClick={() => navigate(`/${postData.creator.userName}`)}>
+            {postData.creator.userName}
+          </h2>
+          <h3>{postData.location}</h3>
+        </div>
       </div>
 
       <button className="btn btn--options" onClick={() => setShowOptions(true)}>
