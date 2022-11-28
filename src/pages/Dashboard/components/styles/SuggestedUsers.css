@@ -1,0 +1,38 @@
+.SuggestedUsers {
+  width: 32rem;
+  margin-left: 3rem;
+  padding: 1.5rem 0;
+}
+.SuggestedUsers button {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.SuggestedUsers__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.SuggestedUsers__header__info {
+  display: flex;
+  align-items: center;
+}
+.SuggestedUsers__header__info h3 {
+  color: var(--black);
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-left: 2rem;
+}
+.SuggestedUsers__heading {
+  padding: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.SuggestedUsers__heading h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.SuggestedUsers__users__not {
+  padding: 0 1rem;
+  font-size: 1.4rem;
+}

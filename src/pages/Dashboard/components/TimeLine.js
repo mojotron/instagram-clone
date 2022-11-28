@@ -2,7 +2,7 @@ import TimeLinePost from '../../Post/TimeLinePost';
 
 import { useCollectTimeLinePosts } from '../../../hooks/useCollectTimeLinePosts';
 
-const TimeLine = ({ posts }) => {
+const TimeLine = () => {
   const { documents } = useCollectTimeLinePosts();
 
   return (

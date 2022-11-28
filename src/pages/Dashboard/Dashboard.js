@@ -13,6 +13,7 @@ import Post from '../Post/Post';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
+import SuggestedUsers from './components/SuggestedUsers';
 
 const Dashboard = () => {
   // get data
@@ -29,7 +30,6 @@ const Dashboard = () => {
       {response.document && (
         <>
           <Header toggleShowCreatePost={toggleShowCreatePost} />
-          <TimeLine />
 
           {showCreatePost && (
             <UserPostContextProvider>
@@ -38,6 +38,15 @@ const Dashboard = () => {
           )}
 
           <Routes>
+            <Route
+              path="/"
+              element={
+                <section className="Dashboard__main">
+                  <TimeLine />
+                  <SuggestedUsers />
+                </section>
+              }
+            />
             <Route path="/settings" element={<Settings />} />
             <Route path="/:userName" element={<Profile />} />
             <Route path="/p/:postId" element={<Post type="regular" />} />
