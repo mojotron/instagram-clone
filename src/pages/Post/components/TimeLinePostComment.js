@@ -8,8 +8,6 @@ const TimeLinePostComment = ({ data }) => {
 
   const [hideText, setHideText] = useState(data.text.length > 100);
 
-  console.log(hideText);
-
   return (
     <div className="TimeLineComment">
       <p>

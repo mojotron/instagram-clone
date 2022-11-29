@@ -2,15 +2,11 @@ import { useState, useEffect } from 'react';
 import { useUserDataContext } from './useUserDataContext';
 // firebase
 import { projectFirestore } from '../firebase/config';
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export const useCollectSuggestedUsers = () => {
+  console.log('suggested users hook called');
+
   const { response } = useUserDataContext();
 
   const [isCanceled, setIsCanceled] = useState(false);
@@ -36,20 +32,26 @@ export const useCollectSuggestedUsers = () => {
 
   const getSuggestedUsers = async () => {
     // collect following user docs
-    const getFollowersFriends = await getUsers(response.document.following);
+    const getFollowers = await getUsers(response.document.following);
     // map over users and collect uids of user you don't follow
-    const suggestedFriends = getFollowersFriends
-      .map(user => {
-        return user.following.filter(
-          uid => !response.document.following.includes(uid)
-        );
-      })
-      .flat();
-    console.log(suggestedFriends);
+    console.log('1', getFollowers);
+    // collect followings of your followings, filter out own account, account
+    // that you already follow or accounts you don't follow back (they are separate
+    // collection notFollowingBack array)
+    const followersFollowing = getFollowers
+      .map(user => ({
+        user: user.userName,
+        suggestions: user.following.filter(
+          userUid =>
+            userUid !== response.document.uid &&
+            !response.document.following.includes(userUid) &&
+            !notFollowingBack.includes(userUid)
+        ),
+      }))
+      .flat()
+      .reduce((acc, ele) => {}, []);
+    console.log('2', followersFollowing);
   };
-
-  // followers not followed back
-  // friends of followers
 
   return { documents, isPending, error, getSuggestedUsers };
 };
