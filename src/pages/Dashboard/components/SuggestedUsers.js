@@ -8,11 +8,11 @@ import { useEffect } from 'react';
 
 const SuggestedUsers = () => {
   const { response } = useUserDataContext();
-  const { getSuggestedUsers } = useCollectSuggestedUsers();
+  const { getSuggestedUsersDocuments } = useCollectSuggestedUsers();
 
   useEffect(() => {
-    getSuggestedUsers();
-  }, []);
+    getSuggestedUsersDocuments();
+  }, [getSuggestedUsersDocuments]);
 
   return (
     <div className="SuggestedUsers">

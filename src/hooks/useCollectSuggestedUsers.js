@@ -39,7 +39,7 @@ export const useCollectSuggestedUsers = () => {
     // that you already follow or accounts you don't follow back (they are separate
     // collection notFollowingBack array)
     const followersFollowing = getFollowers
-      .map(user => ({
+      .flatMap(user => ({
         user: user.userName,
         suggestions: user.following.filter(
           userUid =>
@@ -48,10 +48,42 @@ export const useCollectSuggestedUsers = () => {
             !notFollowingBack.includes(userUid)
         ),
       }))
-      .flat()
-      .reduce((acc, ele) => {}, []);
-    console.log('2', followersFollowing);
+      .reduce((acc, ele) => {
+        ele.suggestions.forEach(sug => {
+          if (acc[sug]) {
+            acc[sug] = [...acc[sug], ele.user];
+          } else {
+            acc[sug] = [ele.user];
+          }
+        });
+        return acc;
+      }, {});
+    // return object, key is uid of suggested array, value is array
+    // of all your friends that follow that account
+    return followersFollowing;
   };
 
-  return { documents, isPending, error, getSuggestedUsers };
+  const getSuggestedUsersDocuments = async () => {
+    try {
+      let getNotFollowingBack;
+      let suggestedUsers;
+      if (notFollowingBack.length > 0) {
+        getNotFollowingBack = await getUsers(notFollowingBack);
+      }
+
+      const getSuggestedUids = await getSuggestedUsers();
+
+      if (Object.keys(getSuggestedUids).length > 0) {
+        suggestedUsers = await getUsers(Object.keys(getSuggestedUids));
+        suggestedUsers.forEach(userObj => {
+          userObj.suggestedBy = getSuggestedUids[userObj.uid];
+        });
+      }
+
+      console.log(getNotFollowingBack);
+      console.log(suggestedUsers);
+    } catch (error) {}
+  };
+
+  return { documents, isPending, error, getSuggestedUsersDocuments };
 };
