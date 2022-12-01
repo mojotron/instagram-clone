@@ -4,15 +4,25 @@ import Avatar from '../../../components/Avatar';
 // hooks
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const SuggestedUsers = () => {
   const { response } = useUserDataContext();
-  const { getSuggestedUsersDocuments } = useCollectSuggestedUsers();
+  const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
+
+  // const getDocs = useRef(async () => {
+  //   const response = await getSuggestedUsersDocuments();
+  //   console.log(response);
+  //   setNotFollowingBack(response.notFollowingBack);
+  //   setSuggestedUsers(response.suggestedUsers);
+  // }).current;
 
   useEffect(() => {
+    if (documents) return;
     getSuggestedUsersDocuments();
-  }, [getSuggestedUsersDocuments]);
+  }, [getSuggestedUsersDocuments, documents]);
+
+  console.log(documents);
 
   return (
     <div className="SuggestedUsers">

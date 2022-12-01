@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useUserDataContext } from './useUserDataContext';
 // firebase
 import { projectFirestore } from '../firebase/config';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export const useCollectSuggestedUsers = () => {
-  console.log('suggested users hook called');
-
   const { response } = useUserDataContext();
 
   const [isCanceled, setIsCanceled] = useState(false);
@@ -34,7 +32,6 @@ export const useCollectSuggestedUsers = () => {
     // collect following user docs
     const getFollowers = await getUsers(response.document.following);
     // map over users and collect uids of user you don't follow
-    console.log('1', getFollowers);
     // collect followings of your followings, filter out own account, account
     // that you already follow or accounts you don't follow back (they are separate
     // collection notFollowingBack array)
@@ -64,6 +61,8 @@ export const useCollectSuggestedUsers = () => {
   };
 
   const getSuggestedUsersDocuments = async () => {
+    setIsPending(true);
+    setError(null);
     try {
       let getNotFollowingBack;
       let suggestedUsers;
@@ -79,9 +78,10 @@ export const useCollectSuggestedUsers = () => {
           userObj.suggestedBy = getSuggestedUids[userObj.uid];
         });
       }
-
-      console.log(getNotFollowingBack);
-      console.log(suggestedUsers);
+      setDocuments({
+        notFollowingBack: getNotFollowingBack,
+        suggestedUsers,
+      });
     } catch (error) {}
   };
 
