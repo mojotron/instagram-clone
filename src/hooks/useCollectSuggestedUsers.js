@@ -64,8 +64,8 @@ export const useCollectSuggestedUsers = () => {
     setIsPending(true);
     setError(null);
     try {
-      let getNotFollowingBack;
-      let suggestedUsers;
+      let getNotFollowingBack = [];
+      let suggestedUsers = [];
       if (notFollowingBack.length > 0) {
         getNotFollowingBack = await getUsers(notFollowingBack);
       }
@@ -78,10 +78,7 @@ export const useCollectSuggestedUsers = () => {
           userObj.suggestedBy = getSuggestedUids[userObj.uid];
         });
       }
-      setDocuments({
-        notFollowingBack: getNotFollowingBack,
-        suggestedUsers,
-      });
+      setDocuments([...getNotFollowingBack, ...suggestedUsers]);
     } catch (error) {}
   };
 

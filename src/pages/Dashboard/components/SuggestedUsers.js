@@ -10,19 +10,16 @@ const SuggestedUsers = () => {
   const { response } = useUserDataContext();
   const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
 
-  // const getDocs = useRef(async () => {
-  //   const response = await getSuggestedUsersDocuments();
-  //   console.log(response);
-  //   setNotFollowingBack(response.notFollowingBack);
-  //   setSuggestedUsers(response.suggestedUsers);
-  // }).current;
-
   useEffect(() => {
     if (documents) return;
     getSuggestedUsersDocuments();
   }, [getSuggestedUsersDocuments, documents]);
 
   console.log(documents);
+
+  // todo when follow user set documents to null
+  // link avatar and name to profile
+  // follow user, reset document recall method
 
   return (
     <div className="SuggestedUsers">
@@ -40,10 +37,38 @@ const SuggestedUsers = () => {
       </div>
 
       <div className="SuggestedUsers__users">
-        <p className="SuggestedUsers__users__not">
-          No suggestions yet. Search for friends, or explore posts to find
-          accounts to follow!
-        </p>
+        {!documents && (
+          <p className="SuggestedUsers__users__not">
+            No suggestions yet. Search for friends, or explore posts to find
+            accounts to follow!
+          </p>
+        )}
+        {documents &&
+          documents.slice(0, 5).map(doc => (
+            <div key={doc.userName} className="Suggestion">
+              <div className="Suggestion__left">
+                <Avatar url={doc.avatar.url} size="mid" />
+                <div className="Suggestion__left__info">
+                  <h2>{doc.userName}</h2>
+                  {!doc.suggestedBy && <p>Follows you</p>}
+                  {doc.suggestedBy && (
+                    <p>
+                      Followed by{' '}
+                      {
+                        doc.suggestedBy[
+                          Math.floor(Math.random(doc.suggestedBy.length - 1))
+                        ]
+                      }
+                      {doc.suggestedBy.length > 1
+                        ? ` + ${doc.suggestedBy.length - 1}`
+                        : ''}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <button className="btn btn--blue">Follow</button>
+            </div>
+          ))}
       </div>
     </div>
   );

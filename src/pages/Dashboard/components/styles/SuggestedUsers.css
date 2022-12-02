@@ -36,3 +36,25 @@
   padding: 0 1rem;
   font-size: 1.4rem;
 }
+/* suggestion */
+.Suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.Suggestion__left {
+  display: flex;
+  align-items: center;
+}
+.Suggestion__left__info {
+  margin-left: 1.5rem;
+}
+.Suggestion__left__info h2 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--black);
+}
+.Suggestion__left__info p {
+  font-size: 1.4rem;
+}
