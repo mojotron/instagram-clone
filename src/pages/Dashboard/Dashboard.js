@@ -9,11 +9,13 @@ import CreateNewPost from '../CreateNewPost/CreateNewPost';
 import Profile from '../Profile/Profile';
 import TimeLine from './components/TimeLine';
 import Post from '../Post/Post';
+import AllSuggestedUsers from './components/AllSuggestedUsers';
 // style
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
 import SuggestedUsers from './components/SuggestedUsers';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
   // get data
@@ -50,6 +52,7 @@ const Dashboard = () => {
             <Route path="/settings" element={<Settings />} />
             <Route path="/:userName" element={<Profile />} />
             <Route path="/p/:postId" element={<Post type="regular" />} />
+            <Route path="/explore/people" element={<AllSuggestedUsers />} />
           </Routes>
         </>
       )}
