@@ -1,0 +1,49 @@
+.AllSuggestedUsers {
+  padding: 5rem 0;
+  width: 90vw;
+  max-width: 60rem;
+}
+.AllSuggestedUsers__heading {
+  color: var(--black);
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+.AllSuggestedUsers__user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.AllSuggestedUsers__user__left {
+  display: flex;
+  align-items: center;
+}
+.AllSuggestedUsers__user__left__info {
+  margin-left: 1.5rem;
+}
+.AllSuggestedUsers__user__left__info h2 {
+  color: var(--black);
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.AllSuggestedUsers__user__left__info h3 {
+  color: var(--gray);
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+.AllSuggestedUsers__user__left__info p {
+  color: var(--gray);
+  font-size: 1.4rem;
+}
+.btn--follow {
+  background: none;
+  border: none;
+  color: white;
+  background-color: var(--blue);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.8rem;
+  border-radius: 0.5rem;
+  padding: 0.75rem 2rem;
+}

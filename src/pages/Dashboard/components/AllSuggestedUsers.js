@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
 import { useTimeLinePostHandlers } from '../../../hooks/useTimeLinePostHandlers';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import Avatar from '../../../components/Avatar';
+import './styles/AllSuggestedUsers.css';
 
 const AllSuggestedUsers = () => {
   const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
@@ -16,18 +16,18 @@ const AllSuggestedUsers = () => {
   }, [getSuggestedUsersDocuments, documents]);
 
   return (
-    <div>
-      <h2>Suggested</h2>
+    <div className="AllSuggestedUsers">
+      <h2 className="AllSuggestedUsers__heading">Suggested</h2>
       {documents &&
         documents.map(doc => (
-          <div key={doc.userName} className="Suggestion">
-            <div className="Suggestion__left">
+          <div key={doc.userName} className="AllSuggestedUsers__user">
+            <div className="AllSuggestedUsers__user__left">
               <Avatar
                 url={doc.avatar.url}
-                size="mid"
+                size="mid-3"
                 handleClick={() => navigate(`/${doc.userName}`)}
               />
-              <div className="Suggestion__left__info">
+              <div className="AllSuggestedUsers__user__left__info">
                 <h2 onClick={() => navigate(`/${doc.userName}`)}>
                   {doc.userName}
                 </h2>
@@ -49,7 +49,7 @@ const AllSuggestedUsers = () => {
               </div>
             </div>
             <button
-              className="btn btn--blue"
+              className="btn btn--follow"
               onClick={() => followProfile(doc.uid, doc.followers, doc.id)}
             >
               Follow
