@@ -1,7 +1,15 @@
 .SearchBar {
   width: 80vw;
   max-width: 35rem;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 20%;
+  left: 30rem;
+  background: #efefef;
+  border-radius: 0.5rem;
+}
+.SearchBar__form {
 }
 .SearchBar__form label {
   position: relative;
@@ -36,4 +44,28 @@
   right: 1rem;
   transform: scale(0.65);
   cursor: pointer;
+}
+/* results */
+.SearchBar__results {
+  border-top: var(--gray-border);
+  height: 400px;
+  background: #efefef;
+  z-index: 100;
+}
+.SearchBar__results__item {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+}
+.SearchBar__results__item__info {
+  margin-left: 2rem;
+}
+.SearchBar__results__item__info h2 {
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.SearchBar__results__item__info h3 {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--gray);
 }

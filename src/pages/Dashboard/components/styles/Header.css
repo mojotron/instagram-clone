@@ -1,16 +1,18 @@
 .Header {
   width: 100vw;
-  height: 6rem;
+  min-height: 6rem;
   border-bottom: var(--gray-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 7rem;
   color: black;
+  position: relative;
 }
 .Header__left {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 .Header h1 {
   font-family: 'Oleo Script';
