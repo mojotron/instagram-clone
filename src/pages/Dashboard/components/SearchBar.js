@@ -10,7 +10,7 @@ import { useRef } from 'react';
 // components
 import Avatar from '../../../components/Avatar';
 
-const SearchBar = () => {
+const SearchBar = ({ toggleShowSearchBar }) => {
   const { documents, isPending, error, searchForUsers, reset } =
     useSearchUsers();
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,9 +20,12 @@ const SearchBar = () => {
     JSON.parse(localStorage.getItem('instagram-clone-recent-search')) || []
   );
 
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const navigate = useNavigate();
 
   const search = useRef(str => searchForUsers(str)).current;
+  const inputRef = useRef();
 
   useEffect(() => {
     if (searchTerm === '') return;
@@ -35,11 +38,21 @@ const SearchBar = () => {
   }, [searchTerm, search]);
 
   useEffect(() => {
+    // update local storage when recent search updates
     localStorage.setItem(
       'instagram-clone-recent-search',
       JSON.stringify(recentSearch)
     );
-  }, [recentSearch]);
+    if (selectedUser) {
+      // if searched user is clicked navigate to that user and close search component
+      navigate(`/${selectedUser.userName}`);
+      toggleShowSearchBar();
+    }
+  }, [recentSearch, navigate, selectedUser, toggleShowSearchBar]);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const handleResetSearch = e => {
     // e.stopPropagation();
@@ -49,7 +62,6 @@ const SearchBar = () => {
   };
 
   const handleSelectSearchedUser = user => {
-    navigate(`/${user.userName}`);
     handleResetSearch();
     reset();
     setRecentSearch(oldValue => [
@@ -61,6 +73,17 @@ const SearchBar = () => {
         avatar: { url: user.avatar.url },
       },
     ]);
+    setSelectedUser(user);
+  };
+
+  const handleRemoveRecentSearch = userName => {
+    console.log(userName);
+    setRecentSearch(oldValue => {
+      const transformedValue = oldValue.filter(
+        user => user.userName !== userName
+      );
+      return transformedValue;
+    });
   };
 
   return (
@@ -76,6 +99,7 @@ const SearchBar = () => {
           )}
 
           <input
+            ref={inputRef}
             type="text"
             placeholder="Search"
             value={searchTerm}
@@ -96,46 +120,52 @@ const SearchBar = () => {
           />
         )}
       </form>
-      {(searchTerm !== '' || focus) && (
-        <section className="SearchBar__results">
-          {isPending && <p>Loading...</p>}
-          {error && <p>{error}</p>}
 
-          {searchTerm === '' &&
-            recentSearch.map(doc => (
-              <div key={doc.id} className="SearchBar__results__item">
-                <Avatar
-                  url={doc.avatar.url}
-                  size="mid-3"
-                  handleClick={() => handleSelectSearchedUser(doc)}
-                />
-                <div className="SearchBar__results__item__info">
-                  <h2 onClick={() => handleSelectSearchedUser(doc)}>
-                    {doc.userName}
-                  </h2>
-                  <h3>{doc.fullName}</h3>
-                </div>
-              </div>
-            ))}
+      <section className="SearchBar__results">
+        {isPending && <p>Loading...</p>}
+        {error && <p>{error}</p>}
 
-          {documents &&
-            documents.map(doc => (
-              <div key={doc.id} className="SearchBar__results__item">
-                <Avatar
-                  url={doc.avatar.url}
-                  size="mid-3"
-                  handleClick={() => handleSelectSearchedUser(doc)}
-                />
-                <div className="SearchBar__results__item__info">
-                  <h2 onClick={() => handleSelectSearchedUser(doc)}>
-                    {doc.userName}
-                  </h2>
-                  <h3>{doc.fullName}</h3>
-                </div>
+        {searchTerm === '' &&
+          recentSearch.map(doc => (
+            <div key={doc.id} className="SearchBar__results__item">
+              <Avatar
+                url={doc.avatar.url}
+                size="mid-3"
+                handleClick={() => handleSelectSearchedUser(doc)}
+              />
+              <div className="SearchBar__results__item__info">
+                <h2 onClick={() => handleSelectSearchedUser(doc)}>
+                  {doc.userName}
+                </h2>
+                <h3>{doc.fullName}</h3>
+
+                <button
+                  className="btn btn--remove-recent-search"
+                  onClick={() => handleRemoveRecentSearch(doc.userName)}
+                >
+                  <img src={closeIcon} alt="remove" />
+                </button>
               </div>
-            ))}
-        </section>
-      )}
+            </div>
+          ))}
+
+        {documents &&
+          documents.map(doc => (
+            <div key={doc.id} className="SearchBar__results__item">
+              <Avatar
+                url={doc.avatar.url}
+                size="mid-3"
+                handleClick={() => handleSelectSearchedUser(doc)}
+              />
+              <div className="SearchBar__results__item__info">
+                <h2 onClick={() => handleSelectSearchedUser(doc)}>
+                  {doc.userName}
+                </h2>
+                <h3>{doc.fullName}</h3>
+              </div>
+            </div>
+          ))}
+      </section>
     </div>
   );
 };
