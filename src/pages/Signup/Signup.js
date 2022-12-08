@@ -35,7 +35,7 @@ const Signup = () => {
         // setup default data, user can update them on the settings page
         following: [], // user ids
         followers: [], // user ids
-        posts: [], // post ids
+        savedPosts: [], // post ids
         avatar: {
           url: '',
           fileName: '', // for deleting avatar when user remove image

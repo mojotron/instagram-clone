@@ -21,18 +21,34 @@ const PostControls = ({
   handleUnfollow,
 }) => {
   // in timlinepost handleCommentReset sends user to post page
-  const { response } = useUserDataContext();
+  const { response, updateDocument } = useUserDataContext();
   const [showLikedBy, setShowLikedBy] = useState(false);
-
+  // is current user liking post
   const userLikesPost = postData.likes.find(
     like => like.userName === response.document.userName
   );
-
+  // find all users from your following list who likes this post
   const followingLike = postData.likes.find(ele =>
     response.document.following.includes(ele.uid)
   );
 
   const likesCount = postData.likes.length;
+  // is current user saved this post
+  const userSavedPost = response.document.savedPosts.includes(postData.id);
+
+  const handleSavePostClick = () => {
+    let transformed;
+    if (userSavedPost) {
+      // if user have saved this post filter it out
+      transformed = response.document.savedPosts.filter(
+        post => post !== postData.id
+      );
+    } else {
+      // or add it to the saved posts
+      transformed = [...response.document.savedPosts, postData.id];
+    }
+    updateDocument(response.document.id, { savedPosts: transformed });
+  };
 
   return (
     <section className="PostControls">
@@ -70,8 +86,11 @@ const PostControls = ({
             <img src={sendIcon} alt="send" />
           </button>
         </div>
-        <button className="btn btn--post">
-          <img src={bookmarkIcon} alt="bookmark" />
+        <button className="btn btn--post" onClick={handleSavePostClick}>
+          <img
+            src={userSavedPost ? bookmarkFilledIcon : bookmarkIcon}
+            alt="bookmark"
+          />
         </button>
       </div>
 

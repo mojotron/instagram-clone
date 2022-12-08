@@ -9,10 +9,11 @@ import PostCard from './components/PostCard';
 //hooks
 import { useFirestore } from '../../hooks/useFirestore';
 import { useCollectPosts } from '../../hooks/useCollectPosts';
+import { useCollectSavedPosts } from '../../hooks/useCollectSavedPosts';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
 // icons
 import gridIcon from '../../images/grid-icon.svg';
 import bookmarkIcon from '../../images/bookmark-icon.svg';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 const Profile = () => {
   const { response, updateDocument: handleUpdateUser } = useUserDataContext();
@@ -32,6 +33,9 @@ const Profile = () => {
   const { checkIfUserExists, updateDocument } = useFirestore('users');
 
   const { documents } = useCollectPosts(profileData?.uid);
+  const { documents: savedPosts } = useCollectSavedPosts();
+
+  const [activeTab, setActiveTab] = useState('posts'); // posts or saved
 
   useEffect(() => {
     if (profileData) return;
@@ -131,22 +135,38 @@ const Profile = () => {
 
       <section className="Profile__collections">
         <div className="Profile__collections__tabs">
-          <button className="btn btn--tab active">
+          <button
+            className={`btn btn--tab ${activeTab === 'posts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('posts')}
+          >
             <img src={gridIcon} alt="posts collection" />
             <span>Posts</span>
           </button>
-          <button className="btn btn--tab">
+          <button
+            className={`btn btn--tab ${activeTab === 'saved' ? 'active' : ''}`}
+            onClick={() => setActiveTab('saved')}
+          >
             <img src={bookmarkIcon} alt="saved collection" />
             <span>Saved</span>
           </button>
         </div>
 
-        <div className="Profile__collections__showcase">
-          {documents &&
-            documents.map(ele => (
-              <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
-            ))}
-        </div>
+        {activeTab === 'posts' && (
+          <div className="Profile__collections__showcase">
+            {documents &&
+              documents.map(ele => (
+                <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
+              ))}
+          </div>
+        )}
+        {activeTab === 'saved' && (
+          <div className="Profile__collections__showcase">
+            {savedPosts &&
+              savedPosts.map(ele => (
+                <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
+              ))}
+          </div>
+        )}
       </section>
     </div>
   );
