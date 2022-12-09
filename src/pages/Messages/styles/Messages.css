@@ -1,0 +1,11 @@
+.Messages {
+  margin-top: 2rem;
+  width: 90vw;
+  height: 85vh;
+  border: var(--gray-border);
+  display: flex;
+}
+.Messages__left {
+  border-right: var(--gray-border);
+  width: 40%;
+}

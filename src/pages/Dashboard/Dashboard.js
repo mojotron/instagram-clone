@@ -16,6 +16,7 @@ import './styles/Dashboard.css';
 import { UserPostContextProvider } from '../../context/UserPostContext';
 import SuggestedUsers from './components/SuggestedUsers';
 import { useEffect } from 'react';
+import Messages from '../Messages/Messages';
 
 const Dashboard = () => {
   // get data
@@ -53,6 +54,7 @@ const Dashboard = () => {
             <Route path="/:userName" element={<Profile />} />
             <Route path="/p/:postId" element={<Post type="regular" />} />
             <Route path="/explore/people" element={<AllSuggestedUsers />} />
+            <Route path="/direct" element={<Messages />} />
           </Routes>
         </>
       )}
