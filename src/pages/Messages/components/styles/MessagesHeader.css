@@ -1,0 +1,20 @@
+.MessagesHeader {
+  height: 6rem;
+  border-bottom: var(--gray-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.MessagesHeader h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: black;
+}
+.MessagesHeader button {
+  position: absolute;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--black);
+}

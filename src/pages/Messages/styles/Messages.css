@@ -4,6 +4,7 @@
   height: 85vh;
   border: var(--gray-border);
   display: flex;
+  border-radius: 0.5rem;
 }
 .Messages__left {
   border-right: var(--gray-border);

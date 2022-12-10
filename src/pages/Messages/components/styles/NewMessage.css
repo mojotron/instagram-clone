@@ -1,0 +1,19 @@
+.NewMessage {
+  width: 40rem;
+  height: 45rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+.NewMessage__header {
+  padding: 0 1.5rem;
+  height: 4.2rem;
+  border-bottom: var(--gray-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.NewMessage__header {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--black);
+}
