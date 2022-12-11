@@ -14,7 +14,7 @@ const Messages = () => {
         <MessagesHeader setShowNewMessage={setShowNewMessage} />
         <section></section>
       </div>
-      <div className="Messages__right">message</div>
+      <div className="Messages__right"></div>
     </div>
   );
 };

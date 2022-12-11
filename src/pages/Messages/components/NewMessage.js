@@ -1,7 +1,37 @@
+import { useState, useRef, useEffect } from 'react';
+// style
 import './styles/NewMessage.css';
+// icons
 import { GrClose } from 'react-icons/gr';
+// hooks
+import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
+import { useSearchUsers } from '../../../hooks/useSearchUsers';
+import Avatar from '../../../components/Avatar';
 
 const NewMessage = ({ setShowNewMessage }) => {
+  // TODO fetch suggested users
+  const { documents, isPending, error, searchForUsers, reset } =
+    useSearchUsers();
+  const [searchTerm, setSearchTerm] = useState('');
+  const inputRef = useRef();
+  const search = useRef(str => searchForUsers(str)).current;
+
+  console.log(documents);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === '') return;
+    const debounce = setTimeout(() => {
+      console.log('call debounce');
+      search(searchTerm);
+    }, 2000);
+
+    return () => clearTimeout(debounce);
+  }, [searchTerm, search]);
+
   return (
     <div className="overlay">
       <div className="NewMessage">
@@ -12,6 +42,36 @@ const NewMessage = ({ setShowNewMessage }) => {
           <h2>New message</h2>
           <button className="btn btn--blue">Next</button>
         </header>
+
+        <div className="NewMessage__search">
+          <label>To:</label>
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="search"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <div className="NewMessage__user-list">
+          {isPending && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+
+          {documents &&
+            documents.map(user => (
+              <div
+                className="NewMessage__user-list__item"
+                onClick={() => console.log('start messeging')}
+              >
+                <Avatar url={user.avatar.url} size="mid" />
+                <div className="NewMessage__user-list__item__info">
+                  <h2>{user.userName}</h2>
+                  <h3>{user.fullName}</h3>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );
