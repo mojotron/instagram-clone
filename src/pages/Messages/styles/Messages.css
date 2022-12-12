@@ -10,3 +10,6 @@
   border-right: var(--gray-border);
   width: 40%;
 }
+.Messages__right {
+  width: 60%;
+}

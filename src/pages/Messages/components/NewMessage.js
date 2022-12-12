@@ -8,7 +8,7 @@ import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUser
 import { useSearchUsers } from '../../../hooks/useSearchUsers';
 import Avatar from '../../../components/Avatar';
 
-const NewMessage = ({ setShowNewMessage }) => {
+const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   // TODO fetch suggested users
   const { documents, isPending, error, searchForUsers, reset } =
     useSearchUsers();
@@ -31,6 +31,12 @@ const NewMessage = ({ setShowNewMessage }) => {
 
     return () => clearTimeout(debounce);
   }, [searchTerm, search]);
+
+  const handleMessageToUser = user => {
+    setMessageTo(user);
+    reset();
+    setShowNewMessage(false);
+  };
 
   return (
     <div className="overlay">
@@ -61,8 +67,9 @@ const NewMessage = ({ setShowNewMessage }) => {
           {documents &&
             documents.map(user => (
               <div
+                key={user.id}
                 className="NewMessage__user-list__item"
-                onClick={() => console.log('start messeging')}
+                onClick={() => handleMessageToUser(user)}
               >
                 <Avatar url={user.avatar.url} size="mid" />
                 <div className="NewMessage__user-list__item__info">
