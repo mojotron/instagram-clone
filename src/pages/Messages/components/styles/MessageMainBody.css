@@ -21,6 +21,12 @@
 }
 .MessageMainBody__messages {
   flex-grow: 2;
+  position: relative;
+}
+.MessageMainBody__messages__emojis {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
 }
 .MessageMainBody__new-message {
   min-height: 6rem;
@@ -40,9 +46,9 @@
   border: var(--gray-border);
   width: 100%;
   resize: none;
-  min-height: 4rem;
-  max-height: 30rem;
-  padding: 1rem 4rem;
+  min-height: 3rem;
+  max-height: 10rem;
+  padding: 1rem 6rem 1rem 4rem;
   font-family: inherit;
   outline: none;
   font-family: inherit;
@@ -52,5 +58,11 @@
   height: 3rem;
   width: 3rem;
   left: 2.5rem;
-  top: 1.5rem;
+  top: 0.75rem;
+}
+.btn--direct {
+  font-size: 1.6rem;
+  position: absolute;
+  right: 3.5rem;
+  top: 1.25rem;
 }
