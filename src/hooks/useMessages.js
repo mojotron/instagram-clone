@@ -1,50 +1,98 @@
 import { projectFirestore } from '../firebase/config';
 import {
   collection,
-  query,
-  where,
   Timestamp,
   addDoc,
+  onSnapshot,
+  doc,
 } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
 import { useEffect, useState } from 'react';
 import { useFirestore } from './useFirestore';
 
 export const useMessages = user => {
+  // messages between users go to single file, in array, better approach is
+  // to create separate file for single message, but i will limit number of
+  // between users to 5-10, this is learning project and for that is this
+  // approach is fine :)
   const { response, updateDocument } = useUserDataContext();
-  const { updateDocument: updateTargetDocument } = useFirestore();
+  const { updateDocument: updateTargetDocument } = useFirestore('users');
+  const { updateDocument: updateMessageDocument } = useFirestore('messages');
 
-  const userAlreadyHaveMessages = response.document?.messages?.find(
-    obj => obj.targetUid === user.uid
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState(null);
+  const [document, setDocument] = useState(null);
+
+  const haveMessages = response.document?.messages?.find(
+    obj => obj.messageTo === user.uid
   );
 
   const colRef = collection(projectFirestore, 'messages');
 
+  useEffect(() => {
+    if (!haveMessages) return;
+
+    let unsubscribe;
+    const fetchDocument = async () => {
+      setIsPending(true);
+      try {
+        unsubscribe = onSnapshot(
+          doc(projectFirestore, 'messages', haveMessages.messageDocId),
+          doc => {
+            setIsPending(false);
+            setDocument({ ...doc.data(), id: doc.id });
+          }
+        );
+      } catch (error) {
+        setError(error.message);
+        setIsPending(false);
+      }
+    };
+
+    fetchDocument();
+
+    return () => unsubscribe();
+  }, [haveMessages]);
+
   const createMessageDoc = async text => {
     try {
-      const messageObj = {
-        users: [response.document.uid, user.uid],
-        messages: [text],
-      };
-
       const newDoc = await addDoc(colRef, {
-        ...messageObj,
+        users: [response.document.uid, user.uid],
+        messages: [{ text, from: response.document.uid }],
         createdAt: Timestamp.fromDate(new Date()),
       });
-      console.log('1');
-
-      const userObj = { messageTo: user.uid, messageDocId: newDoc.id };
-      const targetObj = {
-        messageTo: response.document.uid,
-        messageDocId: newDoc.id,
-      };
-
-      await updateDocument();
+      await updateDocument(response.document.id, {
+        messages: [
+          ...response.document.messages,
+          { messageTo: user.uid, messageDocId: newDoc.id },
+        ],
+      });
+      await updateTargetDocument(user.id, {
+        messages: [
+          ...user.messages,
+          {
+            messageTo: response.document.uid,
+            messageDocId: newDoc.id,
+          },
+        ],
+      });
     } catch (error) {}
   };
 
-  const addMessage = () => {};
+  const addMessage = async (type, payload) => {
+    try {
+      // await updateTargetDocument(haveMessages.messageDocId, {...})
+    } catch (error) {}
+  };
 
-  console.log('already messed ', userAlreadyHaveMessages);
-  return { createMessageDoc };
+  const deleteMessage = async () => {};
+
+  return {
+    haveMessages,
+    document,
+    isPending,
+    error,
+    createMessageDoc,
+    addMessage,
+  };
 };

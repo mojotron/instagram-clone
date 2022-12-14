@@ -10,8 +10,6 @@ const Messages = () => {
   const [showNewMessage, setShowNewMessage] = useState(false);
   const [messageTo, setMessageTo] = useState(null);
 
-  console.log('message to', messageTo?.userName);
-
   return (
     <div className="Messages">
       {showNewMessage && (

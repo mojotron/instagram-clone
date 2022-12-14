@@ -4,9 +4,14 @@ import './styles/MessageMainBody.css';
 import EmojiPicker from 'emoji-picker-react';
 import { BiSmile } from 'react-icons/bi';
 import { useMessages } from '../../../hooks/useMessages';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const MessageMainBody = ({ user }) => {
-  const { createMessageDoc } = useMessages(user);
+  const { response } = useUserDataContext();
+  const { haveMessages, document, createMessageDoc, addMessage } =
+    useMessages(user);
+
+  console.log(haveMessages);
 
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
@@ -29,8 +34,16 @@ const MessageMainBody = ({ user }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(text);
-    await createMessageDoc(text);
+    try {
+      if (haveMessages) {
+        await addMessage('text', text);
+      } else {
+        await createMessageDoc(text);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     // if is first message create
     // -- new message document
     // -- add message to that document
@@ -55,6 +68,23 @@ const MessageMainBody = ({ user }) => {
             <EmojiPicker emojiStyle="native" onEmojiClick={handleEmojiClick} />
           </div>
         )}
+
+        {document &&
+          document.messages.map((msg, i) => {
+            const ownMessage = msg.from === response.document.uid;
+
+            return (
+              <div
+                className={`MessageMainBody__messages__item ${
+                  ownMessage ? 'right' : 'left'
+                }`}
+                key={i}
+              >
+                {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
+                <p>{msg.text}</p>
+              </div>
+            );
+          })}
       </main>
 
       <footer className="MessageMainBody__new-message">

@@ -36,6 +36,7 @@ const Signup = () => {
         following: [], // user ids
         followers: [], // user ids
         savedPosts: [], // post ids
+        messages: [], // obj {messageTo: user uid, messageDocId: /messages/doc}
         avatar: {
           url: '',
           fileName: '', // for deleting avatar when user remove image

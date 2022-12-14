@@ -22,6 +22,8 @@
 .MessageMainBody__messages {
   flex-grow: 2;
   position: relative;
+  display: flex;
+  flex-direction: column-reverse;
 }
 .MessageMainBody__messages__emojis {
   position: absolute;
@@ -65,4 +67,23 @@
   position: absolute;
   right: 3.5rem;
   top: 1.25rem;
+}
+.MessageMainBody__messages__item {
+  border: 1px solid black;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: flex-end;
+}
+.MessageMainBody__messages__item.left {
+  justify-content: flex-start;
+}
+.MessageMainBody__messages__item.right {
+  justify-content: flex-end;
+}
+.MessageMainBody__messages__item p {
+  color: var(--black);
+  font-size: 1.4rem;
+  padding: 1rem;
+  border: var(--gray-border);
+  border-radius: 3rem;
 }
