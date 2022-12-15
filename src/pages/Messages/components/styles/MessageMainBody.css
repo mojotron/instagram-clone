@@ -69,7 +69,6 @@
   top: 1.25rem;
 }
 .MessageMainBody__messages__item {
-  border: 1px solid black;
   padding: 1rem 2rem;
   display: flex;
   align-items: flex-end;
@@ -83,7 +82,8 @@
 .MessageMainBody__messages__item p {
   color: var(--black);
   font-size: 1.4rem;
-  padding: 1rem;
+  padding: 2rem;
   border: var(--gray-border);
   border-radius: 3rem;
+  width: 85%;
 }

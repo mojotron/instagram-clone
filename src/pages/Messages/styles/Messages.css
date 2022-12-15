@@ -10,6 +10,18 @@
   border-right: var(--gray-border);
   width: 40%;
 }
+.Messages__left__list-item {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  cursor: pointer;
+}
+.Messages__left__list-item h2 {
+  color: var(--black);
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-left: 2rem;
+}
 .Messages__right {
   width: 60%;
 }

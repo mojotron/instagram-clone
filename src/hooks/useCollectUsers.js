@@ -11,6 +11,7 @@ export const useCollectUsers = userIDList => {
     if (userIDList.length < 1) return;
     setIsPending(true);
 
+    console.log('hook', userIDList);
     const getDocuments = async () => {
       try {
         const q = query(

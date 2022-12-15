@@ -54,12 +54,19 @@ export const useMessages = user => {
     return () => unsubscribe();
   }, [haveMessages]);
 
-  const createMessageDoc = async text => {
+  const createMessageDoc = async (type, payload) => {
+    const messageType = type === 'text' ? 'text' : 'post';
     try {
       const newDoc = await addDoc(colRef, {
         users: [response.document.uid, user.uid],
-        messages: [{ text, from: response.document.uid }],
-        createdAt: Timestamp.fromDate(new Date()),
+        messages: [
+          {
+            type: messageType,
+            content: payload,
+            from: response.document.uid,
+            createdAt: Timestamp.fromDate(new Date()),
+          },
+        ],
       });
       await updateDocument(response.document.id, {
         messages: [
@@ -80,9 +87,27 @@ export const useMessages = user => {
   };
 
   const addMessage = async (type, payload) => {
+    const messageType = type === 'text' ? 'text' : 'post';
     try {
-      // await updateTargetDocument(haveMessages.messageDocId, {...})
-    } catch (error) {}
+      if (haveMessages) {
+        console.log(document.messages);
+        await updateMessageDocument(haveMessages.messageDocId, {
+          messages: [
+            {
+              type: messageType,
+              content: payload,
+              from: response.document.uid,
+              createdAt: Timestamp.fromDate(new Date()),
+            },
+            ...document.messages,
+          ],
+        });
+      } else {
+        await createMessageDoc(type, payload);
+      }
+    } catch (error) {
+      console.log('error');
+    }
   };
 
   const deleteMessage = async () => {};

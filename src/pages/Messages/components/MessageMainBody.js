@@ -8,10 +8,7 @@ import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const MessageMainBody = ({ user }) => {
   const { response } = useUserDataContext();
-  const { haveMessages, document, createMessageDoc, addMessage } =
-    useMessages(user);
-
-  console.log(haveMessages);
+  const { document, addMessage } = useMessages(user);
 
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
@@ -35,11 +32,7 @@ const MessageMainBody = ({ user }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      if (haveMessages) {
-        await addMessage('text', text);
-      } else {
-        await createMessageDoc(text);
-      }
+      await addMessage('text', text);
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +74,7 @@ const MessageMainBody = ({ user }) => {
                 key={i}
               >
                 {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
-                <p>{msg.text}</p>
+                <p>{msg.content}</p>
               </div>
             );
           })}
