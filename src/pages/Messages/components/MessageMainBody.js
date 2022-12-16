@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Avatar from '../../../components/Avatar';
 import './styles/MessageMainBody.css';
 import EmojiPicker from 'emoji-picker-react';
-import { BiSmile } from 'react-icons/bi';
+import { BiSmile, BiDotsHorizontalRounded } from 'react-icons/bi';
 import { useMessages } from '../../../hooks/useMessages';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
@@ -36,16 +36,12 @@ const MessageMainBody = ({ user }) => {
     } catch (error) {
       console.log(error);
     }
-
-    // if is first message create
-    // -- new message document
-    // -- add message to that document
-    // -- add doc Id of message doc to current user messages
-    // -- add doc Id of message doc to target user messages
-    // else
-    // - append new message
     setText('');
     setShowEmojis(false);
+  };
+
+  const handleDeleteMessage = async i => {
+    console.log(i);
   };
 
   return (
@@ -68,13 +64,24 @@ const MessageMainBody = ({ user }) => {
 
             return (
               <div
+                key={i}
                 className={`MessageMainBody__messages__item ${
                   ownMessage ? 'right' : 'left'
                 }`}
-                key={i}
               >
-                {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
-                <p>{msg.content}</p>
+                <div className="MessageMainBody__messages__item__body">
+                  {ownMessage && (
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() => handleDeleteMessage(i)}
+                    >
+                      <BiDotsHorizontalRounded size={20} />
+                    </button>
+                  )}
+                  {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
+                  <p>{msg.content}</p>
+                </div>
               </div>
             );
           })}
