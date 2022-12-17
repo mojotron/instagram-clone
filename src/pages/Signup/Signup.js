@@ -43,6 +43,11 @@ const Signup = () => {
         },
         bio: '',
         website: '',
+        // TODO -> in login and logout
+        online: {
+          status: true,
+          lastLoggedOut: null,
+        },
       };
       try {
         await signup(formData.email, formData.password, userAccount);
