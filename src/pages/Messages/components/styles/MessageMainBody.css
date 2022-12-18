@@ -69,35 +69,3 @@
   right: 3.5rem;
   top: 1.25rem;
 }
-.MessageMainBody__messages__item {
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-}
-.MessageMainBody__messages__item.left {
-  justify-content: flex-start;
-}
-.MessageMainBody__messages__item.right {
-  justify-content: flex-end;
-}
-.MessageMainBody__messages__item__body {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.MessageMainBody__messages__item__body p {
-  color: var(--black);
-  font-size: 1.4rem;
-  padding: 2rem;
-  border: var(--gray-border);
-  border-radius: 3rem;
-  width: 85%;
-}
-.MessageMainBody__messages__item__body button {
-  color: var(--gray);
-  visibility: hidden;
-}
-.MessageMainBody__messages__item__body:hover button {
-  color: var(--gray);
-  visibility: visible;
-}

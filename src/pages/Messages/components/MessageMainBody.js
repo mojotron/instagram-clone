@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import Avatar from '../../../components/Avatar';
 import './styles/MessageMainBody.css';
 import EmojiPicker from 'emoji-picker-react';
-import { BiSmile, BiDotsHorizontalRounded } from 'react-icons/bi';
+import { BiSmile } from 'react-icons/bi';
 import { useMessages } from '../../../hooks/useMessages';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import MessageItem from './MessageItem';
 
 const MessageMainBody = ({ user }) => {
   const { response } = useUserDataContext();
@@ -57,32 +58,19 @@ const MessageMainBody = ({ user }) => {
             <EmojiPicker emojiStyle="native" onEmojiClick={handleEmojiClick} />
           </div>
         )}
-
+        {/* display messages */}
         {document &&
           document.messages.map((msg, i) => {
             const ownMessage = msg.from === response.document.uid;
-
             return (
-              <div
+              <MessageItem
+                user={user}
+                messageData={msg}
+                ownMessage={ownMessage}
+                handleDeleteMessage={handleDeleteMessage}
+                messageIndex={i}
                 key={i}
-                className={`MessageMainBody__messages__item ${
-                  ownMessage ? 'right' : 'left'
-                }`}
-              >
-                <div className="MessageMainBody__messages__item__body">
-                  {ownMessage && (
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => handleDeleteMessage(i)}
-                    >
-                      <BiDotsHorizontalRounded size={20} />
-                    </button>
-                  )}
-                  {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
-                  <p>{msg.content}</p>
-                </div>
-              </div>
+              />
             );
           })}
       </main>

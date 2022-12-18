@@ -9,6 +9,8 @@ import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useCollectUsers } from '../../hooks/useCollectUsers';
 import Avatar from '../../components/Avatar';
 
+import { formatTime } from '../../utils/formatTime';
+
 const Messages = () => {
   const { response } = useUserDataContext();
   const [showNewMessage, setShowNewMessage] = useState(false);
@@ -35,13 +37,20 @@ const Messages = () => {
           {documents &&
             documents.map(user => (
               <div
+                className="Messages__left__list-item"
                 key={user.uid}
                 onClick={() => setMessageTo(user)}
-                className="Messages__left__list-item"
               >
                 <Avatar url={user.avatar.url} size="mid" />
-                <h2>{user.userName}</h2>
-                {/* message set time */}
+                {user.online.status && <span className="user-online-status" />}
+                <div className="Messages__left__list-item__info">
+                  <h2>{user.userName}</h2>
+                  {!user.online.status && (
+                    <h3>
+                      {formatTime(user.online.lastLoggedOut.seconds * 1000)}
+                    </h3>
+                  )}
+                </div>
               </div>
             ))}
         </section>
