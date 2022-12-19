@@ -3,17 +3,21 @@
   display: flex;
   align-items: center;
   position: relative;
+  width: 100%;
 }
-.MessageItem.left {
+.MessageItem.left,
+.MessageItem__body.left {
   justify-content: flex-start;
 }
-.MessageItem.right {
+.MessageItem.right,
+.MessageItem__body.right {
   justify-content: flex-end;
 }
 .MessageItem__body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  width: 75%;
 }
 .MessageItem__body p {
   color: var(--black);
@@ -21,7 +25,6 @@
   padding: 2rem;
   border: var(--gray-border);
   border-radius: 3rem;
-  width: 75%;
 }
 .MessageItem__body__control {
   display: flex;
@@ -38,21 +41,27 @@
   visibility: visible;
 }
 .MessageItem__options {
-  height: 2rem;
-  width: 10rem;
+  height: 3rem;
   background-color: var(--black);
   border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  bottom: 1rem;
 }
 .MessageItem__options::after {
   display: block;
   content: '';
-  height: 1.25rem;
-  width: 1.25rem;
+  height: 1rem;
+  width: 1rem;
   background-color: var(--black);
-  position: relative;
-  top: 1.25rem;
-  left: 7.5rem;
+  position: absolute;
+  top: 2.25rem;
+  right: 1.1rem;
   transform: rotate(45deg);
+}
+.btn--unsend {
+  visibility: visible;
+  color: white;
 }

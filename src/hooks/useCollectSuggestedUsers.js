@@ -7,7 +7,6 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 export const useCollectSuggestedUsers = () => {
   const { response } = useUserDataContext();
 
-  const [isCanceled, setIsCanceled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [documents, setDocuments] = useState(null);
@@ -82,5 +81,18 @@ export const useCollectSuggestedUsers = () => {
     } catch (error) {}
   };
 
-  return { documents, isPending, error, getSuggestedUsersDocuments };
+  const getSuggestedUsersMessagesDocuments = async () => {
+    // collect messages and following
+    const x = response.document.messages.map(ele => ele.messageTo);
+    const y = response.document.following.filter(ele => !x.includes(ele));
+    console.log([...x, ...y]);
+  };
+
+  return {
+    documents,
+    isPending,
+    error,
+    getSuggestedUsersDocuments,
+    getSuggestedUsersMessagesDocuments,
+  };
 };

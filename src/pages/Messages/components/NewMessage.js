@@ -10,6 +10,7 @@ import Avatar from '../../../components/Avatar';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   // TODO fetch suggested users
+  const { getSuggestedUsersMessagesDocuments } = useCollectSuggestedUsers();
   const { documents, isPending, error, searchForUsers, reset } =
     useSearchUsers();
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,6 +18,10 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   const search = useRef(str => searchForUsers(str)).current;
 
   console.log(documents);
+
+  useEffect(() => {
+    getSuggestedUsersMessagesDocuments();
+  }, [getSuggestedUsersMessagesDocuments]);
 
   useEffect(() => {
     inputRef.current.focus();

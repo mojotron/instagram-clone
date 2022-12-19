@@ -9,7 +9,9 @@ import MessageItem from './MessageItem';
 
 const MessageMainBody = ({ user }) => {
   const { response } = useUserDataContext();
-  const { document, addMessage } = useMessages(user);
+  const { document, addMessage, deleteMessage } = useMessages(user);
+  // for message options popup with index
+  const [showOptions, setShowOptions] = useState(null);
 
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
@@ -41,10 +43,6 @@ const MessageMainBody = ({ user }) => {
     setShowEmojis(false);
   };
 
-  const handleDeleteMessage = async i => {
-    console.log(i);
-  };
-
   return (
     <section className="MessageMainBody">
       <header className="MessageMainBody__header">
@@ -67,9 +65,11 @@ const MessageMainBody = ({ user }) => {
                 user={user}
                 messageData={msg}
                 ownMessage={ownMessage}
-                handleDeleteMessage={handleDeleteMessage}
+                handleDeleteMessage={deleteMessage}
                 messageIndex={i}
                 key={i}
+                showOptions={showOptions}
+                setShowOptions={setShowOptions}
               />
             );
           })}

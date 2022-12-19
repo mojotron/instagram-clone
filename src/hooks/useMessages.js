@@ -90,7 +90,6 @@ export const useMessages = user => {
     const messageType = type === 'text' ? 'text' : 'post';
     try {
       if (haveMessages) {
-        console.log(document.messages);
         await updateMessageDocument(haveMessages.messageDocId, {
           messages: [
             {
@@ -110,14 +109,23 @@ export const useMessages = user => {
     }
   };
 
-  const deleteMessage = async () => {};
+  const deleteMessage = async index => {
+    try {
+      await updateMessageDocument(haveMessages.messageDocId, {
+        messages: document.messages.filter((msg, i) => i !== index),
+      });
+      console.log(index);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return {
     haveMessages,
     document,
     isPending,
     error,
-    createMessageDoc,
     addMessage,
+    deleteMessage,
   };
 };
