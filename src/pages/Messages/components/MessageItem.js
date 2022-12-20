@@ -1,6 +1,11 @@
 import './styles/MessageItem.css';
 import Avatar from '../../../components/Avatar';
+import PostImage from '../../../components/PostImage';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import { useFirestore } from '../../../hooks/useFirestore';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MessageItem = ({
   user,
@@ -11,6 +16,16 @@ const MessageItem = ({
   showOptions,
   setShowOptions,
 }) => {
+  const { response, getDocumentById } = useFirestore('posts');
+  const getPost = useRef(docId => getDocumentById(docId)).current;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (messageData.type !== 'post') return;
+    console.log('load data post');
+    getPost(messageData.content);
+  }, [getPost, messageData]);
+
   const handleShowOptions = index => {
     if (index === showOptions) setShowOptions(null);
     else setShowOptions(index);
@@ -46,7 +61,34 @@ const MessageItem = ({
         </div>
 
         {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
-        <p>{messageData.content}</p>
+
+        {messageData.type === 'text' && <p>{messageData.content}</p>}
+        {messageData.type === 'post' && (
+          <>
+            {response.error && <p>Post load failed!</p>}
+            {response.isPending && <p>Loading...</p>}
+            {response.document && (
+              <div
+                style={{
+                  width: '225px',
+                  height: '400px',
+                  overflow: 'hidden',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                }}
+                onClick={e => {
+                  e.stopPropagation();
+                  navigate(`/p/${messageData.content}`);
+                }}
+              >
+                <PostImage
+                  imagesData={response.document.images}
+                  dimensions={response.document.dimensions}
+                />
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
