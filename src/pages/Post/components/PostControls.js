@@ -11,7 +11,9 @@ import './styles/PostControls.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
 import PostLikedBy from './PostLikedBy';
+import { useMessages } from '../../../hooks/useMessages';
 // component
+import NewMessage from '../../Messages/components/NewMessage';
 
 const PostControls = ({
   postData,
@@ -50,8 +52,24 @@ const PostControls = ({
     updateDocument(response.document.id, { savedPosts: transformed });
   };
 
+  const { addMessage } = useMessages();
+  const [showNewMessage, setShowNewMessage] = useState(false);
+
+  const handleSendPostTo = user => {
+    console.log('hello');
+    console.log(user.userName);
+    addMessage(user, 'post', postData.id);
+  };
+
   return (
     <section className="PostControls">
+      {showNewMessage && (
+        <NewMessage
+          setShowNewMessage={setShowNewMessage}
+          setMessageTo={handleSendPostTo}
+        />
+      )}
+
       {showLikedBy && (
         <PostLikedBy
           // likes map here to stop infinite rerender
@@ -82,7 +100,10 @@ const PostControls = ({
               <img src={commentIcon} alt="comment" />
             </button>
           )}
-          <button className="btn btn--post">
+          <button
+            className="btn btn--post"
+            onClick={() => setShowNewMessage(true)}
+          >
             <img src={sendIcon} alt="send" />
           </button>
         </div>

@@ -10,18 +10,20 @@ import Avatar from '../../../components/Avatar';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   // TODO fetch suggested users
-  const { getSuggestedUsersMessagesDocuments } = useCollectSuggestedUsers();
+  const { documents: suggestedUsers, getSuggestedUsersMessagesDocuments } =
+    useCollectSuggestedUsers();
   const { documents, isPending, error, searchForUsers, reset } =
     useSearchUsers();
   const [searchTerm, setSearchTerm] = useState('');
   const inputRef = useRef();
   const search = useRef(str => searchForUsers(str)).current;
+  const suggestedUsersRef = useRef(getSuggestedUsersMessagesDocuments).current;
 
-  console.log(documents);
+  console.log(suggestedUsers);
 
   useEffect(() => {
-    getSuggestedUsersMessagesDocuments();
-  }, [getSuggestedUsersMessagesDocuments]);
+    suggestedUsersRef();
+  }, [suggestedUsersRef]);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -68,6 +70,22 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
         <div className="NewMessage__user-list">
           {isPending && <p>Loading...</p>}
           {error && <p>{error}</p>}
+
+          {suggestedUsers &&
+            !documents &&
+            suggestedUsers.map(user => (
+              <div
+                key={user.id}
+                className="NewMessage__user-list__item"
+                onClick={() => handleMessageToUser(user)}
+              >
+                <Avatar url={user.avatar.url} size="mid" />
+                <div className="NewMessage__user-list__item__info">
+                  <h2>{user.userName}</h2>
+                  <h3>{user.fullName}</h3>
+                </div>
+              </div>
+            ))}
 
           {documents &&
             documents.map(user => (

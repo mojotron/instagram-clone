@@ -1,15 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
-import Avatar from '../../../components/Avatar';
+// style
 import './styles/MessageMainBody.css';
-import EmojiPicker from 'emoji-picker-react';
+// icons
 import { BiSmile } from 'react-icons/bi';
+// components
+import Avatar from '../../../components/Avatar';
+import EmojiPicker from 'emoji-picker-react';
+import MessageItem from './MessageItem';
+// hooks
 import { useMessages } from '../../../hooks/useMessages';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
-import MessageItem from './MessageItem';
+import { useCollectMessage } from '../../../hooks/useCollectMessage';
 
 const MessageMainBody = ({ user }) => {
   const { response } = useUserDataContext();
-  const { document, addMessage, deleteMessage } = useMessages(user);
+  const { document, isPending, error } = useCollectMessage(user);
+  const { addMessage, deleteMessage } = useMessages();
   // for message options popup with index
   const [showOptions, setShowOptions] = useState(null);
 
@@ -35,7 +41,7 @@ const MessageMainBody = ({ user }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await addMessage('text', text);
+      await addMessage(user, 'text', text);
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +63,8 @@ const MessageMainBody = ({ user }) => {
           </div>
         )}
         {/* display messages */}
+        {isPending && <p>Loading...</p>}
+        {error && <p>{error}</p>}
         {document &&
           document.messages.map((msg, i) => {
             const ownMessage = msg.from === response.document.uid;

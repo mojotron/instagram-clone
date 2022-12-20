@@ -28,7 +28,7 @@ const MessageItem = ({
                   color: 'white',
                 }}
                 className="btn btn--unsend"
-                onClick={() => handleDeleteMessage(messageIndex)}
+                onClick={() => handleDeleteMessage(user, messageIndex)}
               >
                 Unsend
               </button>

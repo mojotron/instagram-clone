@@ -112,6 +112,7 @@ export const useFirestore = collectionName => {
       if (docSnapshot.empty) throw new Error('Document not found!');
       const userDocument = { ...docSnapshot.data(), id: docSnapshot.id };
       dispatchIfNotCancelled({ type: 'GET_DOCUMENT', payload: userDocument });
+      return userDocument;
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }

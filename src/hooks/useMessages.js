@@ -1,16 +1,10 @@
 import { projectFirestore } from '../firebase/config';
-import {
-  collection,
-  Timestamp,
-  addDoc,
-  onSnapshot,
-  doc,
-} from 'firebase/firestore';
+import { collection, Timestamp, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
-import { useEffect, useState } from 'react';
+
 import { useFirestore } from './useFirestore';
 
-export const useMessages = user => {
+export const useMessages = () => {
   // messages between users go to single file, in array, better approach is
   // to create separate file for single message, but i will limit number of
   // between users to 5-10, this is learning project and for that is this
@@ -19,49 +13,19 @@ export const useMessages = user => {
   const { updateDocument: updateTargetDocument } = useFirestore('users');
   const { updateDocument: updateMessageDocument } = useFirestore('messages');
 
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState(null);
-  const [document, setDocument] = useState(null);
-
-  const haveMessages = response.document?.messages?.find(
-    obj => obj.messageTo === user.uid
-  );
+  const haveMessagesCheck = user => {
+    return response.document?.messages?.find(obj => obj.messageTo === user.uid);
+  };
 
   const colRef = collection(projectFirestore, 'messages');
 
-  useEffect(() => {
-    if (!haveMessages) return;
-
-    let unsubscribe;
-    const fetchDocument = async () => {
-      setIsPending(true);
-      try {
-        unsubscribe = onSnapshot(
-          doc(projectFirestore, 'messages', haveMessages.messageDocId),
-          doc => {
-            setIsPending(false);
-            setDocument({ ...doc.data(), id: doc.id });
-          }
-        );
-      } catch (error) {
-        setError(error.message);
-        setIsPending(false);
-      }
-    };
-
-    fetchDocument();
-
-    return () => unsubscribe();
-  }, [haveMessages]);
-
-  const createMessageDoc = async (type, payload) => {
-    const messageType = type === 'text' ? 'text' : 'post';
+  const createMessageDoc = async (user, type, payload) => {
     try {
       const newDoc = await addDoc(colRef, {
         users: [response.document.uid, user.uid],
         messages: [
           {
-            type: messageType,
+            type,
             content: payload,
             from: response.document.uid,
             createdAt: Timestamp.fromDate(new Date()),
@@ -86,33 +50,48 @@ export const useMessages = user => {
     } catch (error) {}
   };
 
-  const addMessage = async (type, payload) => {
-    const messageType = type === 'text' ? 'text' : 'post';
+  const getDocument = async docId => {
+    const docRef = doc(projectFirestore, 'messages', docId);
+    const docSnapshot = await getDoc(docRef);
+    if (docSnapshot.empty) throw new Error('Document not found!');
+    return { ...docSnapshot.data(), id: docSnapshot.id };
+  };
+
+  const addMessage = async (user, type, payload) => {
+    const haveMessages = haveMessagesCheck(user);
+
     try {
       if (haveMessages) {
+        const messageDoc = await getDocument(haveMessages.messageDocId);
+
         await updateMessageDocument(haveMessages.messageDocId, {
           messages: [
             {
-              type: messageType,
+              type,
               content: payload,
               from: response.document.uid,
               createdAt: Timestamp.fromDate(new Date()),
             },
-            ...document.messages,
+            // TODO need old messages
+            ...messageDoc.messages,
           ],
         });
       } else {
-        await createMessageDoc(type, payload);
+        await createMessageDoc(user, type, payload);
       }
     } catch (error) {
-      console.log('error');
+      console.log(error.message);
     }
   };
 
-  const deleteMessage = async index => {
+  const deleteMessage = async (user, index) => {
+    const haveMessages = haveMessagesCheck(user);
+
     try {
+      const messageDoc = await getDocument(haveMessages.messageDocId);
+
       await updateMessageDocument(haveMessages.messageDocId, {
-        messages: document.messages.filter((msg, i) => i !== index),
+        messages: messageDoc.messages.filter((msg, i) => i !== index),
       });
       console.log(index);
     } catch (error) {
@@ -121,10 +100,6 @@ export const useMessages = user => {
   };
 
   return {
-    haveMessages,
-    document,
-    isPending,
-    error,
     addMessage,
     deleteMessage,
   };

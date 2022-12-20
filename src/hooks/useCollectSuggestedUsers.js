@@ -85,7 +85,16 @@ export const useCollectSuggestedUsers = () => {
     // collect messages and following
     const x = response.document.messages.map(ele => ele.messageTo);
     const y = response.document.following.filter(ele => !x.includes(ele));
-    console.log([...x, ...y]);
+    try {
+      setIsPending(true);
+      const suggestedUsers = await getUsers([...x, ...y]);
+      setDocuments(suggestedUsers);
+      setIsPending(false);
+    } catch (error) {
+      console.log(error.message);
+      setError(error.message);
+      setIsPending(false);
+    }
   };
 
   return {
