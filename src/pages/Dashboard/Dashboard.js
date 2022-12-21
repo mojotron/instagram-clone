@@ -10,6 +10,7 @@ import Profile from '../Profile/Profile';
 import TimeLine from './components/TimeLine';
 import Post from '../Post/Post';
 import AllSuggestedUsers from './components/AllSuggestedUsers';
+import Explore from '../Explore/Explore';
 // style
 import './styles/Dashboard.css';
 // context provider
@@ -55,6 +56,7 @@ const Dashboard = () => {
             <Route path="/p/:postId" element={<Post type="regular" />} />
             <Route path="/explore/people" element={<AllSuggestedUsers />} />
             <Route path="/direct" element={<Messages />} />
+            <Route path="/explore" element={<Explore />} />
           </Routes>
         </>
       )}
