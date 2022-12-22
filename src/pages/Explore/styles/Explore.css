@@ -1,0 +1,9 @@
+.Explore__posts {
+  width: 80vw;
+  height: 90vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  overflow: hidden;
+  overflow-y: scroll;
+}
