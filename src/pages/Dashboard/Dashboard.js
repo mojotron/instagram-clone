@@ -11,13 +11,13 @@ import TimeLine from './components/TimeLine';
 import Post from '../Post/Post';
 import AllSuggestedUsers from './components/AllSuggestedUsers';
 import Explore from '../Explore/Explore';
+import SuggestedUsers from './components/SuggestedUsers';
+import Messages from '../Messages/Messages';
+import Notifications from '../Notifications/Notifications';
 // style
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
-import SuggestedUsers from './components/SuggestedUsers';
-import { useEffect } from 'react';
-import Messages from '../Messages/Messages';
 
 const Dashboard = () => {
   // get data
@@ -34,6 +34,8 @@ const Dashboard = () => {
       {response.document && (
         <>
           <Header toggleShowCreatePost={toggleShowCreatePost} />
+
+          <Notifications />
 
           {showCreatePost && (
             <UserPostContextProvider>
