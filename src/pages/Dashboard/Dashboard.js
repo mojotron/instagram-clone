@@ -24,18 +24,26 @@ const Dashboard = () => {
   const { response } = useUserDataContext();
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showNotification, setShowNotifications] = useState(false);
 
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(oldValue => !oldValue);
   };
 
   return (
     <div className="Dashboard">
       {response.document && (
         <>
-          <Header toggleShowCreatePost={toggleShowCreatePost} />
+          <Header
+            toggleShowCreatePost={toggleShowCreatePost}
+            toggleNotifications={toggleNotifications}
+          />
 
-          <Notifications />
+          {showNotification && <Notifications />}
 
           {showCreatePost && (
             <UserPostContextProvider>

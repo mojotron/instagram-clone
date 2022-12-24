@@ -1,0 +1,26 @@
+.Notification {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.Notification__content {
+  display: flex;
+  align-items: center;
+}
+.Notification__content p {
+  width: 23rem;
+  margin-left: 1.5rem;
+  font-size: 1.6rem;
+  color: var(--black);
+}
+.Notification__content__username {
+  font-weight: 700;
+}
+.Notification__content__created-at {
+  color: var(--gray);
+}
+.Notification__post {
+  height: 4.4rem;
+  width: 4.4rem;
+}

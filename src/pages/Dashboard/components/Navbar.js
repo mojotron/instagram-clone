@@ -4,16 +4,20 @@ import { NavLink } from 'react-router-dom';
 import Avatar from '../../../components/Avatar';
 import ProfileDropdown from './ProfileDropdown';
 // icon images
-import homeIcon from '../../../images/home-filled.svg';
-import addPostIcon from '../../../images/add-icon.svg';
-import searchIcon from '../../../images/search-icon.svg';
+import { BsSearch } from 'react-icons/bs';
 import { FiSend } from 'react-icons/fi';
 import { MdOutlineExplore } from 'react-icons/md';
+import { AiOutlineHeart } from 'react-icons/ai';
+import { CgHome, CgAddR } from 'react-icons/cg';
 // style
 import './styles/Navbar.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const Navbar = ({ toggleShowCreatePost, toggleShowSearchBar }) => {
+const Navbar = ({
+  toggleShowCreatePost,
+  toggleShowSearchBar,
+  toggleNotifications,
+}) => {
   const { response } = useUserDataContext();
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -22,11 +26,11 @@ const Navbar = ({ toggleShowCreatePost, toggleShowSearchBar }) => {
       <ul>
         <li className="Navbar__item">
           <NavLink to="/">
-            <img className="Navbar__icon" src={homeIcon} alt="home" />
+            <CgHome size={20} />
           </NavLink>
         </li>
         <li className="Navbar__item" onClick={toggleShowSearchBar}>
-          <img src={searchIcon} alt="search for user" />
+          <BsSearch size={20} />
         </li>
         <li className="Navbar__item">
           <NavLink to="/explore">
@@ -38,8 +42,11 @@ const Navbar = ({ toggleShowCreatePost, toggleShowSearchBar }) => {
             <FiSend size={20} />
           </NavLink>
         </li>
+        <li className="Navbar__item" onClick={toggleNotifications}>
+          <AiOutlineHeart size={20} />
+        </li>
         <li className="Navbar__item" onClick={toggleShowCreatePost}>
-          <img className="Navbar__icon" src={addPostIcon} alt="add post" />
+          <CgAddR size={20} />
         </li>
         <li
           className="Navbar__item"

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { useState } from 'react';
 
-const Header = ({ toggleShowCreatePost }) => {
+const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   const toggleShowSearchBar = () => {
@@ -25,6 +25,7 @@ const Header = ({ toggleShowCreatePost }) => {
       <Navbar
         toggleShowCreatePost={toggleShowCreatePost}
         toggleShowSearchBar={toggleShowSearchBar}
+        toggleNotifications={toggleNotifications}
       />
     </header>
   );
