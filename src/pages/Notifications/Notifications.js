@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNotifications } from '../../hooks/useNotifications';
 import Notification from './components/Notification';
 // styles
 import './styles/Notifications.css';
 
 const Notifications = () => {
+  const { addNotification } = useNotifications();
+
   return (
     <div className="Notifications">
       <h2>Notifications</h2>
@@ -21,6 +24,15 @@ const Notifications = () => {
           }}
         />
       </section>
+      <button
+        onClick={() =>
+          addNotification('3O14T4slCa8lsmEbWKd7', {
+            notifications: ['hello world'],
+          })
+        }
+      >
+        Test notification
+      </button>
     </div>
   );
 };

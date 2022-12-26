@@ -12,6 +12,7 @@ export const useSignup = () => {
   const { dispatch } = useAuthContext();
 
   const { addDocument, checkIfUserExists } = useFirestore('users');
+  const { addDocument: addNotificationDoc } = useFirestore('notifications');
 
   const signup = async (email, password, data) => {
     setError(null);
@@ -30,8 +31,10 @@ export const useSignup = () => {
       if (!response) throw new Error('Could not create user account!');
       // create user document using useFirestore hook
       await addDocument({ ...data, uid: response.user.uid });
-      //
+      // TODO create notification doc
+      await addNotificationDoc({ uid: response.user.uid, notifications: [] });
       dispatch({ type: 'LOGIN', payload: response.user });
+      //
       if (!isCancelled) {
         setIsPending(false);
         setError(null);
