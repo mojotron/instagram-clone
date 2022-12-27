@@ -19,7 +19,7 @@ const Notification = ({ data }) => {
   const getPostRef = useRef(id => getPost(id)).current;
 
   useEffect(() => {
-    console.log('called');
+    console.log('called single notification useEffect');
     if (isReady) return;
 
     const getData = async () => {
