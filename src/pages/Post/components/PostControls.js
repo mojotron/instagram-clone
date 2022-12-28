@@ -12,6 +12,7 @@ import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
 import PostLikedBy from './PostLikedBy';
 import { useMessages } from '../../../hooks/useMessages';
+import { useNotifications } from '../../../hooks/useNotifications';
 // component
 import NewMessage from '../../Messages/components/NewMessage';
 
@@ -22,7 +23,7 @@ const PostControls = ({
   handleFollow,
   handleUnfollow,
 }) => {
-  // in timlinepost handleCommentReset sends user to post page
+  // in timeline post handleCommentReset sends user to post page
   const { response, updateDocument } = useUserDataContext();
   const [showLikedBy, setShowLikedBy] = useState(false);
   // is current user liking post
@@ -61,6 +62,20 @@ const PostControls = ({
     addMessage(user, 'post', postData.id);
   };
 
+  //TODO
+  const { updateNotifications } = useNotifications();
+  //TODO
+  const handleClickLikePost = async () => {
+    try {
+      await handleLikePost(postData.likes, postData.id);
+      // await updateNotifications()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // TODO
+  // TODO
+
   return (
     <section className="PostControls">
       {showNewMessage && (
@@ -83,12 +98,7 @@ const PostControls = ({
       <div className="PostControls__icons">
         <div className="PostControls__icons__left">
           {!postData.disableLikes && (
-            <button
-              className="btn btn--post"
-              onClick={async () => {
-                await handleLikePost(postData.likes, postData.id);
-              }}
-            >
+            <button className="btn btn--post" onClick={handleClickLikePost}>
               <img
                 src={userLikesPost ? heartLikedIcon : heartIcon}
                 alt="like"
