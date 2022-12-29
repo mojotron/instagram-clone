@@ -16,18 +16,16 @@ const Notifications = () => {
       <h2>Notifications</h2>
       {document && (
         <section>
-          <Notification
-            data={{
-              userId: 'AOrJ4zBfL98UazG2SBlv',
-              postId: '6n5FOVcQK3MRrhDF7eTF',
-              content: `Homemade pumpkin latte with @rusty_trails , traditional for Halloween 👻 🎃
-            .
-            .
-            .
-            #Halloween #pumpkin #pumpkinlatte #samhain #coffee #pumpkincarving`,
-              createdAt: new Date(),
-            }}
-          />
+          {document.notifications.map(note => (
+            <Notification
+              data={{
+                fromUserId: note.fromUserId,
+                postId: note.postUserId,
+                createdAt: note.createdAt,
+                content: note.content,
+              }}
+            />
+          ))}
         </section>
       )}
       <button

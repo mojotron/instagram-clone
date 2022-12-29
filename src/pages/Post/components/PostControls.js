@@ -63,12 +63,18 @@ const PostControls = ({
   };
 
   //TODO
-  const { updateNotifications } = useNotifications();
+  const { addNotification } = useNotifications();
   //TODO
-  const handleClickLikePost = async () => {
+  const handleClickLikePost = async userLikesPost => {
+    // post data to use in notification hook => user id, post id, content
     try {
+      console.log(postData.creator.profileDocId);
       await handleLikePost(postData.likes, postData.id);
-      // await updateNotifications()
+      await addNotification(
+        postData.creator.profileDocId,
+        postData.id,
+        userLikesPost ? 'unlike-post' : 'like-post'
+      );
     } catch (error) {
       console.log(error);
     }
@@ -98,7 +104,10 @@ const PostControls = ({
       <div className="PostControls__icons">
         <div className="PostControls__icons__left">
           {!postData.disableLikes && (
-            <button className="btn btn--post" onClick={handleClickLikePost}>
+            <button
+              className="btn btn--post"
+              onClick={() => handleClickLikePost(userLikesPost)}
+            >
               <img
                 src={userLikesPost ? heartLikedIcon : heartIcon}
                 alt="like"

@@ -8,6 +8,10 @@ import './styles/Notification.css';
 // hooks
 import { useFirestore } from '../../../hooks/useFirestore';
 const Notification = ({ data }) => {
+  // fromUserId: note.fromUserId,
+  //               postId: note.postUserId,
+  //               createdAt: note.createdAt,
+  //               content: note.content,
   const [isReady, setIsReady] = useState(false);
 
   const { response: userResponse, getDocumentById: getUser } =
