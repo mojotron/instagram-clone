@@ -8,10 +8,6 @@ import './styles/Notification.css';
 // hooks
 import { useFirestore } from '../../../hooks/useFirestore';
 const Notification = ({ data }) => {
-  // fromUserId: note.fromUserId,
-  //               postId: note.postUserId,
-  //               createdAt: note.createdAt,
-  //               content: note.content,
   const [isReady, setIsReady] = useState(false);
 
   const { response: userResponse, getDocumentById: getUser } =
@@ -28,8 +24,10 @@ const Notification = ({ data }) => {
 
     const getData = async () => {
       try {
-        await getUserRef(data.userId);
-        await getPostRef(data.postId);
+        await getUserRef(data.fromUserId);
+        if (data.postId) {
+          await getPostRef(data.postId);
+        }
         setIsReady(true);
       } catch (error) {
         console.log(error);
@@ -51,16 +49,21 @@ const Notification = ({ data }) => {
           </span>{' '}
           {data.content}{' '}
           <span className="Notification__content__created-at">
-            {formatTime(data.createdAt)}
+            {formatTime(data.createdAt.seconds * 1000)}
           </span>
         </p>
       </div>
-      <div className="Notification__post">
-        <PostImage
-          imagesData={postResponse.document.images}
-          dimensions={postResponse.document.dimensions}
-        />
-      </div>
+      {postResponse.document && (
+        <div className="Notification__post">
+          <PostImage
+            imagesData={postResponse.document.images}
+            dimensions={postResponse.document.dimensions}
+          />
+        </div>
+      )}
+      {data.content === 'started following you.' && (
+        <button className="btn btn--auth">Follow</button>
+      )}
     </div>
   );
 };

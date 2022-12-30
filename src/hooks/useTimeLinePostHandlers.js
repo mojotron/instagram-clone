@@ -1,5 +1,6 @@
 import { updateDoc, doc, Timestamp, deleteDoc } from 'firebase/firestore';
 import { projectFirestore } from '../firebase/config';
+import { useNotifications } from './useNotifications';
 import { useUserDataContext } from './useUserDataContext';
 
 const ALERT_MSG = `
@@ -11,6 +12,7 @@ Thank you for inspecting my project!
 
 export const useTimeLinePostHandlers = () => {
   const { response, updateDocument: updateUserDoc } = useUserDataContext();
+  const { addNotification } = useNotifications();
 
   const toggleLike = async (postLikes, docId) => {
     // save likes with username and uid, for easier display of friends that liked post
@@ -66,16 +68,12 @@ export const useTimeLinePostHandlers = () => {
   };
 
   const editPost = async (newData, docId) => {
-    console.log('hook', newData, docId);
-
     await updateDoc(doc(projectFirestore, 'posts', docId), {
       ...newData,
     });
   };
 
   const followProfile = async (postUid, profileFollowers, profileDocId) => {
-    console.log(postUid, profileFollowers, profileDocId);
-
     // add target uid to owner following
     const ownAccFollowing = [...response.document.following, postUid];
     // add owner uid to target followers
@@ -87,6 +85,8 @@ export const useTimeLinePostHandlers = () => {
     await updateUserDoc(response.document.id, {
       following: ownAccFollowing,
     });
+    // add notification to target account
+    await addNotification(profileDocId, null, 'follow-user');
   };
 
   const unfollowProfile = async (postUid, profileFollowers, docId) => {

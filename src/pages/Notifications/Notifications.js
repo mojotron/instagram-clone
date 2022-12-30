@@ -1,15 +1,13 @@
 import React from 'react';
-import { useCollectNotifications } from '../../hooks/useCollectNotifications';
-import { useNotifications } from '../../hooks/useNotifications';
+// components
 import Notification from './components/Notification';
+// hooks
+import { useCollectNotifications } from '../../hooks/useCollectNotifications';
 // styles
 import './styles/Notifications.css';
 
 const Notifications = () => {
-  const { updateNotifications } = useNotifications();
   const { document } = useCollectNotifications();
-
-  console.log('notifi doc', document);
 
   return (
     <div className="Notifications">
@@ -18,9 +16,10 @@ const Notifications = () => {
         <section>
           {document.notifications.map(note => (
             <Notification
+              key={note.createdAt.milliseconds}
               data={{
                 fromUserId: note.fromUserId,
-                postId: note.postUserId,
+                postId: note.post,
                 createdAt: note.createdAt,
                 content: note.content,
               }}
@@ -28,15 +27,6 @@ const Notifications = () => {
           ))}
         </section>
       )}
-      <button
-        onClick={() =>
-          updateNotifications('3O14T4slCa8lsmEbWKd7', {
-            notifications: [...document.notifications, 'hello world'],
-          })
-        }
-      >
-        Test notification
-      </button>
     </div>
   );
 };

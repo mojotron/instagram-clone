@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useFirestore } from './useFirestore';
 import { projectFirestore } from '../firebase/config';
 import { Timestamp, updateDoc, doc } from 'firebase/firestore';
+import { useNotifications } from './useNotifications';
 
 const ALERT_MSG = `
 Maximum number of comments is limited to 5,
@@ -22,6 +23,8 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
   } = useFirestore('posts');
 
   const loadDocument = useRef(() => getDocumentById(postId)).current;
+
+  const { addNotification } = useNotifications();
 
   useEffect(() => {
     loadDocument();
@@ -71,7 +74,7 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
   };
 
   const followProfile = async (postUid, profileFollowers, profileDocId) => {
-    console.log('calleds');
+    console.log('target profile, ', profileDocId);
     // add target uid to owner following
     const ownAccFollowing = [...userData.following, postUid];
     // add owner uid to target followers
@@ -83,6 +86,11 @@ export const usePostControl = (postId, userData, updateUserDoc) => {
     await updateUserDoc(userData.id, {
       following: ownAccFollowing,
     });
+    // TODO add notification here => follow user
+    // - useNotification hook -> method addNotification with params
+    // - userId, postId, type => follow- user, payload none
+    // update targets profile notification doc
+    // await addNotification(userData.id, );
   };
 
   const unfollowProfile = async (postUid, profileFollowers, profileDocId) => {
