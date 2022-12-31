@@ -1,4 +1,31 @@
 # Instagram Clone
 
-sign up user validation
-TODO navigate after setting submit
+This project is capstone frontend path of The Odin Project Curriculum.
+
+## Assignment
+
+Replicate your favorite website as close as possible - Pinterest, Facebook, Twitter, etc. Just make sure it has lots of interesting functionality. You’ll be integrating a full array of skills into this one. If you have completed a backend course, you may use that for this project, otherwise use Firebase. This should prove that you now have all the tools and knowledge needed to build a website, just like the ones you use every day.
+
+## Goal of the project
+
+I decided to replicate instagram, because its looked as biggest challenge to take. My goal is to replicate all core features involving images. Features with videos are not included because this is learning project and free Firebase plan has only 5GB storage. Features that are of the marketing or commercial nature, are skipped.
+
+### Technologies used to build this project
+
+1. React (functional)
+2. Firebase
+3. Custom CSS
+4. Vanilla JS
+
+### Firebase data structure
+
+## Features build
+
+To recreate Instagram project is separated in building block than create a finish product. Building block are:
+
+### Firebase Authentication
+
+- auth context
+- useSignup hook
+- useLogin hook
+- useLogout hook
