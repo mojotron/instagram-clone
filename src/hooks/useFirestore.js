@@ -146,6 +146,7 @@ export const useFirestore = collectionName => {
     }
   };
 
+  // TODO delete or make separate hook
   const checkIfUserExists = async username => {
     // helper function for useSignup hook
     // helper function for checking friend profile in Profile page
