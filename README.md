@@ -25,7 +25,9 @@ To recreate Instagram project is separated in building block than create a finis
 
 ### Firebase Authentication
 
-- auth context
-- useSignup hook
-- useLogin hook
-- useLogout hook
+Authentication is build of four major parts parts,
+
+1. useSignup hook - checks if username is already taken (using useCheckUsername hook). If username not exist create new user. First create user with email and address, use firebase auth object to create user document. Next create notification document and create public_usernames document to register username. Finally change AuthContext state to login user.
+2. useLogin hook - check if user exist and login him/her or display message that user do not exist.
+3. useLogout hook - logout user and change AuthContext state to display login page instead of user dashboard.
+4. AuthContext - useReduce hook to keep track if user is logged in.

@@ -1,31 +1,31 @@
 import { useState, useEffect } from 'react';
-import { projectAuth, projectFirestore } from '../firebase/config';
+// firebase auth
+import { projectAuth } from '../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
+// hooks
 import { useAuthContext } from '../hooks/useAuthContext';
-// import firestore hook do create rational database auth -> users
 import { useFirestore } from './useFirestore';
+import { useCheckUsername } from './useCheckUsername';
 
 export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
-
+  // auth context
   const { dispatch } = useAuthContext();
-
+  // firestore
   const { addDocument: addUsersDoc } = useFirestore('users');
   const { addDocument: addNotificationDoc } = useFirestore('notifications');
+  const { publicUsernameExist, createPublicUsername } = useCheckUsername();
 
   const signup = async (email, password, data) => {
     setError(null);
     setIsPending(true);
     try {
       // check if userName exist in publicUsernames collections **
-      const usernameDocRef = await getDoc(
-        doc(projectFirestore, `public_usernames/${data.userName}`)
-      );
-      console.log('check for username', usernameDocRef);
-      if (usernameDocRef.exists()) {
+      const usernameExist = await publicUsernameExist(data.userName);
+      console.log('check for username', usernameExist);
+      if (usernameExist) {
         throw new Error('Username already exist, please try another one!');
       }
       // create new account in firebase auth
@@ -39,15 +39,12 @@ export const useSignup = () => {
       await addUsersDoc({ ...data, uid: response.user.uid });
       // create public_usernames collection doc with custom id which is username so
       // in account creation we can check if user exists **
-      await setDoc(doc(projectFirestore, 'public_usernames', data.userName), {
-        userName: data.userName,
-        createdAt: Timestamp.fromDate(new Date()),
-      });
+      await createPublicUsername(data.userName);
       // create notification doc
       await addNotificationDoc({ uid: response.user.uid, notifications: [] });
       // change login context and display user dashboard after all documents are created
       dispatch({ type: 'LOGIN', payload: response.user });
-      //
+      // change DOM state only if is component mounted
       if (!isCancelled) {
         setIsPending(false);
         setError(null);
