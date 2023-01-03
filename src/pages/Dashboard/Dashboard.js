@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 // hooks
 import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 // components
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
@@ -25,6 +26,13 @@ const Dashboard = () => {
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [showNotification, setShowNotifications] = useState(false);
+  // TEST
+  const small = useMediaQuery('(max-width: 200px)');
+  const large = useMediaQuery('(max-width: 600px)');
+
+  console.log('screen is small: ', small);
+  console.log('screen is large: ', large);
+  // TEST
 
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);

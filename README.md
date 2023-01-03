@@ -31,3 +31,5 @@ Authentication is build of four major parts parts,
 2. useLogin hook - check if user exist and login him/her or display message that user do not exist.
 3. useLogout hook - logout user and change AuthContext state to display login page instead of user dashboard.
 4. AuthContext - useReduce hook to keep track if user is logged in.
+
+### User Settings
