@@ -1,0 +1,4 @@
+.Sidebar {
+  border-left: var(--gray-border);
+  height: 100vh;
+}

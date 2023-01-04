@@ -19,6 +19,7 @@ import Notifications from '../Notifications/Notifications';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
+import Sidebar from './components/Sidebar';
 
 const Dashboard = () => {
   // get data
@@ -26,13 +27,17 @@ const Dashboard = () => {
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [showNotification, setShowNotifications] = useState(false);
-  // TEST
-  const small = useMediaQuery('(max-width: 200px)');
-  const large = useMediaQuery('(max-width: 600px)');
+  // screen size
+  const small = useMediaQuery('(max-width: 770px)');
+  const large = useMediaQuery('(min-width: 1280px)');
 
-  console.log('screen is small: ', small);
-  console.log('screen is large: ', large);
-  // TEST
+  const determineScreenSize = () => {
+    if (small) return 'small';
+    if (large) return 'large';
+    return 'medium';
+  };
+
+  const screenSize = determineScreenSize();
 
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
@@ -43,14 +48,12 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="Dashboard">
+    <div
+      className="Dashboard"
+      style={{ flexDirection: screenSize === small ? 'column' : 'row' }}
+    >
       {response.document && (
         <>
-          <Header
-            toggleShowCreatePost={toggleShowCreatePost}
-            toggleNotifications={toggleNotifications}
-          />
-
           {showNotification && <Notifications />}
 
           {showCreatePost && (
@@ -58,24 +61,43 @@ const Dashboard = () => {
               <CreateNewPost setShowCreatePost={setShowCreatePost} />
             </UserPostContextProvider>
           )}
+          {/* 
+            large/medium
+            sidebar - heading, navbar, searchbar
+            main - dynamic content
 
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <section className="Dashboard__main">
-                  <TimeLine />
-                  <SuggestedUsers />
-                </section>
-              }
-            />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/:userName" element={<Profile />} />
-            <Route path="/p/:postId" element={<Post type="regular" />} />
-            <Route path="/explore/people" element={<AllSuggestedUsers />} />
-            <Route path="/direct" element={<Messages />} />
-            <Route path="/explore" element={<Explore />} />
-          </Routes>
+            small
+            header - heading, search bar, notifications
+            main - dynamic content
+            footer - navbar
+          */}
+
+          {screenSize !== 'small' && <Sidebar screenSize={screenSize} />}
+
+          {/* <Header
+            toggleShowCreatePost={toggleShowCreatePost}
+            toggleNotifications={toggleNotifications}
+          /> */}
+
+          <div className="Dashboard__content">
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <section className="Dashboard__main">
+                    <TimeLine />
+                    {large && <SuggestedUsers />}
+                  </section>
+                }
+              />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/:userName" element={<Profile />} />
+              <Route path="/p/:postId" element={<Post type="regular" />} />
+              <Route path="/explore/people" element={<AllSuggestedUsers />} />
+              <Route path="/direct" element={<Messages />} />
+              <Route path="/explore" element={<Explore />} />
+            </Routes>
+          </div>
         </>
       )}
     </div>
