@@ -1,17 +1,24 @@
 .Navbar {
   position: relative;
+  flex-grow: 2;
 }
 .Navbar ul {
+  height: 100%;
   list-style: none;
   display: flex;
 }
 .Navbar__item {
-  margin-left: 2rem;
+  display: flex;
+  align-items: center;
   cursor: pointer;
+  color: var(--black);
+  margin-bottom: 2rem;
 }
-.Navbar__icon {
-  height: 2.2rem;
-  width: 2.2rem;
+.Navbar__item h2 {
+  padding-left: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--black);
 }
 .Navbar .active {
   opacity: 0.8;

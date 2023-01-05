@@ -1,12 +1,11 @@
 import TimeLinePost from '../../Post/TimeLinePost';
-
 import { useCollectTimeLinePosts } from '../../../hooks/useCollectTimeLinePosts';
 
 const TimeLine = () => {
   const { documents } = useCollectTimeLinePosts();
 
   return (
-    <div>
+    <div className="TimeLine" style={{ padding: '2rem' }}>
       {documents &&
         documents.map((post, i) => <TimeLinePost key={i} postData={post} />)}
     </div>

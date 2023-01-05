@@ -1,10 +1,12 @@
 .Dashboard {
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
   position: relative;
 }
-.Dashboard__main {
+.Dashboard__content {
+  height: inherit;
+  overflow-y: scroll;
+  flex-grow: 2;
   display: flex;
+  justify-content: center;
 }

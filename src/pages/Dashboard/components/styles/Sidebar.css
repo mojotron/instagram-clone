@@ -1,4 +1,15 @@
 .Sidebar {
-  border-left: var(--gray-border);
+  border-right: var(--gray-border);
   height: 100vh;
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+}
+.Sidebar__header {
+  margin-bottom: 3rem;
+}
+.Sidebar__header h1 {
+  font-family: 'Oleo Script';
+  font-size: 2.8rem;
+  font-weight: 400;
 }

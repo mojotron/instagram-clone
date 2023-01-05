@@ -22,11 +22,6 @@ const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
           <SearchBar toggleShowSearchBar={toggleShowSearchBar} />
         )}
       </div>
-      <Navbar
-        toggleShowCreatePost={toggleShowCreatePost}
-        toggleShowSearchBar={toggleShowSearchBar}
-        toggleNotifications={toggleNotifications}
-      />
     </header>
   );
 };

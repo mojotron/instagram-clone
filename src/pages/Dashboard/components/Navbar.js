@@ -14,6 +14,8 @@ import './styles/Navbar.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const Navbar = ({
+  direction,
+  screenSize,
   toggleShowCreatePost,
   toggleShowSearchBar,
   toggleNotifications,
@@ -23,36 +25,44 @@ const Navbar = ({
 
   return (
     <nav className="Navbar">
-      <ul>
-        <li className="Navbar__item">
-          <NavLink to="/">
-            <CgHome size={20} />
-          </NavLink>
-        </li>
+      <ul style={{ flexDirection: direction }}>
+        <NavLink to="/">
+          <li className="Navbar__item">
+            <CgHome size={25} />
+            {screenSize === 'large' && <h2>Home</h2>}
+          </li>
+        </NavLink>
         <li className="Navbar__item" onClick={toggleShowSearchBar}>
-          <BsSearch size={20} />
+          <BsSearch size={25} />
+          {screenSize === 'large' && <h2>Search</h2>}
         </li>
-        <li className="Navbar__item">
-          <NavLink to="/explore">
-            <MdOutlineExplore size={20} />
-          </NavLink>
-        </li>
-        <li className="Navbar__item">
-          <NavLink to="/direct">
-            <FiSend size={20} />
-          </NavLink>
-        </li>
+        <NavLink to="/explore">
+          <li className="Navbar__item">
+            <MdOutlineExplore size={25} />
+            {screenSize === 'large' && <h2>Explore</h2>}
+          </li>
+        </NavLink>
+        <NavLink to="/direct">
+          <li className="Navbar__item">
+            <FiSend size={25} />
+            {screenSize === 'large' && <h2>Messages</h2>}
+          </li>
+        </NavLink>
         <li className="Navbar__item" onClick={toggleNotifications}>
-          <AiOutlineHeart size={20} />
+          <AiOutlineHeart size={25} />
+          {screenSize === 'large' && <h2>Notifications</h2>}
         </li>
         <li className="Navbar__item" onClick={toggleShowCreatePost}>
-          <CgAddR size={20} />
+          <CgAddR size={25} />
+          {screenSize === 'large' && <h2>Create</h2>}
         </li>
         <li
           className="Navbar__item"
           onClick={() => setShowDropdown(oldValue => !oldValue)}
         >
           <Avatar url={response.document.avatar.url} size="small" />
+          {screenSize === 'large' && <h2>Profile</h2>}
+
           {showDropdown && <ProfileDropdown />}
         </li>
       </ul>

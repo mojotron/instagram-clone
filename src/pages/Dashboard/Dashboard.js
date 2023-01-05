@@ -15,6 +15,7 @@ import Explore from '../Explore/Explore';
 import SuggestedUsers from './components/SuggestedUsers';
 import Messages from '../Messages/Messages';
 import Notifications from '../Notifications/Notifications';
+import Footer from './components/Footer';
 // style
 import './styles/Dashboard.css';
 // context provider
@@ -50,7 +51,7 @@ const Dashboard = () => {
   return (
     <div
       className="Dashboard"
-      style={{ flexDirection: screenSize === small ? 'column' : 'row' }}
+      style={{ flexDirection: screenSize === 'small' ? 'column' : 'row' }}
     >
       {response.document && (
         <>
@@ -73,21 +74,22 @@ const Dashboard = () => {
           */}
 
           {screenSize !== 'small' && <Sidebar screenSize={screenSize} />}
-
-          {/* <Header
-            toggleShowCreatePost={toggleShowCreatePost}
-            toggleNotifications={toggleNotifications}
-          /> */}
+          {screenSize === 'small' && (
+            <Header
+              toggleShowCreatePost={toggleShowCreatePost}
+              toggleNotifications={toggleNotifications}
+            />
+          )}
 
           <div className="Dashboard__content">
             <Routes>
               <Route
                 path="/"
                 element={
-                  <section className="Dashboard__main">
+                  <>
                     <TimeLine />
                     {large && <SuggestedUsers />}
-                  </section>
+                  </>
                 }
               />
               <Route path="/settings" element={<Settings />} />
@@ -98,6 +100,8 @@ const Dashboard = () => {
               <Route path="/explore" element={<Explore />} />
             </Routes>
           </div>
+
+          {screenSize === 'small' && <Footer />}
         </>
       )}
     </div>
