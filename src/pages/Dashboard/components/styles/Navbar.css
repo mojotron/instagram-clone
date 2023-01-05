@@ -4,6 +4,7 @@
 }
 .Navbar ul {
   height: 100%;
+  width: 100%;
   list-style: none;
   display: flex;
 }
@@ -12,7 +13,9 @@
   align-items: center;
   cursor: pointer;
   color: var(--black);
-  margin-bottom: 2rem;
+}
+.Navbar ul a {
+  display: block;
 }
 .Navbar__item h2 {
   padding-left: 1.5rem;

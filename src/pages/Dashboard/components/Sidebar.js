@@ -6,6 +6,7 @@ import { BsInstagram } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
 // components
 import Navbar from './Navbar';
+import NavbarItem from './NavbarItem';
 
 const Sidebar = ({ screenSize }) => {
   return (
@@ -25,10 +26,12 @@ const Sidebar = ({ screenSize }) => {
 
       <Navbar direction="column" screenSize={screenSize} />
 
-      <div className="Navbar__item">
-        <GiHamburgerMenu size={25} />
-        {screenSize === 'large' && <h2>More</h2>}
-      </div>
+      <NavbarItem
+        icon={<GiHamburgerMenu size={25} />}
+        link={null}
+        screenSize={screenSize}
+        headings="More"
+      />
     </div>
   );
 };

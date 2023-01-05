@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 // components
 import Avatar from '../../../components/Avatar';
 import ProfileDropdown from './ProfileDropdown';
+import NavbarItem from './NavbarItem';
 // icon images
 import { BsSearch } from 'react-icons/bs';
 import { FiSend } from 'react-icons/fi';
@@ -23,48 +24,65 @@ const Navbar = ({
   const { response } = useUserDataContext();
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const rowStyle = {
+    flexDirection: direction,
+    justifyContent: 'space-around',
+  };
+  const columnStyle = {
+    flexDirection: direction,
+    justifyContent: 'flex-start',
+  };
+
   return (
     <nav className="Navbar">
-      <ul style={{ flexDirection: direction }}>
-        <NavLink to="/">
-          <li className="Navbar__item">
-            <CgHome size={25} />
-            {screenSize === 'large' && <h2>Home</h2>}
-          </li>
-        </NavLink>
-        <li className="Navbar__item" onClick={toggleShowSearchBar}>
-          <BsSearch size={25} />
-          {screenSize === 'large' && <h2>Search</h2>}
-        </li>
-        <NavLink to="/explore">
-          <li className="Navbar__item">
-            <MdOutlineExplore size={25} />
-            {screenSize === 'large' && <h2>Explore</h2>}
-          </li>
-        </NavLink>
-        <NavLink to="/direct">
-          <li className="Navbar__item">
-            <FiSend size={25} />
-            {screenSize === 'large' && <h2>Messages</h2>}
-          </li>
-        </NavLink>
-        <li className="Navbar__item" onClick={toggleNotifications}>
-          <AiOutlineHeart size={25} />
-          {screenSize === 'large' && <h2>Notifications</h2>}
-        </li>
-        <li className="Navbar__item" onClick={toggleShowCreatePost}>
-          <CgAddR size={25} />
-          {screenSize === 'large' && <h2>Create</h2>}
-        </li>
-        <li
-          className="Navbar__item"
-          onClick={() => setShowDropdown(oldValue => !oldValue)}
-        >
-          <Avatar url={response.document.avatar.url} size="small" />
-          {screenSize === 'large' && <h2>Profile</h2>}
-
-          {showDropdown && <ProfileDropdown />}
-        </li>
+      <ul style={direction === 'row' ? rowStyle : columnStyle}>
+        <NavbarItem
+          icon={<CgHome size={25} />}
+          link="/"
+          screenSize={screenSize}
+          headings="Home"
+        />
+        {screenSize !== 'small' && (
+          <NavbarItem
+            icon={<BsSearch size={25} />}
+            link={null}
+            screenSize={screenSize}
+            headings="Search"
+          />
+        )}
+        <NavbarItem
+          icon={<MdOutlineExplore size={25} />}
+          link="/explore"
+          screenSize={screenSize}
+          headings="Explore"
+        />
+        <NavbarItem
+          icon={<FiSend size={25} />}
+          link="/direct"
+          screenSize={screenSize}
+          headings="Messages"
+        />
+        {screenSize !== 'small' && (
+          <NavbarItem
+            icon={<AiOutlineHeart size={25} />}
+            link={null}
+            screenSize={screenSize}
+            headings="Notifications"
+          />
+        )}
+        <NavbarItem
+          icon={<CgAddR size={25} />}
+          link={null}
+          screenSize={screenSize}
+          headings="Create"
+        />
+        <NavbarItem
+          icon={<Avatar url={response.document.avatar.url} size="small" />}
+          link={null}
+          screenSize={screenSize}
+          headings="Profile"
+        />
+        {showDropdown && <ProfileDropdown />}
       </ul>
     </nav>
   );

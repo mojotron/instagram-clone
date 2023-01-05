@@ -76,6 +76,7 @@ const Dashboard = () => {
           {screenSize !== 'small' && <Sidebar screenSize={screenSize} />}
           {screenSize === 'small' && (
             <Header
+              screenSize={screenSize}
               toggleShowCreatePost={toggleShowCreatePost}
               toggleNotifications={toggleNotifications}
             />
@@ -101,7 +102,7 @@ const Dashboard = () => {
             </Routes>
           </div>
 
-          {screenSize === 'small' && <Footer />}
+          {screenSize === 'small' && <Footer screenSize={screenSize} />}
         </>
       )}
     </div>

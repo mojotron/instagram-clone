@@ -1,10 +1,11 @@
 import './styles/Header.css';
-import Navbar from './Navbar';
+import { AiOutlineHeart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { useState } from 'react';
+import NavbarItem from './NavbarItem';
 
-const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
+const Header = ({ screenSize, toggleShowCreatePost, toggleNotifications }) => {
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   const toggleShowSearchBar = () => {
@@ -21,6 +22,14 @@ const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
         {showSearchBar && (
           <SearchBar toggleShowSearchBar={toggleShowSearchBar} />
         )}
+      </div>
+      <div className="Header__right">
+        <NavbarItem
+          icon={<AiOutlineHeart size={25} />}
+          link={null}
+          screenSize={screenSize}
+          headings=""
+        />
       </div>
     </header>
   );
