@@ -1,4 +1,4 @@
-.SearchBar {
+.XSearchBar {
   width: 80vw;
   max-width: 35rem;
   display: flex;
@@ -9,14 +9,14 @@
   background: #efefef;
   border-radius: 0.5rem;
 }
-.SearchBar__form {
+.XSearchBar__form {
 }
-.SearchBar__form label {
+.XSearchBar__form label {
   position: relative;
   display: flex;
   align-items: center;
 }
-.SearchBar__form input {
+.XSearchBar__form input {
   width: 100%;
   padding: 0.75rem 1rem;
   text-indent: 4rem;
@@ -26,18 +26,18 @@
   font-family: inherit;
   font-size: 1.8rem;
 }
-.SearchBar__form input.active {
+.XSearchBar__form input.active {
   text-indent: 0;
 }
-.SearchBar__form__search-icon,
-.SearchBar__form__close-icon {
+.XSearchBar__form__search-icon,
+.XSearchBar__form__close-icon {
   position: absolute;
 }
-.SearchBar__form__search-icon {
+.XSearchBar__form__search-icon {
   filter: invert(50%);
   left: 1rem;
 }
-.SearchBar__form__close-icon {
+.XSearchBar__form__close-icon {
   border-radius: 50%;
   background-color: var(--gray);
   top: 0.5rem;
@@ -46,26 +46,26 @@
   cursor: pointer;
 }
 /* results */
-.SearchBar__results {
+.XSearchBar__results {
   border-top: var(--gray-border);
   height: 400px;
   background: #efefef;
   z-index: 100;
 }
-.SearchBar__results__item {
+.XSearchBar__results__item {
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
   position: relative;
 }
-.SearchBar__results__item__info {
+.XSearchBar__results__item__info {
   margin-left: 2rem;
 }
-.SearchBar__results__item__info h2 {
+.XSearchBar__results__item__info h2 {
   font-size: 1.8rem;
   cursor: pointer;
 }
-.SearchBar__results__item__info h3 {
+.XSearchBar__results__item__info h3 {
   font-size: 1.6rem;
   font-weight: 400;
   color: var(--gray);

@@ -15,12 +15,12 @@ import Explore from '../Explore/Explore';
 import SuggestedUsers from './components/SuggestedUsers';
 import Messages from '../Messages/Messages';
 import Notifications from '../Notifications/Notifications';
+import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 // style
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
-import Sidebar from './components/Sidebar';
 
 const Dashboard = () => {
   // get data

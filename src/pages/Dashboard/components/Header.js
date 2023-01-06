@@ -1,7 +1,7 @@
 import './styles/Header.css';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import SearchBar from './SearchBar';
+import SearchBar from './SearchBarOLD';
 import { useState } from 'react';
 import NavbarItem from './NavbarItem';
 
