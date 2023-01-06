@@ -26,6 +26,10 @@ body {
   color: var(--gray);
   background-color: #fafafa;
 }
+a {
+  color: var(--black);
+  text-decoration: none;
+}
 .App {
   width: 100vw;
   min-height: 100vh;

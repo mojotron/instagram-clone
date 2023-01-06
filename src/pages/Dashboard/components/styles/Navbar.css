@@ -2,6 +2,9 @@
   position: relative;
   flex-grow: 2;
 }
+.Navbar a {
+  color: var(--black);
+}
 .Navbar ul {
   height: 100%;
   width: 100%;

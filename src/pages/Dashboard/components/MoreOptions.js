@@ -1,35 +1,36 @@
-import './styles/ProfileDropdown.css';
+import './styles/MoreOptions.css';
 import { Link } from 'react-router-dom';
 // icons
-import userIcon from '../../../images/user-icon.svg';
-import settingsIcon from '../../../images/settings-icon.svg';
-import bookmarkIcon from '../../../images/bookmark-icon.svg';
+import { RiSettings5Fill } from 'react-icons/ri';
+import { FiBookmark } from 'react-icons/fi';
+import { CgProfile } from 'react-icons/cg';
+// hooks
 import { useLogout } from '../../../hooks/useLogout';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const ProfileDropdown = () => {
+const MoreOptions = () => {
   const { response } = useUserDataContext();
   const { isPending, error, logout } = useLogout();
   return (
-    <ul className="ProfileDropdown">
+    <ul className="MoreOptions">
       <li>
         <Link
           to={`/${response.document.userName}`}
           state={{ userID: response.document.uid }}
         >
-          <img src={userIcon} alt="Profile" />
           <span>Profile</span>
+          <CgProfile size={20} />
         </Link>
       </li>
       <li>
         <Link to="/settings">
-          <img src={settingsIcon} alt="Settings" />
           <span>Settings</span>
+          <RiSettings5Fill size={20} />
         </Link>
       </li>
       <li>
-        <img src={bookmarkIcon} alt="Saved" />
         <span>Saved</span>
+        <FiBookmark size={20} />
       </li>
       <li onClick={logout}>
         {isPending ? 'Loading' : 'Logout'}
@@ -39,4 +40,4 @@ const ProfileDropdown = () => {
   );
 };
 
-export default ProfileDropdown;
+export default MoreOptions;

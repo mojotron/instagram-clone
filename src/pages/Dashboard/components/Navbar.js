@@ -1,8 +1,5 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 // components
 import Avatar from '../../../components/Avatar';
-import ProfileDropdown from './ProfileDropdown';
 import NavbarItem from './NavbarItem';
 // icon images
 import { BsSearch } from 'react-icons/bs';
@@ -22,7 +19,6 @@ const Navbar = ({
   toggleNotifications,
 }) => {
   const { response } = useUserDataContext();
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const rowStyle = {
     flexDirection: direction,
@@ -41,6 +37,7 @@ const Navbar = ({
           link="/"
           screenSize={screenSize}
           headings="Home"
+          handleClick={null}
         />
         {screenSize !== 'small' && (
           <NavbarItem
@@ -48,6 +45,7 @@ const Navbar = ({
             link={null}
             screenSize={screenSize}
             headings="Search"
+            handleClick={toggleShowSearchBar}
           />
         )}
         <NavbarItem
@@ -55,12 +53,14 @@ const Navbar = ({
           link="/explore"
           screenSize={screenSize}
           headings="Explore"
+          handleClick={null}
         />
         <NavbarItem
           icon={<FiSend size={25} />}
           link="/direct"
           screenSize={screenSize}
           headings="Messages"
+          handleClick={null}
         />
         {screenSize !== 'small' && (
           <NavbarItem
@@ -68,6 +68,7 @@ const Navbar = ({
             link={null}
             screenSize={screenSize}
             headings="Notifications"
+            handleClick={null}
           />
         )}
         <NavbarItem
@@ -75,14 +76,15 @@ const Navbar = ({
           link={null}
           screenSize={screenSize}
           headings="Create"
+          handleClick={null}
         />
         <NavbarItem
           icon={<Avatar url={response.document.avatar.url} size="small" />}
           link={null}
           screenSize={screenSize}
           headings="Profile"
+          handleClick={null}
         />
-        {showDropdown && <ProfileDropdown />}
       </ul>
     </nav>
   );

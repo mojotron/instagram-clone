@@ -1,4 +1,5 @@
 .Sidebar {
+  position: relative;
   border-right: var(--gray-border);
   height: 100vh;
   padding: 4rem 3rem;
