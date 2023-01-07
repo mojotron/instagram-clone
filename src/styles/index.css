@@ -73,6 +73,9 @@ a {
   background: none;
   cursor: pointer;
   font-family: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btn--close {
   position: absolute;
