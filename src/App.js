@@ -34,8 +34,10 @@ const App = () => {
               path="/signup"
               element={
                 <ProtectedRoute condition={!user} goto="/">
-                  <Signup />
-                  <AuthLink goto="/login" />
+                  <div className="AuthWrapper">
+                    <Signup />
+                    <AuthLink goto="/login" />
+                  </div>
                 </ProtectedRoute>
               }
             />
@@ -43,8 +45,10 @@ const App = () => {
               path="/login"
               element={
                 <ProtectedRoute condition={!user} goto="/">
-                  <Login />
-                  <AuthLink goto="/signup" />
+                  <div className="AuthWrapper">
+                    <Login />
+                    <AuthLink goto="/signup" />
+                  </div>
                 </ProtectedRoute>
               }
             />
@@ -52,7 +56,9 @@ const App = () => {
               path="/login/reset"
               element={
                 <ProtectedRoute condition={!user} goto="/">
-                  <ForgotPassword />
+                  <div className="AuthWrapper">
+                    <ForgotPassword />
+                  </div>
                 </ProtectedRoute>
               }
             />

@@ -35,8 +35,8 @@ a {
   min-height: 100vh;
   /* display: flex;
   flex-direction: column;
-  justify-content: flex-start; */
-  align-items: center;
+  justify-content: flex-start; 
+  align-items: center;*/
 }
 .gray {
   opacity: 0.5;
@@ -92,4 +92,12 @@ a {
   font-size: 1.6rem;
   padding-top: 1rem;
   font-weight: bold;
+}
+.AuthWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

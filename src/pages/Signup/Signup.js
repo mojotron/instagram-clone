@@ -37,13 +37,9 @@ const Signup = () => {
         followers: [], // user ids
         savedPosts: [], // post ids
         messages: [], // obj {messageTo: user uid, messageDocId: /messages/doc}
-        avatar: {
-          url: '',
-          fileName: '', // for deleting avatar when user remove image
-        },
+        avatarUrl: '',
         bio: '',
         website: '',
-        // TODO -> in login and logout
         online: {
           status: true,
           lastLoggedOut: null,

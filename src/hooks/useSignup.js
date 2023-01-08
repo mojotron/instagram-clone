@@ -5,7 +5,6 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 // hooks
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useFirestore } from './useFirestore';
-import { useCheckUsername } from './useCheckUsername';
 
 export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
@@ -14,9 +13,7 @@ export const useSignup = () => {
   // auth context
   const { dispatch } = useAuthContext();
   // firestore
-  const { addDocument: addUsersDoc } = useFirestore('users');
-  const { addDocument: addNotificationDoc } = useFirestore('notifications');
-  const { publicUsernameExist, createPublicUsername } = useCheckUsername();
+  const { createDocWithCustomID, publicUsernameExist } = useFirestore('');
 
   const signup = async (email, password, data) => {
     setError(null);
@@ -36,12 +33,25 @@ export const useSignup = () => {
       );
       if (!response) throw new Error('Could not create user account!');
       // create users collection user doc using useFirestore hook
-      await addUsersDoc({ ...data, uid: response.user.uid });
+      await createDocWithCustomID(response.user.uid, 'users', {
+        ...data,
+        uid: response.user.uid,
+      });
       // create public_usernames collection doc with custom id which is username so
       // in account creation we can check if user exists **
-      await createPublicUsername(data.userName);
+      await createDocWithCustomID(response.user.uid, 'public_usernames', {
+        userName: data.userName,
+      });
       // create notification doc
-      await addNotificationDoc({ uid: response.user.uid, notifications: [] });
+      await createDocWithCustomID(response.user.uid, 'notifications', {
+        notifications: [],
+      });
+      // create user_display_data doc
+      await createDocWithCustomID(response.user.uid, 'user_display_data', {
+        avatar: { url: '', fileName: '' },
+        userName: data.userName,
+        fullName: data.fullName,
+      });
       // change login context and display user dashboard after all documents are created
       dispatch({ type: 'LOGIN', payload: response.user });
       // change DOM state only if is component mounted

@@ -79,7 +79,7 @@ const Navbar = ({
           handleClick={null}
         />
         <NavbarItem
-          icon={<Avatar url={response.document.avatar.url} size="small" />}
+          icon={<Avatar url={response.document.avatarUrl} size="small" />}
           link={null}
           screenSize={screenSize}
           headings="Profile"

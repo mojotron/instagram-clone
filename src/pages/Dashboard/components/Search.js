@@ -5,10 +5,15 @@ import SearchResults from './SearchResults';
 import './styles/Search.css';
 
 const Search = () => {
+  // preform search query
+  const search = searchTerm => {
+    console.log('collect:', searchTerm);
+  };
+
   return (
     <div className="Search">
       <h2>Search</h2>
-      <SearchBar />
+      <SearchBar handleSearch={search} />
       <SearchResults />
     </div>
   );

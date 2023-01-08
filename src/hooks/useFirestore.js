@@ -10,6 +10,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  setDoc,
   deleteDoc,
 } from 'firebase/firestore';
 
@@ -138,6 +139,7 @@ export const useFirestore = collectionName => {
 
   const deleteDocument = async docId => {
     dispatch({ type: 'IS_PENDING' });
+    // TODO bug here
     dispatchIfNotCancelled({ type: 'DELETE_DOCUMENT' });
     try {
       await deleteDoc(doc(projectFirestore, collectionName, docId));
@@ -146,18 +148,26 @@ export const useFirestore = collectionName => {
     }
   };
 
-  // TODO delete or make separate hook
-  const checkIfUserExists = async username => {
-    // helper function for useSignup hook
-    // helper function for checking friend profile in Profile page
+  const createDocWithCustomID = async (customID, collectionName, data) => {
+    // helper function used without reducer, used in useSignup hook for creating
+    // user documents with user id as doc id
     try {
-      const q = query(colRef, where('userName', '==', username));
-      const querySnapshot = await getDocs(q);
-      // negate empty to be more in function name spirit
-      if (querySnapshot.empty) return false;
-      const users = [];
-      querySnapshot.forEach(doc => users.push({ ...doc.data(), id: doc.id }));
-      return users[0];
+      await setDoc(doc(projectFirestore, collectionName, customID), {
+        ...data,
+        createdAt: Timestamp.fromDate(new Date()),
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // helper function
+  const publicUsernameExist = async username => {
+    try {
+      const usernameDocRef = await getDoc(
+        doc(projectFirestore, `public_usernames/${username}`)
+      );
+      return usernameDocRef.exists();
     } catch (error) {
       throw error;
     }
@@ -173,7 +183,8 @@ export const useFirestore = collectionName => {
     getDocument,
     getDocumentById,
     updateDocument,
-    checkIfUserExists,
     deleteDocument,
+    createDocWithCustomID,
+    publicUsernameExist,
   };
 };

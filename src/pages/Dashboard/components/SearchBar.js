@@ -5,7 +5,7 @@ import './styles/Search.css';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { BsSearch } from 'react-icons/bs';
 
-const SearchBar = () => {
+const SearchBar = ({ handleSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hasFocus, setHasFocus] = useState(false);
   const inputRef = useRef();
@@ -16,8 +16,9 @@ const SearchBar = () => {
     // debounce search call, call search one and half second after user
     // stops typing
     if (searchTerm === '') return;
+    console.log('call debounce');
     const debounce = setTimeout(() => {
-      console.log(searchTerm);
+      handleSearch(searchTerm);
     }, 1500);
 
     return () => clearTimeout(debounce);
@@ -27,7 +28,11 @@ const SearchBar = () => {
     inputRef.current.focus();
   }, []);
 
-  const handleClearSearch = () => {};
+  const handleClearSearch = () => {
+    console.log('clearing search');
+    setSearchTerm('');
+    setHasFocus(false);
+  };
 
   return (
     <form className="SearchBar">
@@ -42,9 +47,8 @@ const SearchBar = () => {
           onFocus={() => setHasFocus(true)}
           onBlur={() => setHasFocus(false)}
         />
-
         {hasFocus && (
-          <button className="btn">
+          <button type="button" className="btn" onMouseDown={handleClearSearch}>
             <IoIosCloseCircle size={15} color={'var(--gray)'} />
           </button>
         )}
