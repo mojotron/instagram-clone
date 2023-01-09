@@ -162,10 +162,10 @@ export const useFirestore = collectionName => {
   };
 
   // helper function
-  const publicUsernameExist = async username => {
+  const documentExist = async (collectionName, docId) => {
     try {
       const usernameDocRef = await getDoc(
-        doc(projectFirestore, `public_usernames/${username}`)
+        doc(projectFirestore, `${collectionName}/${docId}`)
       );
       return usernameDocRef.exists();
     } catch (error) {
@@ -185,6 +185,6 @@ export const useFirestore = collectionName => {
     updateDocument,
     deleteDocument,
     createDocWithCustomID,
-    publicUsernameExist,
+    documentExist,
   };
 };
