@@ -3,29 +3,28 @@ import { useFirestore } from '../hooks/useFirestore';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useEffect, useRef } from 'react';
 import { Timestamp } from 'firebase/firestore';
+import { useOnSnapshotDocument } from '../hooks/useOnSnapshotDocument';
 
 export const UserDataContext = createContext();
 
 export const UserDataContextProvider = ({ children }) => {
   const { user } = useAuthContext();
-  const { response, getDocument, updateDocument, checkIfUserExists } =
-    useFirestore('users');
+  const { document, isPending, error } = useOnSnapshotDocument(
+    'users',
+    user.uid
+  );
+  const { updateDocument } = useFirestore('users');
 
-  const loadDocument = useRef(() => getDocument(user.uid)).current;
   const updateStatus = useRef((docId, data) =>
     updateDocument(docId, data)
   ).current;
 
   useEffect(() => {
-    loadDocument();
-  }, [loadDocument]);
-
-  useEffect(() => {
-    if (response.document === null) return;
-    if (response.document.online.status) return;
+    if (document === null) return;
+    if (document.online.status) return;
 
     const changeOnlineStatus = async () => {
-      updateStatus(response.document.id, {
+      updateStatus(document.id, {
         online: {
           status: true,
           lastLoggedOut: Timestamp.fromDate(new Date()),
@@ -34,13 +33,13 @@ export const UserDataContextProvider = ({ children }) => {
     };
 
     changeOnlineStatus();
-  }, [response, updateStatus]);
+  }, [document, updateStatus]);
 
-  if (!response.document?.online.status) return;
+  if (!document?.online.status) return;
 
   return (
     <UserDataContext.Provider
-      value={{ response, updateDocument, checkIfUserExists }}
+      value={{ response: { document, isPending, error }, updateDocument }}
     >
       {children}
     </UserDataContext.Provider>

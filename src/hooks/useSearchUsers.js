@@ -6,6 +6,7 @@ export const useSearchUsers = () => {
     updateDocument,
     createDocWithCustomID,
     documentExist,
+    deleteDocument,
   } = useFirestore('search_users');
 
   const _determineBucket = searchTerm => {
@@ -25,25 +26,43 @@ export const useSearchUsers = () => {
     }
   };
 
-  const updateBucket = async (newUserName, userId, oldUserName = null) => {
+  const addToBucket = async (username, userId) => {
     try {
-      const bucketId = _determineBucket(newUserName);
-      console.log('bucket id', bucketId);
+      const bucketId = _determineBucket(username);
       const bucket = await getBucket(bucketId);
-      console.log('bucket', bucket);
       if (bucket) {
-        const users = bucket.users;
-        if (oldUserName) {
-          delete users[oldUserName];
-        }
-        users[newUserName] = userId;
+        const users = { ...bucket.users };
+        users[username] = userId;
         await updateDocument(bucketId, { users });
       } else {
-        const users = { [newUserName]: userId };
-        console.log(users);
+        const users = { [username]: userId };
         await createDocWithCustomID(bucketId, 'search_users', { users });
       }
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const removeFromBucket = async username => {
+    console.log('1 old username', username);
+    try {
+      const bucketId = _determineBucket(username);
+      const bucket = await getBucket(bucketId);
+      console.log('2 bucket', bucket);
+      const users = { ...bucket.users };
+      console.log(1, users);
+      delete users[username];
+      console.log(2, users);
+      if (Object.keys(users).length === 0) {
+        console.log('empty try and delete');
+        await deleteDocument(bucketId);
+      } else {
+        console.log('non empty try update');
+        await updateDocument(bucketId, { users });
+      }
+    } catch (error) {
+      throw error;
+    }
   };
 
   const getUsersIDs = async userList => {};
@@ -98,5 +117,5 @@ export const useSearchUsers = () => {
   //   return () => setIsCanceled(true);
   // }, []);
 
-  return { updateBucket };
+  return { addToBucket, removeFromBucket };
 };

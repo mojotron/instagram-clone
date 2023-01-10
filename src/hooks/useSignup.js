@@ -16,7 +16,7 @@ export const useSignup = () => {
   // firestore
   const { createDocWithCustomID, documentExist, getDocumentById } =
     useFirestore('users');
-  const { updateBucket } = useSearchUsers();
+  const { addToBucket } = useSearchUsers();
 
   const signup = async (email, password, data) => {
     setError(null);
@@ -27,7 +27,6 @@ export const useSignup = () => {
         'public_usernames',
         data.userName
       );
-      console.log('check for username', usernameExist);
       if (usernameExist) {
         throw new Error('Username already exist, please try another one!');
       }
@@ -52,14 +51,8 @@ export const useSignup = () => {
       await createDocWithCustomID(response.user.uid, 'notifications', {
         notifications: [],
       });
-      // create user_display_data doc
-      await createDocWithCustomID(response.user.uid, 'user_display_data', {
-        avatar: { url: '', fileName: '' },
-        userName: data.userName,
-        fullName: data.fullName,
-      });
       // add user to search_user bucket
-      await updateBucket(data.userName, response.user.uid);
+      await addToBucket(data.userName, response.user.uid);
       // get created user for auth dispatch
       const createdUser = await getDocumentById(response.user.uid);
       // change login context and display user dashboard after all documents are created

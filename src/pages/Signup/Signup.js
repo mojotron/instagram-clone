@@ -37,7 +37,7 @@ const Signup = () => {
         followers: [], // user ids
         savedPosts: [], // post ids
         messages: [], // obj {messageTo: user uid, messageDocId: /messages/doc}
-        avatarUrl: '',
+        avatar: { url: '', fileName: '' },
         bio: '',
         website: '',
         online: {

@@ -138,11 +138,11 @@ export const useFirestore = collectionName => {
   };
 
   const deleteDocument = async docId => {
+    console.log('deleting', docId);
     dispatch({ type: 'IS_PENDING' });
-    // TODO bug here
-    dispatchIfNotCancelled({ type: 'DELETE_DOCUMENT' });
     try {
       await deleteDoc(doc(projectFirestore, collectionName, docId));
+      dispatchIfNotCancelled({ type: 'DELETE_DOCUMENT' });
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }

@@ -8,9 +8,15 @@ import {
   userNameValidation,
 } from '../../utils/inputValidation';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useFirestore } from '../../hooks/useFirestore';
+import { useSearchUsers } from '../../hooks/useSearchUsers';
 
 const Settings = () => {
-  const { response, updateDocument, checkIfUserExists } = useUserDataContext();
+  const { createDocWithCustomID, deleteDocument, documentExist } =
+    useFirestore('public_usernames');
+
+  const { response, updateDocument } = useUserDataContext();
+  const { removeFromBucket, addToBucket } = useSearchUsers();
 
   const [changeAvatar, setChangeAvatar] = useState(false);
   const [fullNameError, setFullNameError] = useState(null);
@@ -24,6 +30,7 @@ const Settings = () => {
     bio: response.document.bio,
   });
 
+  // toggle change avatar popup
   const handleChangeAvatar = () => setChangeAvatar(oldValue => !oldValue);
 
   const handleChange = e => {
@@ -38,18 +45,34 @@ const Settings = () => {
     setUsernameError(null);
     setFullNameError(null);
     try {
+      if (formData.userName !== response.document.userName) {
+        userNameValidation(formData.userName);
+        const usernameExist = await documentExist(
+          'public_usernames',
+          formData.userName
+        );
+
+        console.log(usernameExist);
+        if (usernameExist) {
+          throw new Error('Username already exist, please try another one!');
+        } else {
+          // delete old public_usernames doc
+          await deleteDocument(response.document.userName);
+          // create new public_username doc
+          await createDocWithCustomID(formData.userName, 'public_usernames', {
+            userName: formData.userName,
+          });
+          // remove old username from search_users bucket
+          await removeFromBucket(response.document.userName);
+          // add new username to search_users bucket
+          await addToBucket(formData.userName, response.document.uid);
+        }
+      }
       if (formData.fullName !== response.document.fullName) {
         fullNameValidation(formData.fullName);
       }
-      if (formData.userName !== response.document.userName) {
-        userNameValidation(formData.userName);
-        const usernameExist = await checkIfUserExists(formData.userName);
-        if (usernameExist)
-          throw new Error('Username already exist, please try another one!');
-      }
       // update user info
       await updateDocument(response.document.id, formData);
-      // navigate('/');
     } catch (err) {
       console.log(err.message);
       if (err.message === 'input full name, like "John Dow"') {
@@ -58,8 +81,8 @@ const Settings = () => {
         setUsernameError(err.message);
       }
     }
-    // navigate
   };
+
   return (
     <>
       {changeAvatar && (
@@ -79,7 +102,7 @@ const Settings = () => {
           >
             <Avatar
               size="mid"
-              url={response.document.avatar.url}
+              url={response.document.avatarUrl}
               handleClick={handleChangeAvatar}
             />
           </div>
