@@ -31,9 +31,9 @@ export const useSearchUsers = () => {
       const bucketId = _determineBucket(username);
       const bucket = await getBucket(bucketId);
       if (bucket) {
-        const users = { ...bucket.users };
-        users[username] = userId;
-        await updateDocument(bucketId, { users });
+        const updatedUsers = { ...bucket.users };
+        updatedUsers[username] = userId;
+        await updateDocument(bucketId, { users: updatedUsers });
       } else {
         const users = { [username]: userId };
         await createDocWithCustomID(bucketId, 'search_users', { users });
@@ -44,20 +44,14 @@ export const useSearchUsers = () => {
   };
 
   const removeFromBucket = async username => {
-    console.log('1 old username', username);
     try {
       const bucketId = _determineBucket(username);
       const bucket = await getBucket(bucketId);
-      console.log('2 bucket', bucket);
       const users = { ...bucket.users };
-      console.log(1, users);
       delete users[username];
-      console.log(2, users);
       if (Object.keys(users).length === 0) {
-        console.log('empty try and delete');
         await deleteDocument(bucketId);
       } else {
-        console.log('non empty try update');
         await updateDocument(bucketId, { users });
       }
     } catch (error) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '../../components/Avatar';
 import ChangeProfilePhoto from '../../components/ChangeProfilePhoto';
 import './styles/Settings.css';
@@ -32,9 +32,21 @@ const Settings = () => {
 
   // toggle change avatar popup
   const handleChangeAvatar = () => setChangeAvatar(oldValue => !oldValue);
+  // toggle disable submit button if data is different from form input
+  useEffect(() => {
+    if (
+      response.document.userName === formData.userName &&
+      response.document.fullName === formData.fullName &&
+      response.document.website === formData.website &&
+      response.document.bio === formData.bio
+    ) {
+      setSubmitDisabled(true);
+    } else {
+      setSubmitDisabled(false);
+    }
+  }, [formData, response]);
 
   const handleChange = e => {
-    if (submitDisabled) setSubmitDisabled(false);
     const { name, value } = e.target;
     setFormData(oldData => ({ ...oldData, [name]: value }));
   };
@@ -62,10 +74,10 @@ const Settings = () => {
           await createDocWithCustomID(formData.userName, 'public_usernames', {
             userName: formData.userName,
           });
-          // remove old username from search_users bucket
-          await removeFromBucket(response.document.userName);
           // add new username to search_users bucket
           await addToBucket(formData.userName, response.document.uid);
+          // remove old username from search_users bucket
+          await removeFromBucket(response.document.userName);
         }
       }
       if (formData.fullName !== response.document.fullName) {
@@ -93,16 +105,10 @@ const Settings = () => {
         <h2 className="Settings__heading">Edit profile</h2>
 
         <section className="Settings__section">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'right',
-              paddingRight: '20px',
-            }}
-          >
+          <div className="Settings__avatar">
             <Avatar
               size="mid"
-              url={response.document.avatarUrl}
+              url={response.document.avatar.url}
               handleClick={handleChangeAvatar}
             />
           </div>

@@ -1,10 +1,16 @@
 .Settings {
+  margin: 2rem auto;
   width: 60rem;
-  padding: 2rem 3rem 2rem 4rem;
+  padding: 2rem 3rem;
   border: var(--gray-border);
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
+  overflow-y: scroll;
+}
+.Settings__avatar {
+  display: flex;
+  justify-content: right;
+  margin-right: 2rem;
 }
 .Settings__heading {
   color: var(--black);
@@ -59,4 +65,31 @@
 }
 .error {
   color: var(--red);
+}
+@media screen and (max-width: 50rem) {
+  .Settings {
+    width: 100vw;
+    padding: 2rem 1rem;
+  }
+  .Settings__section {
+    display: block;
+    width: 100%;
+  }
+  .Settings input,
+  .Settings textarea,
+  .Settings p {
+    width: 100%;
+  }
+  .Settings button {
+    width: 15rem;
+  }
+  .Settings__avatar {
+    display: flex;
+    justify-content: left;
+    margin-right: 2rem;
+  }
+  .Settings__section:first-of-type {
+    display: flex;
+    align-items: center;
+  }
 }
