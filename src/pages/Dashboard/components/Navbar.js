@@ -10,15 +10,18 @@ import { CgHome, CgAddR } from 'react-icons/cg';
 // style
 import './styles/Navbar.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useNavigate } from 'react-router-dom';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const Navbar = ({
   direction,
-  screenSize,
   toggleShowCreatePost,
   toggleShowSearchBar,
   toggleNotifications,
 }) => {
   const { response } = useUserDataContext();
+  const { screenSize } = useScreenSizeContext();
+  const navigate = useNavigate();
 
   const rowStyle = {
     flexDirection: direction,
@@ -35,7 +38,6 @@ const Navbar = ({
         <NavbarItem
           icon={<CgHome size={25} />}
           link="/"
-          screenSize={screenSize}
           headings="Home"
           handleClick={null}
         />
@@ -43,7 +45,6 @@ const Navbar = ({
           <NavbarItem
             icon={<BsSearch size={25} />}
             link={null}
-            screenSize={screenSize}
             headings="Search"
             handleClick={toggleShowSearchBar}
           />
@@ -51,14 +52,12 @@ const Navbar = ({
         <NavbarItem
           icon={<MdOutlineExplore size={25} />}
           link="/explore"
-          screenSize={screenSize}
           headings="Explore"
           handleClick={null}
         />
         <NavbarItem
           icon={<FiSend size={25} />}
           link="/direct"
-          screenSize={screenSize}
           headings="Messages"
           handleClick={null}
         />
@@ -66,7 +65,6 @@ const Navbar = ({
           <NavbarItem
             icon={<AiOutlineHeart size={25} />}
             link={null}
-            screenSize={screenSize}
             headings="Notifications"
             handleClick={null}
           />
@@ -74,16 +72,14 @@ const Navbar = ({
         <NavbarItem
           icon={<CgAddR size={25} />}
           link={null}
-          screenSize={screenSize}
           headings="Create"
           handleClick={null}
         />
         <NavbarItem
-          icon={<Avatar url={response.document.avatar.url} size="small" />}
+          icon={<Avatar url={response.document.avatar.url} size={25} />}
           link={null}
-          screenSize={screenSize}
           headings="Profile"
-          handleClick={null}
+          handleClick={() => navigate(`/${response.document.userName}`)}
         />
       </ul>
     </nav>

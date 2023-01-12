@@ -5,12 +5,15 @@ import './styles/authForm.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './context/AuthContext';
+import { ScreenSizeContextProvider } from './context/ScreenSizeContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
   <AuthContextProvider>
-    <App />
+    <ScreenSizeContextProvider>
+      <App />
+    </ScreenSizeContextProvider>
   </AuthContextProvider>
   // </React.StrictMode>
 );

@@ -8,6 +8,7 @@ export const useOnSnapshotDocument = (collectionName, docId) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!docId) return;
     setIsPending(true);
     let unsubscribe;
     const getDocuments = async () => {

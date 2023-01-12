@@ -11,146 +11,117 @@ import { useFirestore } from '../../hooks/useFirestore';
 import { useCollectPosts } from '../../hooks/useCollectPosts';
 import { useCollectSavedPosts } from '../../hooks/useCollectSavedPosts';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useSearchUsers } from '../../hooks/useSearchUsers';
 // icons
-import gridIcon from '../../images/grid-icon.svg';
-import bookmarkIcon from '../../images/bookmark-icon.svg';
+import { MdGridOn } from 'react-icons/md';
+import { FiBookmark } from 'react-icons/fi';
+import PostsCollectionTab from './components/PostsCollectionTab';
+import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 
 const Profile = () => {
-  const { response, updateDocument: handleUpdateUser } = useUserDataContext();
+  const { response } = useUserDataContext();
+  const { searchForUser } = useSearchUsers();
 
+  // TODO load
   const navigate = useNavigate();
   const { userName } = useParams();
+  const { documentExist } = useFirestore('users');
   // can ne own, friend, other
   const [profileType, setProfileType] = useState(null);
-  const [profileData, setProfileData] = useState(null);
+  const [targetUserUID, setTargetUserUID] = useState(null);
+
+  const [activeTab, setActiveTab] = useState('posts'); // posts or saved
+
+  const { isPending, error, document } = useOnSnapshotDocument(
+    'users',
+    targetUserUID
+  );
+
+  console.log(document);
 
   useEffect(() => {
     // if user inspecting other of friend acc and wants go back to own
     setProfileType(null);
-    setProfileData(null);
-  }, [userName]);
+    setTargetUserUID(null);
+  }, []);
 
-  const { checkIfUserExists, updateDocument } = useFirestore('users');
-
-  const { documents } = useCollectPosts(profileData?.uid);
-  const { documents: savedPosts } = useCollectSavedPosts();
-
-  const [activeTab, setActiveTab] = useState('posts'); // posts or saved
+  // const { documents } = useCollectPosts(profileData?.uid);
+  // const { documents: savedPosts } = useCollectSavedPosts();
 
   useEffect(() => {
-    if (profileData) return;
+    if (profileType) return;
+    // first check if inspecting own profile page
     if (userName === response.document.userName) {
       // users inspecting own profile
-      setProfileData(response.document);
       setProfileType('own');
       return;
     }
-
+    //
     const checkForUser = async () => {
+      console.log('checking for user');
       try {
-        const user = await checkIfUserExists(userName);
-        if (user === false) navigate('/');
-        // find is friend or other
+        // check if userName exist (navigate to homepage if not)
+        const userExist = await documentExist('public_usernames', userName);
+        if (userExist === false) navigate('/');
+        // get user document
+        // TODO
+        const userUID = await searchForUser(userName);
+        // find is friend (following) or other (not following)
         const friend = await response.document.following.find(
-          friendUid => friendUid === user.uid
+          friendUid => friendUid === userUID
         );
         friend ? setProfileType('friend') : setProfileType('other');
-        setProfileData(user);
+        setTargetUserUID(userUID);
       } catch (error) {
         console.log(error);
       }
     };
 
     checkForUser();
-  }, [navigate, userName, response, profileData, checkIfUserExists]);
+  }, [
+    profileType,
+    navigate,
+    userName,
+    response,
+    targetUserUID,
+    documentExist,
+    searchForUser,
+  ]);
 
-  const handleFollowAccount = async (userId, userFollowers, docId) => {
-    console.log(userFollowers);
-    try {
-      const ownAccFollowing = [...response.document.following, userId];
-      const inspectingAccFollowers = [...userFollowers, response.document.uid];
-      await updateDocument(docId, {
-        followers: inspectingAccFollowers,
-      });
-      await handleUpdateUser(response.document.id, {
-        following: ownAccFollowing,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleUnfollowAccount = async (userId, userFollowers, docId) => {
-    try {
-      const ownAccFollowing = [...response.document.following].filter(
-        acc => acc !== userId
-      );
-      const inspectingAccFollowers = [...userFollowers].filter(
-        acc => acc !== response.document.uid
-      );
-      console.log(ownAccFollowing, inspectingAccFollowers);
-      await updateDocument(docId, {
-        followers: inspectingAccFollowers,
-      });
-      await handleUpdateUser(response.document.id, {
-        following: ownAccFollowing,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleRemoveFollower = async (userId, userFollowing, docId) => {
-    //user data is collected via FollowerList useCollectUsers hook
-    try {
-      const ownAccFollowing = [...response.document.followers].filter(
-        acc => acc !== userId
-      );
-      const inspectingAccFollowers = [...userFollowing].filter(
-        acc => acc !== response.document.uid
-      );
-      await updateDocument(docId, {
-        following: inspectingAccFollowers,
-      });
-      await handleUpdateUser(response.document.id, {
-        followers: ownAccFollowing,
-      });
-    } catch (error) {}
-  };
-
-  if (profileData === null || documents === null) return;
+  if (profileType === null) return;
+  if (profileType !== 'own' && document === null) return;
 
   return (
     <div className="Profile">
       <ProfileUser
-        targetData={profileData}
         accountType={profileType}
-        postsCount={documents.length}
-        handlers={{
-          follow: handleFollowAccount,
-          unfollow: handleUnfollowAccount,
-          remove: handleRemoveFollower,
-        }}
+        targetData={
+          profileType === 'own'
+            ? response
+            : { response: { isPending, error, document } }
+        }
       />
-
-      <section className="Profile__collections">
+      {/* TABS */}
+      {/* <section className="Profile__collections">
         <div className="Profile__collections__tabs">
           <button
             className={`btn btn--tab ${activeTab === 'posts' ? 'active' : ''}`}
             onClick={() => setActiveTab('posts')}
           >
-            <img src={gridIcon} alt="posts collection" />
+            <MdGridOn size={15} />
             <span>Posts</span>
           </button>
+
           <button
             className={`btn btn--tab ${activeTab === 'saved' ? 'active' : ''}`}
             onClick={() => setActiveTab('saved')}
           >
-            <img src={bookmarkIcon} alt="saved collection" />
+            <FiBookmark size={15} />
             <span>Saved</span>
           </button>
         </div>
 
+        <PostsCollectionTab postIDList={null} />
         {activeTab === 'posts' && (
           <div className="Profile__collections__showcase">
             {documents &&
@@ -167,7 +138,7 @@ const Profile = () => {
               ))}
           </div>
         )}
-      </section>
+      </section> */}
     </div>
   );
 };

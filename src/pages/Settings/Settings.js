@@ -107,7 +107,7 @@ const Settings = () => {
         <section className="Settings__section">
           <div className="Settings__avatar">
             <Avatar
-              size="mid"
+              size={38}
               url={response.document.avatar.url}
               handleClick={handleChangeAvatar}
             />

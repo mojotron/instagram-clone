@@ -1,8 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const NavbarItem = ({ icon, link, screenSize, headings, handleClick }) => {
+const NavbarItem = ({ icon, link, headings, handleClick }) => {
   // {...(condition ? { onClick: () => {handleClick()}} : {})}
+  const { screenSize } = useScreenSizeContext();
+
   const component = (
     <li
       onClick={handleClick !== null ? handleClick : undefined}

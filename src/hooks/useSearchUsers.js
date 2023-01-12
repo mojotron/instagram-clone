@@ -61,55 +61,16 @@ export const useSearchUsers = () => {
 
   const getUsersIDs = async userList => {};
 
-  const searchForUsers = searchTerm => {
-    // get bucket
-    // loop over users
-    // collect ids
-    // return ids
+  const searchForUser = async searchTerm => {
+    try {
+      const bucketId = _determineBucket(searchTerm);
+      const bucket = await getBucket(bucketId);
+      if (!bucket) return null;
+      return bucket.users[searchTerm];
+    } catch (error) {
+      throw error;
+    }
   };
 
-  // const ref = collection(projectFirestore, 'users');
-  // // TODO create in firebase list of all user for better preformance and refactor
-  // const [isCanceled, setIsCanceled] = useState(false);
-  // const [documents, setDocuments] = useState(null);
-  // const [isPending, setIsPending] = useState(false);
-  // const [error, setError] = useState(null);
-
-  // const searchForUsers = async searchTerm => {
-  //   setIsPending(true);
-  //   setError(null);
-  //   try {
-  //     const querySnapshot = await getDocs(ref);
-  //     const result = [];
-  //     querySnapshot.forEach(doc => {
-  //       const data = doc.data();
-  //       if (data.userName.startsWith(searchTerm)) {
-  //         console.log(data.userName.startsWith(searchTerm));
-  //         result.push({ ...data, id: doc.id });
-  //       }
-  //     });
-  //     if (!isCanceled) {
-  //       setIsPending(false);
-  //       setDocuments(result);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     if (!isCanceled) {
-  //       setIsPending(false);
-  //       setError(error.message);
-  //     }
-  //   }
-  // };
-
-  // const reset = () => {
-  //   setDocuments(null);
-  //   setIsPending(false);
-  //   setError(null);
-  // };
-
-  // useEffect(() => {
-  //   return () => setIsCanceled(true);
-  // }, []);
-
-  return { addToBucket, removeFromBucket };
+  return { addToBucket, removeFromBucket, searchForUser };
 };

@@ -10,8 +10,10 @@ import Navbar from './Navbar';
 import NavbarItem from './NavbarItem';
 import MoreOptions from './MoreOptions';
 import Search from './Search';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const Sidebar = ({ screenSize }) => {
+const Sidebar = () => {
+  const { screenSize } = useScreenSizeContext();
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
@@ -35,11 +37,7 @@ const Sidebar = ({ screenSize }) => {
         </header>
       </Link>
 
-      <Navbar
-        direction="column"
-        screenSize={showSearch ? 'medium' : screenSize}
-        toggleShowSearchBar={toggleSearchBar}
-      />
+      <Navbar direction="column" toggleShowSearchBar={toggleSearchBar} />
 
       {showSearch && <Search screenSize={screenSize} />}
 
@@ -48,7 +46,6 @@ const Sidebar = ({ screenSize }) => {
       <NavbarItem
         icon={<GiHamburgerMenu size={25} />}
         link={null}
-        screenSize={showSearch ? 'medium' : screenSize}
         headings="More"
         handleClick={toggleMoreOptions}
       />

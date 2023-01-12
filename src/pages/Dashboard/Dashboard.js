@@ -21,24 +21,16 @@ import Footer from './components/Footer';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
+import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
 
 const Dashboard = () => {
   // get data
   const { response } = useUserDataContext();
+  const { screenSize } = useScreenSizeContext();
+
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [showNotification, setShowNotifications] = useState(false);
-  // screen size
-  const small = useMediaQuery('(max-width: 770px)');
-  const large = useMediaQuery('(min-width: 1280px)');
-
-  const determineScreenSize = () => {
-    if (small) return 'small';
-    if (large) return 'large';
-    return 'medium';
-  };
-
-  const screenSize = determineScreenSize();
 
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
@@ -62,21 +54,10 @@ const Dashboard = () => {
               <CreateNewPost setShowCreatePost={setShowCreatePost} />
             </UserPostContextProvider>
           )}
-          {/* 
-            large/medium
-            sidebar - heading, navbar, searchbar
-            main - dynamic content
 
-            small
-            header - heading, search bar, notifications
-            main - dynamic content
-            footer - navbar
-          */}
-
-          {screenSize !== 'small' && <Sidebar screenSize={screenSize} />}
+          {screenSize !== 'small' && <Sidebar />}
           {screenSize === 'small' && (
             <Header
-              screenSize={screenSize}
               toggleShowCreatePost={toggleShowCreatePost}
               toggleNotifications={toggleNotifications}
             />
@@ -89,7 +70,7 @@ const Dashboard = () => {
                 element={
                   <>
                     <TimeLine />
-                    {large && <SuggestedUsers />}
+                    {screenSize === 'large' && <SuggestedUsers />}
                   </>
                 }
               />
@@ -102,7 +83,7 @@ const Dashboard = () => {
             </Routes>
           </div>
 
-          {screenSize === 'small' && <Footer screenSize={screenSize} />}
+          {screenSize === 'small' && <Footer />}
         </>
       )}
     </div>

@@ -15,7 +15,7 @@
 .Settings__heading {
   color: var(--black);
   font-weight: 600;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
 }
 .Settings__section {
   display: grid;
@@ -25,7 +25,7 @@
 
 .Settings h1 {
   color: var(--black);
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   font-weight: 400;
   padding-bottom: 0.5rem;
 }
@@ -66,6 +66,7 @@
 .error {
   color: var(--red);
 }
+
 @media screen and (max-width: 50rem) {
   .Settings {
     width: 100vw;

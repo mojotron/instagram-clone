@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import SearchBar from './SearchBarOLD';
 import { useState } from 'react';
 import NavbarItem from './NavbarItem';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const Header = ({ screenSize, toggleShowCreatePost, toggleNotifications }) => {
+const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
+  const { screenSize } = useScreenSizeContext();
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   const toggleShowSearchBar = () => {

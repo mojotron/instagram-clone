@@ -11,9 +11,16 @@ import './styles/ProfileUser.css';
 // icons
 import userCheckIcon from '../../../images/user-check-icon.svg';
 import FollowerList from './FollowerList';
+// hooks
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
+const ProfileUser = ({ targetData, accountType }) => {
+  const { isPending, error, document } = targetData.response;
+  // TODO follower handlers
+  const handlers = {};
+  // TODO
   const navigate = useNavigate();
+  const { screenSize } = useScreenSizeContext();
 
   const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
   const [showConfirmUnfollow, setShowConfirmUnfollow] = useState(false);
@@ -36,11 +43,7 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
           targetData={targetData}
           handleCancel={() => setShowConfirmUnfollow(false)}
           handleAction={() =>
-            handlers.unfollow(
-              targetData.uid,
-              targetData.followers,
-              targetData.id
-            )
+            handlers.unfollow(document.uid, document.followers, document.id)
           }
         />
       )}
@@ -48,7 +51,7 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
       {showFollowerList && (
         <FollowerList
           type="followers"
-          targetList={targetData.followers}
+          targetList={document.followers}
           followHandlers={handlers}
           closeHandler={() => setShowFollowerList(false)}
         />
@@ -56,7 +59,7 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
       {showFollowingList && (
         <FollowerList
           type="following"
-          targetList={targetData.following}
+          targetList={document.following}
           followHandlers={handlers}
           closeHandler={() => setShowFollowingList(false)}
         />
@@ -64,14 +67,14 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
 
       <div className="Profile__user__avatar" title="Change profile photo">
         <Avatar
-          url={targetData.avatar.url}
-          size="big"
+          url={document.avatar.url}
+          size={screenSize === 'small' ? 77 : 150}
           handleClick={toggleUpdateAvatar}
         />
       </div>
       <div className="Profile__user__info">
         <div>
-          <h2>{targetData.userName}</h2>
+          <h2>{document.userName}</h2>
 
           {accountType === 'own' && (
             <button
@@ -100,11 +103,7 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
               <button className="btn btn--profile">Message</button>
               <button
                 onClick={() =>
-                  handlers.follow(
-                    targetData.uid,
-                    targetData.followers,
-                    targetData.id
-                  )
+                  handlers.follow(document.uid, document.followers, document.id)
                 }
                 className="btn btn--profile-blue"
               >
@@ -114,22 +113,22 @@ const ProfileUser = ({ targetData, accountType, postsCount, handlers }) => {
           )}
         </div>
         <div>
-          <FormatCount num={postsCount} title="post" />
+          {/* <FormatCount num={document.posts.length} title="post" /> */}
           <FormatCount
-            num={targetData.followers.length}
+            num={document.followers.length}
             title="follower"
             handleClick={() => setShowFollowerList(true)}
           />
           <FormatCount
-            num={targetData.following.length}
+            num={document.following.length}
             title="following"
             handleClick={() => setShowFollowingList(true)}
           />
         </div>
         <div>
-          <p>{targetData.name}</p>
-          <p>{targetData.bio}</p>
-          <p>{targetData.website}</p>
+          <p>{document.fullName}</p>
+          <p>{document.bio}</p>
+          <p>{document.website}</p>
         </div>
       </div>
     </section>
