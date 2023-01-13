@@ -13,12 +13,14 @@ import userCheckIcon from '../../../images/user-check-icon.svg';
 import FollowerList from './FollowerList';
 // hooks
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
+import { useFollow } from '../../../hooks/useFollow';
 
 const ProfileUser = ({ targetData, accountType }) => {
+  console.log('data for profile user', targetData);
   const { isPending, error, document } = targetData.response;
-  // TODO follower handlers
-  const handlers = {};
-  // TODO
+
+  const { follow, unfollow, removeFollower } = useFollow();
+
   const navigate = useNavigate();
   const { screenSize } = useScreenSizeContext();
 
@@ -42,9 +44,7 @@ const ProfileUser = ({ targetData, accountType }) => {
           text="unfollow"
           targetData={targetData}
           handleCancel={() => setShowConfirmUnfollow(false)}
-          handleAction={() =>
-            handlers.unfollow(document.uid, document.followers, document.id)
-          }
+          handleAction={() => unfollow(document.uid, document.followers)}
         />
       )}
 
@@ -52,7 +52,7 @@ const ProfileUser = ({ targetData, accountType }) => {
         <FollowerList
           type="followers"
           targetList={document.followers}
-          followHandlers={handlers}
+          //TODO followHandlers={handlers}
           closeHandler={() => setShowFollowerList(false)}
         />
       )}
@@ -60,7 +60,7 @@ const ProfileUser = ({ targetData, accountType }) => {
         <FollowerList
           type="following"
           targetList={document.following}
-          followHandlers={handlers}
+          //TODO followHandlers={handlers}
           closeHandler={() => setShowFollowingList(false)}
         />
       )}
@@ -102,9 +102,7 @@ const ProfileUser = ({ targetData, accountType }) => {
             <>
               <button className="btn btn--profile">Message</button>
               <button
-                onClick={() =>
-                  handlers.follow(document.uid, document.followers, document.id)
-                }
+                onClick={() => follow(document.uid, document.followers)}
                 className="btn btn--profile-blue"
               >
                 Follow
@@ -113,7 +111,7 @@ const ProfileUser = ({ targetData, accountType }) => {
           )}
         </div>
         <div>
-          {/* <FormatCount num={document.posts.length} title="post" /> */}
+          <FormatCount num={document.posts.length} title="post" />
           <FormatCount
             num={document.followers.length}
             title="follower"

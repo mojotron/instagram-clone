@@ -1,82 +1,103 @@
+import { useState, useEffect } from 'react';
+// hooks
 import { useUserDataContext } from './useUserDataContext';
 import { useFirestore } from './useFirestore';
-import { useState } from 'react';
+import { useNotifications } from './useNotifications';
 
 export const useFollow = () => {
-  const { response: userDocResponse, updateDocument } = useFirestore('users');
+  const { updateDocument } = useFirestore('users');
   const { response } = useUserDataContext();
+  const { addNotification } = useNotifications();
 
+  const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-  // const handleFollowAccount = async (userId, userFollowers, docId) => {
-  //   console.log(userFollowers);
-  //   try {
-  //     const ownAccFollowing = [...response.document.following, userId];
-  //     const inspectingAccFollowers = [...userFollowers, response.document.uid];
-  //     await updateDocument(docId, {
-  //       followers: inspectingAccFollowers,
-  //     });
-  //     await handleUpdateUser(response.document.id, {
-  //       following: ownAccFollowing,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleUnfollowAccount = async (userId, userFollowers, docId) => {
-  //   try {
-  //     const ownAccFollowing = [...response.document.following].filter(
-  //       acc => acc !== userId
-  //     );
-  //     const inspectingAccFollowers = [...userFollowers].filter(
-  //       acc => acc !== response.document.uid
-  //     );
-  //     console.log(ownAccFollowing, inspectingAccFollowers);
-  //     await updateDocument(docId, {
-  //       followers: inspectingAccFollowers,
-  //     });
-  //     await handleUpdateUser(response.document.id, {
-  //       following: ownAccFollowing,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleRemoveFollower = async (userId, userFollowing, docId) => {
-  //   //user data is collected via FollowerList useCollectUsers hook
-  //   try {
-  //     const ownAccFollowing = [...response.document.followers].filter(
-  //       acc => acc !== userId
-  //     );
-  //     const inspectingAccFollowers = [...userFollowing].filter(
-  //       acc => acc !== response.document.uid
-  //     );
-  //     await updateDocument(docId, {
-  //       following: inspectingAccFollowers,
-  //     });
-  //     await handleUpdateUser(response.document.id, {
-  //       followers: ownAccFollowing,
-  //     });
-  //   } catch (error) {}
-  // };
-
   const follow = async (targetUID, targetFollowers) => {
+    setIsPending(true);
     try {
-    } catch (error) {}
+      // get own following
+      const ownAccountFollowing = [...response.document.following, targetUID];
+      // get target followers
+      const targetAccountFollowers = [
+        ...targetFollowers,
+        response.document.uid,
+      ];
+      // update both docks
+      await updateDocument(response.document.uid, {
+        following: ownAccountFollowing,
+      });
+      await updateDocument(targetUID, { followers: targetAccountFollowers });
+      // add notifications to target acc that you follow him/her
+      await addNotification(targetUID, null, 'follow-user');
+
+      if (!isCancelled) {
+        isPending(false);
+      }
+    } catch (error) {
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(error.message);
+      }
+    }
   };
 
   const unfollow = async (targetUID, targetFollowers) => {
+    setIsPending(true);
     try {
-    } catch (error) {}
+      // remove target uid from owner following
+      const ownAccountFollowing = response.document.following.filter(
+        item => item !== targetUID
+      );
+      // remove owner uid from target followers
+      const targetAccountFollowers = targetFollowers.filter(
+        item => item !== response.document.uid
+      );
+
+      await updateDocument(response.document.uid, {
+        following: ownAccountFollowing,
+      });
+      await updateDocument(targetUID, { followers: targetAccountFollowers });
+
+      if (!isCancelled) {
+        isPending(false);
+      }
+    } catch (error) {
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(error.message);
+      }
+    }
   };
 
   const removeFollower = async (targetUID, targetFollowers) => {
+    setIsPending(true);
     try {
-    } catch (error) {}
+      const ownAccountFollowers = [...response.document.followers].filter(
+        acc => acc !== targetUID
+      );
+      const targetAccountFollowers = [...targetFollowers].filter(
+        acc => acc !== response.document.uid
+      );
+      await updateDocument(response.document.uid, {
+        followers: ownAccountFollowers,
+      });
+      await updateDocument(targetUID, { followers: targetAccountFollowers });
+
+      if (!isCancelled) {
+        isPending(false);
+      }
+    } catch (error) {
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(error.message);
+      }
+    }
   };
+
+  useEffect(() => {
+    return () => setIsCancelled(true);
+  }, []);
 
   return { isPending, error, follow, unfollow, removeFollower };
 };

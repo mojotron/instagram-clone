@@ -35,6 +35,7 @@ const Signup = () => {
         // setup default data, user can update them on the settings page
         following: [], // user ids
         followers: [], // user ids
+        posts: [], // post ids
         savedPosts: [], // post ids
         messages: [], // obj {messageTo: user uid, messageDocId: /messages/doc}
         avatar: { url: '', fileName: '' },

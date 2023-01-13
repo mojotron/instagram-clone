@@ -12,11 +12,11 @@ import { useCollectPosts } from '../../hooks/useCollectPosts';
 import { useCollectSavedPosts } from '../../hooks/useCollectSavedPosts';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useSearchUsers } from '../../hooks/useSearchUsers';
+import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 // icons
 import { MdGridOn } from 'react-icons/md';
 import { FiBookmark } from 'react-icons/fi';
 import PostsCollectionTab from './components/PostsCollectionTab';
-import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 
 const Profile = () => {
   const { response } = useUserDataContext();
@@ -31,19 +31,17 @@ const Profile = () => {
   const [targetUserUID, setTargetUserUID] = useState(null);
 
   const [activeTab, setActiveTab] = useState('posts'); // posts or saved
-
+  // call targetUser(non owner) if targetUserUID is non null, null brake useEffect in useOnSnapshot hooks
   const { isPending, error, document } = useOnSnapshotDocument(
     'users',
     targetUserUID
   );
 
-  console.log(document);
-
   useEffect(() => {
     // if user inspecting other of friend acc and wants go back to own
     setProfileType(null);
     setTargetUserUID(null);
-  }, []);
+  }, [userName]);
 
   // const { documents } = useCollectPosts(profileData?.uid);
   // const { documents: savedPosts } = useCollectSavedPosts();
@@ -97,12 +95,12 @@ const Profile = () => {
         accountType={profileType}
         targetData={
           profileType === 'own'
-            ? response
+            ? { response: { ...response } }
             : { response: { isPending, error, document } }
         }
       />
       {/* TABS */}
-      {/* <section className="Profile__collections">
+      <section className="Profile__collections">
         <div className="Profile__collections__tabs">
           <button
             className={`btn btn--tab ${activeTab === 'posts' ? 'active' : ''}`}
@@ -112,16 +110,28 @@ const Profile = () => {
             <span>Posts</span>
           </button>
 
-          <button
-            className={`btn btn--tab ${activeTab === 'saved' ? 'active' : ''}`}
-            onClick={() => setActiveTab('saved')}
-          >
-            <FiBookmark size={15} />
-            <span>Saved</span>
-          </button>
+          {profileType === 'own' && (
+            <button
+              className={`btn btn--tab ${
+                activeTab === 'saved' ? 'active' : ''
+              }`}
+              onClick={() => setActiveTab('saved')}
+            >
+              <FiBookmark size={15} />
+              <span>Saved</span>
+            </button>
+          )}
         </div>
 
-        <PostsCollectionTab postIDList={null} />
+        <PostsCollectionTab
+          collectionType={activeTab}
+          targetData={
+            profileType === 'own'
+              ? { response: { ...response } }
+              : { response: { isPending, error, document } }
+          }
+        />
+        {/*
         {activeTab === 'posts' && (
           <div className="Profile__collections__showcase">
             {documents &&
@@ -137,8 +147,8 @@ const Profile = () => {
                 <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
               ))}
           </div>
-        )}
-      </section> */}
+        )}*/}
+      </section>
     </div>
   );
 };
