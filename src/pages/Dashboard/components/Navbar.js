@@ -66,14 +66,14 @@ const Navbar = ({
             icon={<AiOutlineHeart size={25} />}
             link={null}
             headings="Notifications"
-            handleClick={null}
+            handleClick={toggleNotifications}
           />
         )}
         <NavbarItem
           icon={<CgAddR size={25} />}
           link={null}
           headings="Create"
-          handleClick={null}
+          handleClick={toggleShowCreatePost}
         />
         <NavbarItem
           icon={<Avatar url={response.document.avatar.url} size={25} />}

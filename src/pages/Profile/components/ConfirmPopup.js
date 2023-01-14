@@ -9,10 +9,11 @@ const ConfirmPopup = ({ text, targetData, handleCancel, handleAction }) => {
       console.log(error);
     }
   };
+
   return (
     <div className="overlay">
       <div className="DiscardPost" style={{ paddingTop: '20px' }}>
-        <Avatar url={targetData.avatar.url} size="mid-2" />
+        <Avatar url={targetData.avatar.url} size={56} />
         <p style={{ paddingTop: '20px' }}>
           {text} @{targetData.userName}?
         </p>

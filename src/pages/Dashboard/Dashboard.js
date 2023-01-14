@@ -55,7 +55,12 @@ const Dashboard = () => {
             </UserPostContextProvider>
           )}
 
-          {screenSize !== 'small' && <Sidebar />}
+          {screenSize !== 'small' && (
+            <Sidebar
+              toggleShowCreatePost={toggleShowCreatePost}
+              toggleNotifications={toggleNotifications}
+            />
+          )}
           {screenSize === 'small' && (
             <Header
               toggleShowCreatePost={toggleShowCreatePost}

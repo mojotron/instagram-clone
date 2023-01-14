@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // svg icons
-import closeIcon from '../../images/close-icon.svg';
+import { GrClose } from 'react-icons/gr';
 // components
 import FileUploadForm from './components/FileUploadForm';
 import ImageSizePanel from './components/ImageSizePanel';
@@ -16,7 +16,7 @@ import { useFirestore } from '../../hooks/useFirestore';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 const CreateNewPost = ({ setShowCreatePost }) => {
-  const { response } = useUserDataContext();
+  const { response, updateDocument } = useUserDataContext();
   const { files, dimensions, imagesData, postInfo, currentStage } =
     useUserPostContext();
   const [showDiscard, setShowDiscard] = useState(false);
@@ -56,14 +56,14 @@ const CreateNewPost = ({ setShowCreatePost }) => {
         comments: [],
         likes: [],
         uid: response.document.uid,
-        creator: {
-          userName: response.document.userName,
-          avatarUrl: response.document.avatar.url,
-          profileDocId: response.document.id,
-        },
+        creator: response.document.uid,
       };
       // add document to post repo and close create post page
-      await addDocument(post);
+      const postDocRef = await addDocument(post);
+      // TODO add postDocID to user.posts
+      const userPosts = [...response.document.posts, postDocRef.id];
+      await updateDocument(response.document.uid, { posts: userPosts });
+      //
       setError(null);
       setIsPending(false);
       setShowCreatePost(false);
@@ -89,7 +89,7 @@ const CreateNewPost = ({ setShowCreatePost }) => {
           className="CreateNewPost__btn--close"
           onClick={handleCloseBtn}
         >
-          <img src={closeIcon} alt="close" />
+          <GrClose size={20} />
         </button>
 
         <div data-testid="create-post" className="CreateNewPost">

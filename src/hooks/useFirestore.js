@@ -83,6 +83,9 @@ export const useFirestore = collectionName => {
       const createdAt = Timestamp.fromDate(new Date());
       const addedDocument = await addDoc(colRef, { ...data, createdAt });
       dispatchIfNotCancelled({ type: 'ADD_DOCUMENT', payload: addedDocument });
+      return addedDocument;
+      // this is doc ref => to get collection/docId => save this method to the
+      // variable and on that variable call id method (const docRef = await addDocument() => docRef.id)
     } catch (error) {
       dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
     }
