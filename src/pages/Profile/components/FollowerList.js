@@ -1,10 +1,14 @@
+// style
 import './styles/FollowerList.css';
-import closeIcon from '../../../images/close-icon.svg';
-import { useCollectUsers } from '../../../hooks/useCollectUsers';
+// icons
+import { GrClose } from 'react-icons/gr';
+// components
 import FollowItem from './FollowItem';
+// hooks
+import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
-const FollowerList = ({ type, targetList, closeHandler, followHandlers }) => {
-  const { documents } = useCollectUsers(targetList);
+const FollowerList = ({ type, userIdList, closeHandler }) => {
+  const { documents } = useCollectDocsByIdList(userIdList, 'users');
   console.log(documents);
 
   return (
@@ -13,18 +17,13 @@ const FollowerList = ({ type, targetList, closeHandler, followHandlers }) => {
         <header className="FollowerList__header">
           <h2>{type}</h2>
           <button className="btn" onClick={closeHandler}>
-            <img src={closeIcon} alt="close follower list" />
+            <GrClose size={20} />
           </button>
         </header>
         <section>
           {documents &&
             documents.map(ele => (
-              <FollowItem
-                type={type}
-                key={ele.id}
-                userData={ele}
-                followHandlers={followHandlers}
-              />
+              <FollowItem key={ele.id} type={type} userData={ele} />
             ))}
         </section>
       </div>

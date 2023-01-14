@@ -5,11 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './styles/Profile.css';
 // components
 import ProfileUser from './components/ProfileUser';
-import PostCard from './components/PostCard';
 //hooks
 import { useFirestore } from '../../hooks/useFirestore';
-import { useCollectPosts } from '../../hooks/useCollectPosts';
-import { useCollectSavedPosts } from '../../hooks/useCollectSavedPosts';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useSearchUsers } from '../../hooks/useSearchUsers';
 import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
@@ -42,9 +39,6 @@ const Profile = () => {
     setProfileType(null);
     setTargetUserUID(null);
   }, [userName]);
-
-  // const { documents } = useCollectPosts(profileData?.uid);
-  // const { documents: savedPosts } = useCollectSavedPosts();
 
   useEffect(() => {
     if (profileType) return;
@@ -131,23 +125,6 @@ const Profile = () => {
               : { response: { isPending, error, document } }
           }
         />
-        {/*
-        {activeTab === 'posts' && (
-          <div className="Profile__collections__showcase">
-            {documents &&
-              documents.map(ele => (
-                <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
-              ))}
-          </div>
-        )}
-        {activeTab === 'saved' && (
-          <div className="Profile__collections__showcase">
-            {savedPosts &&
-              savedPosts.map(ele => (
-                <PostCard key={ele.id} data={ele} dimensions={ele.dimensions} />
-              ))}
-          </div>
-        )}*/}
       </section>
     </div>
   );

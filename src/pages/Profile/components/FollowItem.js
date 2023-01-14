@@ -1,17 +1,21 @@
-import './styles/FollowItem.css';
-import Avatar from '../../../components/Avatar';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+// style
+import './styles/FollowItem.css';
+// components
+import Avatar from '../../../components/Avatar';
 import ConfirmPopup from './ConfirmPopup';
+// hooks
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useFollow } from '../../../hooks/useFollow';
 
-const FollowItem = ({ type, userData, followHandlers }) => {
+const FollowItem = ({ type, userData }) => {
   const { response } = useUserDataContext();
+  const { follow, unfollow, remove } = useFollow();
   const { userName } = useParams(); // to determine if user inspecting own account
   const navigate = useNavigate();
 
   const isOwnAcc = userName === response.document.userName;
-  console.log(userData.followers);
 
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
@@ -19,39 +23,23 @@ const FollowItem = ({ type, userData, followHandlers }) => {
     if (isOwnAcc && type === 'followers')
       return {
         text: 'remove',
-        handler: () =>
-          followHandlers.remove(userData.uid, userData.following, userData.id),
+        handler: () => remove(userData.uid, userData.following, userData.id),
       };
     if (isOwnAcc && type === 'following')
       return {
         text: 'following',
-        handler: () =>
-          followHandlers.unfollow(
-            userData.uid,
-            userData.followers,
-            userData.id
-          ),
+        handler: () => unfollow(userData.uid, userData.followers),
       };
     if (!isOwnAcc && type === 'followers') {
       if (response.document.following.includes(userData.uid)) {
         return {
           text: 'following',
-          handler: () =>
-            followHandlers.unfollow(
-              userData.uid,
-              userData.followers,
-              userData.id
-            ),
+          handler: () => unfollow(userData.uid, userData.followers),
         };
       } else {
         return {
           text: 'follow',
-          handler: () =>
-            followHandlers.follow(
-              userData.uid,
-              userData.followers,
-              userData.id
-            ),
+          handler: () => follow(userData.uid, userData.followers),
         };
       }
     }
@@ -59,22 +47,12 @@ const FollowItem = ({ type, userData, followHandlers }) => {
       if (response.document.following.includes(userData.uid)) {
         return {
           text: 'following',
-          handler: () =>
-            followHandlers.unfollow(
-              userData.uid,
-              userData.followers,
-              userData.id
-            ),
+          handler: () => unfollow(userData.uid, userData.followers),
         };
       } else {
         return {
           text: 'follow',
-          handler: () =>
-            followHandlers.follow(
-              userData.uid,
-              userData.followers,
-              userData.id
-            ),
+          handler: () => follow(userData.uid, userData.followers),
         };
       }
     }
@@ -97,7 +75,7 @@ const FollowItem = ({ type, userData, followHandlers }) => {
         className="FollowItem__user"
         onClick={() => navigate(`/${userData.userName}`)}
       >
-        <Avatar url={userData.avatar.url} size="mid" />
+        <Avatar url={userData.avatar.url} size={35} />
         <div className="FollowItem__user__name">
           <h2>{userData.userName}</h2>
           <h3>{userData.fullName}</h3>

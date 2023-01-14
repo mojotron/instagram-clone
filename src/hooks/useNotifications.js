@@ -8,9 +8,7 @@ export const useNotifications = () => {
   // - form of notification => type, createdAt - timeStamp, from - userDocID
   // read notification with diff hook useCollectNotifications
   const { response } = useUserDataContext();
-  const { getDocumentById } = useFirestore('users');
-  const { updateDocument, getDocumentById: getNotificationsDoc } =
-    useFirestore('notifications');
+  const { getDocumentById, updateDocument } = useFirestore('notifications');
 
   const getType = type => {
     switch (type) {
@@ -29,14 +27,11 @@ export const useNotifications = () => {
     }
   };
 
-  const addNotification = async (userDocId, postDocId, type, payload = '') => {
+  const addNotification = async (userID, postDocId, type, payload = '') => {
     // console.log(userDocId, postDocId, type);
 
     try {
-      const userDoc = await getDocumentById(userDocId);
-      const userNotifications = await getNotificationsDoc(
-        userDoc.notificationDocId
-      );
+      const userNotifications = await getDocumentById(userID);
 
       const notificationObject = {
         createdAt: Timestamp.fromDate(new Date()),
@@ -45,7 +40,7 @@ export const useNotifications = () => {
         content: getType(type),
       };
 
-      await updateDocument(userDoc.notificationDocId, {
+      await updateDocument(userID, {
         notifications: [...userNotifications.notifications, notificationObject],
       });
     } catch (error) {

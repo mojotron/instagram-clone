@@ -16,7 +16,6 @@ import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 import { useFollow } from '../../../hooks/useFollow';
 
 const ProfileUser = ({ targetData, accountType }) => {
-  console.log('data for profile user', targetData);
   const { isPending, error, document } = targetData.response;
 
   const { follow, unfollow, removeFollower } = useFollow();
@@ -51,16 +50,14 @@ const ProfileUser = ({ targetData, accountType }) => {
       {showFollowerList && (
         <FollowerList
           type="followers"
-          targetList={document.followers}
-          //TODO followHandlers={handlers}
+          userIdList={document.followers}
           closeHandler={() => setShowFollowerList(false)}
         />
       )}
       {showFollowingList && (
         <FollowerList
           type="following"
-          targetList={document.following}
-          //TODO followHandlers={handlers}
+          userIdList={document.following}
           closeHandler={() => setShowFollowingList(false)}
         />
       )}
