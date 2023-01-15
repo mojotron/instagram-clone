@@ -7,10 +7,20 @@ import EditPostPanel from './EditPostPanel';
 // styles
 import './styles/PostHeader.css';
 // icon
-import moreOptionsIcon from '../../../images/more-horiz-icon.svg';
+import { FiMoreHorizontal } from 'react-icons/fi';
+import { useFirestore } from '../../../hooks/useFirestore';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 const PostHeader = ({ type, owner, postData, handlers }) => {
   const navigate = useNavigate();
+
+  const { response, getDocumentById } = useFirestore('users');
+  const loadUser = useRef(() => getDocumentById(postData.creator)).current;
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
   const [showOptions, setShowOptions] = useState(false);
   const [showEditPost, setShowEditPost] = useState(false);
@@ -40,20 +50,20 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
 
       <div className="PostHeader__left">
         <Avatar
-          url={postData.creator.avatarUrl}
-          size="mid"
+          url={response.document?.avatar.url}
+          size={32}
           handleClick={() => navigate(`/${postData.creator.userName}`)}
         />
         <div className="PostHeader__left__info">
           <h2 onClick={() => navigate(`/${postData.creator.userName}`)}>
-            {postData.creator.userName}
+            {response.document?.userName}
           </h2>
           <h3>{postData.location}</h3>
         </div>
       </div>
 
       <button className="btn btn--options" onClick={() => setShowOptions(true)}>
-        <img src={moreOptionsIcon} alt="post option" />
+        <FiMoreHorizontal size={20} />
       </button>
     </header>
   );

@@ -16,10 +16,7 @@
   font-size: 2rem;
   cursor: pointer;
 }
-.CreateNewPost__btn--close img {
-  width: 2.5rem;
-  height: 2.5rem;
-}
+
 .create-post-error {
   z-index: 100;
   color: var(--red);

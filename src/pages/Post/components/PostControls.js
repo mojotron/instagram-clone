@@ -62,9 +62,8 @@ const PostControls = ({
     addMessage(user, 'post', postData.id);
   };
 
-  //TODO
   const { addNotification } = useNotifications();
-  //TODO
+
   const handleClickLikePost = async userLikesPost => {
     // post data to use in notification hook => user id, post id, content
     try {
@@ -79,8 +78,6 @@ const PostControls = ({
       console.log(error);
     }
   };
-  // TODO
-  // TODO
 
   return (
     <section className="PostControls">
