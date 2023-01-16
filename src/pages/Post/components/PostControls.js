@@ -1,10 +1,8 @@
 // icons
-import heartIcon from '../../../images/heart-icon.svg';
-import heartLikedIcon from '../../../images/heart-red-icon.svg';
-import commentIcon from '../../../images/comment-outline-icon.svg';
-import sendIcon from '../../../images/send-icon.svg';
-import bookmarkIcon from '../../../images/bookmark-icon.svg';
-import bookmarkFilledIcon from '../../../images/bookmark-icon-filled.svg';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { BiComment } from 'react-icons/bi';
+import { FiSend } from 'react-icons/fi';
+import { BsBookmark, BsFillBookmarkFill } from 'react-icons/bs';
 // style
 import './styles/PostControls.css';
 // hooks
@@ -16,15 +14,10 @@ import { useNotifications } from '../../../hooks/useNotifications';
 // component
 import NewMessage from '../../Messages/components/NewMessage';
 
-const PostControls = ({
-  postData,
-  handleCommentReset,
-  handleLikePost,
-  handleFollow,
-  handleUnfollow,
-}) => {
+const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
   // in timeline post handleCommentReset sends user to post page
   const { response, updateDocument } = useUserDataContext();
+
   const [showLikedBy, setShowLikedBy] = useState(false);
   // is current user liking post
   const userLikesPost = postData.likes.find(
@@ -93,8 +86,6 @@ const PostControls = ({
           // likes map here to stop infinite rerender
           likes={postData.likes.map(ele => ele.uid)}
           handleClose={() => setShowLikedBy(false)}
-          handleFollow={handleFollow}
-          handleUnfollow={handleUnfollow}
         />
       )}
 
@@ -105,29 +96,31 @@ const PostControls = ({
               className="btn btn--post"
               onClick={() => handleClickLikePost(userLikesPost)}
             >
-              <img
-                src={userLikesPost ? heartLikedIcon : heartIcon}
-                alt="like"
-              />
+              {userLikesPost ? (
+                <AiFillHeart size={25} color="#eb6161" />
+              ) : (
+                <AiOutlineHeart size={25} />
+              )}
             </button>
           )}
           {!postData.disableComments && (
             <button className="btn btn--post" onClick={handleCommentReset}>
-              <img src={commentIcon} alt="comment" />
+              <BiComment size={25} />
             </button>
           )}
           <button
             className="btn btn--post"
             onClick={() => setShowNewMessage(true)}
           >
-            <img src={sendIcon} alt="send" />
+            <FiSend size={25} />
           </button>
         </div>
         <button className="btn btn--post" onClick={handleSavePostClick}>
-          <img
-            src={userSavedPost ? bookmarkFilledIcon : bookmarkIcon}
-            alt="bookmark"
-          />
+          {userSavedPost ? (
+            <BsFillBookmarkFill size={25} />
+          ) : (
+            <BsBookmark size={25} />
+          )}
         </button>
       </div>
 
