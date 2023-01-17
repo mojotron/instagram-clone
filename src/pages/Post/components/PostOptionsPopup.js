@@ -1,24 +1,16 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFirestore } from '../../../hooks/useFirestore';
+// hooks
+import { useFollow } from '../../../hooks/useFollow';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+// components
 import ConfirmDelete from './ConfirmDelete';
 
-const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
+const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
   // type => regular or timeline
-  const navigate = useNavigate();
+  const { follow, unfollow } = useFollow();
   const { response } = useUserDataContext();
-
-  const { response: profileData, getDocumentById } = useFirestore('users');
-
-  const loadDocument = useRef(() =>
-    getDocumentById(postData.creator.profileDocId)
-  ).current;
-
-  useEffect(() => {
-    if (owner) return;
-    loadDocument();
-  }, [owner, loadDocument]);
+  const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(null);
 
@@ -96,11 +88,7 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
         {!owner && isFollowing && (
           <button
             onClick={async () =>
-              await handlers.unfollowProfile(
-                postData.uid,
-                profileData.document.followers,
-                postData.creator.profileDocId
-              )
+              await unfollow(postData.uid, userData.followers)
             }
             className="btn discard"
             style={{ border: 'none' }}
@@ -112,11 +100,7 @@ const PostOptionsPopup = ({ type, owner, postData, handlers }) => {
         {!owner && !isFollowing && (
           <button
             onClick={async () =>
-              await handlers.followProfile(
-                postData.uid,
-                profileData.document.followers,
-                postData.creator.profileDocId
-              )
+              await follow(postData.uid, userData.document.followers)
             }
             className="btn discard"
             style={{ border: 'none' }}

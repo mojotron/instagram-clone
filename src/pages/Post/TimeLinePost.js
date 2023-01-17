@@ -22,8 +22,6 @@ const TimeLinePost = ({ postData }) => {
     toggleDisableComments,
     deletePost,
     editPost,
-    followProfile,
-    unfollowProfile,
   } = useTimeLinePostHandlers();
 
   const owner = postData.uid === response.document.uid;
@@ -39,8 +37,6 @@ const TimeLinePost = ({ postData }) => {
           toggleDisableComments,
           deletePost,
           editPost,
-          followProfile,
-          unfollowProfile,
         }}
       />
       <div className="TimeLinePost__image-container">
@@ -51,7 +47,7 @@ const TimeLinePost = ({ postData }) => {
       </div>
       <PostControls
         postData={postData}
-        handleCommentReset={() => navigate(`/p/${postData.id}`)} // here is sending to user post not reseting comment focus like in post component
+        handleCommentReset={() => navigate(`/p/${postData.id}`)} // here is sending to user post not resetting comment focus like in post component
         handleLikePost={toggleLike}
       />
       <TimeLinePostCommentsList postData={postData} />

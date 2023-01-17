@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFirestore } from '../../../hooks/useFirestore';
 // components
 import Avatar from '../../../components/Avatar';
 import PostOptionsPopup from './PostOptionsPopup';
@@ -8,14 +9,11 @@ import EditPostPanel from './EditPostPanel';
 import './styles/PostHeader.css';
 // icon
 import { FiMoreHorizontal } from 'react-icons/fi';
-import { useFirestore } from '../../../hooks/useFirestore';
-import { useRef } from 'react';
-import { useEffect } from 'react';
 
 const PostHeader = ({ type, owner, postData, handlers }) => {
+  const { response, getDocumentById } = useFirestore('users');
   const navigate = useNavigate();
 
-  const { response, getDocumentById } = useFirestore('users');
   const loadUser = useRef(() => getDocumentById(postData.creator)).current;
 
   useEffect(() => {
@@ -31,6 +29,7 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
         <PostOptionsPopup
           type={type}
           owner={owner}
+          userData={response.document}
           postData={postData}
           handlers={{
             ...handlers,

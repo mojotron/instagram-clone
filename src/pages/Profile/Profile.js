@@ -87,11 +87,8 @@ const Profile = () => {
     <div className="Profile">
       <ProfileUser
         accountType={profileType}
-        targetData={
-          profileType === 'own'
-            ? { response: { ...response } }
-            : { response: { isPending, error, document } }
-        }
+        targetData={profileType === 'own' ? response.document : document}
+        setProfileType={setProfileType}
       />
       {/* TABS */}
       <section className="Profile__collections">

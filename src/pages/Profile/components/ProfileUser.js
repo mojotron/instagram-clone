@@ -14,11 +14,11 @@ import FollowerList from './FollowerList';
 // hooks
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 import { useFollow } from '../../../hooks/useFollow';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const ProfileUser = ({ targetData, accountType }) => {
-  const { isPending, error, document } = targetData.response;
-
+const ProfileUser = ({ targetData, accountType, setProfileType }) => {
   const { follow, unfollow, removeFollower } = useFollow();
+  const { response } = useUserDataContext();
 
   const navigate = useNavigate();
   const { screenSize } = useScreenSizeContext();
@@ -30,7 +30,7 @@ const ProfileUser = ({ targetData, accountType }) => {
   const [showFollowingList, setShowFollowingList] = useState(false);
 
   const toggleUpdateAvatar = () =>
-    setShowChangeProfilePhoto(oldvalue => !oldvalue);
+    setShowChangeProfilePhoto(oldValue => !oldValue);
 
   return (
     <section className="Profile__user">
@@ -43,35 +43,38 @@ const ProfileUser = ({ targetData, accountType }) => {
           text="unfollow"
           targetData={targetData}
           handleCancel={() => setShowConfirmUnfollow(false)}
-          handleAction={() => unfollow(document.uid, document.followers)}
+          handleAction={async () => {
+            await unfollow(targetData.uid, targetData.followers);
+            setProfileType('other');
+          }}
         />
       )}
 
       {showFollowerList && (
         <FollowerList
           type="followers"
-          userIdList={document.followers}
+          userIdList={targetData.followers}
           closeHandler={() => setShowFollowerList(false)}
         />
       )}
       {showFollowingList && (
         <FollowerList
           type="following"
-          userIdList={document.following}
+          userIdList={targetData.following}
           closeHandler={() => setShowFollowingList(false)}
         />
       )}
 
       <div className="Profile__user__avatar" title="Change profile photo">
         <Avatar
-          url={document.avatar.url}
+          url={targetData.avatar.url}
           size={screenSize === 'small' ? 77 : 150}
           handleClick={toggleUpdateAvatar}
         />
       </div>
       <div className="Profile__user__info">
         <div>
-          <h2>{document.userName}</h2>
+          <h2>{targetData.userName}</h2>
 
           {accountType === 'own' && (
             <button
@@ -98,8 +101,12 @@ const ProfileUser = ({ targetData, accountType }) => {
           {accountType === 'other' && (
             <>
               <button className="btn btn--profile">Message</button>
+
               <button
-                onClick={() => follow(document.uid, document.followers)}
+                onClick={async () => {
+                  await follow(targetData.uid, targetData.followers);
+                  setProfileType('friend');
+                }}
                 className="btn btn--profile-blue"
               >
                 Follow
@@ -108,22 +115,22 @@ const ProfileUser = ({ targetData, accountType }) => {
           )}
         </div>
         <div>
-          <FormatCount num={document.posts.length} title="post" />
+          <FormatCount num={targetData.posts.length} title="post" />
           <FormatCount
-            num={document.followers.length}
+            num={targetData.followers.length}
             title="follower"
             handleClick={() => setShowFollowerList(true)}
           />
           <FormatCount
-            num={document.following.length}
+            num={targetData.following.length}
             title="following"
             handleClick={() => setShowFollowingList(true)}
           />
         </div>
         <div>
-          <p>{document.fullName}</p>
-          <p>{document.bio}</p>
-          <p>{document.website}</p>
+          <p>{targetData.fullName}</p>
+          <p>{targetData.bio}</p>
+          <p>{targetData.website}</p>
         </div>
       </div>
     </section>

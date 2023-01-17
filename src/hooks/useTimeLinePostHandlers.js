@@ -73,40 +73,6 @@ export const useTimeLinePostHandlers = () => {
     });
   };
 
-  const followProfile = async (postUid, profileFollowers, profileDocId) => {
-    // add target uid to owner following
-    const ownAccFollowing = [...response.document.following, postUid];
-    // add owner uid to target followers
-    const inspectingAccFollowers = [...profileFollowers, response.document.uid];
-
-    await updateDoc(doc(projectFirestore, 'users', profileDocId), {
-      followers: inspectingAccFollowers,
-    });
-    await updateUserDoc(response.document.id, {
-      following: ownAccFollowing,
-    });
-    // add notification to target account
-    await addNotification(profileDocId, null, 'follow-user');
-  };
-
-  const unfollowProfile = async (postUid, profileFollowers, docId) => {
-    // remove target uid from owner following
-    const ownAccFollowing = response.document.following.filter(
-      item => item !== postUid
-    );
-    // remove owner uid from target followers
-    const inspectingAccFollowers = profileFollowers.filter(
-      item => item !== response.document.uid
-    );
-
-    await updateDoc(doc(projectFirestore, 'users', docId), {
-      followers: inspectingAccFollowers,
-    });
-    await updateUserDoc(response.document.id, {
-      following: ownAccFollowing,
-    });
-  };
-
   return {
     toggleLike,
     addComment,
@@ -114,7 +80,5 @@ export const useTimeLinePostHandlers = () => {
     toggleDisableComments,
     deletePost,
     editPost,
-    followProfile,
-    unfollowProfile,
   };
 };

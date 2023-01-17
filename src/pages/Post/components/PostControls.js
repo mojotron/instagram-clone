@@ -8,10 +8,10 @@ import './styles/PostControls.css';
 // hooks
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
-import PostLikedBy from './PostLikedBy';
 import { useMessages } from '../../../hooks/useMessages';
 import { useNotifications } from '../../../hooks/useNotifications';
 // component
+import PostLikedBy from './PostLikedBy';
 import NewMessage from '../../Messages/components/NewMessage';
 
 const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
