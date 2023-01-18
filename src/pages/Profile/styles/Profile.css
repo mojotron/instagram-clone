@@ -34,7 +34,7 @@
   opacity: 1;
   border-top: 1px solid black;
 }
-.Profile__collections__showcase {
+.ProfileCollectionTab {
   max-width: 100rem;
   display: flex;
   flex-wrap: wrap;

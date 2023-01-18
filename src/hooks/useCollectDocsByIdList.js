@@ -9,7 +9,9 @@ export const useCollectDocsByIdList = (docsIdList, collectionName) => {
   const [documents, setDocuments] = useState(null);
 
   useEffect(() => {
+    console.log('hmm', docsIdList);
     const getDocuments = async () => {
+      console.log('getting docs');
       try {
         const documentsResponse = await Promise.all(
           docsIdList.map(async id => {

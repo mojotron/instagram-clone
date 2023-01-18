@@ -116,11 +116,7 @@ const Profile = () => {
 
         <PostsCollectionTab
           collectionType={activeTab}
-          targetData={
-            profileType === 'own'
-              ? { response: { ...response } }
-              : { response: { isPending, error, document } }
-          }
+          targetData={profileType === 'own' ? response.document : document}
         />
       </section>
     </div>

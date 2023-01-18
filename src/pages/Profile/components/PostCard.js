@@ -1,15 +1,15 @@
-import PostImage from '../../../components/PostImage';
-import './styles/PostCard.css';
-//icons
-import multiImageIcon from '../../../images/multiple-files.svg';
-import likeIcon from '../../../images/heart-black-icon.svg';
-import commentIcon from '../../../images/comment-icon.svg';
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+//components
+import PostImage from '../../../components/PostImage';
+// style
+import './styles/PostCard.css';
+//icons
+import { TbBoxMultiple } from 'react-icons/tb';
+import { AiFillHeart } from 'react-icons/ai';
+import { FaComment } from 'react-icons/fa';
 
 const PostCard = ({ data, dimensions }) => {
-  // make sure image data is array
   const [hoverActive, setHoverActive] = useState(false);
   const navigate = useNavigate();
 
@@ -21,10 +21,10 @@ const PostCard = ({ data, dimensions }) => {
       onClick={() => navigate(`/p/${data.id}`)}
     >
       {data.images.length > 1 && (
-        <img
+        <TbBoxMultiple
+          size={23}
           className="PostCard__icon multi-file"
-          src={multiImageIcon}
-          alt="multiple images"
+          color="white"
         />
       )}
       <PostImage
@@ -40,11 +40,11 @@ const PostCard = ({ data, dimensions }) => {
         <div className="PostCard__overlay">
           <div className="PostCard__overlay__icons">
             <p>
-              <img src={likeIcon} alt="likes count" />{' '}
+              <AiFillHeart size={23} />
               <span>{data.likes.length}</span>
             </p>
             <p>
-              <img src={commentIcon} alt="comments count" />{' '}
+              <FaComment size={23} />
               <span>{data.comments.length}</span>
             </p>
           </div>
