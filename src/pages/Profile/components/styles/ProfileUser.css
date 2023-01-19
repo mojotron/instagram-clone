@@ -25,6 +25,7 @@
 }
 .Profile__user__info div:last-child {
   flex-direction: column;
+  padding-top: 2rem;
 }
 .Profile__user__info div:last-child p {
   padding-bottom: 2rem;

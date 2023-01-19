@@ -3,15 +3,13 @@ import { useState, useEffect } from 'react';
 import { projectFirestore } from '../firebase/config';
 
 export const useCollectDocsByIdList = (docsIdList, collectionName) => {
-  const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [documents, setDocuments] = useState(null);
 
   useEffect(() => {
-    console.log('hmm', docsIdList);
+    let isCancelled = false;
     const getDocuments = async () => {
-      console.log('getting docs');
       try {
         const documentsResponse = await Promise.all(
           docsIdList.map(async id => {
@@ -35,8 +33,11 @@ export const useCollectDocsByIdList = (docsIdList, collectionName) => {
 
     getDocuments();
 
-    return () => setIsCancelled(true);
-  }, [docsIdList, collectionName, isCancelled]);
+    return () => {
+      console.log('canceling');
+      isCancelled = true;
+    };
+  }, [docsIdList, collectionName]);
 
   return { documents, isPending, error };
 };

@@ -11,9 +11,8 @@ const PostsCollectionTab = ({ collectionType, targetData }) => {
     if (collectionType === 'saved') return targetData.savedPosts;
   };
 
-  // to do snapshot collection
   const { documents, isPending, error } = useCollectDocsByIdList(
-    collectionType === 'posts' ? targetData.posts : targetData.savedPosts,
+    determineList(),
     'posts'
   );
 

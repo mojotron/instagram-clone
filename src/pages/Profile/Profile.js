@@ -29,10 +29,7 @@ const Profile = () => {
 
   const [activeTab, setActiveTab] = useState('posts'); // posts or saved
   // call targetUser(non owner) if targetUserUID is non null, null brake useEffect in useOnSnapshot hooks
-  const { isPending, error, document } = useOnSnapshotDocument(
-    'users',
-    targetUserUID
-  );
+  const { document } = useOnSnapshotDocument('users', targetUserUID);
 
   useEffect(() => {
     // if user inspecting other of friend acc and wants go back to own
