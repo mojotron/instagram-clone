@@ -46,7 +46,9 @@ const Sidebar = ({ toggleShowCreatePost, toggleNotifications }) => {
 
       {showSearch && <Search screenSize={screenSize} />}
 
-      {showMoreOptions && <MoreOptions />}
+      {showMoreOptions && (
+        <MoreOptions handleClose={() => setShowMoreOptions(false)} />
+      )}
 
       <NavbarItem
         icon={<GiHamburgerMenu size={25} />}

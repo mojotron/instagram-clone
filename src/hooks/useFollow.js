@@ -70,19 +70,21 @@ export const useFollow = () => {
     }
   };
 
-  const removeFollower = async (targetUID, targetFollowers) => {
+  const removeFollower = async (targetUID, targetFollowings) => {
+    console.log('tf', targetFollowings);
     setIsPending(true);
     try {
       const ownAccountFollowers = [...response.document.followers].filter(
         acc => acc !== targetUID
       );
-      const targetAccountFollowers = [...targetFollowers].filter(
+      const targetAccountFollowings = [...targetFollowings].filter(
         acc => acc !== response.document.uid
       );
+
       await updateDocument(response.document.uid, {
         followers: ownAccountFollowers,
       });
-      await updateDocument(targetUID, { followers: targetAccountFollowers });
+      await updateDocument(targetUID, { following: targetAccountFollowings });
 
       if (!isCancelled) {
         isPending(false);

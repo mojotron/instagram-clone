@@ -8,7 +8,7 @@ import { CgProfile } from 'react-icons/cg';
 import { useLogout } from '../../../hooks/useLogout';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const MoreOptions = () => {
+const MoreOptions = ({ handleClose }) => {
   const { response } = useUserDataContext();
   const { isPending, error, logout } = useLogout();
   return (
@@ -16,14 +16,15 @@ const MoreOptions = () => {
       <li>
         <Link
           to={`/${response.document.userName}`}
-          state={{ userID: response.document.uid }}
+          onClick={handleClose}
+          // state={{ userID: response.document.uid }}
         >
           <span>Profile</span>
           <CgProfile size={20} />
         </Link>
       </li>
       <li>
-        <Link to="/settings">
+        <Link to="/settings" onClick={handleClose}>
           <span>Settings</span>
           <RiSettings5Fill size={20} />
         </Link>

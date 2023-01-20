@@ -33,3 +33,10 @@ Authentication is build of four major parts parts,
 4. AuthContext - useReduce hook to keep track if user is logged in.
 
 ### User Settings
+
+In this section user can manage personal information user want to be displayed. User can change avatar image, add/update username, full name, personal webpage and short description.
+
+### User Profile
+
+Display user data in two main parts. First, display user information (number of posts, followers, followings and etc.). Second, post collection (user posts or saved posts for current user).
+In this section of app user can inspect own or others accounts, and manage followers and posts data.

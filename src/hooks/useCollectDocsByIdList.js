@@ -33,10 +33,7 @@ export const useCollectDocsByIdList = (docsIdList, collectionName) => {
 
     getDocuments();
 
-    return () => {
-      console.log('canceling');
-      isCancelled = true;
-    };
+    return () => (isCancelled = true);
   }, [docsIdList, collectionName]);
 
   return { documents, isPending, error };

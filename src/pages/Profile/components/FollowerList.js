@@ -9,7 +9,6 @@ import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
 const FollowerList = ({ type, userIdList, closeHandler }) => {
   const { documents } = useCollectDocsByIdList(userIdList, 'users');
-  console.log(documents);
 
   return (
     <div className="overlay">

@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './styles/Profile.css';
 // components
 import ProfileUser from './components/ProfileUser';
+import PostsCollectionTab from './components/PostsCollectionTab';
 //hooks
 import { useFirestore } from '../../hooks/useFirestore';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
@@ -13,32 +14,31 @@ import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 // icons
 import { MdGridOn } from 'react-icons/md';
 import { FiBookmark } from 'react-icons/fi';
-import PostsCollectionTab from './components/PostsCollectionTab';
 
 const Profile = () => {
+  const { userName } = useParams(); // get userName from web address parameter
+  const navigate = useNavigate();
+  const { documentExist } = useFirestore('users');
   const { response } = useUserDataContext();
   const { searchForUser } = useSearchUsers();
 
-  // TODO load
-  const navigate = useNavigate();
-  const { userName } = useParams();
-  const { documentExist } = useFirestore('users');
-  // can ne own, friend, other
-  const [profileType, setProfileType] = useState(null);
-  const [targetUserUID, setTargetUserUID] = useState(null);
+  const [activeTab, setActiveTab] = useState('posts'); // =>posts or saved
 
-  const [activeTab, setActiveTab] = useState('posts'); // posts or saved
-  // call targetUser(non owner) if targetUserUID is non null, null brake useEffect in useOnSnapshot hooks
+  const [profileType, setProfileType] = useState(null); // => own, friend or other
+  // if account user inspect is not his own save targetUID for hook to get user data
+  const [targetUserUID, setTargetUserUID] = useState(null);
+  // targetUserUID null value exist useEffect in useOnSnapshot hooks before getting data
   const { document } = useOnSnapshotDocument('users', targetUserUID);
 
+  // if user inspecting other of friend acc and wants go back to own => reset
   useEffect(() => {
-    // if user inspecting other of friend acc and wants go back to own
     setProfileType(null);
     setTargetUserUID(null);
   }, [userName]);
 
+  // main logic for determining who's account current user is inspecting
   useEffect(() => {
-    if (profileType) return;
+    if (profileType) return; // breaks useEffect if profileType already determined
     // first check if inspecting own profile page
     if (userName === response.document.userName) {
       // users inspecting own profile
@@ -47,7 +47,6 @@ const Profile = () => {
     }
     //
     const checkForUser = async () => {
-      console.log('checking for user');
       try {
         // check if userName exist (navigate to homepage if not)
         const userExist = await documentExist('public_usernames', userName);

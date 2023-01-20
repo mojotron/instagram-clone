@@ -10,6 +10,7 @@
   background-color: white;
   color: var(--black);
   box-shadow: rgba(0, 0, 0, 0.24) 3px 3px 8px;
+  z-index: 30;
 }
 .MoreOptions::after {
   content: '';

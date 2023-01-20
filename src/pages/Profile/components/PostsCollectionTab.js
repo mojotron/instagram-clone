@@ -4,8 +4,6 @@ import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 import PostCard from './PostCard';
 
 const PostsCollectionTab = ({ collectionType, targetData }) => {
-  console.log(targetData.posts);
-
   const determineList = () => {
     if (collectionType === 'posts') return targetData.posts;
     if (collectionType === 'saved') return targetData.savedPosts;

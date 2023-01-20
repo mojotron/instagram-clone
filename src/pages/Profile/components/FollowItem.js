@@ -11,7 +11,7 @@ import { useFollow } from '../../../hooks/useFollow';
 
 const FollowItem = ({ type, userData }) => {
   const { response } = useUserDataContext();
-  const { follow, unfollow, remove } = useFollow();
+  const { follow, unfollow, removeFollower } = useFollow();
   const { userName } = useParams(); // to determine if user inspecting own account
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const FollowItem = ({ type, userData }) => {
     if (isOwnAcc && type === 'followers')
       return {
         text: 'remove',
-        handler: () => remove(userData.uid, userData.following, userData.id),
+        handler: () => removeFollower(userData.uid, userData.following),
       };
     if (isOwnAcc && type === 'following')
       return {
