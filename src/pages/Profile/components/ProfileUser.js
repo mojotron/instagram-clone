@@ -6,19 +6,15 @@ import Avatar from '../../../components/Avatar';
 import ConfirmPopup from './ConfirmPopup';
 import ChangeProfilePhoto from '../../../components/ChangeProfilePhoto';
 import FormatCount from './FormatCount';
+import FollowerList from './FollowerList';
 // style
 import './styles/ProfileUser.css';
-// icons
-import userCheckIcon from '../../../images/user-check-icon.svg';
-import FollowerList from './FollowerList';
 // hooks
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 import { useFollow } from '../../../hooks/useFollow';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const ProfileUser = ({ targetData, accountType, setProfileType }) => {
-  const { follow, unfollow, removeFollower } = useFollow();
-  const { response } = useUserDataContext();
+const ProfileUser = ({ targetData, profileType, setProfileType }) => {
+  const { follow, unfollow } = useFollow();
 
   const navigate = useNavigate();
   const { screenSize } = useScreenSizeContext();
@@ -73,10 +69,11 @@ const ProfileUser = ({ targetData, accountType, setProfileType }) => {
         />
       </div>
       <div className="Profile__user__info">
+        {/* controls depending on profile type */}
         <div>
           <h2>{targetData.userName}</h2>
 
-          {accountType === 'own' && (
+          {profileType === 'own' && (
             <button
               className="btn btn--profile"
               onClick={() => navigate('/settings')}
@@ -86,19 +83,19 @@ const ProfileUser = ({ targetData, accountType, setProfileType }) => {
             </button>
           )}
 
-          {accountType === 'friend' && (
+          {profileType === 'friend' && (
             <>
               <button className="btn btn--profile">Message</button>
               <button
-                className="btn btn--profile icon"
+                className="btn btn--profile"
                 onClick={() => setShowConfirmUnfollow(true)}
               >
-                <img src={userCheckIcon} alt="unfollow account" />
+                Unfollow
               </button>
             </>
           )}
 
-          {accountType === 'other' && (
+          {profileType === 'other' && (
             <>
               <button className="btn btn--profile">Message</button>
 
@@ -115,7 +112,12 @@ const ProfileUser = ({ targetData, accountType, setProfileType }) => {
           )}
         </div>
         <div>
-          <FormatCount num={targetData.posts.length} title="post" />
+          {/* counters */}
+          <FormatCount
+            num={targetData.posts.length}
+            title="post"
+            handleClick={null}
+          />
           <FormatCount
             num={targetData.followers.length}
             title="follower"
@@ -127,6 +129,7 @@ const ProfileUser = ({ targetData, accountType, setProfileType }) => {
             handleClick={() => setShowFollowingList(true)}
           />
         </div>
+        {/* personal information */}
         <div>
           <p>{targetData.fullName}</p>
           <p>{targetData.bio}</p>

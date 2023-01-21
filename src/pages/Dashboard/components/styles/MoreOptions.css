@@ -1,11 +1,11 @@
 .MoreOptions {
-  position: relative;
-  bottom: 1rem;
-  left: -2rem;
+  position: absolute;
+  bottom: 9.5rem;
+  left: 0.5rem;
   list-style: none;
+  width: 20rem;
   display: flex;
   flex-direction: column;
-  width: 23rem;
   border-radius: 0.5rem;
   background-color: white;
   color: var(--black);

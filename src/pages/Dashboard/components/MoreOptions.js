@@ -16,6 +16,7 @@ const MoreOptions = ({ handleClose }) => {
       <li>
         <Link
           to={`/${response.document.userName}`}
+          state={{ activeTab: 'posts' }}
           onClick={handleClose}
           // state={{ userID: response.document.uid }}
         >
@@ -30,8 +31,14 @@ const MoreOptions = ({ handleClose }) => {
         </Link>
       </li>
       <li>
-        <span>Saved</span>
-        <FiBookmark size={20} />
+        <Link
+          to={`/${response.document.userName}`}
+          state={{ activeTab: 'saved' }}
+          onClick={handleClose}
+        >
+          <span>Saved</span>
+          <FiBookmark size={20} />
+        </Link>
       </li>
       <li onClick={logout}>
         {isPending ? 'Loading' : 'Logout'}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // react router
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 // styles
 import './styles/Profile.css';
 // components
@@ -16,13 +16,23 @@ import { MdGridOn } from 'react-icons/md';
 import { FiBookmark } from 'react-icons/fi';
 
 const Profile = () => {
+  // for MoreOption component direct link to saved posts
+  const location = useLocation();
+  const locationHasState = location.state?.activeTab;
+
+  console.log(locationHasState);
+
   const { userName } = useParams(); // get userName from web address parameter
   const navigate = useNavigate();
   const { documentExist } = useFirestore('users');
   const { response } = useUserDataContext();
   const { searchForUser } = useSearchUsers();
 
-  const [activeTab, setActiveTab] = useState('posts'); // =>posts or saved
+  const [activeTab, setActiveTab] = useState(
+    location.state?.activeTab || 'posts'
+  ); // =>posts or saved
+
+  console.log('activeTab', activeTab);
 
   const [profileType, setProfileType] = useState(null); // => own, friend or other
   // if account user inspect is not his own save targetUID for hook to get user data
@@ -30,11 +40,14 @@ const Profile = () => {
   // targetUserUID null value exist useEffect in useOnSnapshot hooks before getting data
   const { document } = useOnSnapshotDocument('users', targetUserUID);
 
+  const [error, setError] = useState(null);
+
   // if user inspecting other of friend acc and wants go back to own => reset
   useEffect(() => {
     setProfileType(null);
     setTargetUserUID(null);
-  }, [userName]);
+    setActiveTab(location.state?.activeTab || 'posts');
+  }, [location, userName]);
 
   // main logic for determining who's account current user is inspecting
   useEffect(() => {
@@ -45,44 +58,45 @@ const Profile = () => {
       setProfileType('own');
       return;
     }
-    //
+    // if user is not current user
     const checkForUser = async () => {
       try {
         // check if userName exist (navigate to homepage if not)
         const userExist = await documentExist('public_usernames', userName);
         if (userExist === false) navigate('/');
-        // get user document
-        // TODO
+        // get user ID
         const userUID = await searchForUser(userName);
         // find is friend (following) or other (not following)
-        const friend = await response.document.following.find(
+        const isFriend = await response.document.following.find(
           friendUid => friendUid === userUID
         );
-        friend ? setProfileType('friend') : setProfileType('other');
+        isFriend ? setProfileType('friend') : setProfileType('other');
         setTargetUserUID(userUID);
       } catch (error) {
         console.log(error);
+        setError('Something went wrong, please try again later!');
       }
     };
 
     checkForUser();
   }, [
-    profileType,
-    navigate,
     userName,
+    navigate,
     response,
+    profileType,
     targetUserUID,
     documentExist,
     searchForUser,
   ]);
 
+  if (error) return <p className="error">{error}</p>;
   if (profileType === null) return;
   if (profileType !== 'own' && document === null) return;
 
   return (
     <div className="Profile">
       <ProfileUser
-        accountType={profileType}
+        profileType={profileType}
         targetData={profileType === 'own' ? response.document : document}
         setProfileType={setProfileType}
       />

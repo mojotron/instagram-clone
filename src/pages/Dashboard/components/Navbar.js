@@ -79,7 +79,11 @@ const Navbar = ({
           icon={<Avatar url={response.document.avatar.url} size={25} />}
           link={null}
           headings="Profile"
-          handleClick={() => navigate(`/${response.document.userName}`)}
+          handleClick={() =>
+            navigate(`/${response.document.userName}`, {
+              state: { activeTab: 'posts' },
+            })
+          }
         />
       </ul>
     </nav>

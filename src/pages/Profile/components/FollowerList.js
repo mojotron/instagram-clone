@@ -19,6 +19,7 @@ const FollowerList = ({ type, userIdList, closeHandler }) => {
             <GrClose size={20} />
           </button>
         </header>
+        
         <section>
           {documents &&
             documents.map(ele => (

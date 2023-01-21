@@ -12,10 +12,10 @@ import { useFollow } from '../../../hooks/useFollow';
 const FollowItem = ({ type, userData }) => {
   const { response } = useUserDataContext();
   const { follow, unfollow, removeFollower } = useFollow();
-  const { userName } = useParams(); // to determine if user inspecting own account
   const navigate = useNavigate();
 
-  const isOwnAcc = userName === response.document.userName;
+  const { userName } = useParams(); //* to determine if user inspecting own account
+  const isOwnAcc = userName === response.document.userName; // *
 
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
