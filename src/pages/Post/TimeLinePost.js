@@ -7,38 +7,19 @@ import TimeLinePostCommentsList from './components/TimeLinePostCommentsList';
 // styles
 import './styles/TimeLinePost.css';
 //hooks
-import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useNavigate } from 'react-router-dom';
-import { useTimeLinePostHandlers } from '../../hooks/useTimeLinePostHandlers';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 const TimeLinePost = ({ postData }) => {
   const navigate = useNavigate();
   const { response } = useUserDataContext();
 
-  const {
-    toggleLike,
-    addComment,
-    toggleDisableLikes,
-    toggleDisableComments,
-    deletePost,
-    editPost,
-  } = useTimeLinePostHandlers();
-
   const owner = postData.uid === response.document.uid;
 
   return (
     <div className="TimeLinePost">
-      <PostHeader
-        type="timeline"
-        owner={owner}
-        postData={postData}
-        handlers={{
-          toggleDisableLikes,
-          toggleDisableComments,
-          deletePost,
-          editPost,
-        }}
-      />
+      <PostHeader type="timeline" owner={owner} postData={postData} />
+
       <div className="TimeLinePost__image-container">
         <PostImage
           imagesData={postData.images}
@@ -47,14 +28,16 @@ const TimeLinePost = ({ postData }) => {
       </div>
       <PostControls
         postData={postData}
-        handleCommentReset={() => navigate(`/p/${postData.id}`)} // here is sending to user post not resetting comment focus like in post component
-        handleLikePost={toggleLike}
+        // here is sending to user post not resetting comment
+        // focus like in post component
+        handleCommentReset={() => navigate(`/p/${postData.id}`)}
       />
+
       <TimeLinePostCommentsList postData={postData} />
+
       {!postData.disableComments && (
         <PostAddComment
           postData={postData}
-          handleAddComment={addComment}
           focusOnComment={null}
           replyData={null}
         />

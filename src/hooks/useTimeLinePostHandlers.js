@@ -1,5 +1,6 @@
 import { updateDoc, doc, Timestamp, deleteDoc } from 'firebase/firestore';
 import { projectFirestore } from '../firebase/config';
+import { useFirestore } from './useFirestore';
 import { useNotifications } from './useNotifications';
 import { useUserDataContext } from './useUserDataContext';
 
@@ -12,6 +13,8 @@ Thank you for inspecting my project!
 
 export const useTimeLinePostHandlers = () => {
   const { response, updateDocument: updateUserDoc } = useUserDataContext();
+  const { updateDocument: updatePostDoc } = useFirestore('posts');
+
   const { addNotification } = useNotifications();
 
   const toggleLike = async (postLikes, docId) => {
@@ -30,6 +33,7 @@ export const useTimeLinePostHandlers = () => {
       newLikes = postLikes.filter(like => like.uid !== response.document.uid);
     }
     await updateDoc(doc(projectFirestore, 'posts', docId), { likes: newLikes });
+    // add notification
   };
 
   const addComment = async (text, postComments, docId) => {
@@ -49,6 +53,7 @@ export const useTimeLinePostHandlers = () => {
     await updateDoc(doc(projectFirestore, 'posts', docId), {
       comments: [...postComments, newComment],
     });
+    // add notification for post and user mention
   };
 
   const toggleDisableLikes = async (currentValue, docId) => {

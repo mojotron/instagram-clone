@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+// style
 import './styles/TimeLinePostCommentsList.css';
+// components
 import TimeLinePostComment from './TimeLinePostComment';
+// hooks
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const TimeLinePostCommentsList = ({ postData }) => {

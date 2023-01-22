@@ -10,7 +10,12 @@ import './styles/PostHeader.css';
 // icon
 import { FiMoreHorizontal } from 'react-icons/fi';
 
-const PostHeader = ({ type, owner, postData, handlers }) => {
+const PostHeader = ({ type, owner, postData }) => {
+  // handlers ->
+  //  toggleDisableLikes,
+  //  toggleDisableComments,
+  //  deletePost,
+  //  editPost,
   const { response, getDocumentById } = useFirestore('users');
   const navigate = useNavigate();
 
@@ -31,11 +36,8 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
           owner={owner}
           userData={response.document}
           postData={postData}
-          handlers={{
-            ...handlers,
-            handleClose: () => setShowOptions(false),
-            handleOpenEdit: () => setShowEditPost(true),
-          }}
+          handleClose={() => setShowOptions(false)}
+          handleOpenEdit={() => setShowEditPost(true)}
         />
       )}
 
@@ -43,7 +45,6 @@ const PostHeader = ({ type, owner, postData, handlers }) => {
         <EditPostPanel
           postData={postData}
           closeHandler={() => setShowEditPost(false)}
-          handleEditPost={handlers.editPost}
         />
       )}
 

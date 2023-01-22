@@ -2,13 +2,23 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // hooks
 import { useFollow } from '../../../hooks/useFollow';
+import { usePost } from '../../../hooks/usePost';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // components
 import ConfirmDelete from './ConfirmDelete';
 
-const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
+const PostOptionsPopup = ({
+  type,
+  owner,
+  postData,
+  userData,
+  handleClose,
+  handleOpenEdit,
+}) => {
   // type => regular or timeline
   const { follow, unfollow } = useFollow();
+  const { toggleDisableLikes, toggleDisableComments, deletePost } = usePost();
+
   const { response } = useUserDataContext();
   const navigate = useNavigate();
 
@@ -25,7 +35,7 @@ const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const handleDeletePostClick = async () => {
-    await handlers.deletePost(postData.id);
+    await deletePost(postData.id);
     if (type === 'regular') navigate(`/${postData.creator.userName}`);
   };
 
@@ -53,8 +63,8 @@ const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
         {owner && (
           <button
             onClick={() => {
-              handlers.handleOpenEdit(true);
-              handlers.handleClose();
+              handleOpenEdit(true);
+              handleClose();
             }}
             className="btn"
           >
@@ -64,7 +74,7 @@ const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
         {owner && (
           <button
             onClick={() =>
-              handlers.toggleDisableLikes(postData.disableLikes, postData.id)
+              toggleDisableLikes(postData.disableLikes, postData.id)
             }
             className="btn"
           >
@@ -74,10 +84,7 @@ const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
         {owner && (
           <button
             onClick={async () =>
-              await handlers.toggleDisableComments(
-                postData.disableComments,
-                postData.id
-              )
+              await toggleDisableComments(postData.disableComments, postData.id)
             }
             className="btn"
           >
@@ -120,7 +127,7 @@ const PostOptionsPopup = ({ type, owner, postData, userData, handlers }) => {
         >
           Go to {type === 'regular' ? 'profile' : 'post'}
         </button>
-        <button onClick={() => handlers.handleClose()} className="btn">
+        <button onClick={() => handleClose()} className="btn">
           Cancel
         </button>
       </div>

@@ -6,20 +6,21 @@ import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
 // hook
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { usePost } from '../../../hooks/usePost';
 // styles
 import './styles/EditPostPanel.css';
-// icons
 // icons
 import smileIcon from '../../../images/smile-icon.svg';
 import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
-const EditPostPanel = ({ postData, closeHandler, handleEditPost }) => {
+const EditPostPanel = ({ postData, closeHandler }) => {
   // console.log(postData);
   const { response } = useUserDataContext();
   const navigate = useNavigate();
   const textareaRef = useRef();
+  const { editPost } = usePost();
 
   const [caption, setCaption] = useState(postData.caption);
   const [location, setLocation] = useState(postData.location);
@@ -55,7 +56,7 @@ const EditPostPanel = ({ postData, closeHandler, handleEditPost }) => {
       })),
     };
 
-    await handleEditPost(newData, postData.id);
+    await editPost(newData, postData.id);
     closeHandler();
   };
 

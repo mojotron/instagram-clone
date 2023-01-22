@@ -39,7 +39,7 @@ export const UserDataContextProvider = ({ children }) => {
 
   return (
     <UserDataContext.Provider
-      value={{ response: { document, isPending, error }, updateDocument }}
+      value={{ response: { document, isPending, error } }}
     >
       {children}
     </UserDataContext.Provider>

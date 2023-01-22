@@ -23,6 +23,7 @@ const CreateNewPost = ({ setShowCreatePost }) => {
   //
   const { upload } = useStorage();
   const { addDocument, updateDocument: updatePost } = useFirestore('posts');
+  const { updateDocument: updateUserDoc } = useFirestore('users');
   //
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
@@ -62,7 +63,7 @@ const CreateNewPost = ({ setShowCreatePost }) => {
       const postDocRef = await addDocument(post);
       // TODO add postDocID to user.posts
       const userPosts = [...response.document.posts, postDocRef.id];
-      await updateDocument(response.document.uid, { posts: userPosts });
+      await updateUserDoc(response.document.uid, { posts: userPosts });
       // update doc with docID for useSnapshotByIdList hook
       await updatePost(postDocRef.id, { docId: postDocRef.id });
       //
