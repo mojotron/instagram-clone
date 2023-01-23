@@ -11,11 +11,6 @@ import './styles/PostHeader.css';
 import { FiMoreHorizontal } from 'react-icons/fi';
 
 const PostHeader = ({ type, owner, postData }) => {
-  // handlers ->
-  //  toggleDisableLikes,
-  //  toggleDisableComments,
-  //  deletePost,
-  //  editPost,
   const { response, getDocumentById } = useFirestore('users');
   const navigate = useNavigate();
 

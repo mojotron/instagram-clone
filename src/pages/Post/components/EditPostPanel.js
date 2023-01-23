@@ -10,10 +10,12 @@ import { usePost } from '../../../hooks/usePost';
 // styles
 import './styles/EditPostPanel.css';
 // icons
-import smileIcon from '../../../images/smile-icon.svg';
-import locationIcon from '../../../images/location-icon.svg';
-import expandShowIcon from '../../../images/expand-show-icon.svg';
-import expandHideIcon from '../../../images/expand-hide-icon.svg';
+import {
+  MdSentimentSatisfiedAlt,
+  MdOutlineLocationOn,
+  MdExpandMore,
+  MdExpandLess,
+} from 'react-icons/md';
 
 const EditPostPanel = ({ postData, closeHandler }) => {
   // console.log(postData);
@@ -85,7 +87,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
             <header className="EditPostPanel__body__edit__header">
               <Avatar
                 url={response.document.avatar.url}
-                size="mid"
+                size={35}
                 handleClick={() => navigate(`/${response.document.userName}`)}
               />
               <h2 onClick={() => navigate(`/${response.document.userName}`)}>
@@ -109,7 +111,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
                   className="btn btn-"
                   onClick={() => setShowEmojis(oldValue => !oldValue)}
                 >
-                  <img src={smileIcon} alt="emojis" />
+                  <MdSentimentSatisfiedAlt size={22} color="var(--gray)" />
                 </button>
                 {showEmojis && (
                   <EmojiPicker
@@ -129,7 +131,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
                   maxLength="50"
                 />
                 <span className="label-icon">
-                  <img src={locationIcon} alt="location" />
+                  <MdOutlineLocationOn size={22} color="var(--black)" />
                 </span>
               </label>
 
@@ -139,10 +141,11 @@ const EditPostPanel = ({ postData, closeHandler }) => {
                 >
                   <h3>Accessibility</h3>
                   <span>
-                    <img
-                      src={showAccessibility ? expandHideIcon : expandShowIcon}
-                      alt={`${showAccessibility ? 'hide' : 'expand'}`}
-                    />
+                    {showAccessibility ? (
+                      <MdExpandLess size={22} color="var(--black)" />
+                    ) : (
+                      <MdExpandMore size={22} color="var(--black)" />
+                    )}
                   </span>
                 </header>
 
