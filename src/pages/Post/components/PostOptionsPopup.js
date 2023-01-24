@@ -6,10 +6,10 @@ import { usePost } from '../../../hooks/usePost';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // components
 import ConfirmDelete from './ConfirmDelete';
+import PostOptionsPopupButton from './PostOptionsPopupButton';
 
 const PostOptionsPopup = ({
   type,
-  owner,
   postData,
   userData,
   handleClose,
@@ -18,11 +18,13 @@ const PostOptionsPopup = ({
   // type => regular or timeline
   const { follow, unfollow } = useFollow();
   const { toggleDisableLikes, toggleDisableComments, deletePost } = usePost();
-
   const { response } = useUserDataContext();
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(null);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
+  const owner = postData.uid === response.document.uid;
 
   useEffect(() => {
     if (isFollowing !== null) return;
@@ -31,8 +33,6 @@ const PostOptionsPopup = ({
       setIsFollowing(response.document.following.includes(postData.uid));
     }
   }, [owner, postData, response, isFollowing]);
-
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const handleDeletePostClick = async () => {
     await deletePost(postData.id);
@@ -50,86 +50,82 @@ const PostOptionsPopup = ({
       )}
 
       <div className="DiscardPost">
-        {/* TODO follow unfollow */}
         {owner && (
-          <button
-            onClick={() => setShowConfirmDelete(true)}
-            className="btn discard"
-            style={{ border: 'none' }}
-          >
-            Delete
-          </button>
-        )}
-        {owner && (
-          <button
-            onClick={() => {
-              handleOpenEdit(true);
-              handleClose();
-            }}
-            className="btn"
-          >
-            Edit
-          </button>
-        )}
-        {owner && (
-          <button
-            onClick={() =>
-              toggleDisableLikes(postData.disableLikes, postData.id)
-            }
-            className="btn"
-          >
-            {postData.disableLikes ? 'Show' : 'Hide'} Like count
-          </button>
-        )}
-        {owner && (
-          <button
-            onClick={async () =>
-              await toggleDisableComments(postData.disableComments, postData.id)
-            }
-            className="btn"
-          >
-            Turn {postData.disableComments ? 'on' : 'off'} commenting
-          </button>
+          <>
+            <PostOptionsPopupButton
+              btnText="Delete"
+              handleClick={() => setShowConfirmDelete(true)}
+              discardBtn={true}
+            />
+            <PostOptionsPopupButton
+              btnText="Edit"
+              handleClick={() => {
+                handleOpenEdit(true);
+                handleClose();
+              }}
+              discardBtn={false}
+            />
+            <PostOptionsPopupButton
+              btnText={`${postData.disableLikes ? 'Show' : 'Hide'} Like count`}
+              handleClick={async () =>
+                await toggleDisableLikes(postData.disableLikes, postData.id)
+              }
+              discardBtn={false}
+            />
+            <PostOptionsPopupButton
+              btnText={`Turn ${
+                postData.disableComments ? 'on' : 'off'
+              } commenting`}
+              handleClick={async () =>
+                await toggleDisableComments(
+                  postData.disableComments,
+                  postData.id
+                )
+              }
+              discardBtn={false}
+            />
+          </>
         )}
 
         {!owner && isFollowing && (
-          <button
-            onClick={async () =>
+          <PostOptionsPopupButton
+            btnText="Unfollow"
+            handleClick={async () =>
               await unfollow(postData.uid, userData.followers)
             }
-            className="btn discard"
-            style={{ border: 'none' }}
-          >
-            Unfollow
-          </button>
+            discardBtn={true}
+          />
         )}
 
         {!owner && !isFollowing && (
-          <button
-            onClick={async () =>
+          <PostOptionsPopupButton
+            btnText="Follow"
+            handleClick={async () =>
               await follow(postData.uid, userData.document.followers)
             }
-            className="btn discard"
-            style={{ border: 'none' }}
-          >
-            Follow
-          </button>
+            discardBtn={true}
+          />
         )}
 
-        <button className="btn">Share to...</button>
-        <button
-          onClick={() => {
+        <PostOptionsPopupButton
+          btnText="Share to..."
+          handleClick={() => console.log('TODO')}
+          discardBtn={false}
+        />
+        <PostOptionsPopupButton
+          btnText={`Go to ${type === 'regular' ? 'profile' : 'post'}`}
+          handleClick={() => {
             type === 'regular'
               ? navigate(`/${postData.creator.userName}`)
               : navigate(`/p/${postData.id}`);
           }}
-          className="btn"
-        >
-          Go to {type === 'regular' ? 'profile' : 'post'}
-        </button>
-        <button onClick={() => handleClose()} className="btn">
-          Cancel
-        </button>
+          discardBtn={false}
+        />
+        <PostOptionsPopupButton
+          btnText="Cancel"
+          handleClick={() => handleClose()}
+          discardBtn={false}
+        />
       </div>
     </div>
   );

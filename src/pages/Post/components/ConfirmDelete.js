@@ -7,6 +7,7 @@ const ConfirmDelete = ({ btnText, handleClose, handleDelete }) => {
         <button className="btn discard" onClick={handleDelete}>
           {btnText}
         </button>
+
         <button className="btn" onClick={handleClose}>
           Cancel
         </button>

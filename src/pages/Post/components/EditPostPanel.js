@@ -1,12 +1,13 @@
+// hooks
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EmojiPicker from 'emoji-picker-react';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { usePost } from '../../../hooks/usePost';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 // components
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
-// hook
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
-import { usePost } from '../../../hooks/usePost';
 // styles
 import './styles/EditPostPanel.css';
 // icons
@@ -18,16 +19,17 @@ import {
 } from 'react-icons/md';
 
 const EditPostPanel = ({ postData, closeHandler }) => {
-  // console.log(postData);
+  const { screenSize } = useScreenSizeContext();
   const { response } = useUserDataContext();
-  const navigate = useNavigate();
-  const textareaRef = useRef();
   const { editPost } = usePost();
+  const navigate = useNavigate();
+
+  const textareaRef = useRef();
 
   const [caption, setCaption] = useState(postData.caption);
   const [location, setLocation] = useState(postData.location);
   const [altTexts, setAltTexts] = useState(postData.images.map(ele => ele.alt));
-  // console.log(altTexts);
+
   const [showEmojis, setShowEmojis] = useState(false);
   const [showAccessibility, setShowAccessibility] = useState(false);
 
@@ -61,6 +63,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
     await editPost(newData, postData.id);
     closeHandler();
   };
+  // TODO responsive design
 
   return (
     <div className="child-overlay">
@@ -74,7 +77,11 @@ const EditPostPanel = ({ postData, closeHandler }) => {
             Done
           </button>
         </header>
-        <div className="EditPostPanel__body">
+        {/* TODO screen size on body and img container */}
+        <div
+          className="EditPostPanel__body"
+          style={{ flexDirection: screenSize === 'small' ? 'column' : 'row' }}
+        >
           <div className="EditPostPanel__body__image">
             <div className="EditPostPanel__body__image__container">
               <PostImage
@@ -83,6 +90,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
               />
             </div>
           </div>
+
           <div className="EditPostPanel__body__edit">
             <header className="EditPostPanel__body__edit__header">
               <Avatar

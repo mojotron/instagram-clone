@@ -25,6 +25,9 @@
   color: var(--black);
   pointer-events: auto;
 }
+.DiscardPost button:first-child {
+  border-top: none;
+}
 .btn.discard {
   color: var(--red);
   font-weight: 700;

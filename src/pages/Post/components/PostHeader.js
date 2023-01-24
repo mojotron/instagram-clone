@@ -10,7 +10,7 @@ import './styles/PostHeader.css';
 // icon
 import { FiMoreHorizontal } from 'react-icons/fi';
 
-const PostHeader = ({ type, owner, postData }) => {
+const PostHeader = ({ type, postData }) => {
   const { response, getDocumentById } = useFirestore('users');
   const navigate = useNavigate();
 
@@ -28,7 +28,6 @@ const PostHeader = ({ type, owner, postData }) => {
       {showOptions && (
         <PostOptionsPopup
           type={type}
-          owner={owner}
           userData={response.document}
           postData={postData}
           handleClose={() => setShowOptions(false)}

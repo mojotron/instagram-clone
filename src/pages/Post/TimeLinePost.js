@@ -1,24 +1,20 @@
 // components
-import PostImage from '../../components/PostImage';
-import PostAddComment from './components/PostAddComment';
-import PostControls from './components/PostControls';
 import PostHeader from './components/PostHeader';
+import PostImage from '../../components/PostImage';
+import PostControls from './components/PostControls';
+import PostAddComment from './components/PostAddComment';
 import TimeLinePostCommentsList from './components/TimeLinePostCommentsList';
 // styles
 import './styles/TimeLinePost.css';
 //hooks
 import { useNavigate } from 'react-router-dom';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 const TimeLinePost = ({ postData }) => {
   const navigate = useNavigate();
-  const { response } = useUserDataContext();
-
-  const owner = postData.uid === response.document.uid;
 
   return (
     <div className="TimeLinePost">
-      <PostHeader type="timeline" owner={owner} postData={postData} />
+      <PostHeader type="timeline" postData={postData} />
 
       <div className="TimeLinePost__image-container">
         <PostImage
