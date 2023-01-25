@@ -1,11 +1,11 @@
 // hooks
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import EmojiPicker from 'emoji-picker-react';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { usePost } from '../../../hooks/usePost';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 // components
+import EmojiPicker from 'emoji-picker-react';
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
 // styles

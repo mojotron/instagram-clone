@@ -46,10 +46,10 @@ const PostHeader = ({ type, postData }) => {
         <Avatar
           url={response.document?.avatar.url}
           size={32}
-          handleClick={() => navigate(`/${postData.creator.userName}`)}
+          handleClick={() => navigate(`/${response.document?.userName}`)}
         />
         <div className="PostHeader__left__info">
-          <h2 onClick={() => navigate(`/${postData.creator.userName}`)}>
+          <h2 onClick={() => navigate(`/${response.document?.userName}`)}>
             {response.document?.userName}
           </h2>
           <h3>{postData.location}</h3>

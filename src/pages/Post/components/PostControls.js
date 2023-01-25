@@ -9,15 +9,18 @@ import './styles/PostControls.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
 import { useMessages } from '../../../hooks/useMessages';
-import { useNotifications } from '../../../hooks/useNotifications';
+import { usePost } from '../../../hooks/usePost';
 // component
 import PostLikedBy from './PostLikedBy';
 import NewMessage from '../../Messages/components/NewMessage';
 
-const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
+const PostControls = ({ postData, handleCommentReset }) => {
   // in timeline post handleCommentReset sends user to post page
-  const { response, updateDocument } = useUserDataContext();
+  const { response } = useUserDataContext();
+  const { toggleSavePost, toggleLike } = usePost();
+  const { addMessage } = useMessages();
 
+  const [showNewMessage, setShowNewMessage] = useState(false);
   const [showLikedBy, setShowLikedBy] = useState(false);
   // is current user liking post
   const userLikesPost = postData.likes.find(
@@ -27,49 +30,16 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
   const followingLike = postData.likes.find(ele =>
     response.document.following.includes(ele.uid)
   );
-
   const likesCount = postData.likes.length;
   // is current user saved this post
   const userSavedPost = response.document.savedPosts.includes(postData.id);
+  // send this post to the target user
 
-  const handleSavePostClick = () => {
-    let transformed;
-    if (userSavedPost) {
-      // if user have saved this post filter it out
-      transformed = response.document.savedPosts.filter(
-        post => post !== postData.id
-      );
-    } else {
-      // or add it to the saved posts
-      transformed = [...response.document.savedPosts, postData.id];
-    }
-    updateDocument(response.document.id, { savedPosts: transformed });
-  };
-
-  const { addMessage } = useMessages();
-  const [showNewMessage, setShowNewMessage] = useState(false);
-
+  // TODO with messages refactor
   const handleSendPostTo = user => {
     console.log('hello');
     console.log(user.userName);
     addMessage(user, 'post', postData.id);
-  };
-
-  const { addNotification } = useNotifications();
-
-  const handleClickLikePost = async userLikesPost => {
-    // post data to use in notification hook => user id, post id, content
-    try {
-      console.log(postData.creator.profileDocId);
-      await handleLikePost(postData.likes, postData.id);
-      await addNotification(
-        postData.creator.profileDocId,
-        postData.id,
-        userLikesPost ? 'unlike-post' : 'like-post'
-      );
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -94,7 +64,13 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
           {!postData.disableLikes && (
             <button
               className="btn btn--post"
-              onClick={() => handleClickLikePost(userLikesPost)}
+              onClick={async () =>
+                await toggleLike(
+                  postData.likes,
+                  postData.id,
+                  response.document.id
+                )
+              }
             >
               {userLikesPost ? (
                 <AiFillHeart size={25} color="#eb6161" />
@@ -115,7 +91,10 @@ const PostControls = ({ postData, handleCommentReset, handleLikePost }) => {
             <FiSend size={25} />
           </button>
         </div>
-        <button className="btn btn--post" onClick={handleSavePostClick}>
+        <button
+          className="btn btn--post"
+          onClick={async () => await toggleSavePost(userSavedPost, postData.id)}
+        >
           {userSavedPost ? (
             <BsFillBookmarkFill size={25} />
           ) : (

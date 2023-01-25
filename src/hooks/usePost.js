@@ -70,8 +70,32 @@ export const usePost = () => {
       await updatePostDoc(postDocId, { likes: updatedLikesList });
       // add notification to post creator
       if (!postIsLiked) {
-        await addNotification(userDocId, postDocId, 'like-post');
+        await addNotification(
+          userDocId,
+          postDocId,
+          postIsLiked ? 'unlike-post' : 'like-post'
+        );
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleSavePost = async (postSaved, postDocId) => {
+    // update current user doc
+    try {
+      let updatedSavedPosts;
+      if (postSaved) {
+        updatedSavedPosts = response.document.savedPosts.filter(
+          post => post !== postDocId
+        );
+      } else {
+        updatedSavedPosts = [...response.document.savedPosts, postDocId];
+      }
+
+      await updateUserDoc(response.document.id, {
+        savedPosts: updatedSavedPosts,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -85,5 +109,6 @@ export const usePost = () => {
     deletePost,
     editPost,
     toggleLike,
+    toggleSavePost,
   };
 };

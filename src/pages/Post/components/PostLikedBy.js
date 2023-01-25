@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import './styles/PostLikedBy.css';
 // icon
-import closeIcon from '../../../images/close-icon.svg';
+import { GrClose } from 'react-icons/gr';
 // components
 import ConfirmDelete from './ConfirmDelete';
 import Avatar from '../../../components/Avatar';
 // hooks
-
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useFollow } from '../../../hooks/useFollow';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
@@ -50,16 +49,13 @@ const PostLikedBy = ({ likes, handleClose }) => {
         <header className="PostLikedBy__header">
           <h2>Likes</h2>
           <button className="btn" onClick={handleClose}>
-            <img src={closeIcon} alt="close liked by" />
+            <GrClose size={22} />
           </button>
         </header>
         <div>
-          {/* handlers and button text
-              -- follow / unfollow
-              -- click to user profile
-          */}
           {documents &&
             documents.map((user, i) => {
+              const owner = response.document.id === user.uid;
               const following = response.document.following.find(
                 uid => uid === user.uid
               );
@@ -68,12 +64,14 @@ const PostLikedBy = ({ likes, handleClose }) => {
                 <div className="PostLikedBy__user" key={i}>
                   <div className="PostLikedBy__user__info">
                     <Avatar url={user.avatar.url} size={44} />
+
                     <div className="PostLikedBy__user__info__names">
                       <h2>{user.userName}</h2>
                       <h3>{user.fullName}</h3>
                     </div>
                   </div>
-                  {following && (
+
+                  {following && !owner && (
                     <button
                       className="btn btn--profile"
                       onClick={() => prepUnfollow(user.uid, user.followers)}
@@ -81,7 +79,8 @@ const PostLikedBy = ({ likes, handleClose }) => {
                       Following
                     </button>
                   )}
-                  {!following && (
+
+                  {!following && !owner && (
                     <button
                       className="btn btn--profile-blue"
                       onClick={() => follow(user.uid, user.followers)}
