@@ -1,10 +1,10 @@
+// hooks
 import { useNavigate } from 'react-router-dom';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // style
 import './styles/TimeLinePostCommentsList.css';
 // components
 import TimeLinePostComment from './TimeLinePostComment';
-// hooks
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const TimeLinePostCommentsList = ({ postData }) => {
   const { response } = useUserDataContext();
@@ -37,7 +37,7 @@ const TimeLinePostCommentsList = ({ postData }) => {
           {commentsCount === 1 ? 'comment' : `all ${commentsCount} comments`}
         </button>
       )}
-      {/* comments */}
+      {/* comments => display only comments current user made for all comments link to post*/}
       {!postData.disableComments &&
         yourComments.map(comment => (
           <TimeLinePostComment

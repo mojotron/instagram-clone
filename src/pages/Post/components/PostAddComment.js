@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
+import { usePost } from '../../../hooks/usePost';
+// components
 import EmojiPicker from 'emoji-picker-react';
+// styles
 import './styles/PostAddComment.css';
-import smileyIcon from '../../../images/smile-icon.svg';
+// icon
+import { MdSentimentSatisfiedAlt } from 'react-icons/md';
 
-const PostAddComment = ({
-  postData,
-  handleAddComment,
-  focusOnComment,
-  replyData,
-}) => {
+const PostAddComment = ({ postData, focusOnComment, replyData }) => {
+  const { addComment } = usePost();
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState('');
 
@@ -40,7 +40,7 @@ const PostAddComment = ({
   };
 
   const handlePostComment = async () => {
-    await handleAddComment(text, postData.comments, postData.id);
+    await addComment(text, postData.comments, postData.id, postData.creator);
     setText('');
   };
   return (
@@ -51,7 +51,7 @@ const PostAddComment = ({
         </div>
       )}
       <button className="btn btn--emoji" onClick={() => setShowEmojis(true)}>
-        <img src={smileyIcon} alt="open emoji picker" />
+        <MdSentimentSatisfiedAlt size={25} color="var(--gray)" />
       </button>
       <textarea
         ref={textareaRef}

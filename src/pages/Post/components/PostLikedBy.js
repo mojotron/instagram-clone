@@ -22,8 +22,6 @@ const PostLikedBy = ({ likes, handleClose }) => {
   const [showConfirmUnfollow, setShowConfirmUnfollow] = useState(false);
   const [userToUnfollow, setUserToUnfollow] = useState(null);
 
-  console.log(documents, response);
-
   const prepUnfollow = (userDocId, followersList) => {
     setUserToUnfollow({ userDocId, followersList });
     setShowConfirmUnfollow(true);

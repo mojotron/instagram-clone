@@ -29,10 +29,10 @@ export const useNotifications = () => {
 
   const addNotification = async (userID, postDocId, type, payload = '') => {
     // console.log(userDocId, postDocId, type);
-
+    console.log(userID);
     try {
       const userNotifications = await getDocumentById(userID);
-
+      console.log(userNotifications);
       const notificationObject = {
         createdAt: Timestamp.fromDate(new Date()),
         fromUserId: response.document.id,

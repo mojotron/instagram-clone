@@ -2,6 +2,7 @@ import { MAX_POST_COMMENTS_ALERT_MSG } from '../constants/constants';
 import { useUserDataContext } from './useUserDataContext';
 import { useFirestore } from './useFirestore';
 import { useNotifications } from './useNotifications';
+import { Timestamp } from 'firebase/firestore';
 
 export const usePost = () => {
   const { response } = useUserDataContext();
@@ -101,7 +102,29 @@ export const usePost = () => {
     }
   };
 
-  const addComment = async () => {};
+  const addComment = async (text, postComments, postDocId, userDocId) => {
+    try {
+      if (postComments.length === 5) {
+        alert(MAX_POST_COMMENTS_ALERT_MSG);
+        return;
+      }
+
+      const newComment = {
+        text: text,
+        userID: response.document.id,
+        replies: [],
+        createdAt: Timestamp.fromDate(new Date()),
+      };
+
+      await updatePostDoc(postDocId, {
+        comments: [...postComments, newComment],
+      });
+
+      await addNotification(userDocId, postDocId, 'comment-post');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     toggleDisableLikes,
@@ -110,5 +133,6 @@ export const usePost = () => {
     editPost,
     toggleLike,
     toggleSavePost,
+    addComment,
   };
 };
