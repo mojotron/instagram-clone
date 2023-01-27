@@ -126,6 +126,45 @@ export const usePost = () => {
     }
   };
 
+  const deleteComment = async (
+    comments,
+    commentIndex,
+    postDocId,
+    userDocId
+  ) => {
+    try {
+      const updatedComments = comments.filter((_, i) => i !== commentIndex);
+      await updatePostDoc(postDocId, { comments: updatedComments });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addReplyToComment = async (text, comments, commentIndex, postDocId) => {
+    try {
+      // modify replays in comments
+      const newReplay = {
+        text: text,
+        userID: response.document.id,
+        createdAt: Timestamp.fromDate(new Date()),
+      };
+      const updatedComments = comments.map((comment, i) => {
+        if (i === commentIndex) {
+          return { ...comment, replies: [...comment.replies, newReplay] };
+        } else {
+          return comment;
+        }
+      });
+      await updatePostDoc(postDocId, { comments: updatedComments });
+      // TODO notification
+      await addNotification(userDocId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteReplay = () => {};
+
   return {
     toggleDisableLikes,
     toggleDisableComments,
@@ -134,5 +173,8 @@ export const usePost = () => {
     toggleLike,
     toggleSavePost,
     addComment,
+    deleteComment,
+    addReplyToComment,
+    deleteReplay,
   };
 };

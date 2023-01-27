@@ -1,5 +1,9 @@
+// hooks
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { usePostControl } from '../../hooks/usePostControl';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
+// styles
 import './styles/Post.css';
 // components
 import PostHeader from './components/PostHeader';
@@ -7,29 +11,19 @@ import PostImage from '../../components/PostImage';
 import PostControls from './components/PostControls';
 import PostAddComment from './components/PostAddComment';
 import PostCommentsList from './components/PostCommentsList';
-// hooks
-import { usePostControl } from '../../hooks/usePostControl';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
 // icon
-import closeIcon from '../../images/close-icon.svg';
+import { GrClose } from 'react-icons/gr';
 
 const Post = () => {
-  // type: regular, timeline
+  const navigate = useNavigate();
   const { response: userData, updateDocument } = useUserDataContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
-
   const { postId } = useParams();
-
-  const navigate = useNavigate();
 
   // post document
   const {
     postResponse,
     toggleLike,
-    toggleDisableLikes,
-    toggleDisableComments,
-    deletePost,
-    editPost,
     followProfile,
     unfollowProfile,
     addComment,
@@ -95,7 +89,7 @@ const Post = () => {
   return (
     <div className="overlay">
       <button onClick={() => navigate(-1)} className="btn btn--close">
-        <img src={closeIcon} alt="close post" />
+        <GrClose size={25} />
       </button>
 
       {postResponse.document && (
@@ -116,21 +110,11 @@ const Post = () => {
           </div>
 
           <div className="Post__info">
-            <PostHeader
-              type="regular"
-              owner={owner}
-              postData={postResponse.document}
-              handlers={{
-                toggleDisableLikes,
-                toggleDisableComments,
-                deletePost,
-                editPost,
-                followProfile,
-                unfollowProfile,
-              }}
-            />
+            {/* post type: regular, timeline */}
+            <PostHeader type="regular" postData={postResponse.document} />
+
             <PostCommentsList
-              owner={owner}
+              owner={owner} // move
               postData={postResponse.document}
               handleReply={handleReplyToComment}
               handleDeleteComment={deleteComment}

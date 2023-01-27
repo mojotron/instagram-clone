@@ -37,12 +37,10 @@ export const useTimeLinePostHandlers = () => {
   };
 
   const addComment = async (text, postComments, docId) => {
-    console.log(1);
     if (postComments.length === 5) {
       alert(ALERT_MSG);
       return;
     }
-    console.log(2);
 
     const newComment = {
       text: text,
