@@ -1,11 +1,16 @@
-import './styles/PostComment.css';
-import Avatar from '../../../components/Avatar';
-import { formatTime } from '../../../utils/formatTime';
+// hooks
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moreOptions from '../../../images/more-horiz-icon.svg';
+// style
+import './styles/PostComment.css';
+// components
+import Avatar from '../../../components/Avatar';
 import ConfirmDelete from './ConfirmDelete';
 import LinkfyUsernames from '../../../components/LinkfyUsernames';
+// utils
+import { formatTime } from '../../../utils/formatTime';
+// icons
+import { FiMoreHorizontal } from 'react-icons/fi';
 
 const PostComment = ({
   owner,
@@ -69,7 +74,7 @@ const PostComment = ({
       <div className="PostComment__main">
         <Avatar
           url={data.avatarUrl}
-          size="mid"
+          size={35}
           handleClick={() => navigate(`/${data.userName}`)}
         />
 
@@ -101,7 +106,7 @@ const PostComment = ({
                   setShowDeleteComment(true);
                 }}
               >
-                <img src={moreOptions} alt="options" />
+                <FiMoreHorizontal size={20} />
               </button>
             )}
           </div>
@@ -122,7 +127,7 @@ const PostComment = ({
                     <div key={i} className="PostComment__main replay">
                       <Avatar
                         url={reply.avatarUrl}
-                        size="small"
+                        size={22}
                         handleClick={() => navigate(`/${reply.userName}`)}
                       />
                       <div className="PostComment__main__inner">
@@ -156,7 +161,7 @@ const PostComment = ({
                                 setShowDeleteReply(true);
                               }}
                             >
-                              <img src={moreOptions} alt="options" />
+                              <FiMoreHorizontal size={20} />
                             </button>
                           )}
                         </div>

@@ -20,6 +20,8 @@ export const useNotifications = () => {
         return 'started following you.';
       case 'comment-post':
         return 'commented:';
+      case 'replied on comment':
+        return 'replied to your comment';
       case 'mention-user':
         return 'mentioned you in comment:';
       default:

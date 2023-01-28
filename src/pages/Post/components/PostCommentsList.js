@@ -1,8 +1,9 @@
+// hooks
+import { useCallback, useMemo } from 'react';
+import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 import './styles/PostCommentsList.css';
+// components
 import PostComment from './PostComment';
-
-// avatarUrl={response.document.creator.avatarUrl}
-//               userName={response.document.creator.userName}
 
 const PostCommentsList = ({
   owner,
@@ -11,10 +12,35 @@ const PostCommentsList = ({
   handleDeleteComment,
   handleDeleteReply,
 }) => {
+  console.log('mount List');
+  console.log(postData);
+  // get all user who are listed in post doc (creator, comments and replies)
+  const getUsersIdList = useMemo(() => {
+    console.log('getCommentsAndReplay run');
+    const result = { creator: postData.creator, comments: [], replies: [] };
+
+    postData.comments.forEach(comment => {
+      [...comment.replies].forEach(reply => result.replies.push(reply.userID));
+      result.comments.push(comment.userID);
+    });
+
+    return [result.creator, ...result.comments, ...result.replies];
+  }, [postData]);
+  console.log(getUsersIdList);
+
+  const { documents, isPending, error } = useCollectDocsByIdList(
+    getUsersIdList,
+    'posts'
+  );
+
+  console.log(documents);
+
+  // collect creator, comments, responses id
+  // if (!documents) return;
   return (
     <div className="PostCommentsList">
       {/* first is post caption */}
-      {postData.caption !== '' && (
+      {/* {postData.caption !== '' && (
         <PostComment
           owner={false}
           data={{
@@ -26,9 +52,9 @@ const PostCommentsList = ({
           commentIndex={null}
           handleReply={null}
         />
-      )}
+      )} */}
       {/* comments */}
-      {!postData.disableComments &&
+      {/* {!postData.disableComments &&
         postData.comments.map((comment, i) => (
           <PostComment
             key={i}
@@ -39,7 +65,7 @@ const PostCommentsList = ({
             handleDeleteComment={handleDeleteComment}
             handleDeleteReply={handleDeleteReply}
           />
-        ))}
+        ))} */}
     </div>
   );
 };

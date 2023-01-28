@@ -140,7 +140,14 @@ export const usePost = () => {
     }
   };
 
-  const addReplyToComment = async (text, comments, commentIndex, postDocId) => {
+  const addReplyToComment = async (
+    text,
+    comments,
+    commentIndex,
+    postDocId,
+    userDocId
+  ) => {
+    // user doc id is user on whom we replllllay
     try {
       // modify replays in comments
       const newReplay = {
@@ -157,7 +164,7 @@ export const usePost = () => {
       });
       await updatePostDoc(postDocId, { comments: updatedComments });
       // TODO notification
-      await addNotification(userDocId);
+      // await addNotification(userDocId);
     } catch (error) {
       console.log(error);
     }
