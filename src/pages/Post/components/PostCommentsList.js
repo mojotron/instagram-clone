@@ -1,5 +1,5 @@
 // hooks
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 import './styles/PostCommentsList.css';
 // components
@@ -12,11 +12,8 @@ const PostCommentsList = ({
   handleDeleteComment,
   handleDeleteReply,
 }) => {
-  console.log('mount List');
-  console.log(postData);
   // get all user who are listed in post doc (creator, comments and replies)
   const getUsersIdList = useMemo(() => {
-    console.log('getCommentsAndReplay run');
     const result = { creator: postData.creator, comments: [], replies: [] };
 
     postData.comments.forEach(comment => {
@@ -24,48 +21,48 @@ const PostCommentsList = ({
       result.comments.push(comment.userID);
     });
 
-    return [result.creator, ...result.comments, ...result.replies];
+    return [
+      ...new Set([result.creator, ...result.comments, ...result.replies]),
+    ];
   }, [postData]);
-  console.log(getUsersIdList);
 
   const { documents, isPending, error } = useCollectDocsByIdList(
     getUsersIdList,
-    'posts'
+    'users'
   );
 
-  console.log(documents);
+  console.log('docs', documents);
 
-  // collect creator, comments, responses id
-  // if (!documents) return;
+  if (!documents) return;
   return (
     <div className="PostCommentsList">
       {/* first is post caption */}
-      {/* {postData.caption !== '' && (
+      {postData.caption !== '' && (
         <PostComment
           owner={false}
-          data={{
-            avatarUrl: postData.creator.avatarUrl,
-            userName: postData.creator.userName,
+          userData={documents.find(doc => doc.id === postData.creator)}
+          postData={{
             text: postData.caption,
             createdAt: postData.createdAt,
           }}
           commentIndex={null}
           handleReply={null}
         />
-      )} */}
+      )}
       {/* comments */}
-      {/* {!postData.disableComments &&
+      {!postData.disableComments &&
         postData.comments.map((comment, i) => (
           <PostComment
             key={i}
             owner={owner}
-            data={comment}
+            userData={documents.find(doc => doc.id === comment.userID)}
+            postData={comment}
             commentIndex={i}
             handleReply={handleReply}
             handleDeleteComment={handleDeleteComment}
             handleDeleteReply={handleDeleteReply}
           />
-        ))} */}
+        ))}
     </div>
   );
 };

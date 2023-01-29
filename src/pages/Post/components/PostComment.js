@@ -14,7 +14,8 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 
 const PostComment = ({
   owner,
-  data,
+  userData,
+  postData,
   commentIndex,
   handleReply,
   handleDeleteComment,
@@ -73,27 +74,29 @@ const PostComment = ({
 
       <div className="PostComment__main">
         <Avatar
-          url={data.avatarUrl}
+          url={userData.avatar.url}
           size={35}
-          handleClick={() => navigate(`/${data.userName}`)}
+          handleClick={() => navigate(`/${userData.userName}`)}
         />
 
         <div className="PostComment__main__inner">
           <p>
             <span
               className="PostComment__main__inner__username"
-              onClick={() => navigate(`/${data.userName}`)}
+              onClick={() => navigate(`/${userData.userName}`)}
             >
-              {data.userName}{' '}
+              {userData.userName}{' '}
             </span>
-            <LinkfyUsernames text={data.text} />
+            <LinkfyUsernames text={postData.text} />
           </p>
           <div className="PostComment__controls">
-            <p>{formatTime(data.createdAt.seconds * 1000)}</p>
+            <p>{formatTime(postData.createdAt.seconds * 1000)}</p>
             {handleReply && (
               <button
                 className="btn btn--reply"
-                onClick={() => handleReplyClick(data.avatarUrl, data.userName)}
+                onClick={() =>
+                  handleReplyClick(userData.avatar.Url, userData.userName)
+                }
               >
                 Reply
               </button>
@@ -111,7 +114,7 @@ const PostComment = ({
             )}
           </div>
 
-          {data.replies?.length > 0 && (
+          {postData.replies?.length > 0 && (
             <div className="PostComment__replies">
               <button
                 className="btn btn--toggle-replies"
@@ -119,11 +122,11 @@ const PostComment = ({
               >
                 {showReplies
                   ? 'Hide replies'
-                  : `View replies (${data.replies.length})`}
+                  : `View replies (${postData.replies.length})`}
               </button>
               {showReplies && (
                 <div>
-                  {data.replies.map((reply, i) => (
+                  {postData.replies.map((reply, i) => (
                     <div key={i} className="PostComment__main replay">
                       <Avatar
                         url={reply.avatarUrl}
