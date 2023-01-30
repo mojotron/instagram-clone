@@ -26,12 +26,7 @@ const PostCommentsList = ({
     ];
   }, [postData]);
 
-  const { documents, isPending, error } = useCollectDocsByIdList(
-    getUsersIdList,
-    'users'
-  );
-
-  console.log('docs', documents);
+  const { documents } = useCollectDocsByIdList(getUsersIdList, 'users');
 
   if (!documents) return;
   return (
@@ -41,7 +36,7 @@ const PostCommentsList = ({
         <PostComment
           owner={false}
           userData={documents.find(doc => doc.id === postData.creator)}
-          postData={{
+          commentData={{
             text: postData.caption,
             createdAt: postData.createdAt,
           }}
@@ -56,7 +51,7 @@ const PostCommentsList = ({
             key={i}
             owner={owner}
             userData={documents.find(doc => doc.id === comment.userID)}
-            postData={comment}
+            commentData={comment}
             commentIndex={i}
             handleReply={handleReply}
             handleDeleteComment={handleDeleteComment}

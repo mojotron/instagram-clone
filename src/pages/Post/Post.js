@@ -1,8 +1,8 @@
 // hooks
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { usePostControl } from '../../hooks/usePostControl';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
+import { usePost } from '../../hooks/usePost';
 // styles
 import './styles/Post.css';
 // components
@@ -16,36 +16,23 @@ import { GrClose } from 'react-icons/gr';
 
 const Post = () => {
   const navigate = useNavigate();
-  const { response: userData, updateDocument } = useUserDataContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
   const { postId } = useParams();
-
-  // post document
-  const {
-    postResponse,
-    toggleLike,
-    followProfile,
-    unfollowProfile,
-    addComment,
-    deleteComment,
-    addReplay,
-    deleteReply,
-  } = usePostControl(postId, userData.document, updateDocument);
-
+  const { document: postDocument } = useOnSnapshotDocument('posts', postId);
+  const { addReplyToComment, addComment } = usePost();
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
   // is current comment comment or reply on comment
   const [replayData, setReplayData] = useState(null);
-  // is current profile user logged in
-  const owner = userData.document.uid === postResponse.document?.uid;
-  // remove focus from comment input filed on render
+
   useEffect(() => {
+    // remove focus from comment input filed on render
     if (focusOnComment) setFocusOnComment(false);
   }, [focusOnComment]);
 
   const handleAddComment = async (text, comments, id) => {
     if (replayData) {
-      await addReplay(text, replayData.commentIndex);
+      await addReplyToComment(text, replayData.commentIndex);
       setReplayData(null);
     } else {
       await addComment(text, comments, id);
@@ -72,7 +59,7 @@ const Post = () => {
     if (imageContainerRef.current === null) return;
     const rect = imageContainerRef.current.getBoundingClientRect();
     setContainerSize(Math.min(rect.height, rect.width));
-  }, [imageContainerRef, containerSize, postResponse]);
+  }, [imageContainerRef, containerSize, postDocument]);
 
   // set window resize event if user changes screen size so PostImage is display correctly
   useEffect(() => {
@@ -84,7 +71,7 @@ const Post = () => {
     return () => window.removeEventListener('resize', watchSize);
   }, []);
 
-  if (!postResponse.document) return;
+  if (!postDocument) return;
 
   return (
     <div className="overlay">
@@ -92,7 +79,7 @@ const Post = () => {
         <GrClose size={25} />
       </button>
 
-      {postResponse.document && (
+      {postDocument && (
         <div className="Post">
           <div className="Post__image-wrapper" ref={imageContainerRef}>
             {/* wrapper is for keeping container in middle */}
@@ -100,10 +87,10 @@ const Post = () => {
               className="Post__image-container"
               style={{ width: containerSize, height: containerSize }}
             >
-              {postResponse.document && (
+              {postDocument && (
                 <PostImage
-                  imagesData={postResponse.document.images}
-                  dimensions={postResponse.document.dimensions}
+                  imagesData={postDocument.images}
+                  dimensions={postDocument.dimensions}
                 />
               )}
             </div>
@@ -111,25 +98,21 @@ const Post = () => {
 
           <div className="Post__info">
             {/* post type: regular, timeline */}
-            <PostHeader type="regular" postData={postResponse.document} />
+            <PostHeader type="regular" postData={postDocument} />
 
             <PostCommentsList
-              owner={owner} // move
-              postData={postResponse.document}
+              postData={postDocument}
               handleReply={handleReplyToComment}
-              handleDeleteComment={deleteComment}
-              handleDeleteReply={deleteReply}
             />
+
             <PostControls
-              postData={postResponse.document}
+              postData={postDocument}
               handleCommentReset={handleCommentReset}
-              handleLikePost={toggleLike}
-              handleFollow={followProfile}
-              handleUnfollow={unfollowProfile}
             />
-            {!postResponse.document.disableComments && (
+
+            {!postDocument.disableComments && (
               <PostAddComment
-                postData={postResponse.document}
+                postData={postDocument}
                 handleAddComment={handleAddComment}
                 focusOnComment={focusOnComment}
                 replyData={replayData}

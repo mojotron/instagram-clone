@@ -1,6 +1,7 @@
 // hooks
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // style
 import './styles/PostComment.css';
 // components
@@ -13,16 +14,17 @@ import { formatTime } from '../../../utils/formatTime';
 import { FiMoreHorizontal } from 'react-icons/fi';
 
 const PostComment = ({
-  owner,
   userData,
-  postData,
+  commentData,
   commentIndex,
   handleReply,
   handleDeleteComment,
   handleDeleteReply,
 }) => {
+  const { response } = useUserDataContext();
   const navigate = useNavigate();
-
+  // const owner = response.document.id === postData.comments[commentIndex].userID;
+  const owner = response.document.id === commentData.userID;
   const [showReplies, setShowReplies] = useState(false);
 
   const [showDeleteComment, setShowDeleteComment] = useState(false);
@@ -87,10 +89,10 @@ const PostComment = ({
             >
               {userData.userName}{' '}
             </span>
-            <LinkfyUsernames text={postData.text} />
+            <LinkfyUsernames text={commentData.text} />
           </p>
           <div className="PostComment__controls">
-            <p>{formatTime(postData.createdAt.seconds * 1000)}</p>
+            <p>{formatTime(commentData.createdAt.seconds * 1000)}</p>
             {handleReply && (
               <button
                 className="btn btn--reply"
@@ -114,7 +116,7 @@ const PostComment = ({
             )}
           </div>
 
-          {postData.replies?.length > 0 && (
+          {commentData.replies?.length > 0 && (
             <div className="PostComment__replies">
               <button
                 className="btn btn--toggle-replies"
@@ -122,11 +124,11 @@ const PostComment = ({
               >
                 {showReplies
                   ? 'Hide replies'
-                  : `View replies (${postData.replies.length})`}
+                  : `View replies (${commentData.replies.length})`}
               </button>
               {showReplies && (
                 <div>
-                  {postData.replies.map((reply, i) => (
+                  {commentData.replies.map((reply, i) => (
                     <div key={i} className="PostComment__main replay">
                       <Avatar
                         url={reply.avatarUrl}

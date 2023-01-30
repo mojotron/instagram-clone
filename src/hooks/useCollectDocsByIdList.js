@@ -8,6 +8,7 @@ export const useCollectDocsByIdList = (docsIdList, collectionName) => {
   const [documents, setDocuments] = useState(null);
 
   useEffect(() => {
+    console.log('load');
     let isCancelled = false;
     const getDocuments = async () => {
       try {

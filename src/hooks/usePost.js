@@ -170,7 +170,16 @@ export const usePost = () => {
     }
   };
 
-  const deleteReplay = () => {};
+  const deleteReplay = async (commentIndex, replyIndex, postDocId) => {
+    // const newComments = postResponse.document.comments.map((comment, i) => {
+    //   if (i === commentIndex) {
+    //     const newReplies = comment.replies.filter((_, i) => i !== replayIndex);
+    //     return { ...comment, replies: newReplies };
+    //   }
+    //   return comment;
+    // });
+    // await updateDocument(postResponse.document.id, { comments: newComments });
+  };
 
   return {
     toggleDisableLikes,
