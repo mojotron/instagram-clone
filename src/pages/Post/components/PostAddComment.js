@@ -1,3 +1,4 @@
+// hooks
 import { useState, useRef, useEffect } from 'react';
 import { usePost } from '../../../hooks/usePost';
 // components
@@ -6,9 +7,16 @@ import EmojiPicker from 'emoji-picker-react';
 import './styles/PostAddComment.css';
 // icon
 import { MdSentimentSatisfiedAlt } from 'react-icons/md';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
-const PostAddComment = ({ postData, focusOnComment, replyData }) => {
-  const { addComment } = usePost();
+const PostAddComment = ({
+  postData,
+  focusOnComment,
+  replyData,
+  setReplayData,
+}) => {
+  const { response } = useUserDataContext();
+  const { addComment, addReplyToComment } = usePost();
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState('');
 
@@ -16,7 +24,7 @@ const PostAddComment = ({ postData, focusOnComment, replyData }) => {
 
   useEffect(() => {
     if (replyData) {
-      setText(`@${replyData.userName} `);
+      setText(`@${replyData.replayToUsername} `);
     } else {
       setText('');
     }
@@ -40,9 +48,22 @@ const PostAddComment = ({ postData, focusOnComment, replyData }) => {
   };
 
   const handlePostComment = async () => {
-    await addComment(text, postData.comments, postData.id, postData.creator);
-    setText('');
+    if (replyData) {
+      // add replay
+      await addReplyToComment(
+        text,
+        postData.comments,
+        replyData.commentIndex,
+        postData.id,
+        response.document.id
+      );
+      setReplayData(null);
+    } else {
+      await addComment(text, postData.comments, postData.id, postData.creator);
+      setText('');
+    }
   };
+
   return (
     <div className="PostAddComment">
       {showEmojis && (

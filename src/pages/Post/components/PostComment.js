@@ -1,5 +1,5 @@
 // hooks
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // style
@@ -14,7 +14,7 @@ import { formatTime } from '../../../utils/formatTime';
 import { FiMoreHorizontal } from 'react-icons/fi';
 
 const PostComment = ({
-  userData,
+  userDocuments,
   commentData,
   commentIndex,
   handleReply,
@@ -23,24 +23,29 @@ const PostComment = ({
 }) => {
   const { response } = useUserDataContext();
   const navigate = useNavigate();
-  // const owner = response.document.id === postData.comments[commentIndex].userID;
-  const owner = response.document.id === commentData.userID;
   const [showReplies, setShowReplies] = useState(false);
-
   const [showDeleteComment, setShowDeleteComment] = useState(false);
   const [showDeleteReply, setShowDeleteReply] = useState(false);
-
-  const handleReplyClick = (avatarUrl, userName) => {
-    const replayData = {
-      avatarUrl,
-      userName,
-      commentIndex,
-    };
-    handleReply(replayData);
-  };
-
   const [currentCommentIndex, setCurrentCommentIndex] = useState(null);
   const [currentReplyIndex, setCurrentReplayIndex] = useState(null);
+  console.log('CD', commentData);
+
+  const userData = useMemo(
+    () => userDocuments.find(doc => doc.id === commentData.userID),
+    [userDocuments, commentData]
+  );
+
+  console.log('UD', userData);
+  const owner = response.document.id === commentData.userID;
+
+  const handleReplyClick = () => {
+    handleReply({
+      replayToUsername: userData.userName,
+      replyToID: commentData.userID,
+      userID: response.document.id,
+      commentIndex,
+    });
+  };
 
   const resetCurrentIndices = () => {
     setCurrentCommentIndex(null);
@@ -58,6 +63,8 @@ const PostComment = ({
     await handleDeleteReply(currentCommentIndex, currentReplyIndex);
     resetCurrentIndices();
   };
+
+  if (!userData) return;
 
   return (
     <div className="PostComment">
@@ -93,16 +100,13 @@ const PostComment = ({
           </p>
           <div className="PostComment__controls">
             <p>{formatTime(commentData.createdAt.seconds * 1000)}</p>
+
             {handleReply && (
-              <button
-                className="btn btn--reply"
-                onClick={() =>
-                  handleReplyClick(userData.avatar.Url, userData.userName)
-                }
-              >
+              <button className="btn btn--reply" onClick={handleReplyClick}>
                 Reply
               </button>
             )}
+
             {owner && (
               <button
                 className="btn btn--options"
@@ -128,51 +132,58 @@ const PostComment = ({
               </button>
               {showReplies && (
                 <div>
-                  {commentData.replies.map((reply, i) => (
-                    <div key={i} className="PostComment__main replay">
-                      <Avatar
-                        url={reply.avatarUrl}
-                        size={22}
-                        handleClick={() => navigate(`/${reply.userName}`)}
-                      />
-                      <div className="PostComment__main__inner">
-                        <p>
-                          <span onClick={() => navigate(`/${reply.userName}`)}>
-                            {reply.userName}{' '}
-                          </span>
-                          <LinkfyUsernames text={reply.text} />
-                        </p>
-                        <div className="PostComment__controls">
-                          <p>{formatTime(reply.createdAt.seconds * 1000)}</p>
-                          {handleReply && (
-                            <button
-                              className="btn btn--reply"
-                              onClick={() =>
-                                handleReplyClick(
-                                  reply.avatarUrl,
-                                  reply.userName
-                                )
-                              }
+                  {commentData.replies.map((reply, i) => {
+                    const replyData = userDocuments.find(
+                      doc => doc.id === reply.userID
+                    );
+                    return (
+                      <div key={i} className="PostComment__main replay">
+                        <Avatar
+                          url={replyData.avatar.url}
+                          size={22}
+                          handleClick={() => navigate(`/${replyData.userName}`)}
+                        />
+                        <div className="PostComment__main__inner">
+                          <p>
+                            <span
+                              onClick={() => navigate(`/${replyData.userName}`)}
                             >
-                              Reply
-                            </button>
-                          )}
-                          {owner && (
-                            <button
-                              className="btn btn--options"
-                              onClick={() => {
-                                setCurrentCommentIndex(commentIndex);
-                                setCurrentReplayIndex(i);
-                                setShowDeleteReply(true);
-                              }}
-                            >
-                              <FiMoreHorizontal size={20} />
-                            </button>
-                          )}
+                              {replyData.userName}{' '}
+                            </span>
+                            <LinkfyUsernames text={reply.text} />
+                          </p>
+                          <div className="PostComment__controls">
+                            <p>{formatTime(reply.createdAt.seconds * 1000)}</p>
+                            {handleReply && (
+                              <button
+                                className="btn btn--reply"
+                                onClick={() =>
+                                  handleReplyClick(
+                                    replyData.avatar.url,
+                                    replyData.userName
+                                  )
+                                }
+                              >
+                                Reply
+                              </button>
+                            )}
+                            {owner && (
+                              <button
+                                className="btn btn--options"
+                                onClick={() => {
+                                  setCurrentCommentIndex(commentIndex);
+                                  setCurrentReplayIndex(i);
+                                  setShowDeleteReply(true);
+                                }}
+                              >
+                                <FiMoreHorizontal size={20} />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

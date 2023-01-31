@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
-import { usePost } from '../../hooks/usePost';
 // styles
 import './styles/Post.css';
 // components
@@ -19,26 +18,18 @@ const Post = () => {
   // data minimum data needed to get post document (postID, owner username and avatar url)
   const { postId } = useParams();
   const { document: postDocument } = useOnSnapshotDocument('posts', postId);
-  const { addReplyToComment, addComment } = usePost();
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
   // is current comment comment or reply on comment
-  const [replayData, setReplayData] = useState(null);
+  // replay has format null or {replayToUsername, replayToID, userID, commentIndex}
+  const [replyData, setReplayData] = useState(null);
+
+  console.log(replyData);
 
   useEffect(() => {
     // remove focus from comment input filed on render
     if (focusOnComment) setFocusOnComment(false);
   }, [focusOnComment]);
-
-  const handleAddComment = async (text, comments, id) => {
-    if (replayData) {
-      await addReplyToComment(text, replayData.commentIndex);
-      setReplayData(null);
-    } else {
-      await addComment(text, comments, id);
-    }
-    setFocusOnComment(false);
-  };
 
   const handleReplyToComment = async data => {
     setReplayData(data);
@@ -113,9 +104,9 @@ const Post = () => {
             {!postDocument.disableComments && (
               <PostAddComment
                 postData={postDocument}
-                handleAddComment={handleAddComment}
                 focusOnComment={focusOnComment}
-                replyData={replayData}
+                replyData={replyData}
+                setReplayData={setReplayData}
               />
             )}
           </div>

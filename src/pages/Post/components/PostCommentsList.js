@@ -6,7 +6,6 @@ import './styles/PostCommentsList.css';
 import PostComment from './PostComment';
 
 const PostCommentsList = ({
-  owner,
   postData,
   handleReply,
   handleDeleteComment,
@@ -28,15 +27,16 @@ const PostCommentsList = ({
 
   const { documents } = useCollectDocsByIdList(getUsersIdList, 'users');
 
-  if (!documents) return;
+  if (documents === null) return;
+
   return (
     <div className="PostCommentsList">
       {/* first is post caption */}
       {postData.caption !== '' && (
         <PostComment
-          owner={false}
-          userData={documents.find(doc => doc.id === postData.creator)}
+          userDocuments={documents}
           commentData={{
+            userID: postData.userID,
             text: postData.caption,
             createdAt: postData.createdAt,
           }}
@@ -49,8 +49,7 @@ const PostCommentsList = ({
         postData.comments.map((comment, i) => (
           <PostComment
             key={i}
-            owner={owner}
-            userData={documents.find(doc => doc.id === comment.userID)}
+            userDocuments={documents}
             commentData={comment}
             commentIndex={i}
             handleReply={handleReply}
