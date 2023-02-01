@@ -21,10 +21,8 @@ const Post = () => {
   // when user clicks on comment icon set focus to comment textarea box
   const [focusOnComment, setFocusOnComment] = useState(false);
   // is current comment comment or reply on comment
-  // replay has format null or {replayToUsername, replayToID, userID, commentIndex}
+  // replay has format null or {replyToUsername, replyToID, userID, commentIndex}
   const [replyData, setReplayData] = useState(null);
-
-  console.log(replyData);
 
   useEffect(() => {
     // remove focus from comment input filed on render

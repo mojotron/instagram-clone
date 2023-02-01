@@ -5,12 +5,7 @@ import './styles/PostCommentsList.css';
 // components
 import PostComment from './PostComment';
 
-const PostCommentsList = ({
-  postData,
-  handleReply,
-  handleDeleteComment,
-  handleDeleteReply,
-}) => {
+const PostCommentsList = ({ postData, handleReply }) => {
   // get all user who are listed in post doc (creator, comments and replies)
   const getUsersIdList = useMemo(() => {
     const result = { creator: postData.creator, comments: [], replies: [] };
@@ -40,6 +35,7 @@ const PostCommentsList = ({
             text: postData.caption,
             createdAt: postData.createdAt,
           }}
+          postData={null}
           commentIndex={null}
           handleReply={null}
         />
@@ -51,10 +47,9 @@ const PostCommentsList = ({
             key={i}
             userDocuments={documents}
             commentData={comment}
+            postData={postData}
             commentIndex={i}
             handleReply={handleReply}
-            handleDeleteComment={handleDeleteComment}
-            handleDeleteReply={handleDeleteReply}
           />
         ))}
     </div>

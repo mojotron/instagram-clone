@@ -24,7 +24,7 @@ const PostAddComment = ({
 
   useEffect(() => {
     if (replyData) {
-      setText(`@${replyData.replayToUsername} `);
+      setText(`@${replyData.replyToUsername} `);
     } else {
       setText('');
     }

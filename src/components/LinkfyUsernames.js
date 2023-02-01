@@ -19,6 +19,7 @@ const LinkfyUsernames = ({ text }) => {
         <span
           key={i}
           className="btn btn--username-link"
+          style={{ display: 'inline-block' }}
           onClick={() => navigate(`/${username.slice(1)}`)}
         >
           {username}{' '}
@@ -29,6 +30,7 @@ const LinkfyUsernames = ({ text }) => {
     }
   });
 
+  console.log(x);
   return <>{x}</>;
 };
 

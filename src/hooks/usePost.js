@@ -126,12 +126,7 @@ export const usePost = () => {
     }
   };
 
-  const deleteComment = async (
-    comments,
-    commentIndex,
-    postDocId,
-    userDocId
-  ) => {
+  const deleteComment = async (comments, commentIndex, postDocId) => {
     try {
       const updatedComments = comments.filter((_, i) => i !== commentIndex);
       await updatePostDoc(postDocId, { comments: updatedComments });
@@ -170,15 +165,24 @@ export const usePost = () => {
     }
   };
 
-  const deleteReplay = async (commentIndex, replyIndex, postDocId) => {
-    // const newComments = postResponse.document.comments.map((comment, i) => {
-    //   if (i === commentIndex) {
-    //     const newReplies = comment.replies.filter((_, i) => i !== replayIndex);
-    //     return { ...comment, replies: newReplies };
-    //   }
-    //   return comment;
-    // });
-    // await updateDocument(postResponse.document.id, { comments: newComments });
+  const deleteReplay = async (
+    comments,
+    commentIndex,
+    replyIndex,
+    postDocId
+  ) => {
+    try {
+      const updatedComments = comments.map((comment, i) => {
+        if (i === commentIndex) {
+          const newReplies = comment.replies.filter((_, i) => i !== replyIndex);
+          return { ...comment, replies: newReplies };
+        }
+        return comment;
+      });
+      await updatePostDoc(postDocId, { comments: updatedComments });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return {

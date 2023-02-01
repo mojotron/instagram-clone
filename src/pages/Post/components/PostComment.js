@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { usePost } from '../../../hooks/usePost';
 // style
 import './styles/PostComment.css';
 // components
@@ -16,52 +17,57 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 const PostComment = ({
   userDocuments,
   commentData,
+  postData,
   commentIndex,
   handleReply,
-  handleDeleteComment,
-  handleDeleteReply,
 }) => {
   const { response } = useUserDataContext();
+  const { deleteComment, deleteReplay } = usePost();
   const navigate = useNavigate();
+
   const [showReplies, setShowReplies] = useState(false);
   const [showDeleteComment, setShowDeleteComment] = useState(false);
   const [showDeleteReply, setShowDeleteReply] = useState(false);
-  const [currentCommentIndex, setCurrentCommentIndex] = useState(null);
+
   const [currentReplyIndex, setCurrentReplayIndex] = useState(null);
-  console.log('CD', commentData);
 
   const userData = useMemo(
     () => userDocuments.find(doc => doc.id === commentData.userID),
     [userDocuments, commentData]
   );
 
-  console.log('UD', userData);
   const owner = response.document.id === commentData.userID;
 
-  const handleReplyClick = () => {
+  const handleReplyClick = (replyToUsername, replyToID) => {
     handleReply({
-      replayToUsername: userData.userName,
-      replyToID: commentData.userID,
+      replyToUsername, // whom we answer to
+      replyToID,
       userID: response.document.id,
       commentIndex,
     });
   };
 
   const resetCurrentIndices = () => {
-    setCurrentCommentIndex(null);
     setCurrentReplayIndex(null);
     setShowDeleteComment(false);
     setShowDeleteReply(false);
   };
 
   const handleDeleteCommentClick = async () => {
-    await handleDeleteComment(currentCommentIndex);
+    await deleteComment(postData.comments, commentIndex, postData.id);
     resetCurrentIndices();
     setShowDeleteComment(false);
+    handleReply(null);
   };
   const handleDeleteReplyClick = async () => {
-    await handleDeleteReply(currentCommentIndex, currentReplyIndex);
+    await deleteReplay(
+      postData.comments,
+      commentIndex,
+      currentReplyIndex,
+      postData.id
+    );
     resetCurrentIndices();
+    handleReply(null);
   };
 
   if (!userData) return;
@@ -70,12 +76,14 @@ const PostComment = ({
     <div className="PostComment">
       {showDeleteComment && (
         <ConfirmDelete
+          btnText="Delete Comment"
           handleClose={() => setShowDeleteComment(false)}
           handleDelete={handleDeleteCommentClick}
         />
       )}
       {showDeleteReply && (
         <ConfirmDelete
+          btnText="Delete Reply"
           handleClose={() => setShowDeleteReply(false)}
           handleDelete={handleDeleteReplyClick}
         />
@@ -102,7 +110,12 @@ const PostComment = ({
             <p>{formatTime(commentData.createdAt.seconds * 1000)}</p>
 
             {handleReply && (
-              <button className="btn btn--reply" onClick={handleReplyClick}>
+              <button
+                className="btn btn--reply"
+                onClick={() =>
+                  handleReplyClick(userData.userName, commentData.userID)
+                }
+              >
                 Reply
               </button>
             )}
@@ -111,7 +124,6 @@ const PostComment = ({
               <button
                 className="btn btn--options"
                 onClick={() => {
-                  setCurrentCommentIndex(commentIndex);
                   setShowDeleteComment(true);
                 }}
               >
@@ -133,45 +145,44 @@ const PostComment = ({
               {showReplies && (
                 <div>
                   {commentData.replies.map((reply, i) => {
-                    const replyData = userDocuments.find(
+                    // get document of user
+                    const replyDoc = userDocuments.find(
                       doc => doc.id === reply.userID
                     );
+
                     return (
                       <div key={i} className="PostComment__main replay">
                         <Avatar
-                          url={replyData.avatar.url}
+                          url={replyDoc.avatar.url}
                           size={22}
-                          handleClick={() => navigate(`/${replyData.userName}`)}
+                          handleClick={() => navigate(`/${replyDoc.userName}`)}
                         />
                         <div className="PostComment__main__inner">
                           <p>
                             <span
-                              onClick={() => navigate(`/${replyData.userName}`)}
+                              className="PostComment__main__inner__username"
+                              onClick={() => navigate(`/${replyDoc.userName}`)}
                             >
-                              {replyData.userName}{' '}
+                              {replyDoc.userName}{' '}
                             </span>
                             <LinkfyUsernames text={reply.text} />
                           </p>
                           <div className="PostComment__controls">
                             <p>{formatTime(reply.createdAt.seconds * 1000)}</p>
-                            {handleReply && (
-                              <button
-                                className="btn btn--reply"
-                                onClick={() =>
-                                  handleReplyClick(
-                                    replyData.avatar.url,
-                                    replyData.userName
-                                  )
-                                }
-                              >
-                                Reply
-                              </button>
-                            )}
+
+                            <button
+                              className="btn btn--reply"
+                              onClick={() =>
+                                handleReplyClick(replyDoc.userName, replyDoc.id)
+                              }
+                            >
+                              Reply
+                            </button>
+
                             {owner && (
                               <button
                                 className="btn btn--options"
                                 onClick={() => {
-                                  setCurrentCommentIndex(commentIndex);
                                   setCurrentReplayIndex(i);
                                   setShowDeleteReply(true);
                                 }}
