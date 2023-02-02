@@ -1,18 +1,18 @@
+// hooks
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
+import { useFollow } from '../../../hooks/useFollow';
 // style
 import './styles/SuggestedUsers.css';
 // components
 import Avatar from '../../../components/Avatar';
-// hooks
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
-import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
-import { useTimeLinePostHandlers } from '../../../hooks/useTimeLinePostHandlers';
 
 const SuggestedUsers = () => {
   const { response } = useUserDataContext();
   const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
-  const { followProfile } = useTimeLinePostHandlers();
+  const { follow } = useFollow();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const SuggestedUsers = () => {
         <div className="SuggestedUsers__header__info">
           <Avatar
             url={response.document.avatar.url}
-            size="mid-3"
+            size={50}
             handleClick={() => navigate(`/${response.document.userName}`)}
           />
           <h3 onClick={() => navigate(`/${response.document.userName}`)}>
@@ -84,7 +84,7 @@ const SuggestedUsers = () => {
               </div>
               <button
                 className="btn btn--blue"
-                onClick={() => followProfile(doc.uid, doc.followers, doc.id)}
+                onClick={() => follow(doc.id, doc.followers)}
               >
                 Follow
               </button>

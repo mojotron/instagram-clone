@@ -1,13 +1,16 @@
+// hooks
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
-import { useTimeLinePostHandlers } from '../../../hooks/useTimeLinePostHandlers';
+import { useFollow } from '../../../hooks/useFollow';
+// components
 import Avatar from '../../../components/Avatar';
+// style
 import './styles/AllSuggestedUsers.css';
 
 const AllSuggestedUsers = () => {
   const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
-  const { followProfile } = useTimeLinePostHandlers();
+  const { follow } = useFollow();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const AllSuggestedUsers = () => {
             </div>
             <button
               className="btn btn--follow"
-              onClick={() => followProfile(doc.uid, doc.followers, doc.id)}
+              onClick={() => follow(doc.id, doc.followers)}
             >
               Follow
             </button>

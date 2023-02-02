@@ -1,8 +1,7 @@
-import React from 'react';
-// components
-import Notification from './components/Notification';
 // hooks
 import { useCollectNotifications } from '../../hooks/useCollectNotifications';
+// components
+import Notification from './components/Notification';
 // styles
 import './styles/Notifications.css';
 

@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore';
 import { useState } from 'react';
 
-export const useCollectPostsWithLimit = () => {
+export const useCollectPostsWithLimit = postLimit => {
   const [lastDocument, setLastDocument] = useState(null);
   const [endOfDocuments, setEndOfDocuments] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -28,7 +28,7 @@ export const useCollectPostsWithLimit = () => {
         colRef,
         orderBy('createdAt', 'asc'),
         startAfter(lastDocument || 0),
-        limit(6)
+        limit(postLimit)
       );
       const data = await getDocs(q);
 

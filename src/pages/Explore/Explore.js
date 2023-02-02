@@ -1,20 +1,17 @@
+// hooks
 import { useState, useEffect, useRef } from 'react';
+import { useCollectPostsWithLimit } from '../../hooks/useCollectPostsWithLimit';
 // styles
 import './styles/Explore.css';
-// hooks
-import { useCollectPostsWithLimit } from '../../hooks/useCollectPostsWithLimit';
 // components
 import PostCard from '../Profile/components/PostCard';
 
 const Explore = () => {
-  const { getNextPosts } = useCollectPostsWithLimit();
+  const { getNextPosts } = useCollectPostsWithLimit(6);
   const [posts, setPosts] = useState([]);
   const containerRef = useRef();
 
-  console.log(posts);
-
   useEffect(() => {
-    console.log('try to catch');
     if (posts.length > 0) return;
     console.log('catching');
     getNextPosts().then(data => {
@@ -28,7 +25,6 @@ const Explore = () => {
     const triggerHeight =
       containerRef.current.offsetHeight + containerRef.current.scrollTop;
     if (triggerHeight >= containerRef.current.scrollHeight) {
-      console.log('LOUNCH');
       getNextPosts().then(data => {
         if (data !== -1) {
           setPosts(oldValue => [...oldValue, ...data]);
