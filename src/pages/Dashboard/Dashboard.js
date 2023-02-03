@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 // hooks
 import { useUserDataContext } from '../../hooks/useUserDataContext';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
 // components
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
@@ -30,6 +29,8 @@ const Dashboard = () => {
 
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
+
+  const [showSearch, setShowSearch] = useState(false);
   const [showNotification, setShowNotifications] = useState(false);
 
   const toggleShowCreatePost = () => {
@@ -37,7 +38,13 @@ const Dashboard = () => {
   };
 
   const toggleNotifications = () => {
+    setShowSearch(false);
     setShowNotifications(oldValue => !oldValue);
+  };
+
+  const toggleSearch = () => {
+    setShowNotifications(false);
+    setShowSearch(oldValue => !oldValue);
   };
 
   return (
@@ -59,12 +66,18 @@ const Dashboard = () => {
             <Sidebar
               toggleShowCreatePost={toggleShowCreatePost}
               toggleNotifications={toggleNotifications}
+              //
+              showSearch={showSearch}
+              toggleSearch={toggleSearch}
             />
           )}
           {screenSize === 'small' && (
             <Header
               toggleShowCreatePost={toggleShowCreatePost}
               toggleNotifications={toggleNotifications}
+              //
+              showSearch={showSearch}
+              toggleSearch={toggleSearch}
             />
           )}
 

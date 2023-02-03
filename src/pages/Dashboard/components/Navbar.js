@@ -16,7 +16,7 @@ import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 const Navbar = ({
   direction,
   toggleShowCreatePost,
-  toggleShowSearchBar,
+  toggleSearch,
   toggleNotifications,
 }) => {
   const { response } = useUserDataContext();
@@ -46,7 +46,7 @@ const Navbar = ({
             icon={<BsSearch size={25} />}
             link={null}
             headings="Search"
-            handleClick={toggleShowSearchBar}
+            handleClick={toggleSearch}
           />
         )}
         <NavbarItem

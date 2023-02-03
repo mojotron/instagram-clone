@@ -12,13 +12,16 @@ import MoreOptions from './MoreOptions';
 import Search from './Search';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const Sidebar = ({ toggleShowCreatePost, toggleNotifications }) => {
+const Sidebar = ({
+  toggleShowCreatePost,
+  toggleNotifications,
+  showSearch,
+  toggleSearch,
+}) => {
   const { screenSize } = useScreenSizeContext();
   const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
 
   const toggleMoreOptions = () => setShowMoreOptions(oldValue => !oldValue);
-  const toggleSearchBar = () => setShowSearch(oldValue => !oldValue);
 
   return (
     <div
@@ -39,7 +42,7 @@ const Sidebar = ({ toggleShowCreatePost, toggleNotifications }) => {
 
       <Navbar
         direction="column"
-        toggleShowSearchBar={toggleSearchBar}
+        toggleSearch={toggleSearch}
         toggleShowCreatePost={toggleShowCreatePost}
         toggleNotifications={toggleNotifications}
       />

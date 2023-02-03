@@ -15,6 +15,7 @@ const Notification = ({ data }) => {
   const { response: postResponse, getDocumentById: getPost } =
     useFirestore('posts');
 
+  // todo move to notification
   const getUserRef = useRef(id => getUser(id)).current;
   const getPostRef = useRef(id => getPost(id)).current;
 
@@ -42,7 +43,7 @@ const Notification = ({ data }) => {
   return (
     <div className="Notification">
       <div className="Notification__content">
-        <Avatar url={userResponse.document.avatar.url} size="mid" />
+        <Avatar url={userResponse.document.avatar.url} size={30} />
         <p>
           <span className="Notification__content__username">
             {userResponse.document.userName}

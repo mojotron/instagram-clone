@@ -30,7 +30,6 @@ const LinkfyUsernames = ({ text }) => {
     }
   });
 
-  console.log(x);
   return <>{x}</>;
 };
 
