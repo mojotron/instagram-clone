@@ -1,5 +1,7 @@
+// hooks
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 // style
 import './styles/Sidebar.css';
 // icons
@@ -10,15 +12,15 @@ import Navbar from './Navbar';
 import NavbarItem from './NavbarItem';
 import MoreOptions from './MoreOptions';
 import Search from './Search';
-import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const Sidebar = ({
   toggleShowCreatePost,
+  showNotifications,
   toggleNotifications,
   showSearch,
   toggleSearch,
 }) => {
-  const { screenSize } = useScreenSizeContext();
+  const { screenSize, fixedSize } = useScreenSizeContext();
   const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   const toggleMoreOptions = () => setShowMoreOptions(oldValue => !oldValue);
@@ -27,12 +29,17 @@ const Sidebar = ({
     <div
       className="Sidebar"
       style={{
-        width: screenSize === 'large' && !showSearch ? '240px' : '85px',
+        width:
+          fixedSize === 'medium'
+            ? '85px'
+            : screenSize === 'large'
+            ? '240px'
+            : '85px',
       }}
     >
       <Link to="/">
         <header className="Sidebar__header">
-          {screenSize === 'large' && !showSearch ? (
+          {screenSize === 'large' && !fixedSize && !showSearch ? (
             <h1>Instagram Clone</h1>
           ) : (
             <BsInstagram size={25} />

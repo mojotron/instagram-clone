@@ -4,7 +4,7 @@ import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const NavbarItem = ({ icon, link, headings, handleClick }) => {
   // {...(condition ? { onClick: () => {handleClick()}} : {})}
-  const { screenSize } = useScreenSizeContext();
+  const { screenSize, fixedSize } = useScreenSizeContext();
 
   const component = (
     <li
@@ -13,7 +13,7 @@ const NavbarItem = ({ icon, link, headings, handleClick }) => {
       style={{ marginBottom: screenSize !== 'small' ? '2rem' : null }}
     >
       {icon}
-      {screenSize === 'large' && <h2>{headings}</h2>}
+      {screenSize === 'large' && !fixedSize && <h2>{headings}</h2>}
     </li>
   );
 

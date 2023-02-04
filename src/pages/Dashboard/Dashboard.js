@@ -1,7 +1,8 @@
+// hooks
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-// hooks
 import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
 // components
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
@@ -20,7 +21,6 @@ import Footer from './components/Footer';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
-import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
 
 const Dashboard = () => {
   // get data
@@ -33,6 +33,8 @@ const Dashboard = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showNotification, setShowNotifications] = useState(false);
 
+  const { setFixedSize } = useScreenSizeContext();
+
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
   };
@@ -40,11 +42,13 @@ const Dashboard = () => {
   const toggleNotifications = () => {
     setShowSearch(false);
     setShowNotifications(oldValue => !oldValue);
+    setFixedSize('medium');
   };
 
   const toggleSearch = () => {
     setShowNotifications(false);
     setShowSearch(oldValue => !oldValue);
+    setFixedSize('medium');
   };
 
   return (
@@ -65,8 +69,8 @@ const Dashboard = () => {
           {screenSize !== 'small' && (
             <Sidebar
               toggleShowCreatePost={toggleShowCreatePost}
+              showNotification={showNotification}
               toggleNotifications={toggleNotifications}
-              //
               showSearch={showSearch}
               toggleSearch={toggleSearch}
             />
