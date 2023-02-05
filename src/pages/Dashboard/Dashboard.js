@@ -41,14 +41,22 @@ const Dashboard = () => {
 
   const toggleNotifications = () => {
     setShowSearch(false);
-    setShowNotifications(oldValue => !oldValue);
-    setFixedSize('medium');
+    let fixedSize;
+    setShowNotifications(oldValue => {
+      fixedSize = oldValue;
+      return !oldValue;
+    });
+    fixedSize ? setFixedSize(null) : setFixedSize('medium');
   };
 
   const toggleSearch = () => {
     setShowNotifications(false);
-    setShowSearch(oldValue => !oldValue);
-    setFixedSize('medium');
+    let fixedSize;
+    setShowSearch(oldValue => {
+      fixedSize = oldValue;
+      return !oldValue;
+    });
+    fixedSize ? setFixedSize(null) : setFixedSize('medium');
   };
 
   return (

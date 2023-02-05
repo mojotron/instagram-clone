@@ -29,12 +29,7 @@ const Sidebar = ({
     <div
       className="Sidebar"
       style={{
-        width:
-          fixedSize === 'medium'
-            ? '85px'
-            : screenSize === 'large'
-            ? '240px'
-            : '85px',
+        width: screenSize === 'large' && !fixedSize ? '240px' : '85px',
       }}
     >
       <Link to="/">

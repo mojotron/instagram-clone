@@ -7,46 +7,14 @@ import PostImage from '../../../components/PostImage';
 import './styles/Notification.css';
 // hooks
 import { useFirestore } from '../../../hooks/useFirestore';
-const Notification = ({ data }) => {
-  const [isReady, setIsReady] = useState(false);
-
-  const { response: userResponse, getDocumentById: getUser } =
-    useFirestore('users');
-  const { response: postResponse, getDocumentById: getPost } =
-    useFirestore('posts');
-
-  // todo move to notification
-  const getUserRef = useRef(id => getUser(id)).current;
-  const getPostRef = useRef(id => getPost(id)).current;
-
-  useEffect(() => {
-    console.log('called single notification useEffect');
-    if (isReady) return;
-
-    const getData = async () => {
-      try {
-        await getUserRef(data.fromUserId);
-        if (data.postId) {
-          await getPostRef(data.postId);
-        }
-        setIsReady(true);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getData();
-  }, [data, getUserRef, getPostRef, isReady]);
-
-  if (!isReady) return;
-
+const Notification = ({ fromUser, post, data }) => {
   return (
     <div className="Notification">
       <div className="Notification__content">
-        <Avatar url={userResponse.document.avatar.url} size={30} />
+        <Avatar url={fromUser.avatar.url} size={30} />
         <p>
           <span className="Notification__content__username">
-            {userResponse.document.userName}
+            {fromUser.userName}
           </span>{' '}
           {data.content}{' '}
           <span className="Notification__content__created-at">
@@ -54,12 +22,9 @@ const Notification = ({ data }) => {
           </span>
         </p>
       </div>
-      {postResponse.document && (
+      {post && (
         <div className="Notification__post">
-          <PostImage
-            imagesData={postResponse.document.images}
-            dimensions={postResponse.document.dimensions}
-          />
+          <PostImage imagesData={post.images} dimensions={post.dimensions} />
         </div>
       )}
       {data.content === 'started following you.' && (
