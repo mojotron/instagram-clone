@@ -1,12 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
 import { formatTime } from '../../../utils/formatTime';
 // components
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
 // styles
 import './styles/Notification.css';
-// hooks
-import { useFirestore } from '../../../hooks/useFirestore';
+
 const Notification = ({ fromUser, post, data }) => {
   return (
     <div className="Notification">

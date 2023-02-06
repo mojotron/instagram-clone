@@ -16,10 +16,11 @@ const Notifications = () => {
   );
   // filter notification
   const filterIDs = useMemo(() => {
-    console.log('response');
-    const collection = { usersIds: [], postIds: [] };
+    console.log('memo');
+    if (!document) return { usersIds: null, postIds: null };
 
-    document?.notifications.forEach(note => {
+    const collection = { usersIds: [], postIds: [] };
+    document.notifications.forEach(note => {
       if (note.fromUserId) collection.usersIds.push(note.fromUserId);
       if (note.post) collection.postIds.push(note.post);
     });
@@ -29,7 +30,6 @@ const Notifications = () => {
     };
   }, [document]);
   // collect documents
-
   const { documents: userDocs } = useCollectDocsByIdList(
     filterIDs.usersIds,
     'users'
@@ -38,15 +38,9 @@ const Notifications = () => {
     filterIDs.postIds,
     'posts'
   );
-  // delete notification
-  // new notification mark
-  // filter server calls
-  // - check all users => collect all ids to minimize server calls
-  // - check all posts
 
-  if (!userDocs && !postDocs) return;
-  if (userDocs.length === 0) return;
-  console.log('READY');
+  if (userDocs === null || postDocs === null) return;
+
   return (
     <div className="Notifications">
       <h2>Notifications</h2>
