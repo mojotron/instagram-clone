@@ -1,19 +1,21 @@
 .Notifications {
   position: fixed;
   top: 0;
-  left: 75px;
+  left: 85px;
   border: var(--gray-border);
   height: 100vh;
   width: 40rem;
   background-color: white;
   z-index: 5;
-  border-radius: 2rem;
-  padding: 2rem;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  padding: 2rem 0;
   overflow: hidden;
   scroll-behavior: auto;
   overflow-y: scroll;
 }
 .Notifications h2 {
+  padding-left: 2rem;
   color: var(--black);
   font-weight: 600;
   font-size: 2.5rem;

@@ -71,11 +71,7 @@ export const usePost = () => {
       await updatePostDoc(postDocId, { likes: updatedLikesList });
       // add notification to post creator
       if (!postIsLiked) {
-        await addNotification(
-          userDocId,
-          postDocId,
-          postIsLiked ? 'unlike-post' : 'like-post'
-        );
+        await addNotification(userDocId, postDocId, 'like-post');
       }
     } catch (error) {
       console.log(error);
@@ -120,7 +116,7 @@ export const usePost = () => {
         comments: [...postComments, newComment],
       });
 
-      await addNotification(userDocId, postDocId, 'comment-post');
+      await addNotification(userDocId, postDocId, 'comment-post', text);
     } catch (error) {
       console.log(error);
     }
@@ -158,8 +154,8 @@ export const usePost = () => {
         }
       });
       await updatePostDoc(postDocId, { comments: updatedComments });
-      // TODO notification
-      // await addNotification(userDocId);
+
+      await addNotification(userDocId, postDocId, 'replied on comment', text);
     } catch (error) {
       console.log(error);
     }

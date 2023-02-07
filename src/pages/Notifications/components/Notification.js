@@ -10,6 +10,7 @@ const Notification = ({ fromUser, post, data }) => {
     <div className="Notification">
       <div className="Notification__content">
         <Avatar url={fromUser.avatar.url} size={30} />
+
         <p>
           <span className="Notification__content__username">
             {fromUser.userName}
@@ -20,11 +21,17 @@ const Notification = ({ fromUser, post, data }) => {
           </span>
         </p>
       </div>
+
       {post && (
         <div className="Notification__post">
-          <PostImage imagesData={post.images} dimensions={post.dimensions} />
+          <PostImage
+            //display only first img and hide navigation
+            imagesData={[post.images[0]]}
+            dimensions={post.dimensions}
+          />
         </div>
       )}
+
       {data.content === 'started following you.' && (
         <button className="btn btn--auth">Follow</button>
       )}

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  padding: 1rem 2rem;
 }
 .Notification__content {
   display: flex;
@@ -23,4 +23,11 @@
 .Notification__post {
   height: 4.4rem;
   width: 4.4rem;
+}
+.Notification button {
+  position: relative;
+  bottom: 1.5rem;
+}
+.Notification:hover {
+  background-color: rgb(235, 235, 235);
 }

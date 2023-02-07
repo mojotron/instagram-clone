@@ -49,7 +49,7 @@ const Notifications = () => {
 
       {document && (
         <section>
-          {document.notifications.map(note => (
+          {document.notifications.reverse().map(note => (
             <Notification
               key={note.createdAt.seconds}
               data={note}

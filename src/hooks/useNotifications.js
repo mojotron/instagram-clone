@@ -14,8 +14,6 @@ export const useNotifications = () => {
     switch (type) {
       case 'like-post':
         return 'liked your post.';
-      case 'unlike-post':
-        return 'unliked your post.';
       case 'follow-user':
         return 'started following you.';
       case 'comment-post':
@@ -30,20 +28,22 @@ export const useNotifications = () => {
   };
 
   const addNotification = async (userID, postDocId, type, payload = '') => {
-    // console.log(userDocId, postDocId, type);
-    console.log(userID);
     try {
       const userNotifications = await getDocumentById(userID);
-      console.log(userNotifications);
+
       const notificationObject = {
         createdAt: Timestamp.fromDate(new Date()),
         fromUserId: response.document.id,
         post: postDocId,
         content: getType(type),
+        payload,
       };
 
       await updateDocument(userID, {
-        notifications: [...userNotifications.notifications, notificationObject],
+        notifications: [
+          ...userNotifications.notifications,
+          notificationObject,
+        ].slice(-20), // keep limit on notification object at last 20
       });
     } catch (error) {
       console.log(error);
