@@ -59,7 +59,16 @@ export const useSearchUsers = () => {
     }
   };
 
-  const getUsersIDs = async userList => {};
+  const getUsersIDs = async userList => {
+    try {
+      const userDocs = await Promise.all(
+        userList.map(user => {
+          return searchForUser(user);
+        })
+      );
+      return userDocs;
+    } catch (error) {}
+  };
 
   const searchForUser = async searchTerm => {
     try {
@@ -72,5 +81,5 @@ export const useSearchUsers = () => {
     }
   };
 
-  return { addToBucket, removeFromBucket, searchForUser };
+  return { addToBucket, removeFromBucket, searchForUser, getUsersIDs };
 };

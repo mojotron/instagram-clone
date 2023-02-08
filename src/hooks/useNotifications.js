@@ -1,6 +1,7 @@
 import { useFirestore } from './useFirestore';
 import { useUserDataContext } from './useUserDataContext';
 import { Timestamp } from 'firebase/firestore';
+import { useSearchUsers } from './useSearchUsers';
 
 export const useNotifications = () => {
   // notification document is created when user creates account
@@ -8,7 +9,11 @@ export const useNotifications = () => {
   // - form of notification => type, createdAt - timeStamp, from - userDocID
   // read notification with diff hook useCollectNotifications
   const { response } = useUserDataContext();
-  const { getDocumentById, updateDocument } = useFirestore('notifications');
+  const { getDocumentById, updateDocument, documentExist } =
+    useFirestore('notifications');
+  const { getUsersIDs } = useSearchUsers();
+
+  // console.log('HMMM');
 
   const getType = type => {
     switch (type) {
@@ -17,11 +22,11 @@ export const useNotifications = () => {
       case 'follow-user':
         return 'started following you.';
       case 'comment-post':
-        return 'commented:';
+        return 'commented: ';
       case 'replied on comment':
-        return 'replied to your comment';
+        return 'replied to your comment: ';
       case 'mention-user':
-        return 'mentioned you in comment:';
+        return 'mentioned you in comment: ';
       default:
         return 'unknown action';
     }
@@ -45,10 +50,40 @@ export const useNotifications = () => {
           notificationObject,
         ].slice(-20), // keep limit on notification object at last 20
       });
+
+      // TODO update user doc for new notification
     } catch (error) {
       console.log(error);
     }
   };
 
-  return { addNotification };
+  const checkForUserNames = text =>
+    [...text.matchAll(/@[a-z]+/gi)].map(ele => ele[0].slice(1));
+
+  const mentionUserNotification = async (userID, postDocId, type, text) => {
+    const usernames = checkForUserNames(text);
+    if (usernames.length === 0) return;
+
+    try {
+      // check if username exist
+      const checkUsernames = await Promise.all(
+        usernames.map(username => {
+          return documentExist('public_usernames', username);
+        })
+      );
+      // get existing users docs
+      const existingUsers = usernames.filter((_, i) => checkUsernames[i]);
+      const userIds = await getUsersIDs(existingUsers);
+      console.log(userIds);
+      // send notification to all user except user which gets comment/replay notification
+      for (const user of userIds) {
+        if (user === userID) continue;
+        addNotification(user, postDocId, 'mention-user', text);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { addNotification, mentionUserNotification };
 };

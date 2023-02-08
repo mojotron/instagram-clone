@@ -138,7 +138,7 @@ export const usePost = () => {
     postDocId,
     userDocId
   ) => {
-    // user doc id is user on whom we replllllay
+    // user doc id is user on whom we reply
     try {
       // modify replays in comments
       const newReplay = {
