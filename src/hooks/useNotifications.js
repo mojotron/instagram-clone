@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useFirestore } from './useFirestore';
 import { useUserDataContext } from './useUserDataContext';
 import { Timestamp } from 'firebase/firestore';
@@ -12,8 +13,6 @@ export const useNotifications = () => {
   const { getDocumentById, updateDocument, documentExist } =
     useFirestore('notifications');
   const { getUsersIDs } = useSearchUsers();
-
-  // console.log('HMMM');
 
   const getType = type => {
     switch (type) {
@@ -32,58 +31,64 @@ export const useNotifications = () => {
     }
   };
 
-  const addNotification = async (userID, postDocId, type, payload = '') => {
-    try {
-      const userNotifications = await getDocumentById(userID);
+  const addNotification = useCallback(
+    async (userID, postDocId, type, payload = '') => {
+      try {
+        const userNotifications = await getDocumentById(userID);
 
-      const notificationObject = {
-        createdAt: Timestamp.fromDate(new Date()),
-        fromUserId: response.document.id,
-        post: postDocId,
-        content: getType(type),
-        payload,
-      };
+        const notificationObject = {
+          createdAt: Timestamp.fromDate(new Date()),
+          fromUserId: response.document.id,
+          post: postDocId,
+          content: getType(type),
+          payload,
+        };
 
-      await updateDocument(userID, {
-        notifications: [
-          ...userNotifications.notifications,
-          notificationObject,
-        ].slice(-20), // keep limit on notification object at last 20
-      });
+        await updateDocument(userID, {
+          notifications: [
+            ...userNotifications.notifications,
+            notificationObject,
+          ].slice(-20), // keep limit on notification object at last 20
+        });
 
-      // TODO update user doc for new notification
-    } catch (error) {
-      console.log(error);
-    }
-  };
+        // TODO update user doc for new notification
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [getDocumentById, response, updateDocument]
+  );
 
   const checkForUserNames = text =>
     [...text.matchAll(/@[a-z]+/gi)].map(ele => ele[0].slice(1));
 
-  const mentionUserNotification = async (userID, postDocId, type, text) => {
-    const usernames = checkForUserNames(text);
-    if (usernames.length === 0) return;
+  const mentionUserNotification = useCallback(
+    async (userID, postDocId, text) => {
+      const usernames = checkForUserNames(text);
+      if (usernames.length === 0) return;
 
-    try {
-      // check if username exist
-      const checkUsernames = await Promise.all(
-        usernames.map(username => {
-          return documentExist('public_usernames', username);
-        })
-      );
-      // get existing users docs
-      const existingUsers = usernames.filter((_, i) => checkUsernames[i]);
-      const userIds = await getUsersIDs(existingUsers);
-      console.log(userIds);
-      // send notification to all user except user which gets comment/replay notification
-      for (const user of userIds) {
-        if (user === userID) continue;
-        addNotification(user, postDocId, 'mention-user', text);
+      try {
+        // check if username exist
+        const checkUsernames = await Promise.all(
+          usernames.map(username => {
+            return documentExist('public_usernames', username);
+          })
+        );
+        // get existing users docs
+        const existingUsers = usernames.filter((_, i) => checkUsernames[i]);
+        const userIds = await getUsersIDs(existingUsers);
+        console.log(userIds);
+        // send notification to all user except user which gets comment/replay notification
+        for (const user of userIds) {
+          if (user === userID) continue;
+          addNotification(user, postDocId, 'mention-user', text);
+        }
+      } catch (error) {
+        throw error;
       }
-    } catch (error) {
-      throw error;
-    }
-  };
+    },
+    [addNotification, getUsersIDs, documentExist]
+  );
 
   return { addNotification, mentionUserNotification };
 };

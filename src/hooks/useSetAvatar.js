@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useFirestore } from './useFirestore';
+import { useState, useEffect, useCallback } from 'react';
 // hooks
 import { useStorage } from './useStorage';
 import { useUserDataContext } from './useUserDataContext';
@@ -13,29 +12,32 @@ export const useSetAvatar = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-  const addAvatar = async file => {
-    setIsPending(true);
-    setError(null);
-    try {
-      // clean old image if there is one
-      if (response.document.avatarUrl !== '') {
-        await remove(response.document.avatar.fileName);
+  const addAvatar = useCallback(
+    async file => {
+      setIsPending(true);
+      setError(null);
+      try {
+        // clean old image if there is one
+        if (response.document.avatarUrl !== '') {
+          await remove(response.document.avatar.fileName);
+        }
+        const snapshot = await upload('avatars', file);
+        await updateDocument(response.document.id, { avatar: { ...snapshot } });
+        if (!isCancelled) {
+          setIsPending(false);
+          setError(null);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setIsPending(false);
+          setError(error.message);
+        }
       }
-      const snapshot = await upload('avatars', file);
-      await updateDocument(response.document.id, { avatar: { ...snapshot } });
-      if (!isCancelled) {
-        setIsPending(false);
-        setError(null);
-      }
-    } catch (error) {
-      if (!isCancelled) {
-        setIsPending(false);
-        setError(error.message);
-      }
-    }
-  };
+    },
+    [response, isCancelled, remove, updateDocument, upload]
+  );
 
-  const removeAvatar = async () => {
+  const removeAvatar = useCallback(async () => {
     setIsPending(true);
     setError(null);
     try {
@@ -55,7 +57,7 @@ export const useSetAvatar = () => {
         setError(error.message);
       }
     }
-  };
+  }, [isCancelled, remove, response, updateDocument]);
 
   useEffect(() => {
     return () => setIsCancelled(true);

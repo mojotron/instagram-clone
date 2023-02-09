@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { projectAuth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -15,7 +15,7 @@ export const useLogout = () => {
   const { updateDocument } = useFirestore('users');
   const { response } = useUserDataContext();
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setError(null);
     setIsPending(true);
     try {
@@ -40,7 +40,7 @@ export const useLogout = () => {
         setIsPending(false);
       }
     }
-  };
+  }, [response, dispatch, isCancelled, updateDocument]);
 
   useEffect(() => {
     return () => setIsCancelled(true);

@@ -2,6 +2,7 @@ import { formatTime } from '../../../utils/formatTime';
 // components
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
+import LinkfyUsernames from '../../../components/LinkfyUsernames';
 // styles
 import './styles/Notification.css';
 
@@ -16,8 +17,9 @@ const Notification = ({ fromUser, post, data }) => {
             {fromUser.userName}
           </span>{' '}
           {data.content}{' '}
+          {data.payload && <LinkfyUsernames text={data.payload} />}
           <span className="Notification__content__created-at">
-            {formatTime(data.createdAt.seconds * 1000)}
+            {` ${formatTime(data.createdAt.seconds * 1000)}`}
           </span>
         </p>
       </div>

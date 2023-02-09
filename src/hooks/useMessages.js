@@ -1,7 +1,7 @@
+import { useCallback } from 'react'; // TODO REFSCTORING
 import { projectFirestore } from '../firebase/config';
 import { collection, Timestamp, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
-
 import { useFirestore } from './useFirestore';
 
 export const useMessages = () => {
@@ -19,36 +19,41 @@ export const useMessages = () => {
 
   const colRef = collection(projectFirestore, 'messages');
 
-  const createMessageDoc = async (user, type, payload) => {
-    try {
-      const newDoc = await addDoc(colRef, {
-        users: [response.document.uid, user.uid],
-        messages: [
-          {
-            type,
-            content: payload,
-            from: response.document.uid,
-            createdAt: Timestamp.fromDate(new Date()),
-          },
-        ],
-      });
-      await updateDocument(response.document.id, {
-        messages: [
-          ...response.document.messages,
-          { messageTo: user.uid, messageDocId: newDoc.id },
-        ],
-      });
-      await updateTargetDocument(user.id, {
-        messages: [
-          ...user.messages,
-          {
-            messageTo: response.document.uid,
-            messageDocId: newDoc.id,
-          },
-        ],
-      });
-    } catch (error) {}
-  };
+  const createMessageDoc = useCallback(
+    async (user, type, payload) => {
+      try {
+        const newDoc = await addDoc(colRef, {
+          users: [response.document.uid, user.uid],
+          messages: [
+            {
+              type,
+              content: payload,
+              from: response.document.uid,
+              createdAt: Timestamp.fromDate(new Date()),
+            },
+          ],
+        });
+        await updateDocument(response.document.id, {
+          messages: [
+            ...response.document.messages,
+            { messageTo: user.uid, messageDocId: newDoc.id },
+          ],
+        });
+        await updateTargetDocument(user.id, {
+          messages: [
+            ...user.messages,
+            {
+              messageTo: response.document.uid,
+              messageDocId: newDoc.id,
+            },
+          ],
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [response, colRef, updateDocument, updateTargetDocument]
+  );
 
   const getDocument = async docId => {
     const docRef = doc(projectFirestore, 'messages', docId);

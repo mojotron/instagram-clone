@@ -7,7 +7,7 @@ import {
   query,
   startAfter,
 } from 'firebase/firestore';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export const useCollectPostsWithLimit = postLimit => {
   const [lastDocument, setLastDocument] = useState(null);
@@ -16,7 +16,7 @@ export const useCollectPostsWithLimit = postLimit => {
 
   console.log(lastDocument);
 
-  const getNextPosts = async () => {
+  const getNextPosts = useCallback(async () => {
     if (endOfDocuments) return -1;
     if (isFetching) return -1;
 
@@ -50,7 +50,7 @@ export const useCollectPostsWithLimit = postLimit => {
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }, [isFetching, lastDocument, endOfDocuments, postLimit]);
 
   return { getNextPosts };
 };

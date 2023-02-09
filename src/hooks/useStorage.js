@@ -1,4 +1,4 @@
-import { useReducer, useState, useEffect } from 'react';
+import { useReducer, useState, useEffect, useCallback } from 'react';
 import { projectStorage } from '../firebase/config';
 import {
   ref,
@@ -50,36 +50,45 @@ export const useStorage = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [response, dispatch] = useReducer(storageReducer, initialState);
 
-  const dispatchIfNotCancelled = action => {
-    if (!isCancelled) {
-      dispatch(action);
-    }
-  };
+  const dispatchIfNotCancelled = useCallback(
+    action => {
+      if (!isCancelled) {
+        dispatch(action);
+      }
+    },
+    [isCancelled]
+  );
 
-  const upload = async (directory, file) => {
-    dispatch({ type: 'IS_PENDING' });
-    try {
-      const fileName = `${directory}/${uuidv4()}-${file.name}`;
-      const storageRef = ref(projectStorage, fileName);
-      await uploadBytes(storageRef, file);
-      const snapUrl = await getDownloadURL(storageRef);
-      dispatchIfNotCancelled({ type: 'UPLOAD_IMAGE', payload: snapUrl });
-      return { url: snapUrl, fileName: fileName };
-    } catch (error) {
-      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
-    }
-  };
+  const upload = useCallback(
+    async (directory, file) => {
+      dispatch({ type: 'IS_PENDING' });
+      try {
+        const fileName = `${directory}/${uuidv4()}-${file.name}`;
+        const storageRef = ref(projectStorage, fileName);
+        await uploadBytes(storageRef, file);
+        const snapUrl = await getDownloadURL(storageRef);
+        dispatchIfNotCancelled({ type: 'UPLOAD_IMAGE', payload: snapUrl });
+        return { url: snapUrl, fileName: fileName };
+      } catch (error) {
+        dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+      }
+    },
+    [dispatchIfNotCancelled]
+  );
 
-  const remove = async fileName => {
-    dispatch({ type: 'IS_PENDING' });
-    try {
-      const storageRef = ref(projectStorage, `${fileName}`);
-      await deleteObject(storageRef);
-      dispatchIfNotCancelled({ type: 'DELETE_IMAGE' });
-    } catch (error) {
-      dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
-    }
-  };
+  const remove = useCallback(
+    async fileName => {
+      dispatch({ type: 'IS_PENDING' });
+      try {
+        const storageRef = ref(projectStorage, `${fileName}`);
+        await deleteObject(storageRef);
+        dispatchIfNotCancelled({ type: 'DELETE_IMAGE' });
+      } catch (error) {
+        dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+      }
+    },
+    [dispatchIfNotCancelled]
+  );
 
   useEffect(() => {
     return () => setIsCancelled(true);
