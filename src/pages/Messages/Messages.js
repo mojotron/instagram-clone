@@ -1,14 +1,15 @@
-import { useState, useRef } from 'react';
+// hooks
+import { useState, useMemo } from 'react';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useCollectDocsByIdList } from '../../hooks/useCollectDocsByIdList';
 // components
 import NewMessage from './components/NewMessage';
 import MessagesHeader from './components/MessagesHeader';
 import MessageMainBody from './components/MessageMainBody';
+import Avatar from '../../components/Avatar';
 // style
 import './styles/Messages.css';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
-import { useCollectUsers } from '../../hooks/useCollectUsers';
-import Avatar from '../../components/Avatar';
-
+// utils
 import { formatTime } from '../../utils/formatTime';
 
 const Messages = () => {
@@ -16,12 +17,14 @@ const Messages = () => {
   const [showNewMessage, setShowNewMessage] = useState(false);
   const [messageTo, setMessageTo] = useState(null);
 
-  const messagesList = useRef(
-    response.document.messages.map(msg => msg.messageTo)
-  ).current;
-  const { documents } = useCollectUsers(messagesList);
+  const messagesList = useMemo(() => {
+    console.log('msg memo');
+    return response.document.messages.map(msg => msg.messageTo);
+  }, [response.document.messages]);
 
-  console.log(documents);
+  const { documents } = useCollectDocsByIdList(messagesList, 'messages');
+
+  console.log(messagesList);
 
   return (
     <div className="Messages">

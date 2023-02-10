@@ -83,6 +83,24 @@ export const useSearchUsers = () => {
     [_determineBucket, getBucket]
   );
 
+  const getAllUsersStartingWith = useCallback(
+    async searchTerm => {
+      try {
+        const bucketId = _determineBucket(searchTerm);
+        const bucket = await getBucket(bucketId);
+        if (!bucket) return null;
+        const matches = [];
+        for (const [key, value] of Object.entries(bucket.users)) {
+          if (key.toString().startsWith(searchTerm)) matches.push(value);
+        }
+        return matches;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [_determineBucket, getBucket]
+  );
+
   const getUsersIDs = useCallback(
     async userList => {
       try {
@@ -97,5 +115,11 @@ export const useSearchUsers = () => {
     [searchForUser]
   );
 
-  return { addToBucket, removeFromBucket, searchForUser, getUsersIDs };
+  return {
+    addToBucket,
+    removeFromBucket,
+    searchForUser,
+    getUsersIDs,
+    getAllUsersStartingWith,
+  };
 };

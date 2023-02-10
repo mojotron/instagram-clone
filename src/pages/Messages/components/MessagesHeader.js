@@ -1,9 +1,8 @@
-import React from 'react';
-import './styles/MessagesHeader.css';
-//
-import { BiEdit } from 'react-icons/bi';
-//
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+// styles
+import './styles/MessagesHeader.css';
+// icons
+import { BiEdit } from 'react-icons/bi';
 
 const MessagesHeader = ({ setShowNewMessage }) => {
   const { response } = useUserDataContext();

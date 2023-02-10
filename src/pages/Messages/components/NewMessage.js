@@ -1,29 +1,33 @@
+// hooks
 import { useState, useRef, useEffect } from 'react';
+import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
+import { useSearchUsers } from '../../../hooks/useSearchUsers';
 // style
 import './styles/NewMessage.css';
 // icons
 import { GrClose } from 'react-icons/gr';
-// hooks
-import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
-import { useSearchUsers } from '../../../hooks/useSearchUsers';
+// components
 import Avatar from '../../../components/Avatar';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   // TODO fetch suggested users
   const { documents: suggestedUsers, getSuggestedUsersMessagesDocuments } =
     useCollectSuggestedUsers();
-  const { documents, isPending, error, searchForUsers, reset } =
-    useSearchUsers();
+  // refactored
+  const { getAllUsersStartingWith } = useSearchUsers();
   const [searchTerm, setSearchTerm] = useState('');
+  // TODO
+  const [searchResults, setSearchResults] = useState(null);
   const inputRef = useRef();
-  const search = useRef(str => searchForUsers(str)).current;
-  const suggestedUsersRef = useRef(getSuggestedUsersMessagesDocuments).current;
+
+  // const search = useRef(str => searchForUsers(str)).current;
+  // const suggestedUsersRef = useRef(getSuggestedUsersMessagesDocuments).current;
 
   console.log(suggestedUsers);
 
-  useEffect(() => {
-    suggestedUsersRef();
-  }, [suggestedUsersRef]);
+  // useEffect(() => {
+  //   suggestedUsersRef();
+  // }, [suggestedUsersRef]);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -31,19 +35,20 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
 
   useEffect(() => {
     if (searchTerm === '') return;
-    const debounce = setTimeout(() => {
+    const debounce = setTimeout(async () => {
       console.log('call debounce');
-      search(searchTerm);
+      const results = await getAllUsersStartingWith(searchTerm);
+      console.log('debounce result', results);
     }, 2000);
 
     return () => clearTimeout(debounce);
-  }, [searchTerm, search]);
+  }, [searchTerm, getAllUsersStartingWith]);
 
-  const handleMessageToUser = user => {
-    setMessageTo(user);
-    reset();
-    setShowNewMessage(false);
-  };
+  // const handleMessageToUser = user => {
+  //   setMessageTo(user);
+  //   reset();
+  //   setShowNewMessage(false);
+  // };
 
   return (
     <div className="overlay">
@@ -68,10 +73,10 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
         </div>
 
         <div className="NewMessage__user-list">
-          {isPending && <p>Loading...</p>}
-          {error && <p>{error}</p>}
+          {/* {isPending && <p>Loading...</p>}
+          {error && <p>{error}</p>} */}
 
-          {suggestedUsers &&
+          {/* {suggestedUsers &&
             !documents &&
             suggestedUsers.map(user => (
               <div
@@ -85,9 +90,9 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
                   <h3>{user.fullName}</h3>
                 </div>
               </div>
-            ))}
+            ))} */}
 
-          {documents &&
+          {/* {documents &&
             documents.map(user => (
               <div
                 key={user.id}
@@ -100,7 +105,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
                   <h3>{user.fullName}</h3>
                 </div>
               </div>
-            ))}
+            ))} */}
         </div>
       </div>
     </div>
