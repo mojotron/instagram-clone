@@ -8,22 +8,28 @@ import './styles/NewMessage.css';
 import { GrClose } from 'react-icons/gr';
 // components
 import Avatar from '../../../components/Avatar';
+import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   // TODO fetch suggested users
-  const { documents: suggestedUsers, getSuggestedUsersMessagesDocuments } =
-    useCollectSuggestedUsers();
+  // const { documents: suggestedUsers, getSuggestedUsersMessagesDocuments } =
+  //   useCollectSuggestedUsers();
   // refactored
   const { getAllUsersStartingWith } = useSearchUsers();
   const [searchTerm, setSearchTerm] = useState('');
-  // TODO
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState(null);
   const [searchResults, setSearchResults] = useState(null);
+  const { documents: searchedUsersDoc } = useCollectDocsByIdList(
+    searchResults,
+    'users'
+  );
+  // get list of user after search
+
   const inputRef = useRef();
 
   // const search = useRef(str => searchForUsers(str)).current;
   // const suggestedUsersRef = useRef(getSuggestedUsersMessagesDocuments).current;
-
-  console.log(suggestedUsers);
 
   // useEffect(() => {
   //   suggestedUsersRef();
@@ -33,16 +39,43 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
     inputRef.current.focus();
   }, []);
 
+  // search for users with debounce
+
   useEffect(() => {
     if (searchTerm === '') return;
+    let isMounted = true;
+    console.log('call debounce');
+    setIsPending(true);
+    setError(null);
+
     const debounce = setTimeout(async () => {
-      console.log('call debounce');
-      const results = await getAllUsersStartingWith(searchTerm);
-      console.log('debounce result', results);
+      try {
+        const results = await getAllUsersStartingWith(searchTerm);
+        if (isMounted) {
+          setSearchResults(results);
+          setIsPending(false);
+        }
+      } catch (error) {
+        console.log(error);
+        if (isMounted) {
+          setError('Network error, please try again later!');
+          setIsPending(false);
+        }
+      }
     }, 2000);
 
-    return () => clearTimeout(debounce);
+    return () => {
+      isMounted = false;
+      clearTimeout(debounce);
+    };
   }, [searchTerm, getAllUsersStartingWith]);
+
+  useEffect(() => {
+    if (searchTerm !== '') return;
+    setError(null);
+    setIsPending(false);
+    setSearchResults(null);
+  }, [searchTerm]);
 
   // const handleMessageToUser = user => {
   //   setMessageTo(user);
@@ -73,8 +106,8 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
         </div>
 
         <div className="NewMessage__user-list">
-          {/* {isPending && <p>Loading...</p>}
-          {error && <p>{error}</p>} */}
+          {isPending && <p>Loading...</p>}
+          {error && <p>{error}</p>}
 
           {/* {suggestedUsers &&
             !documents &&
@@ -92,20 +125,21 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
               </div>
             ))} */}
 
-          {/* {documents &&
-            documents.map(user => (
+          {searchResults &&
+            searchedUsersDoc &&
+            searchedUsersDoc.map(user => (
               <div
                 key={user.id}
                 className="NewMessage__user-list__item"
-                onClick={() => handleMessageToUser(user)}
+                // onClick={() => handleMessageToUser(user)}
               >
-                <Avatar url={user.avatar.url} size="mid" />
+                <Avatar url={user.avatar.url} size={35} />
                 <div className="NewMessage__user-list__item__info">
                   <h2>{user.userName}</h2>
                   <h3>{user.fullName}</h3>
                 </div>
               </div>
-            ))} */}
+            ))}
         </div>
       </div>
     </div>

@@ -24,8 +24,6 @@ const Messages = () => {
 
   const { documents } = useCollectDocsByIdList(messagesList, 'messages');
 
-  console.log(messagesList);
-
   return (
     <div className="Messages">
       {showNewMessage && (
