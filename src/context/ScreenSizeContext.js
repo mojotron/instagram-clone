@@ -7,7 +7,6 @@ export const ScreenSizeContextProvider = ({ children }) => {
   const small = useMediaQuery('(max-width: 770px)');
   const large = useMediaQuery('(min-width: 1280px)');
   const [fixedSize, setFixedSize] = useState(null);
-  console.log(fixedSize);
 
   const determineScreenSize = () => {
     if (small) return 'small';

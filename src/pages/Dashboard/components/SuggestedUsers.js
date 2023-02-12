@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
-import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
+// import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
 import { useFollow } from '../../../hooks/useFollow';
 // style
 import './styles/SuggestedUsers.css';
@@ -11,14 +11,14 @@ import Avatar from '../../../components/Avatar';
 
 const SuggestedUsers = () => {
   const { response } = useUserDataContext();
-  const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
+  // const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
   const { follow } = useFollow();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (documents) return;
-    getSuggestedUsersDocuments();
-  }, [getSuggestedUsersDocuments, documents]);
+  // useEffect(() => {
+  //   if (documents) return;
+  //   getSuggestedUsersDocuments();
+  // }, [getSuggestedUsersDocuments, documents]);
 
   // todo when follow user set documents to null
   // follow user, reset document recall method
@@ -46,7 +46,7 @@ const SuggestedUsers = () => {
         </button>
       </div>
 
-      <div className="SuggestedUsers__users">
+      {/* <div className="SuggestedUsers__users">
         {!documents && (
           <p className="SuggestedUsers__users__not">
             No suggestions yet. Search for friends, or explore posts to find
@@ -90,7 +90,7 @@ const SuggestedUsers = () => {
               </button>
             </div>
           ))}
-      </div>
+      </div> */}
     </div>
   );
 };

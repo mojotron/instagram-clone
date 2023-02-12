@@ -1,6 +1,6 @@
 // hooks
 import { useState, useRef, useEffect } from 'react';
-import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
+import { useSuggestedUsers } from '../../../hooks/useSuggestedUsers';
 import { useSearchUsers } from '../../../hooks/useSearchUsers';
 // style
 import './styles/NewMessage.css';
@@ -12,8 +12,7 @@ import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   // TODO fetch suggested users
-  // const { documents: suggestedUsers, getSuggestedUsersMessagesDocuments } =
-  //   useCollectSuggestedUsers();
+  const { notFollowingBack, followersFollowings } = useSuggestedUsers();
   // refactored
   const { getAllUsersStartingWith } = useSearchUsers();
   const [searchTerm, setSearchTerm] = useState('');
@@ -109,21 +108,22 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
           {isPending && <p>Loading...</p>}
           {error && <p>{error}</p>}
 
-          {/* {suggestedUsers &&
-            !documents &&
-            suggestedUsers.map(user => (
+          {!searchResults &&
+            notFollowingBack &&
+            followersFollowings &&
+            [...notFollowingBack, ...followersFollowings].map(userDoc => (
               <div
-                key={user.id}
+                key={userDoc.id}
                 className="NewMessage__user-list__item"
-                onClick={() => handleMessageToUser(user)}
+                // onClick={() => handleMessageToUser(user)}
               >
-                <Avatar url={user.avatar.url} size="mid" />
+                <Avatar url={userDoc.avatar.url} size={35} />
                 <div className="NewMessage__user-list__item__info">
-                  <h2>{user.userName}</h2>
-                  <h3>{user.fullName}</h3>
+                  <h2>{userDoc.userName}</h2>
+                  <h3>{userDoc.fullName}</h3>
                 </div>
               </div>
-            ))} */}
+            ))}
 
           {searchResults &&
             searchedUsersDoc &&

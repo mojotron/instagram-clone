@@ -1,7 +1,7 @@
 // hooks
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
+// import { useCollectSuggestedUsers } from '../../../hooks/useCollectSuggestedUsers';
 import { useFollow } from '../../../hooks/useFollow';
 // components
 import Avatar from '../../../components/Avatar';
@@ -9,18 +9,18 @@ import Avatar from '../../../components/Avatar';
 import './styles/AllSuggestedUsers.css';
 
 const AllSuggestedUsers = () => {
-  const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
+  // const { documents, getSuggestedUsersDocuments } = useCollectSuggestedUsers();
   const { follow } = useFollow();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (documents) return;
-    getSuggestedUsersDocuments();
-  }, [getSuggestedUsersDocuments, documents]);
+  // useEffect(() => {
+  //   if (documents) return;
+  //   getSuggestedUsersDocuments();
+  // }, [getSuggestedUsersDocuments, documents]);
 
   return (
     <div className="AllSuggestedUsers">
-      <h2 className="AllSuggestedUsers__heading">Suggested</h2>
+      {/* <h2 className="AllSuggestedUsers__heading">Suggested</h2>
       {documents &&
         documents.map(doc => (
           <div key={doc.userName} className="AllSuggestedUsers__user">
@@ -58,7 +58,7 @@ const AllSuggestedUsers = () => {
               Follow
             </button>
           </div>
-        ))}
+        ))} */}
     </div>
   );
 };
