@@ -11,28 +11,20 @@ import Avatar from '../../../components/Avatar';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
-  // TODO fetch suggested users
   const { notFollowingBack, followersFollowings } = useSuggestedUsers();
-  // refactored
   const { getAllUsersStartingWith } = useSearchUsers();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [searchResults, setSearchResults] = useState(null);
+
   const { documents: searchedUsersDoc } = useCollectDocsByIdList(
     searchResults,
     'users'
   );
-  // get list of user after search
 
   const inputRef = useRef();
-
-  // const search = useRef(str => searchForUsers(str)).current;
-  // const suggestedUsersRef = useRef(getSuggestedUsersMessagesDocuments).current;
-
-  // useEffect(() => {
-  //   suggestedUsersRef();
-  // }, [suggestedUsersRef]);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -76,11 +68,10 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
     setSearchResults(null);
   }, [searchTerm]);
 
-  // const handleMessageToUser = user => {
-  //   setMessageTo(user);
-  //   reset();
-  //   setShowNewMessage(false);
-  // };
+  const handleMessageToUser = user => {
+    setMessageTo(user);
+    setShowNewMessage(false);
+  };
 
   return (
     <div className="overlay">
@@ -115,7 +106,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
               <div
                 key={userDoc.id}
                 className="NewMessage__user-list__item"
-                // onClick={() => handleMessageToUser(user)}
+                onClick={() => handleMessageToUser(userDoc.id)}
               >
                 <Avatar url={userDoc.avatar.url} size={35} />
                 <div className="NewMessage__user-list__item__info">

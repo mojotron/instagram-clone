@@ -1,4 +1,4 @@
-import { useCallback } from 'react'; // TODO REFSCTORING
+import { useCallback } from 'react';
 import { projectFirestore } from '../firebase/config';
 import { collection, Timestamp, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
@@ -13,25 +13,26 @@ export const useMessages = () => {
   const { updateDocument: updateTargetDocument } = useFirestore('users');
   const { updateDocument: updateMessageDocument } = useFirestore('messages');
 
-  const haveMessagesCheck = user => {
-    return response.document?.messages?.find(obj => obj.messageTo === user.uid);
-  };
-
   const colRef = collection(projectFirestore, 'messages');
+
+  const createMessageObject = useCallback(
+    (type, payload) => {
+      return {
+        type,
+        content: payload,
+        from: response.document.uid,
+        createdAt: Timestamp.fromDate(new Date()),
+      };
+    },
+    [response.document.uid]
+  );
 
   const createMessageDoc = useCallback(
     async (user, type, payload) => {
       try {
         const newDoc = await addDoc(colRef, {
           users: [response.document.uid, user.uid],
-          messages: [
-            {
-              type,
-              content: payload,
-              from: response.document.uid,
-              createdAt: Timestamp.fromDate(new Date()),
-            },
-          ],
+          messages: [createMessageObject(type, payload)],
         });
         await updateDocument(response.document.id, {
           messages: [
@@ -49,37 +50,25 @@ export const useMessages = () => {
           ],
         });
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
-    [response, colRef, updateDocument, updateTargetDocument]
+    [
+      response,
+      colRef,
+      updateDocument,
+      updateTargetDocument,
+      createMessageObject,
+    ]
   );
 
-  const getDocument = async docId => {
-    const docRef = doc(projectFirestore, 'messages', docId);
-    const docSnapshot = await getDoc(docRef);
-    if (docSnapshot.empty) throw new Error('Document not found!');
-    return { ...docSnapshot.data(), id: docSnapshot.id };
-  };
-
-  const addMessage = async (user, type, payload) => {
-    const haveMessages = haveMessagesCheck(user);
-
+  const addMessage = async (messages, user, type, payload, messageDocId) => {
     try {
-      if (haveMessages) {
-        const messageDoc = await getDocument(haveMessages.messageDocId);
+      if (messages) {
+        const updatedMessages = [...messages, createMessageDoc(type, payload)];
 
-        await updateMessageDocument(haveMessages.messageDocId, {
-          messages: [
-            {
-              type,
-              content: payload,
-              from: response.document.uid,
-              createdAt: Timestamp.fromDate(new Date()),
-            },
-            // TODO need old messages
-            ...messageDoc.messages,
-          ],
+        await updateMessageDocument(messageDocId, {
+          messages: updatedMessages,
         });
       } else {
         await createMessageDoc(user, type, payload);
@@ -89,20 +78,19 @@ export const useMessages = () => {
     }
   };
 
-  const deleteMessage = async (user, index) => {
-    const haveMessages = haveMessagesCheck(user);
-
-    try {
-      const messageDoc = await getDocument(haveMessages.messageDocId);
-
-      await updateMessageDocument(haveMessages.messageDocId, {
-        messages: messageDoc.messages.filter((msg, i) => i !== index),
-      });
-      console.log(index);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  const deleteMessage = useCallback(
+    async (messages, index, messageDocId) => {
+      const updatedMessages = messages.filter((_, i) => i !== index);
+      try {
+        await updateMessageDocument(messageDocId, {
+          messages: updatedMessages,
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+    [updateMessageDocument]
+  );
 
   return {
     addMessage,

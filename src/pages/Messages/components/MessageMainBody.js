@@ -1,4 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+// hooks
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useMessages } from '../../../hooks/useMessages';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // style
 import './styles/MessageMainBody.css';
 // icons
@@ -7,15 +10,29 @@ import { BiSmile } from 'react-icons/bi';
 import Avatar from '../../../components/Avatar';
 import EmojiPicker from 'emoji-picker-react';
 import MessageItem from './MessageItem';
-// hooks
-import { useMessages } from '../../../hooks/useMessages';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
-import { useCollectMessage } from '../../../hooks/useCollectMessage';
+import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
 
-const MessageMainBody = ({ user }) => {
+const MessageMainBody = ({ messageTo }) => {
   const { response } = useUserDataContext();
-  const { document, isPending, error } = useCollectMessage(user);
   const { addMessage, deleteMessage } = useMessages();
+
+  const findMessages = useMemo(() => {
+    return response.document.messages.find(msg => msg.messageTo === messageTo);
+  }, [response.document.messages, messageTo]);
+
+  const { document: messageToUserDoc } = useOnSnapshotDocument(
+    'users',
+    messageTo
+  );
+
+  const { document: messagesDoc } = useOnSnapshotDocument(
+    'messages',
+    findMessages?.messageDocId
+  );
+
+  // console.log('TEMP', messageToUserDoc);
+  // console.log('TEMP 2', messagesDoc);
+
   // for message options popup with index
   const [showOptions, setShowOptions] = useState(null);
 
@@ -24,6 +41,7 @@ const MessageMainBody = ({ user }) => {
   const textareaRef = useRef();
 
   useEffect(() => {
+    if (!textareaRef.current) return;
     textareaRef.current.style.height = '0px';
     const scrollHeight = textareaRef.current.scrollHeight;
     textareaRef.current.style.height = scrollHeight + 'px';
@@ -39,21 +57,21 @@ const MessageMainBody = ({ user }) => {
   };
 
   const handleSubmit = async e => {
-    e.preventDefault();
-    try {
-      await addMessage(user, 'text', text);
-    } catch (error) {
-      console.log(error);
-    }
-    setText('');
-    setShowEmojis(false);
+    // e.preventDefault();
+    // try {
+    //   await addMessage(user, 'text', text);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    // setText('');
+    // setShowEmojis(false);
   };
-
+  if (!messageToUserDoc) return null;
   return (
     <section className="MessageMainBody">
       <header className="MessageMainBody__header">
-        <Avatar url={user.avatar.url} size="small" />
-        <h2>{user.userName}</h2>
+        <Avatar url={messageToUserDoc.avatar.url} size={35} />
+        <h2>{messageToUserDoc.userName}</h2>
       </header>
 
       <main className="MessageMainBody__messages">
@@ -63,14 +81,14 @@ const MessageMainBody = ({ user }) => {
           </div>
         )}
         {/* display messages */}
-        {isPending && <p>Loading...</p>}
-        {error && <p>{error}</p>}
-        {document &&
-          document.messages.map((msg, i) => {
+        {/* {isPending && <p>Loading...</p>}
+        {error && <p>{error}</p>} */}
+        {messagesDoc &&
+          messagesDoc.messages.map((msg, i) => {
             const ownMessage = msg.from === response.document.uid;
             return (
               <MessageItem
-                user={user}
+                user={messageToUserDoc}
                 messageData={msg}
                 ownMessage={ownMessage}
                 handleDeleteMessage={deleteMessage}

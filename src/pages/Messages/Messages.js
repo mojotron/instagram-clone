@@ -57,7 +57,7 @@ const Messages = () => {
         </section>
       </div>
       <div className="Messages__right">
-        {messageTo && <MessageMainBody user={messageTo} />}
+        {messageTo && <MessageMainBody messageTo={messageTo} />}
       </div>
     </div>
   );
