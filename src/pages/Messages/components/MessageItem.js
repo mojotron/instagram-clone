@@ -21,7 +21,7 @@ const MessageItem = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (messageData.type !== 'post') return;
+    if (messageData.type !== 'post-message') return;
     console.log('load data post');
     getPost(messageData.content);
   }, [getPost, messageData]);

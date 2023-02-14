@@ -22,7 +22,9 @@ const Messages = () => {
     return response.document.messages.map(msg => msg.messageTo);
   }, [response.document.messages]);
 
-  const { documents } = useCollectDocsByIdList(messagesList, 'messages');
+  const { documents } = useCollectDocsByIdList(messagesList, 'users');
+  console.log(documents);
+  return null;
 
   return (
     <div className="Messages">
@@ -42,7 +44,7 @@ const Messages = () => {
                 key={user.uid}
                 onClick={() => setMessageTo(user)}
               >
-                <Avatar url={user.avatar.url} size="mid" />
+                <Avatar url={user.avatar.url} size={35} />
                 {user.online.status && <span className="user-online-status" />}
                 <div className="Messages__left__list-item__info">
                   <h2>{user.userName}</h2>

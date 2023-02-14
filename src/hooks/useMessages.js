@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { projectFirestore } from '../firebase/config';
-import { collection, Timestamp, addDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, Timestamp, addDoc } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
 import { useFirestore } from './useFirestore';
 
@@ -9,13 +9,13 @@ export const useMessages = () => {
   // to create separate file for single message, but i will limit number of
   // between users to 5-10, this is learning project and for that is this
   // approach is fine :)
-  const { response, updateDocument } = useUserDataContext();
-  const { updateDocument: updateTargetDocument } = useFirestore('users');
+  const { response } = useUserDataContext();
+  const { updateDocument } = useFirestore('users');
   const { updateDocument: updateMessageDocument } = useFirestore('messages');
-
+  // type 'text-message' 'post-message'
   const colRef = collection(projectFirestore, 'messages');
 
-  const createMessageObject = useCallback(
+  const _createMessageObject = useCallback(
     (type, payload) => {
       return {
         type,
@@ -27,22 +27,24 @@ export const useMessages = () => {
     [response.document.uid]
   );
 
-  const createMessageDoc = useCallback(
-    async (user, type, payload) => {
+  const _createMessageDoc = useCallback(
+    async (userDoc, type, payload) => {
+      console.log('lets create msg doc 2');
+
       try {
         const newDoc = await addDoc(colRef, {
-          users: [response.document.uid, user.uid],
-          messages: [createMessageObject(type, payload)],
+          users: [response.document.uid, userDoc.uid],
+          messages: [_createMessageObject(type, payload)],
         });
         await updateDocument(response.document.id, {
           messages: [
             ...response.document.messages,
-            { messageTo: user.uid, messageDocId: newDoc.id },
+            { messageTo: userDoc.uid, messageDocId: newDoc.id },
           ],
         });
-        await updateTargetDocument(user.id, {
+        await updateDocument(userDoc.id, {
           messages: [
-            ...user.messages,
+            ...userDoc.messages,
             {
               messageTo: response.document.uid,
               messageDocId: newDoc.id,
@@ -53,25 +55,23 @@ export const useMessages = () => {
         throw error;
       }
     },
-    [
-      response,
-      colRef,
-      updateDocument,
-      updateTargetDocument,
-      createMessageObject,
-    ]
+    [response, colRef, updateDocument, _createMessageObject]
   );
 
-  const addMessage = async (messages, user, type, payload, messageDocId) => {
+  const addMessage = async (messagesDoc, userDoc, type, payload) => {
     try {
-      if (messages) {
-        const updatedMessages = [...messages, createMessageDoc(type, payload)];
+      if (messagesDoc !== null) {
+        const updatedMessages = [
+          ...messagesDoc.messages,
+          _createMessageObject(type, payload),
+        ];
 
-        await updateMessageDocument(messageDocId, {
+        await updateMessageDocument(messagesDoc.id, {
           messages: updatedMessages,
         });
       } else {
-        await createMessageDoc(user, type, payload);
+        console.log('lets create msg doc');
+        await _createMessageDoc(userDoc, type, payload);
       }
     } catch (error) {
       console.log(error.message);
