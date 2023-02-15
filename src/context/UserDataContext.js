@@ -13,27 +13,27 @@ export const UserDataContextProvider = ({ children }) => {
     'users',
     user.uid
   );
-  const { updateDocument } = useFirestore('users');
+  // const { updateDocument } = useFirestore('users');
 
-  const updateStatus = useRef((docId, data) =>
-    updateDocument(docId, data)
-  ).current;
+  // const updateStatus = useRef((docId, data) =>
+  //   updateDocument(docId, data)
+  // ).current;
 
-  useEffect(() => {
-    if (document === null) return;
-    if (document.online.status) return;
+  // useEffect(() => {
+  //   if (document === null) return;
+  //   if (document.online.status) return;
 
-    const changeOnlineStatus = async () => {
-      updateStatus(document.id, {
-        online: {
-          status: true,
-          lastLoggedOut: Timestamp.fromDate(new Date()),
-        },
-      });
-    };
+  //   const changeOnlineStatus = async () => {
+  //     updateStatus(document.id, {
+  //       online: {
+  //         status: true,
+  //         lastLoggedOut: Timestamp.fromDate(new Date()),
+  //       },
+  //     });
+  //   };
 
-    changeOnlineStatus();
-  }, [document, updateStatus]);
+  //   changeOnlineStatus();
+  // }, [document, updateStatus]);
 
   if (!document?.online.status) return;
 

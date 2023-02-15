@@ -2,29 +2,24 @@ import './styles/MessageItem.css';
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
-import { useFirestore } from '../../../hooks/useFirestore';
-import { useEffect } from 'react';
-import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
 
 const MessageItem = ({
   user,
   messageData,
-  ownMessage,
   handleDeleteMessage,
-  messageIndex,
   showOptions,
   setShowOptions,
 }) => {
-  const { response, getDocumentById } = useFirestore('posts');
-  const getPost = useRef(docId => getDocumentById(docId)).current;
+  const { response } = useUserDataContext();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (messageData.type !== 'post-message') return;
-    console.log('load data post');
-    getPost(messageData.content);
-  }, [getPost, messageData]);
+  const { document, isPending, error } = useOnSnapshotDocument(
+    'posts',
+    messageData.type === 'post-message' ? messageData.content : null
+  );
+  const ownMessage = response.document.uid === messageData.from;
 
   const handleShowOptions = index => {
     if (index === showOptions) setShowOptions(null);
@@ -35,15 +30,18 @@ const MessageItem = ({
     <div className={`MessageItem ${ownMessage ? 'right' : 'left'}`}>
       <div className={`MessageItem__body ${ownMessage ? 'right' : 'left'}`}>
         <div className="MessageItem__body__control">
-          {ownMessage && showOptions === messageIndex && (
+          {ownMessage && showOptions === messageData.messageIndex && (
             <div className="MessageItem__options">
               <button
                 style={{
-                  visibility: showOptions === messageIndex && 'visible',
+                  visibility:
+                    showOptions === messageData.messageIndex && 'visible',
                   color: 'white',
                 }}
                 className="btn btn--unsend"
-                onClick={() => handleDeleteMessage(user, messageIndex)}
+                onClick={() =>
+                  handleDeleteMessage(user, messageData.messageIndex)
+                }
               >
                 Unsend
               </button>
@@ -53,21 +51,21 @@ const MessageItem = ({
             <button
               type="button"
               className="btn"
-              onClick={() => handleShowOptions(messageIndex)}
+              onClick={() => handleShowOptions(messageData.messageIndex)}
             >
               <BiDotsHorizontalRounded size={20} />
             </button>
           )}
         </div>
 
-        {!ownMessage && <Avatar url={user.avatar.url} size="small" />}
+        {!ownMessage && <Avatar url={user.avatar.url} size={35} />}
 
-        {messageData.type === 'text' && <p>{messageData.content}</p>}
-        {messageData.type === 'post' && (
+        {messageData.type === 'text-message' && <p>{messageData.content}</p>}
+        {messageData.type === 'post-message' && (
           <>
-            {response.error && <p>Post load failed!</p>}
-            {response.isPending && <p>Loading...</p>}
-            {response.document && (
+            {error && <p>Post load failed!</p>}
+            {isPending && <p>Loading...</p>}
+            {document && (
               <div
                 style={{
                   width: '225px',
@@ -82,8 +80,8 @@ const MessageItem = ({
                 }}
               >
                 <PostImage
-                  imagesData={response.document.images}
-                  dimensions={response.document.dimensions}
+                  imagesData={[document.images[0]]}
+                  dimensions={document.dimensions}
                 />
               </div>
             )}

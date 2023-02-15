@@ -137,25 +137,44 @@ export const useFirestore = collectionName => {
     [collectionName, dispatchIfNotCancelled]
   );
 
-  const updateDocument = useCallback(
-    async (docId, data) => {
+  const getDocumentByIdAndCollectionName = useCallback(
+    async (collectionName, docId) => {
       dispatch({ type: 'IS_PENDING' });
       try {
-        const docRef = doc(colRef, docId);
+        const docRef = doc(projectFirestore, collectionName, docId);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.empty) throw new Error('Document not found!');
+        const userDocument = { ...docSnapshot.data(), id: docSnapshot.id };
+        dispatchIfNotCancelled({ type: 'GET_DOCUMENT', payload: userDocument });
+        return userDocument;
+      } catch (error) {
+        dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
+      }
+    },
+    [dispatchIfNotCancelled]
+  );
+
+  const updateDocument = useCallback(
+    async (docId, data) => {
+      console.log('test', data);
+      const docRef = doc(projectFirestore, collectionName, docId);
+      dispatch({ type: 'IS_PENDING' });
+      try {
+        console.log('1');
+        console.log('test', data);
         await updateDoc(docRef, data);
-        const docSnap = await getDoc(
-          doc(projectFirestore, collectionName, docId)
-        );
+        const docSnap = await getDoc(docRef);
 
         dispatchIfNotCancelled({
           type: 'UPDATE_DOCUMENT',
           payload: { ...docSnap.data(), id: docSnap.id },
         });
       } catch (error) {
+        console.log('err');
         dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
       }
     },
-    [colRef, collectionName, dispatchIfNotCancelled]
+    [collectionName, dispatchIfNotCancelled]
   );
 
   const deleteDocument = useCallback(
@@ -212,5 +231,6 @@ export const useFirestore = collectionName => {
     deleteDocument,
     createDocWithCustomID,
     documentExist,
+    getDocumentByIdAndCollectionName,
   };
 };

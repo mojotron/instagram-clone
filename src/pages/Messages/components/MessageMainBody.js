@@ -74,6 +74,7 @@ const MessageMainBody = ({ messageTo }) => {
   };
 
   if (!messageToUserDoc) return null;
+  if (!messagesDoc) return null;
 
   return (
     <section className="MessageMainBody">
@@ -91,22 +92,19 @@ const MessageMainBody = ({ messageTo }) => {
         {/* display messages */}
         {/* {isPending && <p>Loading...</p>}
         {error && <p>{error}</p>} */}
-        {/* {messagesDoc &&
-          messagesDoc.messages.map((msg, i) => {
-            const ownMessage = msg.from === response.document.uid;
+        {messagesDoc &&
+          messagesDoc.messages.reverse().map((msg, i) => {
             return (
               <MessageItem
+                key={msg.createdAt.seconds}
                 user={messageToUserDoc}
-                messageData={msg}
-                ownMessage={ownMessage}
+                messageData={{ ...msg, messageIndex: i }}
                 handleDeleteMessage={deleteMessage}
-                messageIndex={i}
-                key={i}
                 showOptions={showOptions}
                 setShowOptions={setShowOptions}
               />
             );
-          })} */}
+          })}
       </main>
 
       <footer className="MessageMainBody__new-message">

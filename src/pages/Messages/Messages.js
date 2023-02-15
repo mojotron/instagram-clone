@@ -23,8 +23,6 @@ const Messages = () => {
   }, [response.document.messages]);
 
   const { documents } = useCollectDocsByIdList(messagesList, 'users');
-  console.log(documents);
-  return null;
 
   return (
     <div className="Messages">
@@ -42,7 +40,7 @@ const Messages = () => {
               <div
                 className="Messages__left__list-item"
                 key={user.uid}
-                onClick={() => setMessageTo(user)}
+                onClick={() => setMessageTo(user.id)}
               >
                 <Avatar url={user.avatar.url} size={35} />
                 {user.online.status && <span className="user-online-status" />}

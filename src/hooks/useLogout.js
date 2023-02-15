@@ -20,12 +20,14 @@ export const useLogout = () => {
     setIsPending(true);
     try {
       console.log('logging out', response.document.id);
+
       await updateDocument(response.document.id, {
         online: {
           status: false,
           lastLoggedOut: Timestamp.fromDate(new Date()),
         },
       });
+
       await signOut(projectAuth);
 
       dispatch({ type: 'LOGOUT' });

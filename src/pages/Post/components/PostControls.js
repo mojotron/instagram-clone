@@ -10,6 +10,7 @@ import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState } from 'react';
 import { useMessages } from '../../../hooks/useMessages';
 import { usePost } from '../../../hooks/usePost';
+import { useFirestore } from '../../../hooks/useFirestore';
 // component
 import PostLikedBy from './PostLikedBy';
 import NewMessage from '../../Messages/components/NewMessage';
@@ -18,6 +19,7 @@ const PostControls = ({ postData, handleCommentReset }) => {
   // in timeline post handleCommentReset sends user to post page
   const { response } = useUserDataContext();
   const { toggleSavePost, toggleLike } = usePost();
+  const { getDocumentByIdAndCollectionName } = useFirestore('users');
   const { addMessage } = useMessages();
 
   const [showNewMessage, setShowNewMessage] = useState(false);
@@ -36,10 +38,23 @@ const PostControls = ({ postData, handleCommentReset }) => {
   // send this post to the target user
 
   // TODO with messages refactor
-  const handleSendPostTo = user => {
-    console.log('hello');
-    console.log(user.userName);
-    addMessage(user, 'post', postData.id);
+  const handleSendPostTo = async user => {
+    // find message doc
+    console.log(user);
+    const userDoc = await getDocumentByIdAndCollectionName('users', user);
+    console.log(userDoc);
+    const messageTo = response.document.messages.find(
+      msg => msg.messageTo === user
+    );
+    const messageDoc = await getDocumentByIdAndCollectionName(
+      'messages',
+      messageTo?.messageDocId
+    );
+    console.log(messageDoc);
+    // get user doc
+    // get message doc for that user
+
+    await addMessage(messageDoc, userDoc, 'post-message', postData.id);
   };
 
   return (

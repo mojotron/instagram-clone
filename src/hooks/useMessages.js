@@ -60,7 +60,7 @@ export const useMessages = () => {
 
   const addMessage = async (messagesDoc, userDoc, type, payload) => {
     try {
-      if (messagesDoc !== null) {
+      if (messagesDoc) {
         const updatedMessages = [
           ...messagesDoc.messages,
           _createMessageObject(type, payload),
