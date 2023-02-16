@@ -9,7 +9,6 @@ export const useCollectDocsByIdList = (docsIdList, collectionName) => {
 
   useEffect(() => {
     if (!Array.isArray(docsIdList)) return;
-    console.log('load');
     let isCancelled = false;
     const getDocuments = async () => {
       try {

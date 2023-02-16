@@ -30,9 +30,6 @@ const MessageMainBody = ({ messageTo }) => {
     findMessages?.messageDocId
   );
 
-  // console.log('USER', messageToUserDoc);
-  // console.log('MESSAGE', messagesDoc);
-
   // for message options popup with index
   const [showOptions, setShowOptions] = useState(null);
 
@@ -58,23 +55,16 @@ const MessageMainBody = ({ messageTo }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(text);
     try {
       await addMessage(messagesDoc, messageToUserDoc, 'text-message', text);
     } catch (error) {
       console.log(error);
     }
-    // try {
-    //   await addMessage(user, 'text', text);
-    // } catch (error) {
-    //   console.log(error);
-    // }
     setText('');
     setShowEmojis(false);
   };
 
   if (!messageToUserDoc) return null;
-  if (!messagesDoc) return null;
 
   return (
     <section className="MessageMainBody">
@@ -93,7 +83,7 @@ const MessageMainBody = ({ messageTo }) => {
         {/* {isPending && <p>Loading...</p>}
         {error && <p>{error}</p>} */}
         {messagesDoc &&
-          messagesDoc.messages.reverse().map((msg, i) => {
+          messagesDoc.messages.map((msg, i) => {
             return (
               <MessageItem
                 key={msg.createdAt.seconds}

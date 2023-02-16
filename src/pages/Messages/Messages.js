@@ -18,7 +18,6 @@ const Messages = () => {
   const [messageTo, setMessageTo] = useState(null);
 
   const messagesList = useMemo(() => {
-    console.log('msg memo');
     return response.document.messages.map(msg => msg.messageTo);
   }, [response.document.messages]);
 

@@ -122,7 +122,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
               <div
                 key={user.id}
                 className="NewMessage__user-list__item"
-                // onClick={() => handleMessageToUser(user)}
+                onClick={() => handleMessageToUser(user)}
               >
                 <Avatar url={user.avatar.url} size={35} />
                 <div className="NewMessage__user-list__item__info">

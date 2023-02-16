@@ -62,8 +62,8 @@ export const useMessages = () => {
     try {
       if (messagesDoc) {
         const updatedMessages = [
-          ...messagesDoc.messages,
           _createMessageObject(type, payload),
+          ...messagesDoc.messages,
         ];
 
         await updateMessageDocument(messagesDoc.id, {

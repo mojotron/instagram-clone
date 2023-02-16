@@ -23,7 +23,6 @@ export const useLogin = () => {
           password
         );
         // update login status
-
         await updateDocument(response.user.uid, {
           online: {
             status: true,
@@ -44,7 +43,7 @@ export const useLogin = () => {
         }
       }
     },
-    [dispatch, isCancelled]
+    [dispatch, isCancelled, updateDocument]
   );
 
   useEffect(() => {

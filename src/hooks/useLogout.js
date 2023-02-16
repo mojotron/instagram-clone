@@ -19,8 +19,7 @@ export const useLogout = () => {
     setError(null);
     setIsPending(true);
     try {
-      console.log('logging out', response.document.id);
-
+      // update user online status
       await updateDocument(response.document.id, {
         online: {
           status: false,

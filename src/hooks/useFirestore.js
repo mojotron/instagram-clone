@@ -156,12 +156,9 @@ export const useFirestore = collectionName => {
 
   const updateDocument = useCallback(
     async (docId, data) => {
-      console.log('test', data);
       const docRef = doc(projectFirestore, collectionName, docId);
       dispatch({ type: 'IS_PENDING' });
       try {
-        console.log('1');
-        console.log('test', data);
         await updateDoc(docRef, data);
         const docSnap = await getDoc(docRef);
 
@@ -170,7 +167,6 @@ export const useFirestore = collectionName => {
           payload: { ...docSnap.data(), id: docSnap.id },
         });
       } catch (error) {
-        console.log('err');
         dispatchIfNotCancelled({ type: 'ERROR', payload: error.message });
       }
     },
