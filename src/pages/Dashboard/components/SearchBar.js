@@ -5,28 +5,11 @@ import './styles/Search.css';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { BsSearch } from 'react-icons/bs';
 
-const SearchBar = ({ handleSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchBar = ({ searchTerm, setSearchTerm }) => {
   const [hasFocus, setHasFocus] = useState(false);
   const inputRef = useRef();
 
-  console.log('Focus is', hasFocus ? 'on' : 'off');
-
-  useEffect(() => {
-    // debounce search call, call search one and half second after user
-    // stops typing
-    if (searchTerm === '') return;
-    console.log('call debounce');
-    const debounce = setTimeout(() => {
-      handleSearch(searchTerm);
-    }, 1500);
-
-    return () => clearTimeout(debounce);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
+  // console.log('Focus is', hasFocus ? 'on' : 'off');
 
   const handleClearSearch = () => {
     console.log('clearing search');

@@ -1,7 +1,7 @@
 import './styles/Header.css';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import SearchBar from './SearchBarOLD';
+// import SearchBar from './SearchBarOLD';
 import { useState } from 'react';
 import NavbarItem from './NavbarItem';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
@@ -21,9 +21,9 @@ const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
           <h1>Instagram Clone</h1>
         </Link>
 
-        {showSearchBar && (
+        {/* {showSearchBar && (
           <SearchBar toggleShowSearchBar={toggleShowSearchBar} />
-        )}
+        )} */}
       </div>
       <div className="Header__right">
         <NavbarItem
