@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 // components
 import AuthLink from './components/AuthLink';
 import ProtectedRoute from './components/ProtectedRoute';
+import { SuggestedUserContextProvider } from './context/SuggestedUserContext';
 
 const App = () => {
   const { authIsReady, user } = useAuthContext();
@@ -25,7 +26,9 @@ const App = () => {
               element={
                 <ProtectedRoute condition={user} goto="login">
                   <UserDataContextProvider>
-                    <Dashboard />
+                    <SuggestedUserContextProvider>
+                      <Dashboard />
+                    </SuggestedUserContextProvider>
                   </UserDataContextProvider>
                 </ProtectedRoute>
               }

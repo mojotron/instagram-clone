@@ -1,6 +1,6 @@
 // hooks
 import { useState, useRef, useEffect } from 'react';
-import { useSuggestedUsers } from '../../../hooks/useSuggestedUsers';
+import { useSuggestedUsersContext } from '../../../hooks/useSuggestedUsersContext';
 import { useSearchUsers } from '../../../hooks/useSearchUsers';
 // style
 import './styles/NewMessage.css';
@@ -11,7 +11,7 @@ import Avatar from '../../../components/Avatar';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
-  const { notFollowingBack, followersFollowings } = useSuggestedUsers();
+  const { notFollowingBack, followersFollowings } = useSuggestedUsersContext();
   const { getAllUsersStartingWith } = useSearchUsers();
 
   const [searchTerm, setSearchTerm] = useState('');
