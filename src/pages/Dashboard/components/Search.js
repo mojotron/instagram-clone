@@ -7,13 +7,44 @@ import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 // style
 import './styles/Search.css';
+import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const Search = () => {
-  // TODO
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState(null);
-  const { getAllUsersStartingWith } = useSearchUsers();
-  const { documents } = useCollectDocsByIdList(searchResults, 'users');
+  const [recentSearch, setRecentSearch] = useState(null);
+  const [modifyRecentSearch, setModifyRecentSearch] = useState(true);
+  const { getAllUsersStartingWith, getRecentSearch } = useSearchUsers();
+  // get docs
+  const { documents: currentSearchDocs } = useCollectDocsByIdList(
+    searchResults,
+    'users'
+  );
+  const { documents: recentSearchDocs } = useCollectDocsByIdList(
+    recentSearch,
+    'users'
+  );
+
+  useEffect(() => {
+    if (modifyRecentSearch === false) return;
+    let isMounted = true;
+    const loadRecentSearch = async () => {
+      try {
+        const data = await getRecentSearch();
+        if (isMounted) {
+          setRecentSearch(data.recentSearch);
+          setModifyRecentSearch(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    loadRecentSearch();
+    return () => {
+      isMounted = false;
+    };
+  }, [getRecentSearch, modifyRecentSearch]);
 
   useEffect(() => {
     // debounce search call, call search one and half second after user
@@ -42,8 +73,12 @@ const Search = () => {
     <div className="Search">
       <h2>Search</h2>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      {/* conditional here is for case when user clear search bar */}
-      <SearchResults userList={searchResults ? documents : null} />
+      <SearchResults
+        // conditional here is for case when user clear search bar
+        currentSearch={searchResults ? currentSearchDocs : null}
+        recentSearch={recentSearch ? recentSearchDocs : null}
+        setModifyRecentSearch={setModifyRecentSearch}
+      />
     </div>
   );
 };
