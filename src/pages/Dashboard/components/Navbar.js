@@ -62,12 +62,17 @@ const Navbar = ({
           handleClick={null}
         />
         {screenSize !== 'small' && (
-          <NavbarItem
-            icon={<AiOutlineHeart size={25} />}
-            link={null}
-            headings="Notifications"
-            handleClick={toggleNotifications}
-          />
+          <div className="Navbar__item-wrapper">
+            <NavbarItem
+              icon={<AiOutlineHeart size={25} />}
+              link={null}
+              headings="Notifications"
+              handleClick={toggleNotifications}
+            />
+            {response.document.newNotification && (
+              <span className="Navbar__item-new-dot" />
+            )}
+          </div>
         )}
         <NavbarItem
           icon={<CgAddR size={25} />}

@@ -29,3 +29,16 @@
 .Navbar .active {
   opacity: 0.8;
 }
+.Navbar__item-wrapper {
+  display: flex;
+  position: relative;
+}
+.Navbar__item-new-dot {
+  height: 8px;
+  width: 8px;
+  background-color: #ff3040;
+  border-radius: 50%;
+  position: absolute;
+  top: 0.3rem;
+  left: 1.8rem;
+}

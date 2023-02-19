@@ -6,6 +6,7 @@
   padding: 4rem 3rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 .Sidebar__header {
   margin-bottom: 3rem;

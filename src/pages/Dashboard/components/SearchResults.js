@@ -8,6 +8,7 @@ const SearchResults = ({
   currentSearch,
   recentSearch,
   setModifyRecentSearch,
+  isHeader,
 }) => {
   const { clearRecentSearch } = useSearchUsers();
 
@@ -21,7 +22,7 @@ const SearchResults = ({
   };
 
   return (
-    <div className="SearchResults">
+    <div className={`${isHeader ? 'SearchResults--header' : 'SearchResults'}`}>
       <header className="SearchResults__header">
         {!currentSearch && <h3>Recent</h3>}
         {!currentSearch && (

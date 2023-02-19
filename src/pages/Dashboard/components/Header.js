@@ -1,18 +1,35 @@
-import './styles/Header.css';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
-// import SearchBar from './SearchBarOLD';
+// hooks
 import { useState } from 'react';
-import NavbarItem from './NavbarItem';
+import { Link } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
+import { useSearch } from '../../../hooks/useSearch';
+// icons
+import { AiOutlineHeart } from 'react-icons/ai';
+// style
+import './styles/Header.css';
+// components
+import NavbarItem from './NavbarItem';
+import SearchBar from './SearchBar';
+import SearchResults from './SearchResults';
 
-const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
+const Header = ({
+  toggleShowCreatePost,
+  toggleNotifications,
+  showSearch,
+  toggleSearch,
+}) => {
   const { screenSize } = useScreenSizeContext();
-  const [showSearchBar, setShowSearchBar] = useState(false);
+  const {
+    searchTerm,
+    setSearchTerm,
+    searchResults,
+    recentSearch,
+    currentSearchDocs,
+    recentSearchDocs,
+    setModifyRecentSearch,
+  } = useSearch();
 
-  const toggleShowSearchBar = () => {
-    setShowSearchBar(oldValue => !oldValue);
-  };
+  const [showHeaderSearch, setShowHeaderSearch] = useState(false);
 
   return (
     <header className="Header">
@@ -20,12 +37,15 @@ const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
         <Link to="/">
           <h1>Instagram Clone</h1>
         </Link>
-
-        {/* {showSearchBar && (
-          <SearchBar toggleShowSearchBar={toggleShowSearchBar} />
-        )} */}
       </div>
+
       <div className="Header__right">
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          startFocus={false}
+          handleHeaderSearch={setShowHeaderSearch}
+        />
         <NavbarItem
           icon={<AiOutlineHeart size={25} />}
           link={null}
@@ -33,6 +53,15 @@ const Header = ({ toggleShowCreatePost, toggleNotifications }) => {
           headings=""
         />
       </div>
+
+      {showHeaderSearch && (
+        <SearchResults
+          currentSearch={searchResults ? currentSearchDocs : null}
+          recentSearch={recentSearch ? recentSearchDocs : null}
+          setModifyRecentSearch={setModifyRecentSearch}
+          isHeader={true}
+        />
+      )}
     </header>
   );
 };

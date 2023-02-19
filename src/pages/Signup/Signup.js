@@ -45,6 +45,7 @@ const Signup = () => {
           status: true,
           lastLoggedOut: null,
         },
+        newNotification: false,
       };
       try {
         await signup(formData.email, formData.password, userAccount);

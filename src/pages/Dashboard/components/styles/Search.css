@@ -11,10 +11,13 @@
   border-bottom-right-radius: 2rem;
   padding: 3rem 0;
 }
+.Search form {
+  padding-bottom: 3rem;
+}
 .Search h2 {
   font-size: 2rem;
   color: var(--black);
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   margin-left: 2rem;
 }
 /* SEARCH BAR*/
@@ -24,7 +27,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 3rem;
+  /* padding-bottom: 3rem; */
   position: relative;
 }
 .SearchBar label {
@@ -41,12 +44,30 @@
 .SearchBar input[type='text'] {
   width: 95%;
   text-indent: 0.5rem;
+  border: none;
+  background-color: #efefef;
+}
+.SearchBar input[type='text']:focus {
+  outline: none;
 }
 /* SEARCH RESULTS */
 .SearchResults {
   border-top: var(--gray-border);
   padding: 2rem;
   overflow-y: scroll;
+}
+.SearchResults--header {
+  position: absolute;
+  top: 7rem;
+  right: 0.5rem;
+  width: 375px;
+  height: 365px;
+  overflow-y: scroll;
+  z-index: 25;
+  background-color: white;
+  border-radius: 1rem;
+  border: var(--gray-border);
+  padding: 2rem;
 }
 .SearchResults__header {
   display: flex;

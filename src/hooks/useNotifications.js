@@ -12,6 +12,7 @@ export const useNotifications = () => {
   const { response } = useUserDataContext();
   const { getDocumentById, updateDocument, documentExist } =
     useFirestore('notifications');
+  const { updateDocument: updateUserDoc } = useFirestore('users');
   const { getUsersIDs } = useSearchUsers();
 
   const getType = type => {
@@ -51,12 +52,13 @@ export const useNotifications = () => {
           ].slice(-20), // keep limit on notification object at last 20
         });
 
-        // TODO update user doc for new notification
+        await updateUserDoc(userID, { newNotification: true });
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
-    [getDocumentById, response, updateDocument]
+    [getDocumentById, response, updateDocument, updateUserDoc]
   );
 
   const checkForUserNames = text =>
@@ -90,5 +92,13 @@ export const useNotifications = () => {
     [addNotification, getUsersIDs, documentExist]
   );
 
-  return { addNotification, mentionUserNotification };
+  const toggleNewNotificationOff = useCallback(async () => {
+    try {
+      await updateUserDoc(response.document.id, { newNotification: false });
+    } catch (error) {
+      throw error;
+    }
+  }, [response.document.id, updateUserDoc]);
+
+  return { addNotification, mentionUserNotification, toggleNewNotificationOff };
 };

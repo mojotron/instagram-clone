@@ -5,16 +5,28 @@ import './styles/Search.css';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { BsSearch } from 'react-icons/bs';
 
-const SearchBar = ({ searchTerm, setSearchTerm }) => {
-  const [hasFocus, setHasFocus] = useState(false);
+const SearchBar = ({
+  searchTerm,
+  setSearchTerm,
+  startFocus,
+  handleHeaderSearch,
+}) => {
+  const [hasFocus, setHasFocus] = useState(startFocus);
   const inputRef = useRef();
 
   // console.log('Focus is', hasFocus ? 'on' : 'off');
+
+  useEffect(() => {
+    if (startFocus) {
+      inputRef.current.focus();
+    }
+  }, [startFocus]);
 
   const handleClearSearch = () => {
     console.log('clearing search');
     setSearchTerm('');
     setHasFocus(false);
+    if (handleHeaderSearch) handleHeaderSearch(false);
   };
 
   return (
@@ -27,8 +39,13 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
           value={searchTerm}
           placeholder="Search..."
           onChange={e => setSearchTerm(e.target.value)}
-          onFocus={() => setHasFocus(true)}
-          onBlur={() => setHasFocus(false)}
+          onFocus={() => {
+            setHasFocus(true);
+            if (handleHeaderSearch) handleHeaderSearch(true);
+          }}
+          onBlur={() => {
+            setHasFocus(false);
+          }}
         />
         {hasFocus && (
           <button type="button" className="btn" onMouseDown={handleClearSearch}>

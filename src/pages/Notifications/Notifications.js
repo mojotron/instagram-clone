@@ -1,5 +1,5 @@
 // hooks
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 import { useCollectDocsByIdList } from '../../hooks/useCollectDocsByIdList';
@@ -7,6 +7,7 @@ import { useCollectDocsByIdList } from '../../hooks/useCollectDocsByIdList';
 import Notification from './components/Notification';
 // styles
 import './styles/Notifications.css';
+import { useNotifications } from '../../hooks/useNotifications';
 
 const Notifications = () => {
   const { response } = useUserDataContext();
@@ -14,9 +15,15 @@ const Notifications = () => {
     'notifications',
     response.document.id
   );
+  const { toggleNewNotificationOff } = useNotifications();
+  // check if user have new notification, if does change status to false
+  useEffect(() => {
+    if (response.document.newNotification === false) return;
+    toggleNewNotificationOff();
+  }, [response.document.newNotification, toggleNewNotificationOff]);
+
   // filter notification
   const filterIDs = useMemo(() => {
-    console.log('memo');
     if (!document) return { usersIds: null, postIds: null };
 
     const collection = { usersIds: [], postIds: [] };
