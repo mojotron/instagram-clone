@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useSearch } from '../../../hooks/useSearch';
 // icons
 import { AiOutlineHeart } from 'react-icons/ai';
@@ -18,6 +19,7 @@ const Header = ({
   showSearch,
   toggleSearch,
 }) => {
+  const { response } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const {
     searchTerm,
@@ -46,12 +48,18 @@ const Header = ({
           startFocus={false}
           handleHeaderSearch={setShowHeaderSearch}
         />
-        <NavbarItem
-          icon={<AiOutlineHeart size={25} />}
-          link={null}
-          screenSize={screenSize}
-          headings=""
-        />
+        <div className="Navbar__item-wrapper">
+          <NavbarItem
+            icon={<AiOutlineHeart size={25} />}
+            link={null}
+            screenSize={screenSize}
+            headings=""
+            handleClick={toggleNotifications}
+          />
+          {response.document.newNotification && (
+            <span className="Navbar__item-new-dot" />
+          )}
+        </div>
       </div>
 
       {showHeaderSearch && (

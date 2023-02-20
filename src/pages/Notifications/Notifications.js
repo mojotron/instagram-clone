@@ -3,18 +3,22 @@ import { useEffect, useMemo } from 'react';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 import { useCollectDocsByIdList } from '../../hooks/useCollectDocsByIdList';
+import { useNotifications } from '../../hooks/useNotifications';
+import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
 // components
 import Notification from './components/Notification';
 // styles
 import './styles/Notifications.css';
-import { useNotifications } from '../../hooks/useNotifications';
+// icons
+import { IoIosArrowBack } from 'react-icons/io';
 
-const Notifications = () => {
+const Notifications = ({ toggleNotifications }) => {
   const { response } = useUserDataContext();
   const { isPending, error, document } = useOnSnapshotDocument(
     'notifications',
     response.document.id
   );
+  const { screenSize } = useScreenSizeContext();
   const { toggleNewNotificationOff } = useNotifications();
   // check if user have new notification, if does change status to false
   useEffect(() => {
@@ -49,8 +53,19 @@ const Notifications = () => {
   if (userDocs === null || postDocs === null) return;
 
   return (
-    <div className="Notifications">
-      <h2>Notifications</h2>
+    <div
+      className={`Notifications${
+        screenSize === 'small' ? ' Notifications--full-width' : ''
+      }`}
+    >
+      <header className="Notifications__header">
+        {screenSize === 'small' && (
+          <button className="btn" onClick={toggleNotifications}>
+            <IoIosArrowBack size={25} />
+          </button>
+        )}
+        <h2>Notifications</h2>
+      </header>
       {isPending && <p>Loading...</p>}
       {error && <p>{error}</p>}
 

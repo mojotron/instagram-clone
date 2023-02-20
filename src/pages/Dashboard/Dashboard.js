@@ -66,7 +66,9 @@ const Dashboard = () => {
     >
       {response.document && (
         <>
-          {showNotification && <Notifications />}
+          {showNotification && (
+            <Notifications toggleNotifications={toggleNotifications} />
+          )}
 
           {showCreatePost && (
             <UserPostContextProvider>
