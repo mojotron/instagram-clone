@@ -18,9 +18,7 @@ import { FiBookmark } from 'react-icons/fi';
 const Profile = () => {
   // for MoreOption component direct link to saved posts
   const location = useLocation();
-  const locationHasState = location.state?.activeTab;
-
-  console.log(locationHasState);
+  // const locationHasState = location.state?.activeTab;
 
   const { userName } = useParams(); // get userName from web address parameter
   const navigate = useNavigate();
@@ -31,8 +29,6 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'posts'
   ); // =>posts or saved
-
-  console.log('activeTab', activeTab);
 
   const [profileType, setProfileType] = useState(null); // => own, friend or other
   // if account user inspect is not his own save targetUID for hook to get user data

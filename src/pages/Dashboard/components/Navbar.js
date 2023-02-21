@@ -13,13 +13,8 @@ import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const Navbar = ({
-  direction,
-  toggleShowCreatePost,
-  toggleSearch,
-  toggleNotifications,
-}) => {
-  const { response } = useUserDataContext();
+const Navbar = ({ direction, toggleShowCreatePost }) => {
+  const { response, toggleModal } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
 
@@ -46,7 +41,7 @@ const Navbar = ({
             icon={<BsSearch size={25} />}
             link={null}
             headings="Search"
-            handleClick={toggleSearch}
+            handleClick={e => toggleModal(e, 'openSearch')}
           />
         )}
         <NavbarItem
@@ -67,7 +62,7 @@ const Navbar = ({
               icon={<AiOutlineHeart size={25} />}
               link={null}
               headings="Notifications"
-              handleClick={toggleNotifications}
+              handleClick={e => toggleModal(e, 'openNotifications')}
             />
             {response.document.newNotification && (
               <span className="Navbar__item-new-dot" />

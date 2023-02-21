@@ -24,51 +24,25 @@ import { UserPostContextProvider } from '../../context/UserPostContext';
 
 const Dashboard = () => {
   // get data
-  const { response } = useUserDataContext();
+  const { response, modals, closeModals } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
 
   // toggle create form page
   const [showCreatePost, setShowCreatePost] = useState(false);
 
-  const [showSearch, setShowSearch] = useState(false);
-  const [showNotification, setShowNotifications] = useState(false);
-
-  const { setFixedSize } = useScreenSizeContext();
-
   const toggleShowCreatePost = () => {
     setShowCreatePost(oldValue => !oldValue);
-  };
-
-  const toggleNotifications = () => {
-    setShowSearch(false);
-    let fixedSize;
-    setShowNotifications(oldValue => {
-      fixedSize = oldValue;
-      return !oldValue;
-    });
-    fixedSize ? setFixedSize(null) : setFixedSize('medium');
-  };
-
-  const toggleSearch = () => {
-    setShowNotifications(false);
-    let fixedSize;
-    setShowSearch(oldValue => {
-      fixedSize = oldValue;
-      return !oldValue;
-    });
-    fixedSize ? setFixedSize(null) : setFixedSize('medium');
   };
 
   return (
     <div
       className="Dashboard"
       style={{ flexDirection: screenSize === 'small' ? 'column' : 'row' }}
+      onClick={closeModals}
     >
       {response.document && (
         <>
-          {showNotification && (
-            <Notifications toggleNotifications={toggleNotifications} />
-          )}
+          {modals.openNotifications && <Notifications />}
 
           {showCreatePost && (
             <UserPostContextProvider>
@@ -77,23 +51,9 @@ const Dashboard = () => {
           )}
 
           {screenSize !== 'small' && (
-            <Sidebar
-              toggleShowCreatePost={toggleShowCreatePost}
-              showNotification={showNotification}
-              toggleNotifications={toggleNotifications}
-              showSearch={showSearch}
-              toggleSearch={toggleSearch}
-            />
+            <Sidebar toggleShowCreatePost={toggleShowCreatePost} />
           )}
-          {screenSize === 'small' && (
-            <Header
-              toggleShowCreatePost={toggleShowCreatePost}
-              toggleNotifications={toggleNotifications}
-              //
-              showSearch={showSearch}
-              toggleSearch={toggleSearch}
-            />
-          )}
+          {screenSize === 'small' && <Header />}
 
           <div className="Dashboard__content">
             <Routes>

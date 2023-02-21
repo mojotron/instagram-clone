@@ -1,5 +1,5 @@
 // hooks
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
@@ -13,13 +13,8 @@ import NavbarItem from './NavbarItem';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 
-const Header = ({
-  toggleShowCreatePost,
-  toggleNotifications,
-  showSearch,
-  toggleSearch,
-}) => {
-  const { response } = useUserDataContext();
+const Header = () => {
+  const { response, toggleModal } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const {
     searchTerm,
@@ -32,6 +27,14 @@ const Header = ({
   } = useSearch();
 
   const [showHeaderSearch, setShowHeaderSearch] = useState(false);
+
+  useEffect(() => {
+    let isMounted;
+    toggleModal(null, 'openSearch');
+    if (isMounted) {
+    }
+    return () => (isMounted = false);
+  }, [toggleModal]);
 
   return (
     <header className="Header">
@@ -54,7 +57,7 @@ const Header = ({
             link={null}
             screenSize={screenSize}
             headings=""
-            handleClick={toggleNotifications}
+            handleClick={e => toggleModal(e, 'openNotifications')}
           />
           {response.document.newNotification && (
             <span className="Navbar__item-new-dot" />

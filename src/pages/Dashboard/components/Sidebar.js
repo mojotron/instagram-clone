@@ -1,7 +1,7 @@
 // hooks
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 // style
 import './styles/Sidebar.css';
 // icons
@@ -13,17 +13,9 @@ import NavbarItem from './NavbarItem';
 import MoreOptions from './MoreOptions';
 import Search from './Search';
 
-const Sidebar = ({
-  toggleShowCreatePost,
-  showNotifications,
-  toggleNotifications,
-  showSearch,
-  toggleSearch,
-}) => {
+const Sidebar = ({ toggleShowCreatePost }) => {
   const { screenSize, fixedSize } = useScreenSizeContext();
-  const [showMoreOptions, setShowMoreOptions] = useState(false);
-
-  const toggleMoreOptions = () => setShowMoreOptions(oldValue => !oldValue);
+  const { modals, toggleModal } = useUserDataContext();
 
   return (
     <div
@@ -34,7 +26,7 @@ const Sidebar = ({
     >
       <Link to="/">
         <header className="Sidebar__header">
-          {screenSize === 'large' && !fixedSize && !showSearch ? (
+          {screenSize === 'large' && !fixedSize && !modals.openSearch ? (
             <h1>Instagram Clone</h1>
           ) : (
             <BsInstagram size={25} />
@@ -42,24 +34,16 @@ const Sidebar = ({
         </header>
       </Link>
 
-      <Navbar
-        direction="column"
-        toggleSearch={toggleSearch}
-        toggleShowCreatePost={toggleShowCreatePost}
-        toggleNotifications={toggleNotifications}
-      />
+      <Navbar direction="column" toggleShowCreatePost={toggleShowCreatePost} />
 
-      {showSearch && <Search screenSize={screenSize} />}
-
-      {showMoreOptions && (
-        <MoreOptions handleClose={() => setShowMoreOptions(false)} />
-      )}
+      {modals.openMoreOptions && <MoreOptions />}
+      {modals.openSearch && <Search screenSize={screenSize} />}
 
       <NavbarItem
         icon={<GiHamburgerMenu size={25} />}
         link={null}
         headings="More"
-        handleClick={toggleMoreOptions}
+        handleClick={e => toggleModal(e, 'openMoreOptions')}
       />
     </div>
   );
