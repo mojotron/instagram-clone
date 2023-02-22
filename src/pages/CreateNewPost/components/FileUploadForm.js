@@ -83,7 +83,11 @@ const FileUploadForm = () => {
             <button
               type="button"
               className="btn--select-file"
-              onClick={() => inputRef.current.click()}
+              onClick={e => {
+                e.stopPropagation();
+                console.log('stop');
+                inputRef.current.click();
+              }}
             >
               Select from computer
             </button>

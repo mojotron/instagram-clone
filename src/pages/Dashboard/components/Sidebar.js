@@ -13,7 +13,7 @@ import NavbarItem from './NavbarItem';
 import MoreOptions from './MoreOptions';
 import Search from './Search';
 
-const Sidebar = ({ toggleShowCreatePost }) => {
+const Sidebar = () => {
   const { screenSize, fixedSize } = useScreenSizeContext();
   const { modals, toggleModal } = useUserDataContext();
 
@@ -34,7 +34,7 @@ const Sidebar = ({ toggleShowCreatePost }) => {
         </header>
       </Link>
 
-      <Navbar direction="column" toggleShowCreatePost={toggleShowCreatePost} />
+      <Navbar direction="column" />
 
       {modals.openMoreOptions && <MoreOptions />}
       {modals.openSearch && <Search screenSize={screenSize} />}

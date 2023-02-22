@@ -1,5 +1,5 @@
 // hooks
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
@@ -27,14 +27,6 @@ const Header = () => {
   } = useSearch();
 
   const [showHeaderSearch, setShowHeaderSearch] = useState(false);
-
-  useEffect(() => {
-    let isMounted;
-    toggleModal(null, 'openSearch');
-    if (isMounted) {
-    }
-    return () => (isMounted = false);
-  }, [toggleModal]);
 
   return (
     <header className="Header">

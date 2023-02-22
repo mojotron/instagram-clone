@@ -13,7 +13,7 @@ import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
-const Navbar = ({ direction, toggleShowCreatePost }) => {
+const Navbar = ({ direction }) => {
   const { response, toggleModal } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const Navbar = ({ direction, toggleShowCreatePost }) => {
           icon={<CgAddR size={25} />}
           link={null}
           headings="Create"
-          handleClick={toggleShowCreatePost}
+          handleClick={e => toggleModal(e, 'openCreatePost')}
         />
         <NavbarItem
           icon={<Avatar url={response.document.avatar.url} size={25} />}

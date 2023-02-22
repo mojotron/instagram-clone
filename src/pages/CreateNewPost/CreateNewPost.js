@@ -16,7 +16,7 @@ import { useFirestore } from '../../hooks/useFirestore';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 const CreateNewPost = ({ setShowCreatePost }) => {
-  const { response, updateDocument } = useUserDataContext();
+  const { response, toggleModal } = useUserDataContext();
   const { files, dimensions, imagesData, postInfo, currentStage } =
     useUserPostContext();
   const [showDiscard, setShowDiscard] = useState(false);
@@ -28,9 +28,9 @@ const CreateNewPost = ({ setShowCreatePost }) => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
 
-  const handleCloseBtn = () => {
-    if (currentStage === 'choose-files') setShowCreatePost(false);
-    setShowDiscard(true);
+  const handleCloseBtn = e => {
+    if (currentStage === 'choose-files') toggleModal(e, 'openCreatePost');
+    else setShowDiscard(true);
   };
 
   const handleCreatePost = async () => {
@@ -82,7 +82,7 @@ const CreateNewPost = ({ setShowCreatePost }) => {
       {showDiscard && (
         <DiscardPost
           handleCancel={() => setShowDiscard(false)}
-          handleDiscard={() => setShowCreatePost(false)}
+          handleDiscard={e => toggleModal(e, 'openCreatePost')}
         />
       )}
 
@@ -90,12 +90,17 @@ const CreateNewPost = ({ setShowCreatePost }) => {
         <button
           type="button"
           className="CreateNewPost__btn--close"
-          onClick={handleCloseBtn}
+          onClick={e => handleCloseBtn(e)}
         >
           <GrClose size={20} />
         </button>
 
-        <div data-testid="create-post" className="CreateNewPost">
+        <div
+          data-testid="create-post"
+          className="CreateNewPost"
+          // stop click propagation because of click outside modal option to close all modals
+          onClick={e => e.stopPropagation()}
+        >
           {currentStage === 'choose-files' && <FileUploadForm />}
 
           {currentStage === 'set-dimensions' && <ImageSizePanel />}

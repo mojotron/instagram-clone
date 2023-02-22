@@ -1,5 +1,4 @@
 // hooks
-import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
@@ -23,16 +22,8 @@ import './styles/Dashboard.css';
 import { UserPostContextProvider } from '../../context/UserPostContext';
 
 const Dashboard = () => {
-  // get data
   const { response, modals, closeModals } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
-
-  // toggle create form page
-  const [showCreatePost, setShowCreatePost] = useState(false);
-
-  const toggleShowCreatePost = () => {
-    setShowCreatePost(oldValue => !oldValue);
-  };
 
   return (
     <div
@@ -44,15 +35,14 @@ const Dashboard = () => {
         <>
           {modals.openNotifications && <Notifications />}
 
-          {showCreatePost && (
+          {modals.openCreatePost && (
             <UserPostContextProvider>
-              <CreateNewPost setShowCreatePost={setShowCreatePost} />
+              <CreateNewPost />
             </UserPostContextProvider>
           )}
 
-          {screenSize !== 'small' && (
-            <Sidebar toggleShowCreatePost={toggleShowCreatePost} />
-          )}
+          {screenSize !== 'small' && <Sidebar />}
+
           {screenSize === 'small' && <Header />}
 
           <div className="Dashboard__content">
@@ -68,7 +58,7 @@ const Dashboard = () => {
               />
               <Route path="/settings" element={<Settings />} />
               <Route path="/:userName" element={<Profile />} />
-              <Route path="/p/:postId" element={<Post type="regular" />} />
+              <Route path="/p/:postId" element={<Post />} />
               <Route path="/explore/people" element={<AllSuggestedUsers />} />
               <Route path="/direct" element={<Messages />} />
               <Route path="/explore" element={<Explore />} />

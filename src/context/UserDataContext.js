@@ -5,6 +5,13 @@ import { useScreenSizeContext } from '../hooks/useScreenSizeContext';
 
 export const UserDataContext = createContext();
 
+const initialModalState = {
+  openNotifications: false,
+  openSearch: false,
+  openMoreOptions: false,
+  openCreatePost: false,
+};
+
 export const UserDataContextProvider = ({ children }) => {
   const { user } = useAuthContext();
   const { screenSize, setFixedSize } = useScreenSizeContext();
@@ -13,36 +20,23 @@ export const UserDataContextProvider = ({ children }) => {
     user.uid
   );
   // TEST close modals
-  const [modals, setModals] = useState({
-    openNotifications: false,
-    openSearch: false,
-    openMoreOptions: false,
-  });
+  const [modals, setModals] = useState({ ...initialModalState });
   // close all modals
   const closeModals = useCallback(() => {
-    setModals({
-      openNotifications: false,
-      openSearch: false,
-      openMoreOptions: false,
-    });
+    setModals({ ...initialModalState });
     setFixedSize(null);
   }, [setFixedSize]);
 
   const toggleModal = useCallback(
     (event, modalName) => {
       if (event !== null) event.stopPropagation();
-      // check for notifcation/search => is is open and screens sieze grater then small set to fix size to midium
+      // check for notifcation/search => is is open and screens size grater then small set to fix size to midium
       let openFlag = false;
       setModals(oldValue => {
         if (modalName === 'openNotifications' || modalName === 'openSearch') {
           openFlag = !oldValue[modalName];
         }
-        const newValue = {
-          openNotifications: false,
-          openSearch: false,
-          openMoreOptions: false,
-        };
-        return { ...newValue, [modalName]: !oldValue[modalName] };
+        return { ...initialModalState, [modalName]: !oldValue[modalName] };
       });
       openFlag && screenSize === 'large'
         ? setFixedSize('medium')
