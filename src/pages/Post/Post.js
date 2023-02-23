@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
+import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
 // styles
 import './styles/Post.css';
 // components
@@ -15,6 +16,7 @@ import { GrClose } from 'react-icons/gr';
 
 const Post = () => {
   const navigate = useNavigate();
+  const { screenSize } = useScreenSizeContext();
   // data minimum data needed to get post document (postID, owner username and avatar url)
   const { postId } = useParams();
   const { document: postDocument } = useOnSnapshotDocument('posts', postId);
@@ -42,22 +44,39 @@ const Post = () => {
   // control PostImage size to fit in parent container
   const imageContainerRef = useRef(null);
   const [containerSize, setContainerSize] = useState(null);
+  // stop memory leak when resizing screen many times
+  const [initialSizeSet, setInitialSizeSet] = useState(null);
 
   // control PostImage on response change
   useEffect(() => {
+    let isMounted = true;
+    if (initialSizeSet) return;
     if (imageContainerRef.current === null) return;
+
     const rect = imageContainerRef.current.getBoundingClientRect();
-    setContainerSize(Math.min(rect.height, rect.width));
-  }, [imageContainerRef, containerSize, postDocument]);
+
+    if (isMounted) {
+      setContainerSize(Math.min(rect.height, rect.width));
+    }
+
+    return () => (isMounted = false);
+  }, [imageContainerRef, containerSize, postDocument, initialSizeSet]);
 
   // set window resize event if user changes screen size so PostImage is display correctly
   useEffect(() => {
+    let isMounted = true;
     const watchSize = () => {
       const rect = imageContainerRef.current.getBoundingClientRect();
-      setContainerSize(Math.min(rect.height, rect.width));
+      if (isMounted) {
+        setContainerSize(Math.min(rect.height, rect.width));
+        setInitialSizeSet(true);
+      }
     };
     window.addEventListener('resize', watchSize);
-    return () => window.removeEventListener('resize', watchSize);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('resize', watchSize);
+    };
   }, []);
 
   if (!postDocument) return;
@@ -69,12 +88,46 @@ const Post = () => {
       </button>
 
       {postDocument && (
-        <div className="Post">
-          <div className="Post__image-wrapper" ref={imageContainerRef}>
+        <div
+          className="Post"
+          style={
+            screenSize === 'small'
+              ? {
+                  flexDirection: 'column',
+                  width: '335px',
+                  height: '100vh',
+                  maxHeight: '95vh',
+                  overflowY: 'scroll',
+                }
+              : {
+                  flexDirection: 'row',
+                }
+          }
+        >
+          {screenSize === 'small' && (
+            <PostHeader type="regular" postData={postDocument} />
+          )}
+
+          <div
+            className="Post__image-wrapper"
+            ref={imageContainerRef}
+            style={
+              screenSize === 'small'
+                ? { flexGrow: '0', flexShrink: '0' }
+                : { flexGrow: '2', flexShrink: '2' }
+            }
+          >
             {/* wrapper is for keeping container in middle */}
             <div
               className="Post__image-container"
-              style={{ width: containerSize, height: containerSize }}
+              style={
+                screenSize === 'small'
+                  ? { width: '335px', height: '335px', marginBottom: '20px' }
+                  : {
+                      width: containerSize,
+                      height: containerSize,
+                    }
+              }
             >
               {postDocument && (
                 <PostImage
@@ -85,9 +138,18 @@ const Post = () => {
             </div>
           </div>
 
-          <div className="Post__info">
+          <div
+            className="Post__info"
+            style={
+              screenSize === 'small'
+                ? { width: '335px' }
+                : { width: '500px', flexGrow: '1', flexShrink: '1' }
+            }
+          >
             {/* post type: regular, timeline */}
-            <PostHeader type="regular" postData={postDocument} />
+            {screenSize !== 'small' && (
+              <PostHeader type="regular" postData={postDocument} />
+            )}
 
             <PostCommentsList
               postData={postDocument}

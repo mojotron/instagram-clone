@@ -10,8 +10,8 @@
 }
 .Post__image-wrapper {
   background-color: white;
-  flex-grow: 2;
-  flex-shrink: 2;
+  /* flex-grow: 2;
+  flex-shrink: 2;*/
   min-width: 1px;
   min-height: 1px;
 
@@ -24,17 +24,11 @@
   height: 100%;
 }
 .Post__info {
-  flex-grow: 1;
-  flex-shrink: 1;
-  min-width: 50rem;
-  width: 50rem;
+  /* flex-grow: 1;
+  flex-shrink: 1; */
+
   border-left: var(--gray-border);
   position: relative; /* for Emojis to be absolute */
   display: flex;
   flex-direction: column;
-}
-@media only screen and (max-width: 470px) {
-  .Post {
-    width: 100vw;
-  }
 }
