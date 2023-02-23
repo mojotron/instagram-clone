@@ -109,3 +109,9 @@
   height: 2rem;
   width: 2rem;
 }
+@media only screen and (max-width: 435px) {
+  .ImageSizePanel {
+    width: 100vw;
+    height: 100vw;
+  }
+}

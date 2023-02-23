@@ -15,7 +15,7 @@ import { useStorage } from '../../hooks/useStorage';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 
-const CreateNewPost = ({ setShowCreatePost }) => {
+const CreateNewPost = () => {
   const { response, toggleModal } = useUserDataContext();
   const { files, dimensions, imagesData, postInfo, currentStage } =
     useUserPostContext();
@@ -69,7 +69,7 @@ const CreateNewPost = ({ setShowCreatePost }) => {
       //
       setError(null);
       setIsPending(false);
-      setShowCreatePost(false);
+      toggleModal(null, 'openCreatePost');
     } catch (error) {
       console.log('ERROR', error.message);
       setError('Connection lost, please try again later!');
@@ -96,7 +96,6 @@ const CreateNewPost = ({ setShowCreatePost }) => {
         </button>
 
         <div
-          data-testid="create-post"
           className="CreateNewPost"
           // stop click propagation because of click outside modal option to close all modals
           onClick={e => e.stopPropagation()}

@@ -85,7 +85,6 @@ const FileUploadForm = () => {
               className="btn--select-file"
               onClick={e => {
                 e.stopPropagation();
-                console.log('stop');
                 inputRef.current.click();
               }}
             >

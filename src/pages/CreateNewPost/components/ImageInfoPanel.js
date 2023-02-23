@@ -1,7 +1,13 @@
+// hooks
+import { useUserPostContext } from '../../../hooks/useUserPostContext';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useState, useRef } from 'react';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
+
+// style
 import './styles/ImageInfoPanel.css';
-import EmojiPicker from 'emoji-picker-react';
 // components
+import EmojiPicker from 'emoji-picker-react';
 import CreatePostHeader from './CreatePostHeader';
 import PostImage from '../../../components/PostImage';
 import Avatar from '../../../components/Avatar';
@@ -11,12 +17,11 @@ import smileIcon from '../../../images/smile-icon.svg';
 import locationIcon from '../../../images/location-icon.svg';
 import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
-// hooks
-import { useUserPostContext } from '../../../hooks/useUserPostContext';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
-  const { response } = useUserDataContext();
+  const { response, toggleModal } = useUserDataContext();
+  const { screenSize } = useScreenSizeContext();
+
   const {
     dimensions,
     imagesData,
@@ -68,14 +73,33 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
         handlePrev={() => setCurrentStage('set-filter-layers')}
       />
 
-      <div className="ImageInfoPanel">
-        <section className="ImageInfoPanel__image">
+      <div
+        className="ImageInfoPanel"
+        style={
+          screenSize === 'small'
+            ? {
+                flexDirection: 'column',
+                height: '90vh',
+                width: '335px',
+                overflowY: 'scroll',
+              }
+            : { flexDirection: 'row' }
+        }
+      >
+        <section
+          className="ImageInfoPanel__image"
+          style={
+            screenSize === 'small'
+              ? { height: '335px', width: '335px' }
+              : { height: '435px', width: '435px' }
+          }
+        >
           <PostImage dimensions={dimensions} imagesData={imagesData} />
         </section>
 
         <section className="ImageInfoPanel__info">
           <div className="ImageInfoPanel__info__user">
-            <Avatar url={response.document.avatar.url} size="mid" />
+            <Avatar url={response.document.avatar.url} size={35} />
             <h2>{response.document.userName}</h2>
           </div>
 

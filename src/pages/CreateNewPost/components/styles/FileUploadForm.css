@@ -1,7 +1,8 @@
 .FileUploadForm {
   position: relative;
   height: 43.5rem;
-  width: inherit;
+  max-width: 43.5rem;
+  width: 100vw;
 }
 #file-input {
   display: none; /* hide input type file*/

@@ -7,6 +7,7 @@
 .ImageEditPanel__image {
   height: inherit;
   width: 43.5rem;
+  height: 43.5rem;
   border-right: var(--gray-border);
   display: flex;
   justify-content: center;

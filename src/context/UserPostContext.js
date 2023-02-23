@@ -37,7 +37,6 @@ export const UserPostContextProvider = ({ children }) => {
   });
 
   const setup = useCallback(() => {
-    console.log('called setup');
     setTempImageUrls([...files].map(file => URL.createObjectURL(file)));
 
     setImagesData(
