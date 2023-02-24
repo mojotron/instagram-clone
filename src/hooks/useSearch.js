@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchUsers } from './useSearchUsers';
+import { useRecentSearch } from './useRecentSearch';
 import { useCollectDocsByIdList } from './useCollectDocsByIdList';
 
 export const useSearch = () => {
@@ -7,7 +8,8 @@ export const useSearch = () => {
   const [searchResults, setSearchResults] = useState(null);
   const [recentSearch, setRecentSearch] = useState(null);
   const [modifyRecentSearch, setModifyRecentSearch] = useState(true);
-  const { getAllUsersStartingWith, getRecentSearch } = useSearchUsers();
+  const { getAllUsersStartingWith } = useSearchUsers();
+  const { getRecentSearch } = useRecentSearch();
   // get docs
   const { documents: currentSearchDocs } = useCollectDocsByIdList(
     searchResults,
@@ -25,7 +27,7 @@ export const useSearch = () => {
       try {
         const data = await getRecentSearch();
         if (isMounted) {
-          setRecentSearch(data.recentSearch);
+          setRecentSearch(data?.recentSearch);
           setModifyRecentSearch(false);
         }
       } catch (error) {

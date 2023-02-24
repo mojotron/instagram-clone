@@ -1,5 +1,4 @@
 import { useSearch } from '../../../hooks/useSearch';
-
 // components
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';

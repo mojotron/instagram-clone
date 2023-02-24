@@ -14,13 +14,10 @@ export const useCollectPostsWithLimit = postLimit => {
   const [endOfDocuments, setEndOfDocuments] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  console.log(lastDocument);
-
   const getNextPosts = useCallback(async () => {
     if (endOfDocuments) return -1;
     if (isFetching) return -1;
 
-    console.log('called from hook');
     try {
       setIsFetching(true);
       const colRef = collection(projectFirestore, 'posts');

@@ -2,11 +2,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useFollow } from '../../../hooks/useFollow';
+import { useSuggestedUsersContext } from '../../../hooks/useSuggestedUsersContext';
 // style
 import './styles/SuggestedUsers.css';
 // components
 import Avatar from '../../../components/Avatar';
-import { useSuggestedUsersContext } from '../../../hooks/useSuggestedUsersContext';
 
 const SuggestedUsers = () => {
   const { response } = useUserDataContext();

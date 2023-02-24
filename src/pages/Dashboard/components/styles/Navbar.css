@@ -26,7 +26,7 @@
   font-weight: 700;
   color: var(--black);
 }
-.Navbar .active {
+.Navbar .active li {
   opacity: 0.8;
 }
 .Navbar__item-wrapper {

@@ -18,10 +18,9 @@ import { FiBookmark } from 'react-icons/fi';
 const Profile = () => {
   // for MoreOption component direct link to saved posts
   const location = useLocation();
-  // const locationHasState = location.state?.activeTab;
-
-  const { userName } = useParams(); // get userName from web address parameter
   const navigate = useNavigate();
+  // const locationHasState = location.state?.activeTab;
+  const { userName } = useParams(); // get userName from web address parameter
   const { documentExist } = useFirestore('users');
   const { response } = useUserDataContext();
   const { searchForUser } = useSearchUsers();

@@ -13,7 +13,7 @@ const Explore = () => {
 
   useEffect(() => {
     if (posts.length > 0) return;
-    console.log('catching');
+
     getNextPosts().then(data => {
       if (data !== -1) {
         setPosts(data);

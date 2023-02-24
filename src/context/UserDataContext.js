@@ -14,7 +14,7 @@ const initialModalState = {
 
 export const UserDataContextProvider = ({ children }) => {
   const { user } = useAuthContext();
-  const { screenSize, setFixedSize } = useScreenSizeContext();
+  const { screenSize, setFixedSize, fixedSize } = useScreenSizeContext();
   const { document, isPending, error } = useOnSnapshotDocument(
     'users',
     user.uid
@@ -27,23 +27,27 @@ export const UserDataContextProvider = ({ children }) => {
     setFixedSize(null);
   }, [setFixedSize]);
 
-  const toggleModal = useCallback(
-    (event, modalName) => {
-      if (event !== null) event.stopPropagation();
-      // check for notifcation/search => is is open and screens size grater then small set to fix size to midium
-      let openFlag = false;
-      setModals(oldValue => {
-        if (modalName === 'openNotifications' || modalName === 'openSearch') {
-          openFlag = !oldValue[modalName];
-        }
-        return { ...initialModalState, [modalName]: !oldValue[modalName] };
-      });
-      openFlag && screenSize === 'large'
-        ? setFixedSize('medium')
-        : setFixedSize(null);
-    },
-    [screenSize, setFixedSize]
-  );
+  useEffect(() => {
+    if (screenSize !== 'large') return;
+    if (modals.openSearch || modals.openNotifications) setFixedSize('medium');
+    if (!modals.openSearch && !modals.openNotifications && fixedSize)
+      setFixedSize(null);
+  }, [
+    modals.openSearch,
+    modals.openNotifications,
+    screenSize,
+    setFixedSize,
+    fixedSize,
+  ]);
+
+  const toggleModal = useCallback((event, modalName) => {
+    if (event !== null) event.stopPropagation();
+    // check for notifcation/search => is is open and screens size grater then small set to fix size to midium
+    setModals(oldValue => ({
+      ...initialModalState,
+      [modalName]: !oldValue[modalName],
+    }));
+  }, []);
   //
   useEffect(() => {
     const closeModalsOnEscape = e => {

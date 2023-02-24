@@ -1,4 +1,4 @@
-import { useSearchUsers } from '../../../hooks/useSearchUsers';
+import { useRecentSearch } from '../../../hooks/useRecentSearch';
 // components
 import SearchUserCard from './SearchUserCard';
 // styles
@@ -10,7 +10,7 @@ const SearchResults = ({
   setModifyRecentSearch,
   isHeader,
 }) => {
-  const { clearRecentSearch } = useSearchUsers();
+  const { clearRecentSearch } = useRecentSearch();
 
   const handleClearRecentSearch = async () => {
     try {

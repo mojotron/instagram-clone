@@ -7,7 +7,7 @@ const filesCheck = fileList => {
   // file size
   [...fileList].forEach(file => {
     if (file.size > MAX_IMAGE_SIZE)
-      throw new Error('File size to big, limit 5MB');
+      throw new Error('File size to big, limit 2MB');
   });
   return true;
 };

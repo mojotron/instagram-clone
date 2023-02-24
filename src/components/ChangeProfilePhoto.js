@@ -10,8 +10,8 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
   const handleUploadFile = e => {
     setUploadError(null);
     const file = e.target.files[0];
-    if (file.size > 2000000) {
-      setUploadError('File is to big (limit 2MB)');
+    if (file.size > 500000) {
+      setUploadError('File is to big (limit 500KB)');
       e.target.value = '';
       return;
     }
@@ -35,12 +35,7 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
         <h2>Change Profile Photo</h2>
 
         <form onSubmit={handleSubmit}>
-          <input
-            data-testid="file-input"
-            type="file"
-            onChange={handleUploadFile}
-            accept="image/*"
-          />
+          <input type="file" onChange={handleUploadFile} accept="image/*" />
           {uploadError && (
             <p className="ChangeProfilePhoto__error">{uploadError}</p>
           )}

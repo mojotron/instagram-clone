@@ -1,15 +1,18 @@
+// hooks
 import { useState, useEffect } from 'react';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useFirestore } from '../../hooks/useFirestore';
+import { useSearchUsers } from '../../hooks/useSearchUsers';
+// components
 import Avatar from '../../components/Avatar';
 import ChangeProfilePhoto from '../../components/ChangeProfilePhoto';
+// styles
 import './styles/Settings.css';
-
+// utils
 import {
   fullNameValidation,
   userNameValidation,
 } from '../../utils/inputValidation';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
-import { useFirestore } from '../../hooks/useFirestore';
-import { useSearchUsers } from '../../hooks/useSearchUsers';
 
 const Settings = () => {
   const { createDocWithCustomID, deleteDocument, documentExist } =

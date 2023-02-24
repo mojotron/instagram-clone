@@ -64,7 +64,6 @@ const FileUploadForm = () => {
       />
       <form className="FileUploadForm" onDragEnter={handleDrag}>
         <input
-          data-testid="file-input"
           ref={inputRef}
           type="file"
           accept="image/*"

@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const Navbar = ({ direction }) => {
-  const { response, toggleModal } = useUserDataContext();
+  const { response, toggleModal, closeModals } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
 
