@@ -20,10 +20,29 @@ import Footer from './components/Footer';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
+import { useRef, useEffect } from 'react';
+import { useCollectTimeLinePosts } from '../../hooks/useCollectTimeLinePosts';
 
 const Dashboard = () => {
   const { response, modals, closeModals } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
+  const containerRef = useRef();
+
+  const { documents, nextDocuments, firstDocuments } =
+    useCollectTimeLinePosts();
+
+  useEffect(() => {
+    console.log('useEffect dasboard');
+    firstDocuments();
+  }, [firstDocuments]);
+
+  const handleScroll = () => {
+    const triggerHeight =
+      containerRef.current.offsetHeight + containerRef.current.scrollTop;
+    if (triggerHeight >= containerRef.current.scrollHeight - 1) {
+      nextDocuments();
+    }
+  };
 
   return (
     <div
@@ -45,13 +64,17 @@ const Dashboard = () => {
 
           {screenSize === 'small' && <Header />}
 
-          <div className="Dashboard__content">
+          <div
+            className="Dashboard__content"
+            ref={containerRef}
+            onScroll={handleScroll}
+          >
             <Routes>
               <Route
                 path="/"
                 element={
                   <>
-                    <TimeLine />
+                    <TimeLine documents={documents} />
                     {screenSize === 'large' && <SuggestedUsers />}
                   </>
                 }

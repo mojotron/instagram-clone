@@ -6,3 +6,4 @@ and maximum number of replies on comment is 3.
 This project is for learning purposes!
 Thank you for inspecting my project!
 `;
+export const TIMELINE_POST_LIMIT = 3;
