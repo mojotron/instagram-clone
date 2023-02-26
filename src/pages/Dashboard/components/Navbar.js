@@ -16,10 +16,11 @@ import { useNavigate } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const Navbar = ({ direction }) => {
-  const { response, toggleModal } = useUserDataContext();
+  const { response, toggleModal, navigationTab, setNavigationTab } =
+    useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('home'); // home, explore, messages or profile
+  // const [activeTab, setActiveTab] = useState('home'); // home, explore, messages or profile
 
   const rowStyle = {
     flexDirection: direction,
@@ -35,7 +36,7 @@ const Navbar = ({ direction }) => {
       <ul style={direction === 'row' ? rowStyle : columnStyle}>
         <NavbarItem
           icon={
-            activeTab === 'home' ? (
+            navigationTab === 'home' ? (
               <AiFillHome size={25} />
             ) : (
               <AiOutlineHome size={25} />
@@ -43,7 +44,7 @@ const Navbar = ({ direction }) => {
           }
           link="/"
           headings="Home"
-          handleClick={() => setActiveTab('home')}
+          handleClick={() => setNavigationTab('home')}
         />
         {screenSize !== 'small' && (
           <NavbarItem
@@ -55,7 +56,7 @@ const Navbar = ({ direction }) => {
         )}
         <NavbarItem
           icon={
-            activeTab === 'explore' ? (
+            navigationTab === 'explore' ? (
               <MdExplore size={25} />
             ) : (
               <MdOutlineExplore size={25} />
@@ -63,11 +64,11 @@ const Navbar = ({ direction }) => {
           }
           link="/explore"
           headings="Explore"
-          handleClick={() => setActiveTab('explore')}
+          handleClick={() => setNavigationTab('explore')}
         />
         <NavbarItem
           icon={
-            activeTab === 'messages' ? (
+            navigationTab === 'messages' ? (
               <RiSendPlaneFill size={25} />
             ) : (
               <FiSend size={25} />
@@ -75,7 +76,7 @@ const Navbar = ({ direction }) => {
           }
           link="/direct"
           headings="Messages"
-          handleClick={() => setActiveTab('messages')}
+          handleClick={() => setNavigationTab('messages')}
         />
         {screenSize !== 'small' && (
           <div className="Navbar__item-wrapper">
@@ -103,7 +104,7 @@ const Navbar = ({ direction }) => {
             <Avatar
               url={response.document.avatar.url}
               size={25}
-              activeBorder={activeTab === 'profile'}
+              activeBorder={navigationTab === 'profile'}
             />
           }
           link={null}
@@ -112,7 +113,7 @@ const Navbar = ({ direction }) => {
             navigate(`/${response.document.userName}`, {
               state: { activeTab: 'posts' },
             });
-            setActiveTab('profile');
+            setNavigationTab('profile');
           }}
         />
       </ul>

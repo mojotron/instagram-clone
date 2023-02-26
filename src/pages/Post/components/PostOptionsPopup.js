@@ -38,7 +38,7 @@ const PostOptionsPopup = ({
     handleClose();
     toggleModal(null, 'openCreatePost');
     if (type === 'regular') navigate(-1);
-    await deletePost(postData.id);
+    await deletePost(postData.id, postData.images);
   };
 
   return (

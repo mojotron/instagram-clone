@@ -4,6 +4,7 @@ import { useUserDataContext } from './useUserDataContext';
 import { useFirestore } from './useFirestore';
 import { useNotifications } from './useNotifications';
 import { Timestamp } from 'firebase/firestore';
+import { useStorage } from './useStorage';
 
 export const usePost = () => {
   const { response } = useUserDataContext();
@@ -11,6 +12,7 @@ export const usePost = () => {
     useFirestore('posts');
   const { updateDocument: updateUserDoc } = useFirestore('users');
   const { addNotification, mentionUserNotification } = useNotifications();
+  const { remove } = useStorage();
 
   const toggleDisableLikes = useCallback(
     async (currentValue, postDocId) => {
@@ -37,19 +39,21 @@ export const usePost = () => {
   );
 
   const deletePost = useCallback(
-    async postDocId => {
-      console.log('delete post', postDocId);
+    async (postDocId, postImages) => {
+      console.log('delete post', postImages);
       try {
         const updatePosts = response.document.posts.filter(
           post => post !== postDocId
         );
         await updateUserDoc(response.document.id, { posts: updatePosts });
         await deleteDocument(postDocId);
+        // delete post images from storage
+        await Promise.all(postImages.map(img => remove(img.fileName)));
       } catch (error) {
         console.log(error);
       }
     },
-    [response, deleteDocument, updateUserDoc]
+    [response, deleteDocument, updateUserDoc, remove]
   );
 
   const editPost = useCallback(

@@ -19,7 +19,7 @@ export const UserDataContextProvider = ({ children }) => {
     'users',
     user.uid
   );
-  // TEST close modals
+  // modals
   const [modals, setModals] = useState({ ...initialModalState });
   // close all modals
   const closeModals = useCallback(() => {
@@ -59,6 +59,9 @@ export const UserDataContextProvider = ({ children }) => {
     return () => window.removeEventListener('keydown', closeModalsOnEscape);
   }, [closeModals]);
 
+  // navigation tab (values => home, explore, messages, profile)
+  const [navigationTab, setNavigationTab] = useState('home');
+
   if (!document?.online.status) return;
 
   return (
@@ -68,6 +71,8 @@ export const UserDataContextProvider = ({ children }) => {
         modals,
         closeModals,
         toggleModal,
+        navigationTab,
+        setNavigationTab,
       }}
     >
       {children}

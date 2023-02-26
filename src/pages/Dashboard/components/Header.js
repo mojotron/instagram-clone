@@ -14,7 +14,7 @@ import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 
 const Header = () => {
-  const { response, toggleModal } = useUserDataContext();
+  const { response, toggleModal, setNavigationTab } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const {
     searchTerm,
@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <header className="Header">
       <div className="Header__left">
-        <Link to="/">
+        <Link to="/" onClick={() => setNavigationTab('home')}>
           <h1>Instagram Clone</h1>
         </Link>
       </div>

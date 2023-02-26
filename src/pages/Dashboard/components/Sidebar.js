@@ -15,7 +15,7 @@ import Search from './Search';
 
 const Sidebar = () => {
   const { screenSize, fixedSize } = useScreenSizeContext();
-  const { modals, toggleModal } = useUserDataContext();
+  const { modals, toggleModal, setNavigationTab } = useUserDataContext();
 
   return (
     <div
@@ -24,7 +24,7 @@ const Sidebar = () => {
         width: screenSize === 'large' && !fixedSize ? '240px' : '85px',
       }}
     >
-      <Link to="/">
+      <Link to="/" onClick={() => setNavigationTab('home')}>
         <header className="Sidebar__header">
           {screenSize === 'large' && !fixedSize && !modals.openSearch ? (
             <h1>Instagram Clone</h1>
