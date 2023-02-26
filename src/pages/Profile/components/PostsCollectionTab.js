@@ -14,6 +14,8 @@ const PostsCollectionTab = ({ collectionType, targetData }) => {
     'posts'
   );
 
+  console.log('docs', documents);
+
   return (
     <div className="ProfileCollectionTab">
       {isPending && <p>Loading...</p>}

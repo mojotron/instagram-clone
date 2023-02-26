@@ -28,7 +28,7 @@ const Dashboard = () => {
   const { screenSize } = useScreenSizeContext();
   const containerRef = useRef();
 
-  const { documents, nextDocuments, firstDocuments } =
+  const { documents, isPending, error, nextDocuments, firstDocuments } =
     useCollectTimeLinePosts();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Dashboard = () => {
   const handleScroll = () => {
     const triggerHeight =
       containerRef.current.offsetHeight + containerRef.current.scrollTop;
-    if (triggerHeight >= containerRef.current.scrollHeight - 1) {
+    if (triggerHeight >= containerRef.current.scrollHeight - 100) {
       nextDocuments();
     }
   };
@@ -74,7 +74,11 @@ const Dashboard = () => {
                 path="/"
                 element={
                   <>
-                    <TimeLine documents={documents} />
+                    <TimeLine
+                      documents={documents}
+                      isPending={isPending}
+                      error={error}
+                    />
                     {screenSize === 'large' && <SuggestedUsers />}
                   </>
                 }

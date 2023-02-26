@@ -18,7 +18,7 @@ const PostOptionsPopup = ({
   // type => regular or timeline
   const { follow, unfollow } = useFollow();
   const { toggleDisableLikes, toggleDisableComments, deletePost } = usePost();
-  const { response } = useUserDataContext();
+  const { response, toggleModal } = useUserDataContext();
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(null);
@@ -35,8 +35,10 @@ const PostOptionsPopup = ({
   }, [owner, postData, response, isFollowing]);
 
   const handleDeletePostClick = async () => {
+    handleClose();
+    toggleModal(null, 'openCreatePost');
+    if (type === 'regular') navigate(-1);
     await deletePost(postData.id);
-    if (type === 'regular') navigate(`/${postData.creator.userName}`);
   };
 
   return (

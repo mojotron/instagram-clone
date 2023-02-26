@@ -38,12 +38,13 @@ export const usePost = () => {
 
   const deletePost = useCallback(
     async postDocId => {
+      console.log('delete post', postDocId);
       try {
-        await deleteDocument(postDocId);
         const updatePosts = response.document.posts.filter(
           post => post !== postDocId
         );
         await updateUserDoc(response.document.id, { posts: updatePosts });
+        await deleteDocument(postDocId);
       } catch (error) {
         console.log(error);
       }

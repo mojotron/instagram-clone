@@ -13,3 +13,6 @@
   height: inherit;
   object-fit: fill;
 }
+.Avatar--active-border {
+  border: 3px solid var(--black);
+}

@@ -23,8 +23,6 @@ export const useCollectTimeLinePosts = () => {
   const [documents, setDocuments] = useState(null);
   const [lastVisible, setLastVisible] = useState(null);
 
-  console.log(lastVisible);
-
   const firstDocuments = useCallback(async () => {
     console.log('first call');
     setIsPending(true);
@@ -74,7 +72,10 @@ export const useCollectTimeLinePosts = () => {
         limit(TIMELINE_POST_LIMIT)
       );
       const documentSnapshots = await getDocs(q);
-      // TODO check for empty
+      if (documentSnapshots.docs.length === 0) {
+        setIsPending(false);
+        return;
+      } // ???
       const documents = documentSnapshots.docs.map(ele => ({
         ...ele.data(),
         id: ele.id,

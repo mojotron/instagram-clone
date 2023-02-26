@@ -1,6 +1,6 @@
 import TimeLinePost from '../../Post/TimeLinePost';
 
-const TimeLine = ({ documents }) => {
+const TimeLine = ({ documents, isPending, error }) => {
   return (
     <div
       className="TimeLine"
@@ -10,6 +10,9 @@ const TimeLine = ({ documents }) => {
     >
       {documents &&
         documents.map((post, i) => <TimeLinePost key={i} postData={post} />)}
+
+      {isPending && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
     </div>
   );
 };

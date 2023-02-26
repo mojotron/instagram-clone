@@ -1,12 +1,19 @@
 .Explore {
   padding: 2rem 1rem;
-}
-.Explore__posts {
-  width: 80vw;
-  height: 90vh;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
   overflow-y: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.Explore__posts {
+  width: 100%;
+  height: 100%;
+  max-width: 100rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }

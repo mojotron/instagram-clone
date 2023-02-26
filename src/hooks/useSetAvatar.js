@@ -1,11 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
 // hooks
+import { useState, useEffect, useCallback } from 'react';
 import { useStorage } from './useStorage';
 import { useUserDataContext } from './useUserDataContext';
+import { useFirestore } from './useFirestore';
 
 export const useSetAvatar = () => {
-  const { response, updateDocument } = useUserDataContext();
-  // const {} = useFirestore();
+  const { response } = useUserDataContext();
+  const { updateDocument } = useFirestore('users');
   const { upload, remove } = useStorage();
 
   const [isCancelled, setIsCancelled] = useState(false);
@@ -18,7 +19,7 @@ export const useSetAvatar = () => {
       setError(null);
       try {
         // clean old image if there is one
-        if (response.document.avatarUrl !== '') {
+        if (response.document.avatar.url !== '') {
           await remove(response.document.avatar.fileName);
         }
         const snapshot = await upload('avatars', file);

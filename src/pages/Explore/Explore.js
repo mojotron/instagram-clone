@@ -34,12 +34,8 @@ const Explore = () => {
   };
 
   return (
-    <div className="Explore">
-      <div
-        ref={containerRef}
-        className="Explore__posts"
-        onScroll={handleScroll}
-      >
+    <div className="Explore" ref={containerRef} onScroll={handleScroll}>
+      <div className="Explore__posts">
         {posts.map(post => (
           <PostCard key={post.id} data={post} dimensions={post.dimensions} />
         ))}

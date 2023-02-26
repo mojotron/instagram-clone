@@ -1,12 +1,14 @@
+import { useState } from 'react';
 // components
 import Avatar from '../../../components/Avatar';
 import NavbarItem from './NavbarItem';
 // icon images
 import { BsSearch } from 'react-icons/bs';
 import { FiSend } from 'react-icons/fi';
-import { MdOutlineExplore } from 'react-icons/md';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { CgHome, CgAddR } from 'react-icons/cg';
+import { MdExplore, MdOutlineExplore } from 'react-icons/md';
+import { CgAddR } from 'react-icons/cg';
+import { RiSendPlaneFill } from 'react-icons/ri';
+import { AiOutlineHome, AiFillHome, AiOutlineHeart } from 'react-icons/ai';
 // style
 import './styles/Navbar.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
@@ -14,9 +16,10 @@ import { useNavigate } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const Navbar = ({ direction }) => {
-  const { response, toggleModal, closeModals } = useUserDataContext();
+  const { response, toggleModal } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('home'); // home, explore, messages or profile
 
   const rowStyle = {
     flexDirection: direction,
@@ -31,10 +34,16 @@ const Navbar = ({ direction }) => {
     <nav className="Navbar">
       <ul style={direction === 'row' ? rowStyle : columnStyle}>
         <NavbarItem
-          icon={<CgHome size={25} />}
+          icon={
+            activeTab === 'home' ? (
+              <AiFillHome size={25} />
+            ) : (
+              <AiOutlineHome size={25} />
+            )
+          }
           link="/"
           headings="Home"
-          handleClick={null}
+          handleClick={() => setActiveTab('home')}
         />
         {screenSize !== 'small' && (
           <NavbarItem
@@ -45,16 +54,28 @@ const Navbar = ({ direction }) => {
           />
         )}
         <NavbarItem
-          icon={<MdOutlineExplore size={25} />}
+          icon={
+            activeTab === 'explore' ? (
+              <MdExplore size={25} />
+            ) : (
+              <MdOutlineExplore size={25} />
+            )
+          }
           link="/explore"
           headings="Explore"
-          handleClick={null}
+          handleClick={() => setActiveTab('explore')}
         />
         <NavbarItem
-          icon={<FiSend size={25} />}
+          icon={
+            activeTab === 'messages' ? (
+              <RiSendPlaneFill size={25} />
+            ) : (
+              <FiSend size={25} />
+            )
+          }
           link="/direct"
           headings="Messages"
-          handleClick={null}
+          handleClick={() => setActiveTab('messages')}
         />
         {screenSize !== 'small' && (
           <div className="Navbar__item-wrapper">
@@ -62,7 +83,9 @@ const Navbar = ({ direction }) => {
               icon={<AiOutlineHeart size={25} />}
               link={null}
               headings="Notifications"
-              handleClick={e => toggleModal(e, 'openNotifications')}
+              handleClick={e => {
+                toggleModal(e, 'openNotifications');
+              }}
             />
             {response.document.newNotification && (
               <span className="Navbar__item-new-dot" />
@@ -76,14 +99,21 @@ const Navbar = ({ direction }) => {
           handleClick={e => toggleModal(e, 'openCreatePost')}
         />
         <NavbarItem
-          icon={<Avatar url={response.document.avatar.url} size={25} />}
+          icon={
+            <Avatar
+              url={response.document.avatar.url}
+              size={25}
+              activeBorder={activeTab === 'profile'}
+            />
+          }
           link={null}
           headings="Profile"
-          handleClick={() =>
+          handleClick={() => {
             navigate(`/${response.document.userName}`, {
               state: { activeTab: 'posts' },
-            })
-          }
+            });
+            setActiveTab('profile');
+          }}
         />
       </ul>
     </nav>

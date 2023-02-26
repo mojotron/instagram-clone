@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const NavbarItem = ({ icon, link, headings, handleClick }) => {
@@ -17,7 +17,7 @@ const NavbarItem = ({ icon, link, headings, handleClick }) => {
     </li>
   );
 
-  if (link !== null) return <NavLink to={link}>{component}</NavLink>;
+  if (link !== null) return <Link to={link}>{component}</Link>;
 
   return component;
 };
