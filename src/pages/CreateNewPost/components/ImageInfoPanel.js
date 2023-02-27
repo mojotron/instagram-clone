@@ -19,7 +19,7 @@ import expandShowIcon from '../../../images/expand-show-icon.svg';
 import expandHideIcon from '../../../images/expand-hide-icon.svg';
 
 const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
-  const { response, toggleModal } = useUserDataContext();
+  const { response } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
 
   const {

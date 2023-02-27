@@ -14,17 +14,17 @@ const PostsCollectionTab = ({ collectionType, targetData }) => {
     'posts'
   );
 
-  console.log('docs', documents);
-
   return (
     <div className="ProfileCollectionTab">
       {isPending && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
       {documents &&
-        documents.map(post => (
-          <PostCard key={post.id} data={post} dimensions={post.dimensions} />
-        ))}
+        documents
+          .reverse()
+          .map(post => (
+            <PostCard key={post.id} data={post} dimensions={post.dimensions} />
+          ))}
     </div>
   );
 };

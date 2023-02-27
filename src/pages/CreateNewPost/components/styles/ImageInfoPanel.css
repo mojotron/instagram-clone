@@ -6,8 +6,7 @@
   width: 36.7rem;
 }
 .ImageInfoPanel__info {
-  /* height: 36.7rem;
-  width: 36.7rem; */
+  height: 43.5rem;
   border-left: var(--gray-border);
   overflow: scroll;
   padding-bottom: 2rem;

@@ -24,7 +24,6 @@ export const useCollectTimeLinePosts = () => {
   const [lastVisible, setLastVisible] = useState(null);
 
   const firstDocuments = useCallback(async () => {
-    console.log('first call');
     setIsPending(true);
     setDocuments(null);
     setLastVisible(null);
@@ -75,7 +74,7 @@ export const useCollectTimeLinePosts = () => {
       if (documentSnapshots.docs.length === 0) {
         setIsPending(false);
         return;
-      } // ???
+      }
       const documents = documentSnapshots.docs.map(ele => ({
         ...ele.data(),
         id: ele.id,
