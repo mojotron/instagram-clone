@@ -1,4 +1,5 @@
 import { formatTime } from '../../../utils/formatTime';
+import { useNavigate } from 'react-router-dom';
 // components
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
@@ -7,13 +8,18 @@ import LinkfyUsernames from '../../../components/LinkfyUsernames';
 import './styles/Notification.css';
 
 const Notification = ({ fromUser, post, data }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="Notification">
       <div className="Notification__content">
         <Avatar url={fromUser.avatar.url} size={30} />
 
         <p>
-          <span className="Notification__content__username">
+          <span
+            className="Notification__content__username"
+            onClick={() => navigate(`/${fromUser.userName}`)}
+          >
             {fromUser.userName}
           </span>{' '}
           {data.content}{' '}
@@ -24,8 +30,11 @@ const Notification = ({ fromUser, post, data }) => {
         </p>
       </div>
 
-      {post && (
-        <div className="Notification__post">
+      {post?.images && (
+        <div
+          className="Notification__post"
+          onClick={() => navigate(`/p/${post.id}`)}
+        >
           <PostImage
             //display only first img and hide navigation
             imagesData={[post.images[0]]}

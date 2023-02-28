@@ -14,6 +14,9 @@
   font-size: 1.6rem;
   color: var(--black);
 }
+.Notification__content span {
+  cursor: pointer;
+}
 .Notification__content__username {
   font-weight: 700;
 }
@@ -21,6 +24,7 @@
   color: var(--gray);
 }
 .Notification__post {
+  cursor: pointer;
   height: 4.4rem;
   width: 4.4rem;
 }

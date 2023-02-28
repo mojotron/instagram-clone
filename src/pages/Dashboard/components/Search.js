@@ -17,7 +17,7 @@ const Search = () => {
   } = useSearch();
 
   return (
-    <div className="Search">
+    <div className="Search" onClick={e => e.stopPropagation()}>
       <h2>Search</h2>
       <SearchBar
         searchTerm={searchTerm}

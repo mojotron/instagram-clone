@@ -47,8 +47,8 @@ export const useNotifications = () => {
 
         await updateDocument(userID, {
           notifications: [
-            ...userNotifications.notifications,
             notificationObject,
+            ...userNotifications.notifications,
           ].slice(-20), // keep limit on notification object at last 20
         });
 

@@ -20,11 +20,9 @@ const PostsCollectionTab = ({ collectionType, targetData }) => {
       {error && <p>{error}</p>}
 
       {documents &&
-        documents
-          .reverse()
-          .map(post => (
-            <PostCard key={post.id} data={post} dimensions={post.dimensions} />
-          ))}
+        documents.map(post => (
+          <PostCard key={post.id} data={post} dimensions={post.dimensions} />
+        ))}
     </div>
   );
 };

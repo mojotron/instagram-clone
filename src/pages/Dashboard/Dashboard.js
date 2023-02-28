@@ -28,8 +28,16 @@ const Dashboard = () => {
   const { screenSize } = useScreenSizeContext();
   const containerRef = useRef();
 
-  const { documents, isPending, error, nextDocuments, firstDocuments } =
-    useCollectTimeLinePosts();
+  const {
+    documents,
+    isPending,
+    error,
+    nextDocuments,
+    firstDocuments,
+    nextCalled,
+  } = useCollectTimeLinePosts();
+
+  console.log('docs', documents);
 
   useEffect(() => {
     firstDocuments();
@@ -38,8 +46,8 @@ const Dashboard = () => {
   const handleScroll = () => {
     const triggerHeight =
       containerRef.current.offsetHeight + containerRef.current.scrollTop;
-    if (triggerHeight >= containerRef.current.scrollHeight - 100) {
-      nextDocuments();
+    if (triggerHeight >= containerRef.current.scrollHeight - 1) {
+      if (!nextCalled) nextDocuments();
     }
   };
 

@@ -62,7 +62,7 @@ const CreateNewPost = () => {
       // add document to post repo and close create post page
       const postDocRef = await addDocument(post);
       // TODO add postDocID to user.posts
-      const userPosts = [...response.document.posts, postDocRef.id];
+      const userPosts = [postDocRef.id, ...response.document.posts];
       await updateUserDoc(response.document.uid, { posts: userPosts });
       // update doc with docID for useSnapshotByIdList hook
       await updatePost(postDocRef.id, { docId: postDocRef.id });

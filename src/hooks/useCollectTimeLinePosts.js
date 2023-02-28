@@ -7,12 +7,14 @@ import {
   query,
   where,
   orderBy,
-  getDocs,
   limit,
   startAfter,
+  onSnapshot,
 } from 'firebase/firestore';
 // constant
-import { TIMELINE_POST_LIMIT } from '../constants/constants';
+// import { TIMELINE_POST_LIMIT } from '../constants/constants';
+
+const TIMELINE_POST_LIMIT = 1;
 
 export const useCollectTimeLinePosts = () => {
   const { response } = useUserDataContext();
@@ -20,13 +22,19 @@ export const useCollectTimeLinePosts = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const [listeners, setListeners] = useState([]);
   const [documents, setDocuments] = useState(null);
   const [lastVisible, setLastVisible] = useState(null);
+  const [nextCalled, setNextCalled] = useState(false);
+
+  console.log(lastVisible, nextCalled);
 
   const firstDocuments = useCallback(async () => {
+    console.log('getting first docs');
     setIsPending(true);
     setDocuments(null);
     setLastVisible(null);
+    setNextCalled(false);
     try {
       const q = query(
         collection(projectFirestore, 'posts'),
@@ -37,18 +45,22 @@ export const useCollectTimeLinePosts = () => {
         orderBy('createdAt', 'desc'),
         limit(TIMELINE_POST_LIMIT)
       );
-      const documentSnapshots = await getDocs(q);
-      const documents = documentSnapshots.docs.map(ele => ({
-        ...ele.data(),
-        id: ele.id,
-      }));
-      if (!isCancelled) {
-        setIsPending(false);
-        setDocuments(documents);
+      const listener = onSnapshot(q, documentSnapshots => {
+        const documents = documentSnapshots.docs.map(ele => ({
+          ...ele.data(),
+          id: ele.id,
+        }));
+
+        setListeners(oldValue => [...oldValue, listener]);
         setLastVisible(
           documentSnapshots.docs[documentSnapshots.docs.length - 1]
         );
-      }
+
+        if (!isCancelled) {
+          setIsPending(false);
+          setDocuments(documents);
+        }
+      });
     } catch (error) {
       if (!isCancelled) {
         setIsPending(false);
@@ -58,7 +70,9 @@ export const useCollectTimeLinePosts = () => {
   }, [response.document.following, response.document.id, isCancelled]);
 
   const nextDocuments = useCallback(async () => {
+    console.log('next');
     setIsPending(true);
+    setNextCalled(true);
     try {
       const q = query(
         collection(projectFirestore, 'posts'),
@@ -70,23 +84,29 @@ export const useCollectTimeLinePosts = () => {
         startAfter(lastVisible),
         limit(TIMELINE_POST_LIMIT)
       );
-      const documentSnapshots = await getDocs(q);
-      if (documentSnapshots.docs.length === 0) {
-        setIsPending(false);
-        return;
-      }
-      const documents = documentSnapshots.docs.map(ele => ({
-        ...ele.data(),
-        id: ele.id,
-      }));
-      if (!isCancelled) {
-        setIsPending(false);
-        setDocuments(oldValue => [...oldValue, ...documents]);
+      const listener = onSnapshot(q, documentSnapshots => {
+        if (documentSnapshots.docs.length === 0) {
+          setIsPending(false);
+          return;
+        }
+        const documents = documentSnapshots.docs.map(ele => ({
+          ...ele.data(),
+          id: ele.id,
+        }));
+
+        setListeners(oldValue => [...oldValue, listener]);
         setLastVisible(
           documentSnapshots.docs[documentSnapshots.docs.length - 1]
         );
-      }
+        setNextCalled(false);
+
+        if (!isCancelled) {
+          setIsPending(false);
+          setDocuments(oldValue => [...oldValue, ...documents]);
+        }
+      });
     } catch (error) {
+      setNextCalled(false);
       if (!isCancelled) {
         setIsPending(false);
         setError('Network error, please try later!');
@@ -100,8 +120,16 @@ export const useCollectTimeLinePosts = () => {
   ]);
 
   useEffect(() => {
-    return () => setIsCancelled(true);
+    return () => {
+      setIsCancelled(true);
+      setNextCalled(false);
+    };
   }, []);
+
+  useEffect(() => {
+    return () => listeners.forEach(listener => listener());
+  }, [listeners]);
+
   // OLD way => for legacy
   // useEffect(() => {
   //   setIsPending(true);
@@ -138,5 +166,12 @@ export const useCollectTimeLinePosts = () => {
   //   return () => unsubscribe();
   // }, [response]);
 
-  return { documents, isPending, error, nextDocuments, firstDocuments };
+  return {
+    documents,
+    isPending,
+    error,
+    nextDocuments,
+    firstDocuments,
+    nextCalled,
+  };
 };

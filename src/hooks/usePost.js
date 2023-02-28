@@ -112,7 +112,7 @@ export const usePost = () => {
             post => post !== postDocId
           );
         } else {
-          updatedSavedPosts = [...response.document.savedPosts, postDocId];
+          updatedSavedPosts = [postDocId, ...response.document.savedPosts];
         }
 
         await updateUserDoc(response.document.id, {

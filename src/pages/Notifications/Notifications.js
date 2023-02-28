@@ -71,7 +71,7 @@ const Notifications = ({ toggleNotifications }) => {
 
       {document && (
         <section>
-          {document.notifications.reverse().map(note => (
+          {document.notifications.map(note => (
             <Notification
               key={note.createdAt.seconds}
               data={note}
