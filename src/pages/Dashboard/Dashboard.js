@@ -37,8 +37,6 @@ const Dashboard = () => {
     nextCalled,
   } = useCollectTimeLinePosts();
 
-  console.log('docs', documents);
-
   useEffect(() => {
     firstDocuments();
   }, [firstDocuments]);

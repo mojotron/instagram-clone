@@ -1,20 +1,17 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useUserDataContext } from './useUserDataContext';
-// firebase
 import { projectFirestore } from '../firebase/config';
 import {
   collection,
   query,
   where,
-  orderBy,
-  limit,
-  startAfter,
   onSnapshot,
+  limit,
+  orderBy,
+  startAfter,
 } from 'firebase/firestore';
-// constant
-// import { TIMELINE_POST_LIMIT } from '../constants/constants';
 
-const TIMELINE_POST_LIMIT = 1;
+const TIMELINE_POST_LIMIT = 2;
 
 export const useCollectTimeLinePosts = () => {
   const { response } = useUserDataContext();
@@ -23,14 +20,16 @@ export const useCollectTimeLinePosts = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [listeners, setListeners] = useState([]);
-  const [documents, setDocuments] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [nextCalled, setNextCalled] = useState(false);
 
-  console.log(lastVisible, nextCalled);
+  console.log('listeners', listeners);
 
   const firstDocuments = useCallback(async () => {
     console.log('getting first docs');
+    setListeners([]);
+    setDocuments([]);
     setIsPending(true);
     setDocuments(null);
     setLastVisible(null);
@@ -45,20 +44,53 @@ export const useCollectTimeLinePosts = () => {
         orderBy('createdAt', 'desc'),
         limit(TIMELINE_POST_LIMIT)
       );
+      let obj;
+
       const listener = onSnapshot(q, documentSnapshots => {
-        const documents = documentSnapshots.docs.map(ele => ({
-          ...ele.data(),
-          id: ele.id,
-        }));
+        const docs = {
+          added: [],
+          modified: [],
+          removed: [],
+        };
+        documentSnapshots.docChanges().forEach(change => {
+          const current = { ...change.doc.data(), id: change.doc.id };
+          if (change.type === 'added') {
+            docs.added.push(current);
+          }
+          if (change.type === 'modified') {
+            console.log('modified');
+            docs.modified.push(current);
+          }
+          if (change.type === 'removed') {
+            docs.removed.push(current);
+          }
+        });
+        obj = docs;
 
-        setListeners(oldValue => [...oldValue, listener]);
-        setLastVisible(
-          documentSnapshots.docs[documentSnapshots.docs.length - 1]
-        );
-
+        console.log(obj);
         if (!isCancelled) {
           setIsPending(false);
-          setDocuments(documents);
+          setDocuments(oldValue => {
+            if (!oldValue) return [...obj.added];
+            console.log('oldValue is', oldValue);
+            let updated = [...oldValue];
+            obj.modified.forEach(ele => {
+              updated = updated.map(doc => (doc.id === ele.id ? ele : doc));
+            });
+            obj.removed.forEach(ele => {
+              updated = updated.filter(doc => doc.id !== ele.id);
+            });
+
+            return [...updated, ...obj.added];
+          });
+
+          if (obj.added.length > 0) {
+            setListeners(oldValue => [...oldValue, listener]);
+          }
+
+          setLastVisible(
+            documentSnapshots.docs[documentSnapshots.docs.length - 1]
+          );
         }
       });
     } catch (error) {
@@ -84,25 +116,53 @@ export const useCollectTimeLinePosts = () => {
         startAfter(lastVisible),
         limit(TIMELINE_POST_LIMIT)
       );
+      let obj;
       const listener = onSnapshot(q, documentSnapshots => {
-        if (documentSnapshots.docs.length === 0) {
-          setIsPending(false);
-          return;
-        }
-        const documents = documentSnapshots.docs.map(ele => ({
-          ...ele.data(),
-          id: ele.id,
-        }));
+        if (documentSnapshots.docs.length < 1) return;
+        const docs = {
+          added: [],
+          modified: [],
+          removed: [],
+        };
+        documentSnapshots.docChanges().forEach(change => {
+          const current = { ...change.doc.data(), id: change.doc.id };
+          if (change.type === 'added') {
+            docs.added.push(current);
+          }
+          if (change.type === 'modified') {
+            console.log('modified');
+            docs.modified.push(current);
+          }
+          if (change.type === 'removed') {
+            docs.removed.push(current);
+          }
+        });
+        obj = docs;
 
-        setListeners(oldValue => [...oldValue, listener]);
-        setLastVisible(
-          documentSnapshots.docs[documentSnapshots.docs.length - 1]
-        );
-        setNextCalled(false);
-
+        console.log(obj);
         if (!isCancelled) {
           setIsPending(false);
-          setDocuments(oldValue => [...oldValue, ...documents]);
+          setDocuments(oldValue => {
+            if (!oldValue) return [...obj.added];
+            console.log('oldValue is', oldValue);
+            let updated = [...oldValue];
+            obj.modified.forEach(ele => {
+              updated = updated.map(doc => (doc.id === ele.id ? ele : doc));
+            });
+            obj.removed.forEach(ele => {
+              updated = updated.filter(doc => doc.id !== ele.id);
+            });
+
+            return [...updated, ...obj.added];
+          });
+
+          if (obj.added.length > 0) {
+            setListeners(oldValue => [...oldValue, listener]);
+          }
+
+          setLastVisible(
+            documentSnapshots.docs[documentSnapshots.docs.length - 1]
+          );
         }
       });
     } catch (error) {
@@ -121,6 +181,7 @@ export const useCollectTimeLinePosts = () => {
 
   useEffect(() => {
     return () => {
+      console.log('unmount');
       setIsCancelled(true);
       setNextCalled(false);
     };
