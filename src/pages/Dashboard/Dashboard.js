@@ -20,32 +20,23 @@ import Footer from './components/Footer';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
-import { useRef, useEffect } from 'react';
-import { useCollectTimeLinePosts } from '../../hooks/useCollectTimeLinePosts';
+import { useRef, useEffect, useState } from 'react';
+import { useTimelinePosts } from '../../hooks/useTimelinePosts';
 
 const Dashboard = () => {
   const { response, modals, closeModals } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const containerRef = useRef();
 
-  const {
-    documents,
-    isPending,
-    error,
-    nextDocuments,
-    firstDocuments,
-    nextCalled,
-  } = useCollectTimeLinePosts();
-
-  useEffect(() => {
-    firstDocuments();
-  }, [firstDocuments]);
+  const { posts, getNextPosts } = useTimelinePosts();
 
   const handleScroll = () => {
     const triggerHeight =
       containerRef.current.offsetHeight + containerRef.current.scrollTop;
     if (triggerHeight >= containerRef.current.scrollHeight - 1) {
-      if (!nextCalled) nextDocuments();
+      console.log('scroll');
+      getNextPosts();
+      console.log('...hmmm');
     }
   };
 
@@ -80,9 +71,10 @@ const Dashboard = () => {
                 element={
                   <>
                     <TimeLine
-                      documents={documents}
-                      isPending={isPending}
-                      error={error}
+                      posts={posts}
+                      //documents={documents}
+                      //isPending={isPending}
+                      //error={error}
                     />
                     {screenSize === 'large' && <SuggestedUsers />}
                   </>

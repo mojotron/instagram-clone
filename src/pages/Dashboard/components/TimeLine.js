@@ -1,6 +1,7 @@
 import TimeLinePost from '../../Post/TimeLinePost';
 
-const TimeLine = ({ documents, isPending, error }) => {
+const TimeLine = ({ posts, isPending, error }) => {
+  console.log('post got', posts);
   return (
     <div
       className="Timeline"
@@ -8,7 +9,7 @@ const TimeLine = ({ documents, isPending, error }) => {
         padding: '2rem 0',
       }}
     >
-      {documents?.length === 0 && !error && (
+      {posts?.length === 0 && !error && (
         <div className="welcome">
           <h3>Welcome to Instagram Clone</h3>
           <p>
@@ -27,8 +28,7 @@ const TimeLine = ({ documents, isPending, error }) => {
           <p>Have fun and thank you for inspecting this project.</p>
         </div>
       )}
-      {documents &&
-        documents.map((post, i) => <TimeLinePost key={i} postData={post} />)}
+      {posts && posts.map((post, i) => <TimeLinePost key={i} postId={post} />)}
 
       {isPending && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}

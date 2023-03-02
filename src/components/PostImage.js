@@ -12,6 +12,7 @@ const PostImage = ({ imagesData, dimensions, getImageIndex }) => {
     getImageIndex(currentIndex);
   }, [currentIndex, getImageIndex]);
 
+  if (!imagesData) return;
   return (
     <div className="PostImage">
       <ImageNavigation

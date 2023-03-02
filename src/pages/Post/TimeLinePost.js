@@ -8,9 +8,13 @@ import TimeLinePostCommentsList from './components/TimeLinePostCommentsList';
 import './styles/TimeLinePost.css';
 //hooks
 import { useNavigate } from 'react-router-dom';
+import { useOnSnapshotDocument } from '../../hooks/useOnSnapshotDocument';
 
-const TimeLinePost = ({ postData }) => {
+const TimeLinePost = ({ postId }) => {
+  const { document: postData } = useOnSnapshotDocument('posts', postId);
   const navigate = useNavigate();
+
+  if (!postData || !postData.uid) return;
 
   return (
     <div className="TimeLinePost">
