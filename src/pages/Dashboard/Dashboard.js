@@ -1,7 +1,9 @@
 // hooks
+import { useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
+import { useTimelinePosts } from '../../hooks/useTimelinePosts';
 // components
 import Header from './components/Header';
 import Settings from '../Settings/Settings';
@@ -20,23 +22,19 @@ import Footer from './components/Footer';
 import './styles/Dashboard.css';
 // context provider
 import { UserPostContextProvider } from '../../context/UserPostContext';
-import { useRef, useEffect, useState } from 'react';
-import { useTimelinePosts } from '../../hooks/useTimelinePosts';
 
 const Dashboard = () => {
   const { response, modals, closeModals } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const containerRef = useRef();
 
-  const { posts, getNextPosts } = useTimelinePosts();
+  const { posts, error, isFetching, getNextPosts } = useTimelinePosts();
 
   const handleScroll = () => {
     const triggerHeight =
       containerRef.current.offsetHeight + containerRef.current.scrollTop;
     if (triggerHeight >= containerRef.current.scrollHeight - 1) {
-      console.log('scroll');
       getNextPosts();
-      console.log('...hmmm');
     }
   };
 
@@ -72,9 +70,8 @@ const Dashboard = () => {
                   <>
                     <TimeLine
                       posts={posts}
-                      //documents={documents}
-                      //isPending={isPending}
-                      //error={error}
+                      isFetching={isFetching}
+                      error={error}
                     />
                     {screenSize === 'large' && <SuggestedUsers />}
                   </>

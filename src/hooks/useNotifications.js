@@ -49,7 +49,7 @@ export const useNotifications = () => {
           notifications: [
             notificationObject,
             ...userNotifications.notifications,
-          ].slice(-20), // keep limit on notification object at last 20
+          ].slice(0, 19), // keep limit on notification object at last 20
         });
 
         await updateUserDoc(userID, { newNotification: true });

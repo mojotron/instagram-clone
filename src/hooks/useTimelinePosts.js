@@ -7,7 +7,6 @@ import {
   query,
   startAfter,
   where,
-  startAt,
 } from 'firebase/firestore';
 import { useState, useCallback, useEffect } from 'react';
 import { useUserDataContext } from './useUserDataContext';
@@ -58,10 +57,17 @@ export const useTimelinePosts = () => {
 
       setLastDocument(last);
       setIsFetching(false);
+      setEndOfDocuments(false);
       if (!isCancelled) {
         setPosts(result);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+      if (!isCancelled) {
+        setError(error.message);
+        setIsFetching(false);
+      }
+    }
   }, [isCancelled, response.document.following, response.document.id]);
 
   const getNextPosts = useCallback(async () => {
@@ -98,7 +104,7 @@ export const useTimelinePosts = () => {
         last = doc;
       });
 
-      console.log('moredocs', result);
+      console.log('more docs', result);
 
       setLastDocument(last);
       setIsFetching(false);
@@ -108,6 +114,10 @@ export const useTimelinePosts = () => {
       }
     } catch (error) {
       console.log(error.message);
+      if (!isCancelled) {
+        setError(error.message);
+        setIsFetching(false);
+      }
     }
   }, [
     isFetching,
@@ -127,5 +137,5 @@ export const useTimelinePosts = () => {
     return () => setIsCancelled(false);
   }, []);
 
-  return { posts, getNextPosts };
+  return { posts, error, isFetching, getNextPosts };
 };

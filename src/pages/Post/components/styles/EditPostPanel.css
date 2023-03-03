@@ -1,10 +1,6 @@
 .EditPostPanel {
-  width: 100vw;
-  max-width: 90rem;
-  min-width: 30rem;
   background-color: white;
   border-radius: 1rem;
-  overflow: hidden;
 }
 .EditPostPanel__header {
   padding: 0 1.5rem;
@@ -22,7 +18,7 @@
 }
 .EditPostPanel__body {
   display: flex;
-  height: 35rem;
+  height: 43.5rem;
   width: 100%;
 }
 .EditPostPanel__body__image {
@@ -32,27 +28,31 @@
   justify-content: center;
   align-items: center;
 }
-.EditPostPanel__body__image__container {
-  width: inherit;
-  height: inherit;
-}
 .EditPostPanel__body__edit {
-  width: 50%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   border-left: var(--gray-border);
   overflow: hidden;
   overflow-y: scroll;
 }
 .EditPostPanel__body__edit__header {
-  padding: 2rem 1.5rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
+}
+.EditPostPanel__body__edit__header h2 {
+  color: var(--black);
+  padding-left: 1.5rem;
+  font-size: 1.6rem;
+  font-size: 700;
 }
 .EditPostPanel__body__edit__form textarea {
   resize: none;
   width: 100%;
-  height: 10rem;
+  height: 18rem;
   border: none;
-  padding: 1.5rem;
+  padding: 0 1.5rem;
   font-family: inherit;
   outline: none;
 }

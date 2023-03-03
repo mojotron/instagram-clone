@@ -80,15 +80,29 @@ const EditPostPanel = ({ postData, closeHandler }) => {
         {/* TODO screen size on body and img container */}
         <div
           className="EditPostPanel__body"
-          style={{ flexDirection: screenSize === 'small' ? 'column' : 'row' }}
+          style={
+            screenSize === 'small'
+              ? {
+                  flexDirection: 'column',
+                  height: '90vh',
+                  width: '335px',
+                  overflowY: 'scroll',
+                }
+              : { flexDirection: 'row' }
+          }
         >
-          <div className="EditPostPanel__body__image">
-            <div className="EditPostPanel__body__image__container">
-              <PostImage
-                imagesData={postData.images}
-                dimensions={postData.dimensions}
-              />
-            </div>
+          <div
+            className="EditPostPanel__body__image"
+            style={
+              screenSize === 'small'
+                ? { height: '335px', width: '335px' }
+                : { height: '435px', width: '435px' }
+            }
+          >
+            <PostImage
+              imagesData={postData.images}
+              dimensions={postData.dimensions}
+            />
           </div>
 
           <div className="EditPostPanel__body__edit">
@@ -111,6 +125,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
                 placeholder="Write a caption..."
                 autoCorrect="off"
                 ref={textareaRef}
+                style={{ height: screenSize === 'small' ? '80px' : '180px' }}
               />
 
               <div className="EditPostPanel__body__edit__form__emoji">

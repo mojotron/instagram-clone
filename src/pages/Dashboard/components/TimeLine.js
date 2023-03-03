@@ -1,6 +1,6 @@
 import TimeLinePost from '../../Post/TimeLinePost';
 
-const TimeLine = ({ posts, isPending, error }) => {
+const TimeLine = ({ posts, isFetching, error }) => {
   console.log('post got', posts);
   return (
     <div
@@ -30,7 +30,7 @@ const TimeLine = ({ posts, isPending, error }) => {
       )}
       {posts && posts.map((post, i) => <TimeLinePost key={i} postId={post} />)}
 
-      {isPending && <p>Loading...</p>}
+      {isFetching && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
     </div>
   );
