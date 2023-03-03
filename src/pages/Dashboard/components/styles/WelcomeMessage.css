@@ -1,0 +1,22 @@
+.WelcomeMessage {
+  width: 100%;
+  max-width: 500px;
+  font-size: 16px;
+  padding: 2rem;
+  text-align: center;
+}
+.WelcomeMessage h3 {
+  font-family: 'Oleo Script', 'Roboto', sans-serif;
+  color: var(--black);
+  font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.WelcomeMessage p {
+  padding-top: 1rem;
+}
+.WelcomeMessage a {
+  color: var(--blue);
+  font-weight: 600;
+}

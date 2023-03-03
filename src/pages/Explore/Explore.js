@@ -7,19 +7,19 @@ import './styles/Explore.css';
 import PostCard from '../Profile/components/PostCard';
 
 const Explore = () => {
-  const { getNextPosts } = useCollectPostsWithLimit(6);
+  const { getFirstPosts, getNextPosts } = useCollectPostsWithLimit(2);
   const [posts, setPosts] = useState([]);
   const containerRef = useRef();
 
   useEffect(() => {
     if (posts.length > 0) return;
 
-    getNextPosts().then(data => {
+    getFirstPosts().then(data => {
       if (data !== -1) {
         setPosts(data);
       }
     });
-  }, [getNextPosts, posts]);
+  }, [getFirstPosts, posts]);
 
   const handleScroll = () => {
     const triggerHeight =

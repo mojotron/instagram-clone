@@ -1,10 +1,20 @@
+// firestore
+import { projectFirestore } from '../firebase/config';
+import {
+  collection,
+  getDocs,
+  query,
+  Timestamp,
+  where,
+} from 'firebase/firestore';
+// hooks
 import { useCallback } from 'react';
-import { MAX_POST_COMMENTS_ALERT_MSG } from '../constants/constants';
 import { useUserDataContext } from './useUserDataContext';
-import { useFirestore } from './useFirestore';
 import { useNotifications } from './useNotifications';
-import { Timestamp } from 'firebase/firestore';
+import { useFirestore } from './useFirestore';
 import { useStorage } from './useStorage';
+// constants
+import { MAX_POST_COMMENTS_ALERT_MSG } from '../constants/constants';
 
 export const usePost = () => {
   const { response } = useUserDataContext();
@@ -22,6 +32,7 @@ export const usePost = () => {
         });
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [updatePostDoc]
@@ -38,6 +49,34 @@ export const usePost = () => {
     [updatePostDoc]
   );
 
+  const _cleanDeletedPost = useCallback(
+    async postDocId => {
+      try {
+        const q = query(
+          collection(projectFirestore, 'users'),
+          where('savedPosts', 'array-contains', postDocId)
+        );
+        const data = await getDocs(q);
+        const users = data.docs.map(doc => ({
+          savedPosts: doc.data().savedPosts,
+          id: doc.id,
+        }));
+
+        await Promise.all(
+          users.map(user => {
+            return updateUserDoc(user.id, {
+              savedPosts: user.savedPosts.filter(post => post !== postDocId),
+            });
+          })
+        );
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    [updateUserDoc]
+  );
+
   const deletePost = useCallback(
     async (postDocId, postImages) => {
       console.log('delete post', postImages);
@@ -49,8 +88,13 @@ export const usePost = () => {
         await deleteDocument(postDocId);
         // delete post images from storage
         await Promise.all(postImages.map(img => remove(img.fileName)));
+        // remove postId from all users that saved this post
+        // 1. find all users
+        // 2. Promise.all update user doc => filter out postDocId
+        await _cleanDeletedPost(postDocId);
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [response, deleteDocument, updateUserDoc, remove]
@@ -62,6 +106,7 @@ export const usePost = () => {
         await updatePostDoc(postDocId, { ...newData });
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [updatePostDoc]
@@ -97,6 +142,7 @@ export const usePost = () => {
         }
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [response, addNotification, updatePostDoc]
@@ -120,6 +166,7 @@ export const usePost = () => {
         });
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [response, updateUserDoc]
@@ -148,6 +195,7 @@ export const usePost = () => {
         await mentionUserNotification(userDocId, postDocId, text);
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [response, updatePostDoc, addNotification, mentionUserNotification]
@@ -160,6 +208,7 @@ export const usePost = () => {
         await updatePostDoc(postDocId, { comments: updatedComments });
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [updatePostDoc]
@@ -188,6 +237,7 @@ export const usePost = () => {
         await mentionUserNotification(userDocId, postDocId, text);
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [response, updatePostDoc, addNotification, mentionUserNotification]
@@ -208,6 +258,7 @@ export const usePost = () => {
         await updatePostDoc(postDocId, { comments: updatedComments });
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
     [updatePostDoc]

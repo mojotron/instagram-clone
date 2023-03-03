@@ -14,6 +14,33 @@ export const useCollectPostsWithLimit = postLimit => {
   const [endOfDocuments, setEndOfDocuments] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
+  const getFirstPosts = useCallback(async () => {
+    try {
+      setIsFetching(true);
+      const colRef = collection(projectFirestore, 'posts');
+      const q = query(colRef, orderBy('createdAt', 'desc'), limit(postLimit));
+      const data = await getDocs(q);
+
+      if (data.empty) {
+        setEndOfDocuments(true);
+        return -1;
+      }
+
+      const result = [];
+      let last;
+      data.docs.forEach(doc => {
+        result.push({ ...doc.data(), id: doc.id });
+        last = doc;
+      });
+      setLastDocument(last);
+      setIsFetching(false);
+
+      return result;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [postLimit]);
+
   const getNextPosts = useCallback(async () => {
     if (endOfDocuments) return -1;
     if (isFetching) return -1;
@@ -23,7 +50,7 @@ export const useCollectPostsWithLimit = postLimit => {
       const colRef = collection(projectFirestore, 'posts');
       const q = query(
         colRef,
-        orderBy('createdAt', 'asc'),
+        orderBy('createdAt', 'desc'),
         startAfter(lastDocument || 0),
         limit(postLimit)
       );
@@ -49,5 +76,5 @@ export const useCollectPostsWithLimit = postLimit => {
     }
   }, [isFetching, lastDocument, endOfDocuments, postLimit]);
 
-  return { getNextPosts };
+  return { getFirstPosts, getNextPosts };
 };

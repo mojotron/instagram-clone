@@ -1,4 +1,5 @@
 // hooks
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useFollow } from '../../../hooks/useFollow';
@@ -7,16 +8,23 @@ import { useSuggestedUsersContext } from '../../../hooks/useSuggestedUsersContex
 import './styles/SuggestedUsers.css';
 // components
 import Avatar from '../../../components/Avatar';
+import SwitchUserPopup from './SwitchUserPopup';
 
 const SuggestedUsers = () => {
   const { response } = useUserDataContext();
   const { notFollowingBack, followersFollowings } = useSuggestedUsersContext();
+
+  const [showSwitchUser, setSwitchUser] = useState(false);
 
   const { follow } = useFollow();
   const navigate = useNavigate();
 
   return (
     <div className="SuggestedUsers">
+      {showSwitchUser && (
+        <SwitchUserPopup handleClose={() => setSwitchUser(false)} />
+      )}
+
       <header className="SuggestedUsers__header">
         <div className="SuggestedUsers__header__info">
           <Avatar
@@ -28,7 +36,9 @@ const SuggestedUsers = () => {
             {response.document.userName}
           </h3>
         </div>
-        <button className="btn btn--blue">Switch</button>
+        <button className="btn btn--blue" onClick={() => setSwitchUser(true)}>
+          Switch
+        </button>
       </header>
 
       <div className="SuggestedUsers__heading">

@@ -1,0 +1,17 @@
+.SwitchUserPopup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2rem;
+  height: 80vh;
+  max-height: 50rem;
+  width: 40rem;
+  background-color: white;
+  padding: 5rem 2rem;
+}
+
+.SwitchUserPopup h3 {
+  font-size: 1.8rem;
+  color: var(--black);
+}
