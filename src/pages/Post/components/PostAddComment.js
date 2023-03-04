@@ -68,10 +68,17 @@ const PostAddComment = ({
     <div className="PostAddComment">
       {showEmojis && (
         <div className="emoji--wrapper">
-          <EmojiPicker emojiStyle="native" onEmojiClick={handleEmojiClick} />
+          <EmojiPicker
+            emojiStyle="native"
+            onEmojiClick={handleEmojiClick}
+            width="335px"
+          />
         </div>
       )}
-      <button className="btn btn--emoji" onClick={() => setShowEmojis(true)}>
+      <button
+        className="btn btn--emoji"
+        onClick={() => setShowEmojis(oldValue => !oldValue)}
+      >
         <MdSentimentSatisfiedAlt size={25} color="var(--gray)" />
       </button>
       <textarea

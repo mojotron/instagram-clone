@@ -114,6 +114,13 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
               autoCorrect="off"
               ref={textareaRef}
             />
+            {showEmojis && (
+              <EmojiPicker
+                emojiStyle="native"
+                onEmojiClick={handleEmojiClick}
+                width="95%"
+              />
+            )}
 
             <div className="ImageInfoPanel__info__form__emoji">
               <button
@@ -123,12 +130,6 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
               >
                 <img src={smileIcon} alt="emojis" />
               </button>
-              {showEmojis && (
-                <EmojiPicker
-                  emojiStyle="native"
-                  onEmojiClick={handleEmojiClick}
-                />
-              )}
               <p data-testid="caption-char-count">
                 {postInfo.caption.length}/2200
               </p>

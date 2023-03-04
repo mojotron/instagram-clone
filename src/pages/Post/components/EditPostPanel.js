@@ -128,6 +128,14 @@ const EditPostPanel = ({ postData, closeHandler }) => {
                 style={{ height: screenSize === 'small' ? '80px' : '180px' }}
               />
 
+              {showEmojis && (
+                <EmojiPicker
+                  emojiStyle="native"
+                  onEmojiClick={handleEmojiClick}
+                  width="95%"
+                />
+              )}
+
               <div className="EditPostPanel__body__edit__form__emoji">
                 <button
                   type="button"
@@ -136,12 +144,7 @@ const EditPostPanel = ({ postData, closeHandler }) => {
                 >
                   <MdSentimentSatisfiedAlt size={22} color="var(--gray)" />
                 </button>
-                {showEmojis && (
-                  <EmojiPicker
-                    emojiStyle="native"
-                    onEmojiClick={handleEmojiClick}
-                  />
-                )}
+
                 <p>{caption.length}/2200</p>
               </div>
 

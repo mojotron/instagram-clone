@@ -61,7 +61,7 @@ const CreateNewPost = () => {
       };
       // add document to post repo and close create post page
       const postDocRef = await addDocument(post);
-      // TODO add postDocID to user.posts
+      // add postDocID to user.posts
       const userPosts = [postDocRef.id, ...response.document.posts];
       await updateUserDoc(response.document.uid, { posts: userPosts });
       // update doc with docID for useSnapshotByIdList hook
@@ -76,6 +76,8 @@ const CreateNewPost = () => {
       setIsPending(false);
     }
   };
+
+  if (response.document.posts.length >= 3) return alert('max num of posts');
 
   return (
     <>

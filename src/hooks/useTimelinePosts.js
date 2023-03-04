@@ -93,6 +93,7 @@ export const useTimelinePosts = () => {
 
       if (data.empty) {
         setEndOfDocuments(true);
+        setIsFetching(false); // last added
         return;
       }
 

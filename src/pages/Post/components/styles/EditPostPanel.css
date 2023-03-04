@@ -29,7 +29,7 @@
   align-items: center;
 }
 .EditPostPanel__body__edit {
-  width: 100%;
+  width: 33.5rem;
   display: flex;
   flex-direction: column;
   border-left: var(--gray-border);

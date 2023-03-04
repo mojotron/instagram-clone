@@ -97,7 +97,7 @@ export const usePost = () => {
         throw error;
       }
     },
-    [response, deleteDocument, updateUserDoc, remove]
+    [response, deleteDocument, updateUserDoc, remove, _cleanDeletedPost]
   );
 
   const editPost = useCallback(
