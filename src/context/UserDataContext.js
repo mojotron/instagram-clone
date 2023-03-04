@@ -10,6 +10,7 @@ const initialModalState = {
   openSearch: false,
   openMoreOptions: false,
   openCreatePost: false,
+  openCustomAlert: false,
 };
 
 export const UserDataContextProvider = ({ children }) => {

@@ -7,6 +7,7 @@ import ImageSizePanel from './components/ImageSizePanel';
 import ImageEditPanel from './components/ImageEditPanel';
 import ImageInfoPanel from './components/ImageInfoPanel';
 import DiscardPost from './components/DiscardPost';
+import CustomAlert from '../../components/CustomAlert';
 // style
 import './styles/CreateNewPost.css';
 // hooks
@@ -14,6 +15,11 @@ import { useUserPostContext } from '../../hooks/useUserPostContext';
 import { useStorage } from '../../hooks/useStorage';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
+// constants
+import {
+  MAX_POST_PER_USER,
+  MAX_POST_COMMENTS_ALERT_MSG,
+} from '../../constants/constants';
 
 const CreateNewPost = () => {
   const { response, toggleModal } = useUserDataContext();
@@ -77,7 +83,7 @@ const CreateNewPost = () => {
     }
   };
 
-  if (response.document.posts.length >= 3) return alert('max num of posts');
+  const maxPost = response.document.posts.length >= MAX_POST_PER_USER;
 
   return (
     <>
@@ -97,25 +103,40 @@ const CreateNewPost = () => {
           <GrClose size={20} />
         </button>
 
-        <div
-          className="CreateNewPost"
-          // stop click propagation because of click outside modal option to close all modals
-          onClick={e => e.stopPropagation()}
-        >
-          {currentStage === 'choose-files' && <FileUploadForm />}
-
-          {currentStage === 'set-dimensions' && <ImageSizePanel />}
-
-          {currentStage === 'set-filter-layers' && <ImageEditPanel />}
-
-          {currentStage === 'post-information' && (
-            <ImageInfoPanel
-              handleCreatePost={handleCreatePost}
-              error={error}
-              isPending={isPending}
+        {maxPost && (
+          <>
+            <CustomAlert
+              message={MAX_POST_COMMENTS_ALERT_MSG}
+              handleClose={e => {
+                toggleModal(e, 'openCreatePost');
+              }}
             />
-          )}
-        </div>
+          </>
+        )}
+
+        {!maxPost && (
+          <>
+            <div
+              className="CreateNewPost"
+              // stop click propagation because of click outside modal option to close all modals
+              onClick={e => e.stopPropagation()}
+            >
+              {currentStage === 'choose-files' && <FileUploadForm />}
+
+              {currentStage === 'set-dimensions' && <ImageSizePanel />}
+
+              {currentStage === 'set-filter-layers' && <ImageEditPanel />}
+
+              {currentStage === 'post-information' && (
+                <ImageInfoPanel
+                  handleCreatePost={handleCreatePost}
+                  error={error}
+                  isPending={isPending}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

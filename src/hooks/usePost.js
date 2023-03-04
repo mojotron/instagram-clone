@@ -176,8 +176,7 @@ export const usePost = () => {
     async (text, postComments, postDocId, userDocId) => {
       try {
         if (postComments.length === 5) {
-          alert(MAX_POST_COMMENTS_ALERT_MSG);
-          return;
+          return 'max-limit';
         }
 
         const newComment = {

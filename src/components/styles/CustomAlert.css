@@ -1,0 +1,25 @@
+.CustomAlert {
+  background-color: rgb(233, 233, 233);
+  min-height: 20rem;
+  width: 100vw;
+  max-width: 44.5rem;
+  border-radius: 2rem;
+  padding: 2rem;
+}
+.CustomAlert h3 {
+  font-size: 2rem;
+  color: var(--black);
+  font-family: 'Oleo Script', 'Roboto', sans-serif;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.CustomAlert p {
+  font-size: 1.6rem;
+  text-align: justify;
+  word-spacing: 0.01rem;
+}
+.CustomAlert__tip {
+  margin-top: 2rem;
+  float: right;
+}

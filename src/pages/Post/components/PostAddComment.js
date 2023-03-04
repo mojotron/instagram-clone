@@ -8,6 +8,8 @@ import './styles/PostAddComment.css';
 // icon
 import { MdSentimentSatisfiedAlt } from 'react-icons/md';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import CustomAlert from '../../../components/CustomAlert';
+import { MAX_POST_COMMENTS_ALERT_MSG } from '../../../constants/constants';
 
 const PostAddComment = ({
   postData,
@@ -15,7 +17,7 @@ const PostAddComment = ({
   replyData,
   setReplayData,
 }) => {
-  const { response } = useUserDataContext();
+  const { response, modals, toggleModal } = useUserDataContext();
   const { addComment, addReplyToComment } = usePost();
   const [text, setText] = useState('');
   const [showEmojis, setShowEmojis] = useState('');
@@ -59,10 +61,28 @@ const PostAddComment = ({
       );
       setReplayData(null);
     } else {
-      await addComment(text, postData.comments, postData.id, postData.creator);
       setText('');
+      const limit = await addComment(
+        text,
+        postData.comments,
+        postData.id,
+        postData.creator
+      );
+
+      if (limit === 'max-limit') {
+        toggleModal(null, 'openCustomAlert');
+      }
+      console.log('limit reached', limit);
     }
   };
+
+  if (modals.openCustomAlert) {
+    return (
+      <div className="overlay">
+        <CustomAlert message={MAX_POST_COMMENTS_ALERT_MSG} />;
+      </div>
+    );
+  }
 
   return (
     <div className="PostAddComment">
