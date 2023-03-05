@@ -50,7 +50,7 @@
   border: var(--gray-border);
   width: 100%;
   resize: none;
-  min-height: 3rem;
+  min-height: 1rem;
   max-height: 10rem;
   padding: 1rem 6rem 1rem 4rem;
   font-family: inherit;

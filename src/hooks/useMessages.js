@@ -3,6 +3,7 @@ import { projectFirestore } from '../firebase/config';
 import { collection, Timestamp, addDoc } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
 import { useFirestore } from './useFirestore';
+import { MAX_MESSAGES_LIMIT } from '../constants/constants';
 
 export const useMessages = () => {
   // messages between users go to single file, in array, better approach is
@@ -61,6 +62,9 @@ export const useMessages = () => {
   const addMessage = async (messagesDoc, userDoc, type, payload) => {
     try {
       if (messagesDoc) {
+        if (messagesDoc.messages.length >= MAX_MESSAGES_LIMIT) {
+          return 'max-limit';
+        }
         const updatedMessages = [
           _createMessageObject(type, payload),
           ...messagesDoc.messages,

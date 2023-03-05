@@ -9,12 +9,13 @@ import { useLogout } from '../../../hooks/useLogout';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const MoreOptions = () => {
-  const { response } = useUserDataContext();
+  const { response, setNavigationTab } = useUserDataContext();
   const { isPending, error, logout } = useLogout();
   return (
     <ul className="MoreOptions">
       <li>
         <Link
+          onClick={() => setNavigationTab('profile')}
           to={`/${response.document.userName}`}
           state={{ activeTab: 'posts' }}
           // state={{ userID: response.document.uid }}
@@ -24,13 +25,14 @@ const MoreOptions = () => {
         </Link>
       </li>
       <li>
-        <Link to="/settings">
+        <Link to="/settings" onClick={() => setNavigationTab('home')}>
           <span>Settings</span>
           <RiSettings5Fill size={20} />
         </Link>
       </li>
       <li>
         <Link
+          onClick={() => setNavigationTab('profile')}
           to={`/${response.document.userName}`}
           state={{ activeTab: 'saved' }}
         >

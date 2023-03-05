@@ -8,12 +8,15 @@ import './styles/MessageMainBody.css';
 import { BiSmile } from 'react-icons/bi';
 // components
 import Avatar from '../../../components/Avatar';
+import CustomAlert from '../../../components/CustomAlert';
 import EmojiPicker from 'emoji-picker-react';
 import MessageItem from './MessageItem';
 import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
+// constants
+import { MAX_MESSAGES_LIMIT_MESSAGE } from '../../../constants/constants';
 
 const MessageMainBody = ({ messageTo }) => {
-  const { response } = useUserDataContext();
+  const { response, modals, toggleModal } = useUserDataContext();
   const { addMessage, deleteMessage } = useMessages();
 
   const findMessages = useMemo(() => {
@@ -39,9 +42,9 @@ const MessageMainBody = ({ messageTo }) => {
 
   useEffect(() => {
     if (!textareaRef.current) return;
-    textareaRef.current.style.height = '0px';
+    textareaRef.current.style.height = '10px';
     const scrollHeight = textareaRef.current.scrollHeight;
-    textareaRef.current.style.height = scrollHeight + 'px';
+    textareaRef.current.style.height = scrollHeight + 10 + 'px';
   }, [text]);
 
   const handleEmojiClick = e => {
@@ -56,7 +59,15 @@ const MessageMainBody = ({ messageTo }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await addMessage(messagesDoc, messageToUserDoc, 'text-message', text);
+      const limit = await addMessage(
+        messagesDoc,
+        messageToUserDoc,
+        'text-message',
+        text
+      );
+      if (limit) {
+        toggleModal(null, 'openCustomAlert');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +76,14 @@ const MessageMainBody = ({ messageTo }) => {
   };
 
   if (!messageToUserDoc) return null;
+
+  if (modals.openCustomAlert) {
+    return (
+      <div className="overlay">
+        <CustomAlert message={MAX_MESSAGES_LIMIT_MESSAGE} />
+      </div>
+    );
+  }
 
   return (
     <section className="MessageMainBody">

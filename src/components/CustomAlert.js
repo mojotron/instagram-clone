@@ -5,7 +5,9 @@ const CustomAlert = ({ message }) => {
     <div className="CustomAlert">
       <h3>Instagram Clone Alert!</h3>
       <p>{message}</p>
-      <p className="CustomAlert__tip">Press escape to exit!</p>
+      <p className="CustomAlert__tip">
+        Press escape to exit or click anywhere!
+      </p>
     </div>
   );
 };

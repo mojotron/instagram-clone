@@ -14,7 +14,7 @@ import { useNotifications } from './useNotifications';
 import { useFirestore } from './useFirestore';
 import { useStorage } from './useStorage';
 // constants
-import { MAX_POST_COMMENTS_ALERT_MSG } from '../constants/constants';
+import { MAX_COMMENTS_LIMIT } from '../constants/constants';
 
 export const usePost = () => {
   const { response } = useUserDataContext();
@@ -175,7 +175,7 @@ export const usePost = () => {
   const addComment = useCallback(
     async (text, postComments, postDocId, userDocId) => {
       try {
-        if (postComments.length === 5) {
+        if (postComments.length === MAX_COMMENTS_LIMIT) {
           return 'max-limit';
         }
 
@@ -217,6 +217,10 @@ export const usePost = () => {
     async (text, comments, commentIndex, postDocId, userDocId) => {
       // user doc id is user on whom we reply
       try {
+        // check if comment have 5 replays
+        if (comments[commentIndex].replies.length >= MAX_COMMENTS_LIMIT) {
+          return 'max-limit';
+        }
         // modify replays in comments
         const newReplay = {
           text: text,

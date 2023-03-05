@@ -39,6 +39,7 @@ const PostAddComment = ({
   }, [focusOnComment]);
 
   useEffect(() => {
+    if (textareaRef.current === null) return;
     textareaRef.current.style.height = '0px';
     const scrollHeight = textareaRef.current.scrollHeight;
     textareaRef.current.style.height = scrollHeight + 'px';
@@ -52,7 +53,7 @@ const PostAddComment = ({
   const handlePostComment = async () => {
     if (replyData) {
       // add replay
-      await addReplyToComment(
+      const limit = await addReplyToComment(
         text,
         postData.comments,
         replyData.commentIndex,
@@ -60,6 +61,8 @@ const PostAddComment = ({
         response.document.id
       );
       setReplayData(null);
+
+      if (limit === 'max-limit') toggleModal(null, 'openCustomAlert');
     } else {
       setText('');
       const limit = await addComment(
@@ -69,10 +72,7 @@ const PostAddComment = ({
         postData.creator
       );
 
-      if (limit === 'max-limit') {
-        toggleModal(null, 'openCustomAlert');
-      }
-      console.log('limit reached', limit);
+      if (limit === 'max-limit') toggleModal(null, 'openCustomAlert');
     }
   };
 
