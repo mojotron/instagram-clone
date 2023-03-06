@@ -55,6 +55,8 @@
 }
 .Settings textarea {
   min-height: 6rem;
+  resize: none;
+  overflow-y: scroll;
 }
 .Settings p {
   width: 35.8rem;

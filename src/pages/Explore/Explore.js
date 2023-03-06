@@ -5,9 +5,12 @@ import { useCollectPostsWithLimit } from '../../hooks/useCollectPostsWithLimit';
 import './styles/Explore.css';
 // components
 import PostCard from '../Profile/components/PostCard';
+// constants
+import { EXPLORE_POST_LIMIT } from '../../constants/constants';
 
 const Explore = () => {
-  const { getFirstPosts, getNextPosts } = useCollectPostsWithLimit(2);
+  const { getFirstPosts, getNextPosts } =
+    useCollectPostsWithLimit(EXPLORE_POST_LIMIT);
   const [posts, setPosts] = useState([]);
   const containerRef = useRef();
 

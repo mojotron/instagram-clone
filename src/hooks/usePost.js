@@ -79,7 +79,6 @@ export const usePost = () => {
 
   const deletePost = useCallback(
     async (postDocId, postImages) => {
-      console.log('delete post', postImages);
       try {
         const updatePosts = response.document.posts.filter(
           post => post !== postDocId

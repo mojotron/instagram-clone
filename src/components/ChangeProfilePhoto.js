@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './styles/ChangeProfilePhoto.css';
 import { useSetAvatar } from '../hooks/useSetAvatar';
+// constants
+import { MAX_AVATAR_IMAGE_SIZE } from '../constants/constants';
 
 const ChangeProfilePhoto = ({ handleDisplay }) => {
   const [imageFile, setImageFile] = useState(null);
@@ -10,7 +12,7 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
   const handleUploadFile = e => {
     setUploadError(null);
     const file = e.target.files[0];
-    if (file.size > 500000) {
+    if (file.size > MAX_AVATAR_IMAGE_SIZE) {
       setUploadError('File is to big (limit 500KB)');
       e.target.value = '';
       return;

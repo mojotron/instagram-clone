@@ -3,6 +3,7 @@ import { useFirestore } from './useFirestore';
 import { useUserDataContext } from './useUserDataContext';
 import { Timestamp } from 'firebase/firestore';
 import { useSearchUsers } from './useSearchUsers';
+import { MAX_NOTIFICATIONS_NUMBER } from '../constants/constants';
 
 export const useNotifications = () => {
   // notification document is created when user creates account
@@ -49,7 +50,7 @@ export const useNotifications = () => {
           notifications: [
             notificationObject,
             ...userNotifications.notifications,
-          ].slice(0, 19), // keep limit on notification object at last 20
+          ].slice(0, MAX_NOTIFICATIONS_NUMBER), // keep limit on notification object at last 20
         });
 
         await updateUserDoc(userID, { newNotification: true });

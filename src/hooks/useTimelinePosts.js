@@ -10,9 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useState, useCallback, useEffect } from 'react';
 import { useUserDataContext } from './useUserDataContext';
-// import { TIMELINE_POST_LIMIT } from '../constants/constants';
-
-const TIMELINE_POST_LIMIT = 2;
+import { TIMELINE_POST_LIMIT } from '../constants/constants';
 
 export const useTimelinePosts = () => {
   const { response } = useUserDataContext();
