@@ -65,7 +65,7 @@ const Login = () => {
         onClick={handleLogInAsTestAccount}
         className={`btn--auth`}
         type="button"
-        style={{ backgroundColor: 'green', transform: 'scale(0.75)' }}
+        style={{ backgroundColor: 'var(--green)', transform: 'scale(0.75)' }}
       >
         {!isPending ? 'Log is as Test Account' : 'Loading'}
       </button>

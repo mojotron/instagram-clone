@@ -1,14 +1,15 @@
+// style
 import './styles/ImageNavigation.css';
+// components
 import ImageButton from './ImageButton';
-//icons
-import navigateLeftIcon from '../images/navigate-left-icon.svg';
-import navigateRightIcon from '../images/navigate-right-icon.svg';
+// icons
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
 const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
   return (
     <div className="ImageNavigation">
       <ImageButton
-        icon={navigateLeftIcon}
+        icon={<AiOutlineLeft size={25} color="white" />}
         alt="previous"
         active=""
         hidden={index === 0}
@@ -18,7 +19,7 @@ const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
       />
 
       <ImageButton
-        icon={navigateRightIcon}
+        icon={<AiOutlineRight size={25} color="white" />}
         alt="next"
         active=""
         hidden={index === numOfImgs - 1}

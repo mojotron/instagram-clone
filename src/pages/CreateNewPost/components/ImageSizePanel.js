@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import './styles/ImageSizePanel.css';
 // icons
-import changeSizeIcon from '../../../images/change-size-icon.svg';
-import zoomInIcon from '../../../images/zoom-in-icon.svg';
-import multipleFilesIcon from '../../../images/multiple-files.svg';
+import { IoMdResize } from 'react-icons/io';
+import { HiZoomIn } from 'react-icons/hi';
+import { TbBoxMultiple } from 'react-icons/tb';
 // components
 import CreatePostHeader from './CreatePostHeader';
 import ImageButton from '../../../components/ImageButton';
@@ -126,7 +126,6 @@ const ImageSizePanel = () => {
       />
 
       <div
-        data-testid="image-size-panel"
         className="ImageSizePanel"
         onMouseUp={() => setRepositionActive(false)}
         onMouseLeave={() => setRepositionActive(false)}
@@ -151,20 +150,20 @@ const ImageSizePanel = () => {
         <div className="ImageSizePanel__options">
           <div className="ImageSizePanel__options__left">
             <ImageButton
-              icon={changeSizeIcon}
+              icon={<IoMdResize size={20} color="white" />}
               alt="change size"
               active={showSizes}
               handleClick={handleShowSize}
             />
             <ImageButton
-              icon={zoomInIcon}
+              icon={<HiZoomIn size={20} color="white" />}
               alt="zoom slider"
               active={showZoomRange}
               handleClick={handleShowZoomRange}
             />
           </div>
           <ImageButton
-            icon={multipleFilesIcon}
+            icon={<TbBoxMultiple size={20} color="white" />}
             alt="add and arrange images"
             active={showManageImages}
             handleClick={handleShowManageImages}
@@ -172,10 +171,7 @@ const ImageSizePanel = () => {
         </div>
         {/* aspect ratio dropdown */}
         {showSizes && (
-          <div
-            data-testid="change-size-popup"
-            className="ImageSizePanel__size__list"
-          >
+          <div className="ImageSizePanel__size__list">
             {!error && (
               <button
                 className={`btn ${activeSize === 'original' ? 'active' : ''}`}
@@ -211,12 +207,8 @@ const ImageSizePanel = () => {
         )}
         {/* zoom range input*/}
         {showZoomRange && (
-          <div
-            data-testid="zoom-level-popup"
-            className="ImageSizePanel__zoom-range"
-          >
+          <div className="ImageSizePanel__zoom-range">
             <input
-              data-testid="zoom-level-input"
               type="range"
               value={dimensions.zoomLevel}
               onChange={e => {
@@ -241,7 +233,6 @@ const ImageSizePanel = () => {
         )}
 
         <div
-          data-testid="size-panel-parent"
           ref={parentElementRef}
           title="Zoom image then reposition!"
           className="ImageSizePanel__imageContainer"
@@ -252,7 +243,6 @@ const ImageSizePanel = () => {
           onClick={closeAllOptions}
         >
           <div
-            data-testid="size-panel-child"
             className="ImageSizePanel__imageContainer__image"
             style={{
               transform: `scale(${dimensions.zoomLevel})`,

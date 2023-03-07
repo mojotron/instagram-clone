@@ -1,10 +1,15 @@
+// hooks
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { emailValidation } from '../../utils/inputValidation';
-import InputWithError from '../../components/InputWithError';
-import lockImg from '../../images/lock.svg';
-import './styles/ForgotPassword.css';
 import { usePasswordReset } from '../../hooks/usePasswordReset';
+// utils
+import { emailValidation } from '../../utils/inputValidation';
+// components
+import InputWithError from '../../components/InputWithError';
+// icons
+import { AiOutlineLock } from 'react-icons/ai';
+// styles
+import './styles/ForgotPassword.css';
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({ email: '' });
@@ -33,7 +38,8 @@ const ForgotPassword = () => {
 
   return (
     <form className="authForm ForgotPassword" onSubmit={handleSubmit}>
-      <img className="ForgotPassword__img" src={lockImg} alt="closed lock" />
+      <AiOutlineLock size={100} color="var(--black)" />
+
       <h1>Trouble Logging In?</h1>
       <h2>
         Enter your email and we'll send you a link to get back into your

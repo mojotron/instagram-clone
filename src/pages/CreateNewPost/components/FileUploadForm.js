@@ -2,8 +2,7 @@ import { useRef, useState } from 'react';
 // style
 import './styles/FileUploadForm.css';
 // icons
-import uploadPhotoIconBlack from '../../../images/upload-photo-icon-black.svg';
-import uploadPhotoIconBlue from '../../../images/upload-photo-icon-blue.svg';
+import { IoMdImages } from 'react-icons/io';
 // components
 import CreatePostHeader from './CreatePostHeader';
 // context
@@ -74,9 +73,9 @@ const FileUploadForm = () => {
         />
         <label htmlFor="file-input" className="FileUploadForm__label">
           <div className="FileUploadForm__label-elements">
-            <img
-              src={dragActive ? uploadPhotoIconBlue : uploadPhotoIconBlack}
-              alt="upload files"
+            <IoMdImages
+              size={100}
+              color={dragActive ? 'var(--blue)' : 'var(--black)'}
             />
             <span>Drag photos here.</span>
             <button

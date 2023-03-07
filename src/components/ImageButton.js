@@ -8,7 +8,7 @@ const ImageButton = ({ icon, alt, handleClick, active, hidden }) => {
       type="button"
       onClick={handleClick}
     >
-      <img src={icon} alt={alt} />
+      {icon}
     </button>
   );
 };

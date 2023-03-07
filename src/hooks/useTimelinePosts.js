@@ -25,7 +25,6 @@ export const useTimelinePosts = () => {
   const [endOfDocuments, setEndOfDocuments] = useState(false);
 
   const getFirstPosts = useCallback(async () => {
-    console.log('set first');
     try {
       const q = query(
         collection(projectFirestore, 'posts'),
@@ -72,7 +71,6 @@ export const useTimelinePosts = () => {
     if (endOfDocuments) return;
     if (isFetching) return;
 
-    console.log('lastDoc', lastDocument);
     try {
       setIsFetching(true);
 
@@ -102,8 +100,6 @@ export const useTimelinePosts = () => {
         result.push(doc.id);
         last = doc;
       });
-
-      console.log('more docs', result);
 
       setLastDocument(last);
       setIsFetching(false);

@@ -13,10 +13,12 @@ import PostImage from '../../../components/PostImage';
 import Avatar from '../../../components/Avatar';
 import SwitchCheckbox from '../../../components/SwitchCheckbox';
 // icons
-import smileIcon from '../../../images/smile-icon.svg';
-import locationIcon from '../../../images/location-icon.svg';
-import expandShowIcon from '../../../images/expand-show-icon.svg';
-import expandHideIcon from '../../../images/expand-hide-icon.svg';
+import {
+  MdSentimentSatisfiedAlt,
+  MdOutlineLocationOn,
+  MdExpandMore,
+  MdExpandLess,
+} from 'react-icons/md';
 
 const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
   const { response } = useUserDataContext();
@@ -128,7 +130,7 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
                 className="btn"
                 onClick={() => setShowEmojis(oldValue => !oldValue)}
               >
-                <img src={smileIcon} alt="emojis" />
+                <MdSentimentSatisfiedAlt size={25} color="var(--gray)" />
               </button>
               <p data-testid="caption-char-count">
                 {postInfo.caption.length}/2200
@@ -145,7 +147,7 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
                 maxLength="50"
               />
               <span className="label-icon">
-                <img src={locationIcon} alt="location pin" />
+                <MdOutlineLocationOn size={25} color="var(--black)" />
               </span>
             </label>
 
@@ -155,10 +157,11 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
               >
                 <h3>Accessibility</h3>
                 <span>
-                  <img
-                    src={showAccessibility ? expandHideIcon : expandShowIcon}
-                    alt={`${showAccessibility ? 'hide' : 'expand'}`}
-                  />
+                  {showAccessibility ? (
+                    <MdExpandLess size={25} color="var(--black)" />
+                  ) : (
+                    <MdExpandMore size={25} color="var(--black)" />
+                  )}
                 </span>
               </header>
 
@@ -175,7 +178,6 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
                       <div key={i}>
                         <PostImage dimensions={dimensions} imagesData={[ele]} />
                         <input
-                          data-testid="alt-input"
                           value={imagesData[i].alt}
                           onChange={e => handleAltChange(e, i)}
                           placeholder="Write alt text"
@@ -194,10 +196,11 @@ const ImageInfoPanel = ({ handleCreatePost, error, isPending }) => {
               >
                 <h3>Advance settings</h3>
                 <span>
-                  <img
-                    src={showAdvanceSettings ? expandHideIcon : expandShowIcon}
-                    alt={`${showAdvanceSettings ? 'hide' : 'expand'}`}
-                  />
+                  {showAdvanceSettings ? (
+                    <MdExpandLess size={25} color="var(--black)" />
+                  ) : (
+                    <MdExpandMore size={25} color="var(--black)" />
+                  )}
                 </span>
               </header>
 

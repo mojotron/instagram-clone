@@ -53,7 +53,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
           setIsPending(false);
         }
       }
-    }, 2000);
+    }, 500);
 
     return () => {
       isMounted = false;

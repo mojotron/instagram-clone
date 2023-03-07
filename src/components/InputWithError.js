@@ -1,6 +1,10 @@
+// hooks
 import { useEffect, useState } from 'react';
-import checkIcon from '../images/circle-check.svg';
-import cancelIcon from '../images/circle-cancel.svg';
+// icons
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai';
+// import checkIcon from '../images/circle-check.svg';
+// import cancelIcon from '../images/circle-cancel.svg';
+// styles
 import './styles/InputWithError.css';
 
 const InputWithError = ({
@@ -64,10 +68,12 @@ const InputWithError = ({
 
       <div className="validation-container">
         {validation && handleValidation !== null && (
-          <img className="validate-icon" src={checkIcon} alt="valid input" />
+          <AiOutlineCheckCircle size={20} color="var(--green)" />
+          // <img className="validate-icon" src={checkIcon} alt="valid input" />
         )}
         {validationError && (
-          <img className="validate-icon" src={cancelIcon} alt="invalid input" />
+          // <img className="validate-icon" src={cancelIcon} alt="invalid input" />
+          <AiOutlineCloseCircle size={20} color="var(--red)" />
         )}
 
         {type === 'password' && value.length > 0 && (

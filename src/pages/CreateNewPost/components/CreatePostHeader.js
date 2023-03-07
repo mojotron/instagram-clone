@@ -1,6 +1,6 @@
 import './styles/CreatePostHeader.css';
 // icons
-import backspaceIcon from '../../../images/backspace-icon.svg';
+import { MdKeyboardBackspace } from 'react-icons/md';
 
 const CreatePostHeader = ({ title, btnText, handleNext, handlePrev }) => {
   // if handler is null hide button
@@ -11,7 +11,7 @@ const CreatePostHeader = ({ title, btnText, handleNext, handlePrev }) => {
         className="btn CreatePostHeader__back-button"
         onClick={handlePrev}
       >
-        <img src={backspaceIcon} alt="go back" />
+        <MdKeyboardBackspace size={25} />
       </button>
 
       <h2>{title}</h2>

@@ -2,7 +2,6 @@ import TimeLinePost from '../../Post/TimeLinePost';
 import WelcomeMessage from './WelcomeMessage';
 
 const TimeLine = ({ posts, isFetching, error }) => {
-  console.log('post got', posts);
   return (
     <div
       className="Timeline"

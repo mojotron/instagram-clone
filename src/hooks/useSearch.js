@@ -55,7 +55,7 @@ export const useSearch = () => {
       if (isMounted) {
         setSearchResults(searchResults);
       }
-    }, 1500);
+    }, 500);
 
     return () => {
       clearTimeout(debounce);

@@ -14,8 +14,6 @@ const SearchBar = ({
   const [hasFocus, setHasFocus] = useState(startFocus);
   const inputRef = useRef();
 
-  // console.log('Focus is', hasFocus ? 'on' : 'off');
-
   useEffect(() => {
     if (startFocus) {
       inputRef.current.focus();
