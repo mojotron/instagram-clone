@@ -2,6 +2,7 @@
 import { useState, useMemo } from 'react';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useCollectDocsByIdList } from '../../hooks/useCollectDocsByIdList';
+import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
 // components
 import NewMessage from './components/NewMessage';
 import MessagesHeader from './components/MessagesHeader';
@@ -14,6 +15,8 @@ import { formatTime } from '../../utils/formatTime';
 
 const Messages = () => {
   const { response } = useUserDataContext();
+  const { screenSize } = useScreenSizeContext();
+
   const [showNewMessage, setShowNewMessage] = useState(false);
   const [messageTo, setMessageTo] = useState(null);
 
@@ -24,14 +27,33 @@ const Messages = () => {
   const { documents } = useCollectDocsByIdList(messagesList, 'users');
 
   return (
-    <div className="Messages">
+    <div
+      className="Messages"
+      style={
+        screenSize === 'small'
+          ? { flexDirection: 'column', height: '1000px', overflowY: 'scroll' }
+          : { flexDirection: 'row' }
+      }
+    >
       {showNewMessage && (
         <NewMessage
           setShowNewMessage={setShowNewMessage}
           setMessageTo={setMessageTo}
         />
       )}
-      <div className="Messages__left">
+      <div
+        className="Messages__left"
+        style={
+          screenSize === 'small'
+            ? {
+                width: '100%',
+                height: '250px',
+                overflowY: 'scroll',
+                borderBottom: 'var(--gray-border)',
+              }
+            : { width: '40%', borderRight: ' var(--gray-border)' }
+        }
+      >
         <MessagesHeader setShowNewMessage={setShowNewMessage} />
         <section>
           {documents &&
@@ -55,7 +77,18 @@ const Messages = () => {
             ))}
         </section>
       </div>
-      <div className="Messages__right">
+      <div
+        className="Messages__right"
+        style={
+          screenSize === 'small'
+            ? {
+                width: '100%',
+                height: '750px',
+                overflowY: 'scroll',
+              }
+            : { width: '60%' }
+        }
+      >
         {messageTo && <MessageMainBody messageTo={messageTo} />}
       </div>
     </div>

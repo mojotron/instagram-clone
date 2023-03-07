@@ -27,6 +27,7 @@ export const useOnSnapshotDocument = (collectionName, docId) => {
     };
 
     getDocuments();
+
     return () => unsubscribe();
   }, [collectionName, docId]);
 

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useMessages } from '../../../hooks/useMessages';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
 // style
 import './styles/MessageMainBody.css';
 // icons
@@ -11,7 +12,6 @@ import Avatar from '../../../components/Avatar';
 import CustomAlert from '../../../components/CustomAlert';
 import EmojiPicker from 'emoji-picker-react';
 import MessageItem from './MessageItem';
-import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
 // constants
 import { MAX_MESSAGES_LIMIT_MESSAGE } from '../../../constants/constants';
 

@@ -7,7 +7,6 @@
   border-radius: 0.5rem;
 }
 .Messages__left {
-  border-right: var(--gray-border);
   width: 40%;
 }
 .Messages__left__list-item {
