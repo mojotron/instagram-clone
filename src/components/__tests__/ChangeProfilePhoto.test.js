@@ -3,6 +3,7 @@ import ChangeProfilePhoto from '../ChangeProfilePhoto';
 import userEvent from '@testing-library/user-event';
 
 import { useSetAvatar } from '../../hooks/useSetAvatar';
+import { MAX_AVATAR_IMAGE_SIZE } from '../../constants/constants';
 
 jest.mock('../../hooks/useSetAvatar', () => ({
   useSetAvatar: jest.fn(() => ({
@@ -101,7 +102,7 @@ describe('ChangeProfilePhoto component', () => {
     }));
     const file = new File(['hello'], 'hello.png', { type: 'image/png' });
     // mock file size
-    Object.defineProperty(file, 'size', { value: 2000001 });
+    Object.defineProperty(file, 'size', { value: MAX_AVATAR_IMAGE_SIZE + 1 });
     render(
       <ChangeProfilePhoto
         userId={1}
@@ -113,7 +114,9 @@ describe('ChangeProfilePhoto component', () => {
     const fileInput = screen.getByTestId('file-input');
 
     await user.upload(fileInput, file);
-    expect(screen.getByText('File is to big (limit 2MB)')).toBeInTheDocument();
+    expect(
+      screen.getByText('File is to big (limit 500KB)')
+    ).toBeInTheDocument();
   });
 
   test('isPending and error from useStAvatar hook', () => {

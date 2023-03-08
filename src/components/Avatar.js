@@ -5,6 +5,7 @@ const Avatar = ({ url, size, handleClick, activeBorder = false }) => {
   // size of image in px (square)
   return (
     <div
+      data-testid="avatar"
       className={`Avatar ${activeBorder ? 'Avatar--active-border' : ''}`}
       style={{ width: `${size}px`, height: `${size}px` }}
       onClick={handleClick}

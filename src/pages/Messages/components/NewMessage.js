@@ -35,7 +35,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   useEffect(() => {
     if (searchTerm === '') return;
     let isMounted = true;
-    console.log('call debounce');
+
     setIsPending(true);
     setError(null);
 

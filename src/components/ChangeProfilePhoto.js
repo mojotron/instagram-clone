@@ -37,7 +37,12 @@ const ChangeProfilePhoto = ({ handleDisplay }) => {
         <h2>Change Profile Photo</h2>
 
         <form onSubmit={handleSubmit}>
-          <input type="file" onChange={handleUploadFile} accept="image/*" />
+          <input
+            data-testid="file-input"
+            type="file"
+            onChange={handleUploadFile}
+            accept="image/*"
+          />
           {uploadError && (
             <p className="ChangeProfilePhoto__error">{uploadError}</p>
           )}
