@@ -16,8 +16,7 @@ describe('ImageNavigation component', () => {
       />
     );
     const user = userEvent.setup();
-    const prevBtn = screen.getByAltText('previous');
-    const nextBtn = screen.getByAltText('next');
+    const [prevBtn, nextBtn] = screen.getAllByRole('button', { hidden: true });
     expect(prevBtn).toHaveStyle('visibility: hidden');
     expect(nextBtn).toHaveStyle('visibility: visible');
     await user.click(nextBtn);
@@ -64,7 +63,9 @@ describe('ImageNavigation component', () => {
 
   test('display 1 image', () => {
     render(<ImageNavigation index={0} setIndex={jest.fn()} numOfImgs={1} />);
-    expect(screen.getByAltText('previous')).toHaveStyle('visibility: hidden');
-    expect(screen.getByAltText('next')).toHaveStyle('visibility: hidden');
+    const [prevBtn, nextBtn] = screen.getAllByRole('button', { hidden: true });
+
+    expect(prevBtn).toHaveStyle('visibility: hidden');
+    expect(nextBtn).toHaveStyle('visibility: hidden');
   });
 });

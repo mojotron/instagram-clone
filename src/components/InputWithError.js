@@ -68,12 +68,12 @@ const InputWithError = ({
 
       <div className="validation-container">
         {validation && handleValidation !== null && (
-          <AiOutlineCheckCircle size={20} color="var(--green)" />
+          <AiOutlineCheckCircle size={20} color="var(--green)" title="valid" />
           // <img className="validate-icon" src={checkIcon} alt="valid input" />
         )}
         {validationError && (
           // <img className="validate-icon" src={cancelIcon} alt="invalid input" />
-          <AiOutlineCloseCircle size={20} color="var(--red)" />
+          <AiOutlineCloseCircle size={20} color="var(--red)" title="invalid" />
         )}
 
         {type === 'password' && value.length > 0 && (

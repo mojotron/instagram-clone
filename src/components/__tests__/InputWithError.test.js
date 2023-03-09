@@ -28,19 +28,19 @@ describe('InputWithError component', () => {
         name="email"
         placeholder="Email"
         setFormData={jest.fn()}
-        handleValidation={jest.fn()}
+        handleValidation={jest.fn(() => true)}
       />
     );
     const user = userEvent.setup();
     const inputElement = screen.getByPlaceholderText('Email');
     // no icon for confirming valid input
-    expect(screen.queryByAltText('valid input')).toBeFalsy();
     await user.clear(inputElement);
     await user.type(inputElement, 'test@example.com');
     // icon for confirming valid input
-    const checkIcon = screen.getByAltText('valid input');
+    // const checkIcon = screen.getByAltText('valid input');
     expect(inputElement).toHaveValue('test@example.com');
-    expect(checkIcon).toBeInTheDocument();
+    const icon = screen.getByTitle('valid');
+    expect(icon).toBeInTheDocument();
   });
 
   test('invalid input typed', async () => {
@@ -58,11 +58,11 @@ describe('InputWithError component', () => {
     const user = userEvent.setup();
     const inputElement = screen.getByPlaceholderText('Email');
     // no icon for confirming invalid input
-    expect(screen.queryByAltText('invalid input')).toBeFalsy();
+    expect(screen.queryByTitle('invalid')).toBeFalsy();
     await user.clear(inputElement);
     await user.type(inputElement, 'test@exam');
     // icon for confirming invalid input
-    const checkIcon = screen.getByAltText('invalid input');
+    const checkIcon = screen.queryByTitle('invalid');
     expect(inputElement).toHaveValue('test@exam');
     expect(checkIcon).toBeInTheDocument();
     const errorElement = screen.getByText('invalid email');

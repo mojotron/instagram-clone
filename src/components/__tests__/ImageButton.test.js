@@ -6,23 +6,20 @@ describe('ImageButton component', () => {
   test('renders icon and alt text', () => {
     render(
       <ImageButton
-        icon={'/images/test.jpg'}
-        alt="test text"
+        icon={<img src="temp" alt="" />}
         handleClick={jest.fn()}
         active={false}
         hidden={false}
       />
     );
     const imgEle = screen.getByRole('img');
-    expect(imgEle).toHaveAttribute('src', '/images/test.jpg');
-    expect(imgEle).toHaveAttribute('alt', 'test text');
+    expect(imgEle).toBeInTheDocument();
   });
 
   test('hidden and active disabled', () => {
     render(
       <ImageButton
-        icon={'/images/test.jpg'}
-        alt="test text"
+        icon={<img src="temp" alt="" />}
         handleClick={jest.fn()}
         active={false}
         hidden={false}
@@ -36,8 +33,7 @@ describe('ImageButton component', () => {
   test('hidden and active enabled', () => {
     render(
       <ImageButton
-        icon={'/images/test.jpg'}
-        alt="test text"
+        icon={<img src="temp" alt="" />}
         handleClick={jest.fn()}
         active={true}
         hidden={true}
@@ -54,8 +50,7 @@ describe('ImageButton component', () => {
     render(
       <div>
         <ImageButton
-          icon={'/images/test.jpg'}
-          alt="test text"
+          icon={<img src="temp" alt="" />}
           handleClick={handler}
           active={false}
           hidden={false}

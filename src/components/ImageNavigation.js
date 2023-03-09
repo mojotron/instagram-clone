@@ -10,7 +10,6 @@ const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
     <div className="ImageNavigation">
       <ImageButton
         icon={<AiOutlineLeft size={25} color="white" />}
-        alt="previous"
         active=""
         hidden={index === 0}
         handleClick={() => {
@@ -20,7 +19,6 @@ const ImageNavigation = ({ index, setIndex, numOfImgs }) => {
 
       <ImageButton
         icon={<AiOutlineRight size={25} color="white" />}
-        alt="next"
         active=""
         hidden={index === numOfImgs - 1}
         handleClick={() => {

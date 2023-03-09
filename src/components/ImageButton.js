@@ -1,6 +1,6 @@
 import './styles/ImageButton.css';
 
-const ImageButton = ({ icon, alt, handleClick, active, hidden }) => {
+const ImageButton = ({ icon, handleClick, active, hidden }) => {
   return (
     <button
       style={{ visibility: hidden ? 'hidden' : 'visible' }}
