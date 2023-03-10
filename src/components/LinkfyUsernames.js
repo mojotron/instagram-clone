@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 const LinkfyUsernames = ({ text }) => {
   const navigate = useNavigate();
 
-  let result = text;
+  let tempText = text;
   const usernames = [];
   const usernameRegex = /@[a-zA-Z0-9_-]+/g;
-  result = text.replaceAll(usernameRegex, match => {
+  tempText = text.replaceAll(usernameRegex, match => {
     usernames.push(match);
-    return '<!USER_NAME!>';
+    return '<!USER_NAME!> ';
   });
 
-  const x = result.split(' ').map((ele, i) => {
+  const result = tempText.split(' ').map((ele, i) => {
     if (ele === '<!USER_NAME!>') {
       const username = usernames.shift();
       return (
@@ -22,7 +22,7 @@ const LinkfyUsernames = ({ text }) => {
           style={{ display: 'inline-block' }}
           onClick={() => navigate(`/${username.slice(1)}`)}
         >
-          {username}{' '}
+          {username.trim(' ')}{' '}
         </span>
       );
     } else {
@@ -30,7 +30,7 @@ const LinkfyUsernames = ({ text }) => {
     }
   });
 
-  return <>{x}</>;
+  return <>{result}</>;
 };
 
 export default LinkfyUsernames;

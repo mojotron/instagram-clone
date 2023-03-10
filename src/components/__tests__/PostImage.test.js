@@ -32,8 +32,8 @@ describe('PostImage component', () => {
       <PostImage imagesData={mockImagesData} dimensions={mockDimensions} />
     );
     const user = userEvent.setup();
-    const nextBtn = screen.getByAltText('next');
-    const prevBtn = screen.getByAltText('previous');
+    const [prevBtn, nextBtn] = screen.getAllByRole('button', { hidden: true });
+
     const dotNavigation = screen.getAllByTestId('dot-navigation-dot');
     expect(screen.getByAltText(mockImagesData[0].alt)).toBeInTheDocument();
     expect(
@@ -67,8 +67,8 @@ describe('PostImage component', () => {
       />
     );
     const user = userEvent.setup();
-    const nextBtn = screen.getByAltText('next');
-    const prevBtn = screen.getByAltText('previous');
+    const [prevBtn, nextBtn] = screen.getAllByRole('button', { hidden: true });
+
     expect(currentIndex).toBe(0);
     await user.click(nextBtn);
     expect(currentIndex).toBe(1);
