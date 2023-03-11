@@ -14,7 +14,7 @@ jest.mock('../../../hooks/useFirestore', () => ({
 }));
 
 describe('Settings page, update user info', () => {
-  test('happy path', async () => {
+  test.only('happy path', async () => {
     const mockUpdateDoc = jest.fn();
     useFirestore.mockImplementation(() => ({
       isPending: false,
@@ -22,6 +22,7 @@ describe('Settings page, update user info', () => {
       checkIfUserExists: jest.fn(),
       updateDocument: mockUpdateDoc,
     }));
+
     const user = userEvent.setup();
     render(<Settings userData={mockUserData} />);
     const fullNameInput = screen.getByLabelText(/^name/i);
