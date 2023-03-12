@@ -23,6 +23,8 @@ const PostHeader = ({ type, postData }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showEditPost, setShowEditPost] = useState(false);
 
+  if (!response?.document) return;
+
   return (
     <header className="PostHeader">
       {showOptions && (

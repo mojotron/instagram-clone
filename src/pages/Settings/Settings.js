@@ -18,7 +18,9 @@ const Settings = () => {
   const { createDocWithCustomID, deleteDocument, documentExist } =
     useFirestore('public_usernames');
 
-  const { response, updateDocument } = useUserDataContext();
+  const { updateDocument } = useFirestore('users');
+
+  const { response } = useUserDataContext();
   const { removeFromBucket, addToBucket } = useSearchUsers();
 
   const [changeAvatar, setChangeAvatar] = useState(false);

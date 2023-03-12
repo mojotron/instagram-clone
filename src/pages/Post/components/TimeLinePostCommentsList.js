@@ -52,7 +52,7 @@ const TimeLinePostCommentsList = ({ postData }) => {
           userName={
             postData.creator === response.document.id
               ? response.document.userName
-              : documents?.find(user => user.id === postData.creator).userName
+              : documents?.find(user => user.id === postData.creator)?.userName
           }
         />
       )}
