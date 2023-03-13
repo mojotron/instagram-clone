@@ -19,12 +19,17 @@
   justify-content: flex-end;
   width: 75%;
 }
-.MessageItem__body p {
+.MessageItem__body__display {
   color: var(--black);
   font-size: 1.4rem;
   padding: 2rem;
   border: var(--gray-border);
   border-radius: 3rem;
+}
+.MessageItem__body__display__time {
+  color: var(--gray);
+  font-size: 1.1rem;
+  padding-top: 1rem;
 }
 .MessageItem__body__control {
   display: flex;

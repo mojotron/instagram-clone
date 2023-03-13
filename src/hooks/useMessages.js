@@ -4,6 +4,7 @@ import { collection, Timestamp, addDoc } from 'firebase/firestore';
 import { useUserDataContext } from './useUserDataContext';
 import { useFirestore } from './useFirestore';
 import { MAX_MESSAGES_LIMIT } from '../constants/constants';
+import { useNotifications } from './useNotifications';
 
 export const useMessages = () => {
   // messages between users go to single file, in array, better approach is
@@ -13,6 +14,8 @@ export const useMessages = () => {
   const { response } = useUserDataContext();
   const { updateDocument } = useFirestore('users');
   const { updateDocument: updateMessageDocument } = useFirestore('messages');
+
+  const { addNotification } = useNotifications();
   // type 'text-message' 'post-message'
   const colRef = collection(projectFirestore, 'messages');
 
@@ -74,9 +77,10 @@ export const useMessages = () => {
           messages: updatedMessages,
         });
       } else {
-        console.log('lets create msg doc');
         await _createMessageDoc(userDoc, type, payload);
       }
+      // TODO add notificatio for new message
+      await addNotification(userDoc.uid, null, 'send-message');
     } catch (error) {
       console.log(error.message);
     }

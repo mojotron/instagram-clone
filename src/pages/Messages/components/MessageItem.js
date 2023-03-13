@@ -1,10 +1,14 @@
 import './styles/MessageItem.css';
+// components
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
+// hooks
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
 import { useOnSnapshotDocument } from '../../../hooks/useOnSnapshotDocument';
+// utils
+import { formatTime } from '../../../utils/formatTime';
 
 const MessageItem = ({
   user,
@@ -60,7 +64,14 @@ const MessageItem = ({
 
         {!ownMessage && <Avatar url={user.avatar.url} size={35} />}
 
-        {messageData.type === 'text-message' && <p>{messageData.content}</p>}
+        {messageData.type === 'text-message' && (
+          <div className="MessageItem__body__display">
+            <p>{messageData.content} </p>
+            <p className="MessageItem__body__display__time">
+              {formatTime(messageData.createdAt.seconds * 1000)}
+            </p>
+          </div>
+        )}
         {messageData.type === 'post-message' && (
           <>
             {error && <p>Post load failed!</p>}

@@ -1,14 +1,23 @@
 import { formatTime } from '../../../utils/formatTime';
 import { useNavigate } from 'react-router-dom';
+import { useFollow } from '../../../hooks/useFollow';
 // components
 import Avatar from '../../../components/Avatar';
 import PostImage from '../../../components/PostImage';
 import LinkfyUsernames from '../../../components/LinkfyUsernames';
 // styles
 import './styles/Notification.css';
+import { useUserDataContext } from '../../../hooks/useUserDataContext';
 
 const Notification = ({ fromUser, post, data }) => {
+  const { response } = useUserDataContext();
   const navigate = useNavigate();
+  const { follow } = useFollow();
+
+  const handleFollowUser = async e => {
+    e.preventDefault();
+    await follow(fromUser.uid, fromUser.followers);
+  };
 
   return (
     <div className="Notification">
@@ -43,9 +52,12 @@ const Notification = ({ fromUser, post, data }) => {
         </div>
       )}
 
-      {data.content === 'started following you.' && (
-        <button className="btn btn--auth">Follow</button>
-      )}
+      {data.content === 'started following you.' &&
+        !response.document.following.includes(fromUser.uid) && (
+          <button className="btn btn--auth" onClick={handleFollowUser}>
+            Follow
+          </button>
+        )}
     </div>
   );
 };

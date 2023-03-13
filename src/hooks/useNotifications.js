@@ -28,6 +28,8 @@ export const useNotifications = () => {
         return 'replied to your comment: ';
       case 'mention-user':
         return 'mentioned you in comment: ';
+      case 'send-message':
+        return 'sent you a message';
       default:
         return 'unknown action';
     }
