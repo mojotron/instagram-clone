@@ -17,7 +17,9 @@
 .PostComment__main__inner p {
   white-space: pre-wrap;
   color: var(--black);
+  font-size: 1.4rem;
 }
+
 .PostComment__main__inner__username {
   font-weight: 700;
   white-space: pre-line;
@@ -29,10 +31,10 @@
   padding-top: 0.5rem;
   width: 25rem;
 }
-/* .PostComment__controls p {
+.PostComment__controls p {
   color: var(--gray);
   font-weight: 400;
-} */
+}
 .btn--reply {
   color: var(--gray);
   font-weight: 700;

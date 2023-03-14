@@ -1,11 +1,18 @@
 // hooks
 import { useMemo } from 'react';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
+import { useNavigate } from 'react-router-dom';
+// styles
 import './styles/PostCommentsList.css';
 // components
 import PostComment from './PostComment';
+import Avatar from '../../../components/Avatar';
+import LinkfyUsernames from '../../../components/LinkfyUsernames';
+// utils
+import { formatTime } from '../../../utils/formatTime';
 
 const PostCommentsList = ({ postData, handleReply }) => {
+  const navigate = useNavigate();
   // get all user who are listed in post doc (creator, comments and replies)
   const getUsersIdList = useMemo(() => {
     const result = { creator: postData.creator, comments: [], replies: [] };
@@ -22,23 +29,45 @@ const PostCommentsList = ({ postData, handleReply }) => {
 
   const { documents } = useCollectDocsByIdList(getUsersIdList, 'users');
 
+  const creatorDoc = useMemo(() => {
+    return documents?.find(user => user.id === postData.creator);
+  }, [documents, postData]);
+
   if (documents === null) return;
 
   return (
     <div className="PostCommentsList">
-      {/* first is post caption */}
+      {/* display caption */}
       {postData.caption !== '' && (
-        <PostComment
-          userDocuments={documents}
-          commentData={{
-            userID: postData.userID,
-            text: postData.caption,
-            createdAt: postData.createdAt,
-          }}
-          postData={null}
-          commentIndex={null}
-          handleReply={null}
-        />
+        <div className="PostComment__main">
+          <Avatar
+            url={creatorDoc.avatar.url}
+            size={35}
+            handleClick={() => {}}
+          />
+
+          <div className="PostComment__main__inner">
+            <p>
+              <span
+                className="PostComment__main__inner__username"
+                onClick={() => navigate(`/${creatorDoc.userName}`)}
+              >
+                {creatorDoc.userName}{' '}
+              </span>
+              <LinkfyUsernames text={postData.caption} />
+
+              <span
+                style={{
+                  color: 'var(--gray)',
+                  padding: '1rem 0 2rem',
+                  display: 'block',
+                }}
+              >
+                {formatTime(postData.createdAt.seconds * 1000)}
+              </span>
+            </p>
+          </div>
+        </div>
       )}
       {/* comments */}
       {!postData.disableComments &&

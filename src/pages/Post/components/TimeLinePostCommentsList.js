@@ -40,8 +40,6 @@ const TimeLinePostCommentsList = ({ postData }) => {
     'users'
   );
 
-  // console.log(yourComments);
-
   return (
     <div className="TimeLinePostCommentsList">
       {/* caption */}

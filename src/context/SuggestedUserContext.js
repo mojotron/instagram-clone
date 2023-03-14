@@ -25,7 +25,7 @@ export const SuggestedUserContextProvider = ({ children }) => {
   // 3. from those documents filter out users that followers are following
   const followersFollowings = useMemo(() => {
     if (!followingDocs) return null;
-    return followingDocs.flatMap(user => {
+    const temp = followingDocs.flatMap(user => {
       return [
         ...user.following.filter(
           userUid =>
@@ -35,12 +35,14 @@ export const SuggestedUserContextProvider = ({ children }) => {
         ),
       ];
     });
+    return [...new Set(temp)];
   }, [
     followingDocs,
     response.document.following,
     response.document.uid,
     followersNotFollowingBack,
   ]);
+
   // 4. get those users
   const { documents: followersFollowingDocs } = useCollectDocsByIdList(
     followersFollowings,

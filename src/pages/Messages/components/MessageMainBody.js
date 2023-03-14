@@ -30,7 +30,7 @@ const MessageMainBody = ({ messageTo }) => {
 
   const { document: messagesDoc } = useOnSnapshotDocument(
     'messages',
-    findMessages?.messageDocId
+    findMessages ? findMessages.messageDocId : null
   );
 
   // for message options popup with index
