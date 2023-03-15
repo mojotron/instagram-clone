@@ -122,8 +122,12 @@ const PostControls = ({ postData, handleCommentReset }) => {
         <button
           className="btn PostControls__liked-by"
           onClick={() => setShowLikedBy(true)}
+          style={{ display: 'inline-block' }}
         >
-          Liked by <span>{followingLike.userName}</span>
+          Liked by{' '}
+          <span style={{ display: 'inline-block' }}>
+            {followingLike.userName}
+          </span>
           <span>{likesCount > 1 ? ` and ${likesCount - 1} others` : ''}</span>
         </button>
       )}

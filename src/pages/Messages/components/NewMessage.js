@@ -9,6 +9,11 @@ import { GrClose } from 'react-icons/gr';
 // components
 import Avatar from '../../../components/Avatar';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
+import InfoPopUpBox from '../../../components/InfoPopUpBox';
+import {
+  SEARCH_POPUP_MSG,
+  SEARCH_POPUP_TITLE,
+} from '../../../constants/constants';
 
 const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   const { notFollowingBack, followersFollowings } = useSuggestedUsersContext();
@@ -93,6 +98,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
+          <InfoPopUpBox title={SEARCH_POPUP_TITLE} message={SEARCH_POPUP_MSG} />
         </div>
 
         <div className="NewMessage__user-list">

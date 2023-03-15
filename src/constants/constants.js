@@ -14,7 +14,7 @@ Maximum number of posts per user is limited to 9.
 To minimize firebase memory use, this project is for learning
 purpose and. Thank you! 
 `;
-export const TIMELINE_POST_LIMIT = 5;
+export const TIMELINE_POST_LIMIT = 3;
 export const MAX_MESSAGES_LIMIT = 9;
 export const MAX_MESSAGES_LIMIT_MESSAGE = `
 Maximum number of messages between two user is ${MAX_MESSAGES_LIMIT}.
@@ -27,3 +27,9 @@ export const TEST_ACCOUNT = {
   auth: 'TestAcc0unt?',
 };
 export const EXPLORE_POST_LIMIT = 9;
+export const SEARCH_POPUP_TITLE = `Search Tips`;
+export const SEARCH_POPUP_MSG = `
+This is an exact search. Start searching for users with a lower case or upper case letter,
+dash or underscore. If you are not sure, just type the first character 
+(i.e. A or a or - or _) and wait for the results.
+`;
