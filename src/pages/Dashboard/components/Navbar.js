@@ -1,4 +1,3 @@
-import { useState } from 'react';
 // components
 import Avatar from '../../../components/Avatar';
 import NavbarItem from './NavbarItem';
@@ -20,7 +19,6 @@ const Navbar = ({ direction }) => {
     useUserDataContext();
   const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
-  // const [activeTab, setActiveTab] = useState('home'); // home, explore, messages or profile
 
   const rowStyle = {
     flexDirection: direction,

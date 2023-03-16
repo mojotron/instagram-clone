@@ -69,7 +69,6 @@ const Settings = () => {
           formData.userName
         );
 
-        console.log(usernameExist);
         if (usernameExist) {
           throw new Error('Username already exist, please try another one!');
         } else {

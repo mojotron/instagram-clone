@@ -3,6 +3,7 @@
   height: 45rem;
   background-color: white;
   border-radius: 1rem;
+  z-index: 35;
 }
 .NewMessage__header {
   padding: 0 1.5rem;

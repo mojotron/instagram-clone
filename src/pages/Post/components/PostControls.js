@@ -37,12 +37,9 @@ const PostControls = ({ postData, handleCommentReset }) => {
   const userSavedPost = response.document.savedPosts.includes(postData.id);
   // send this post to the target user
 
-  // TODO with messages refactor
   const handleSendPostTo = async user => {
     // find message doc
-    console.log(user);
     const userDoc = await getDocumentByIdAndCollectionName('users', user);
-    console.log(userDoc);
     const messageTo = response.document.messages.find(
       msg => msg.messageTo === user
     );
@@ -50,9 +47,6 @@ const PostControls = ({ postData, handleCommentReset }) => {
       'messages',
       messageTo?.messageDocId
     );
-    console.log(messageDoc);
-    // get user doc
-    // get message doc for that user
 
     await addMessage(messageDoc, userDoc, 'post-message', postData.id);
   };

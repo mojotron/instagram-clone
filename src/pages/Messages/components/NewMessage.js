@@ -79,7 +79,7 @@ const NewMessage = ({ setShowNewMessage, setMessageTo }) => {
   };
 
   return (
-    <div className="overlay">
+    <div className="child-overlay" style={{ zIndex: '36' }}>
       <div className="NewMessage">
         <header className="NewMessage__header">
           <button className="btn" onClick={() => setShowNewMessage(false)}>

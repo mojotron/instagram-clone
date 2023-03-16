@@ -18,7 +18,6 @@ export const useCollectUsers = userIDList => {
     let unsubscribe;
     setIsPending(true);
 
-    console.log('hook', userIDList);
     const getDocuments = async () => {
       try {
         const q = query(

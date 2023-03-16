@@ -82,7 +82,6 @@ export const useNotifications = () => {
         // get existing users docs
         const existingUsers = usernames.filter((_, i) => checkUsernames[i]);
         const userIds = await getUsersIDs(existingUsers);
-        console.log(userIds);
         // send notification to all user except user which gets comment/replay notification
         for (const user of userIds) {
           if (user === userID) continue;

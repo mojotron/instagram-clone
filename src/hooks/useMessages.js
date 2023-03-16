@@ -33,8 +33,6 @@ export const useMessages = () => {
 
   const _createMessageDoc = useCallback(
     async (userDoc, type, payload) => {
-      console.log('lets create msg doc 2');
-
       try {
         const newDoc = await addDoc(colRef, {
           users: [response.document.uid, userDoc.uid],

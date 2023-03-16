@@ -1,12 +1,15 @@
+// hooks
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// hooks
 import { useFollow } from '../../../hooks/useFollow';
 import { usePost } from '../../../hooks/usePost';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useFirestore } from '../../../hooks/useFirestore';
+import { useMessages } from '../../../hooks/useMessages';
 // components
 import ConfirmDelete from './ConfirmDelete';
 import PostOptionsPopupButton from './PostOptionsPopupButton';
+import NewMessage from '../../Messages/components/NewMessage';
 
 const PostOptionsPopup = ({
   type,
@@ -20,19 +23,35 @@ const PostOptionsPopup = ({
   const { toggleDisableLikes, toggleDisableComments, deletePost } = usePost();
   const { response, toggleModal } = useUserDataContext();
   const navigate = useNavigate();
+  const { getDocumentByIdAndCollectionName } = useFirestore('users');
+  const { addMessage } = useMessages();
 
   const [isFollowing, setIsFollowing] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [showNewMessage, setShowNewMessage] = useState(false);
 
   const owner = postData.uid === response.document.uid;
 
   useEffect(() => {
     if (isFollowing !== null) return;
     if (!owner) {
-      console.log('here');
       setIsFollowing(response.document.following.includes(postData.uid));
     }
   }, [owner, postData, response, isFollowing]);
+
+  const handleSendPostTo = async user => {
+    // find message doc
+    const userDoc = await getDocumentByIdAndCollectionName('users', user);
+    const messageTo = response.document.messages.find(
+      msg => msg.messageTo === user
+    );
+    const messageDoc = await getDocumentByIdAndCollectionName(
+      'messages',
+      messageTo?.messageDocId
+    );
+
+    await addMessage(messageDoc, userDoc, 'post-message', postData.id);
+  };
 
   const handleDeletePostClick = async () => {
     handleClose();
@@ -48,6 +67,13 @@ const PostOptionsPopup = ({
           btnText="Delete"
           handleClose={() => setShowConfirmDelete(false)}
           handleDelete={handleDeletePostClick}
+        />
+      )}
+
+      {showNewMessage && (
+        <NewMessage
+          setShowNewMessage={setShowNewMessage}
+          setMessageTo={handleSendPostTo}
         />
       )}
 
@@ -111,9 +137,12 @@ const PostOptionsPopup = ({
 
         <PostOptionsPopupButton
           btnText="Share to..."
-          handleClick={() => console.log('TODO')}
+          handleClick={() => {
+            setShowNewMessage(true);
+          }}
           discardBtn={false}
         />
+
         <PostOptionsPopupButton
           btnText={`Go to ${type === 'regular' ? 'profile' : 'post'}`}
           handleClick={() => {

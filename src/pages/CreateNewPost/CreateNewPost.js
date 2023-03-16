@@ -77,7 +77,7 @@ const CreateNewPost = () => {
       setIsPending(false);
       toggleModal(null, 'openCreatePost');
     } catch (error) {
-      console.log('ERROR', error.message);
+      console.log(error.message);
       setError('Connection lost, please try again later!');
       setIsPending(false);
     }

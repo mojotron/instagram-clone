@@ -21,7 +21,6 @@ const SearchBar = ({
   }, [startFocus]);
 
   const handleClearSearch = () => {
-    console.log('clearing search');
     setSearchTerm('');
     setHasFocus(false);
     if (handleHeaderSearch) handleHeaderSearch(false);

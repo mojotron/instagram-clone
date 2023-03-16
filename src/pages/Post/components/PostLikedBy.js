@@ -11,11 +11,7 @@ import { useFollow } from '../../../hooks/useFollow';
 import { useCollectDocsByIdList } from '../../../hooks/useCollectDocsByIdList';
 
 const PostLikedBy = ({ likes, handleClose }) => {
-  console.log('likes', likes);
-  const { isPending, error, documents } = useCollectDocsByIdList(
-    likes,
-    'users'
-  ); // TODO fetch users
+  const { documents } = useCollectDocsByIdList(likes, 'users');
   const { response } = useUserDataContext();
   const { follow, unfollow } = useFollow();
 

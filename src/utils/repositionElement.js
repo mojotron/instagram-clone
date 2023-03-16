@@ -17,7 +17,6 @@ export const calcReposition = (
   zoomLevel
 ) => {
   // if (!repositionActive) return;
-  // console.log('moving');
   const parent = parentBoundingClientRect;
   // get last position of user mouse move
   const lastX = ((moveStart.x - parent.left) / parent.width) * 100;

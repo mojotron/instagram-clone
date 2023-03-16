@@ -13,7 +13,6 @@ const SearchUserCard = ({ data, recent, setModifyRecentSearch }) => {
   const handleUserClick = async () => {
     // add user to recent list
     const doc = await getRecentSearch();
-    console.log(doc);
     await addUserToRecentSearch(data.id, doc ? doc.recentSearch : null);
     // navigate to user
     navigate(`/${data.userName}`);

@@ -78,7 +78,6 @@ export const useFollow = () => {
 
   const removeFollower = useCallback(
     async (targetUID, targetFollowings) => {
-      console.log('tf', targetFollowings);
       setIsPending(true);
       try {
         const ownAccountFollowers = [...response.document.followers].filter(
