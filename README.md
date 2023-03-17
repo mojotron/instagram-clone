@@ -1,6 +1,9 @@
 # Instagram Clone
 
-This project is capstone frontend path of The Odin Project Curriculum.
+This project is the capstone project for the frontend path of The Odin Project Curriculum.
+
+View the final result with ➡️ [Live Demo](https://instagram-clone-c8823.web.app/).
+You can create a profile or look around with a pre made test account.
 
 ## Assignment
 
@@ -8,7 +11,7 @@ Replicate your favorite website as close as possible - Pinterest, Facebook, Twit
 
 ## Goal of the project
 
-I decided to replicate instagram, because its looked as biggest challenge to take. My goal is to replicate all core features involving images. Features with videos are not included because this is learning project and free Firebase plan has only 5GB storage. Features that are of the marketing or commercial nature, are skipped.
+I decided to replicate instagram, because it looked as the biggest challenge to take. My goal was to replicate all the core features involving images. Features with videos are not included because this is a learning project and free Firebase plan has only 5GB storage. All features of marketing or commercial nature are skipped.
 
 ### Technologies used to build this project
 
@@ -17,26 +20,31 @@ I decided to replicate instagram, because its looked as biggest challenge to tak
 3. Custom CSS
 4. Vanilla JS
 
-### Firebase data structure
+## Features
 
-## Features build
+1. Authentication - sign up, login, logout, forgot password.
+2. Responsive - app can be used on all screen sizes.
+3. Search - search for a user, keep the recent search.
+4. Explore - see the latest added posts.
+5. Messages - chat with other users or send them posts.
+6. Notifications - the user gets notified when someone follows them, likes their post, mentions them in comments or messages them.
+7. Create new post - single or multi image. Apply filters or image settings, add post caption and image alts. Disable/enable likes or comments.
+8. Profile - keep track of followers/followings, posts and saved posts.
+9. User Settings - change/update avatar, name, email, bio or webpage.
+10. Suggested users - app will suggest users to follow.
+11. Posts - like posts. Comment posts, tag users with @ sign (i.e. @mojo). Reply on comments. Edit or Save posts.
+12. Follow users.
 
-To recreate Instagram project is separated in building block than create a finish product. Building block are:
+## Screenshots
 
-### Firebase Authentication
+### Main page on large size screen
 
-Authentication is build of four major parts parts,
+![Project main page screenshot](./src/readme-images/project-main.png)
 
-1. useSignup hook - checks if username is already taken (using useCheckUsername hook). If username not exist create new user. First create user with email and address, use firebase auth object to create user document. Next create notification document and create public_usernames document to register username. Finally change AuthContext state to login user.
-2. useLogin hook - check if user exist and login him/her or display message that user do not exist.
-3. useLogout hook - logout user and change AuthContext state to display login page instead of user dashboard.
-4. AuthContext - useReduce hook to keep track if user is logged in.
+### Settings page on medium size screen
 
-### User Settings
+![Project profile page screenshot](./src/readme-images/project-profile.png)
 
-In this section user can manage personal information user want to be displayed. User can change avatar image, add/update username, full name, personal webpage and short description.
+### Create New Post on small size screen
 
-### User Profile
-
-Display user data in two main parts. First, display user information (number of posts, followers, followings and etc.). Second, post collection (user posts or saved posts for current user).
-In this section of app user can inspect own or others accounts, and manage followers and posts data.
+![Project create new post modal screenshot](./src/readme-images/project-create-post.png)
