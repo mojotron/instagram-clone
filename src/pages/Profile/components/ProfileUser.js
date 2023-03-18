@@ -79,7 +79,9 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
       </div>
       <div
         className="Profile__user__info"
-        style={{ marginLeft: screenSize === 'small' ? '0' : '3rem' }}
+        style={{
+          marginLeft: screenSize === 'small' ? '0' : '3rem',
+        }}
       >
         {/* controls depending on profile type */}
         <div
@@ -87,9 +89,10 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
             screenSize === 'small'
               ? {
                   flexDirection: 'column',
-                  alignItems: 'flex-end',
+                  alignItems: 'flex-start',
                   position: 'relative',
                   bottom: '8rem',
+                  left: '10rem',
                 }
               : {
                   flexDirection: 'row',
@@ -131,7 +134,16 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
 
           {profileType === 'friend' && (
             <>
-              <button className="btn btn--profile">Message</button>
+              <button
+                className="btn btn--profile"
+                onClick={() =>
+                  navigate('/direct', {
+                    state: { messageTo: `${targetData.uid}` },
+                  })
+                }
+              >
+                Message
+              </button>
               <button
                 className="btn btn--profile"
                 onClick={() => setShowConfirmUnfollow(true)}
@@ -146,7 +158,16 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
 
           {profileType === 'other' && (
             <>
-              <button className="btn btn--profile">Message</button>
+              <button
+                className="btn btn--profile"
+                onClick={() =>
+                  navigate('/direct', {
+                    state: { messageTo: `${targetData.uid}` },
+                  })
+                }
+              >
+                Message
+              </button>
 
               <button
                 onClick={async () => {

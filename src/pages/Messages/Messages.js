@@ -1,8 +1,9 @@
 // hooks
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 import { useCollectDocsByIdList } from '../../hooks/useCollectDocsByIdList';
 import { useScreenSizeContext } from '../../hooks/useScreenSizeContext';
+import { useLocation } from 'react-router-dom';
 // components
 import NewMessage from './components/NewMessage';
 import MessagesHeader from './components/MessagesHeader';
@@ -14,6 +15,7 @@ import './styles/Messages.css';
 import { formatTime } from '../../utils/formatTime';
 
 const Messages = () => {
+  const location = useLocation();
   const { response } = useUserDataContext();
   const { screenSize } = useScreenSizeContext();
 
@@ -25,6 +27,11 @@ const Messages = () => {
   }, [response.document.messages]);
 
   const { documents } = useCollectDocsByIdList(messagesList, 'users');
+
+  useEffect(() => {
+    if (location.state === null) return;
+    setMessageTo(location.state.messageTo);
+  }, [location]);
 
   return (
     <div
