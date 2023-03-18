@@ -12,11 +12,13 @@ import './styles/ProfileUser.css';
 // hooks
 import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 import { useFollow } from '../../../hooks/useFollow';
+import { useLogout } from '../../../hooks/useLogout';
 
 const ProfileUser = ({ targetData, profileType, setProfileType }) => {
   const { follow, unfollow } = useFollow();
 
   const navigate = useNavigate();
+  const { isPending, logout } = useLogout();
   const { screenSize } = useScreenSizeContext();
 
   const [showChangeProfilePhoto, setShowChangeProfilePhoto] = useState(false);
@@ -29,7 +31,14 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
     setShowChangeProfilePhoto(oldValue => !oldValue);
 
   return (
-    <section className="Profile__user">
+    <section
+      className="Profile__user"
+      style={
+        screenSize === 'small'
+          ? { flexDirection: 'column' }
+          : { flexDirection: 'row', paddingBottom: '3rem' }
+      }
+    >
       {showChangeProfilePhoto && (
         <ChangeProfilePhoto handleDisplay={toggleUpdateAvatar} />
       )}
@@ -68,20 +77,57 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
           handleClick={toggleUpdateAvatar}
         />
       </div>
-      <div className="Profile__user__info">
+      <div
+        className="Profile__user__info"
+        style={{ marginLeft: screenSize === 'small' ? '0' : '3rem' }}
+      >
         {/* controls depending on profile type */}
-        <div>
-          <h2>{targetData.userName}</h2>
+        <div
+          style={
+            screenSize === 'small'
+              ? {
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                  position: 'relative',
+                  bottom: '8rem',
+                }
+              : {
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingBottom: '3rem',
+                }
+          }
+        >
+          <h2
+            style={
+              screenSize === 'small'
+                ? { fontSize: '2rem', paddingBottom: '1rem' }
+                : { fontSize: '3rem' }
+            }
+          >
+            {targetData.userName}
+          </h2>
+          <div>
+            {profileType === 'own' && (
+              <button
+                className="btn btn--profile"
+                onClick={() => navigate('/settings')}
+                style={{ margin: '0px 10px' }}
+              >
+                Edit profile
+              </button>
+            )}
 
-          {profileType === 'own' && (
-            <button
-              className="btn btn--profile"
-              onClick={() => navigate('/settings')}
-              style={{ margin: '0px 10px' }}
-            >
-              Edit profile
-            </button>
-          )}
+            {screenSize === 'small' && profileType === 'own' && (
+              <button
+                className="btn btn--profile"
+                onClick={logout}
+                style={{ margin: '10px 10px 0' }}
+              >
+                {isPending ? 'Signing out...' : 'Logout'}
+              </button>
+            )}
+          </div>
 
           {profileType === 'friend' && (
             <>
@@ -89,6 +135,9 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
               <button
                 className="btn btn--profile"
                 onClick={() => setShowConfirmUnfollow(true)}
+                style={{
+                  margin: screenSize === 'small' ? '10px 0 0' : '0 0 0 10px',
+                }}
               >
                 Unfollow
               </button>
@@ -105,13 +154,16 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
                   setProfileType('friend');
                 }}
                 className="btn btn--profile-blue"
+                style={{
+                  margin: screenSize === 'small' ? '10px 0 0' : '0 0 0 10px',
+                }}
               >
                 Follow
               </button>
             </>
           )}
         </div>
-        <div>
+        <div style={{ paddingBottom: '2rem' }}>
           {/* counters */}
           <FormatCount
             num={targetData.posts.length}

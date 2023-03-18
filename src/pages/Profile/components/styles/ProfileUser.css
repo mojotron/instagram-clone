@@ -3,37 +3,34 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
+
 .Profile__user__avatar {
-  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .Profile__user__info {
-  flex-grow: 4;
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
+  /* margin-bottom: 5rem; */
 }
 .Profile__user__info div {
   display: flex;
 }
 .Profile__user__info div:first-child {
-  padding-bottom: 3rem;
   justify-self: flex-start;
   align-items: center;
 }
 .Profile__user__info div:last-child {
   flex-direction: column;
-  padding-top: 2rem;
+  /* padding-top: 2rem; */
 }
 .Profile__user__info div:last-child p {
   padding-bottom: 2rem;
 }
 .Profile__user__info h2 {
-  font-size: 3rem;
-  font-weight: 400;
-  padding-right: 3rem;
+  font-weight: 600;
+  padding-right: 1rem;
 }
 .Profile__user__info p {
   font-size: 1.6rem;
