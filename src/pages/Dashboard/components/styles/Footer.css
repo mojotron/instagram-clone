@@ -1,6 +1,11 @@
 .Footer {
   height: 5rem;
+  width: 100vw;
   background-color: white;
   border-top: var(--gray-border);
   padding-top: 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

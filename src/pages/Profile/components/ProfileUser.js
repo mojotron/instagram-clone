@@ -81,6 +81,7 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
         className="Profile__user__info"
         style={{
           marginLeft: screenSize === 'small' ? '0' : '3rem',
+          width: '150px',
         }}
       >
         {/* controls depending on profile type */}
@@ -93,6 +94,7 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
                   position: 'relative',
                   bottom: '8rem',
                   left: '10rem',
+                  overflow: 'hidden',
                 }
               : {
                   flexDirection: 'row',
@@ -184,7 +186,7 @@ const ProfileUser = ({ targetData, profileType, setProfileType }) => {
             </>
           )}
         </div>
-        <div style={{ paddingBottom: '2rem' }}>
+        <div style={{ paddingBottom: '2rem', width: '100%' }}>
           {/* counters */}
           <FormatCount
             num={targetData.posts.length}

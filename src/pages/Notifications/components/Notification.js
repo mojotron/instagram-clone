@@ -8,9 +8,11 @@ import LinkfyUsernames from '../../../components/LinkfyUsernames';
 // styles
 import './styles/Notification.css';
 import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useScreenSizeContext } from '../../../hooks/useScreenSizeContext';
 
 const Notification = ({ fromUser, post, data }) => {
   const { response } = useUserDataContext();
+  const { screenSize } = useScreenSizeContext();
   const navigate = useNavigate();
   const { follow } = useFollow();
 
@@ -20,7 +22,14 @@ const Notification = ({ fromUser, post, data }) => {
   };
 
   return (
-    <div className="Notification">
+    <div
+      className="Notification"
+      style={
+        screenSize === 'small'
+          ? { padding: '1rem 0.5rem' }
+          : { padding: '1rem 2rem' }
+      }
+    >
       <div className="Notification__content">
         <Avatar url={fromUser.avatar.url} size={30} />
 

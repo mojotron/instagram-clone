@@ -2,6 +2,11 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  right: 2rem;
+  padding-left: 2rem;
 }
 
 .Profile__user__avatar {
@@ -10,6 +15,7 @@
   align-items: center;
 }
 .Profile__user__info {
+  width: 100vw;
   display: flex;
   flex-direction: column;
   /* margin-bottom: 5rem; */

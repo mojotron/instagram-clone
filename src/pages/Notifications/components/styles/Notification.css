@@ -7,9 +7,10 @@
 .Notification__content {
   display: flex;
   align-items: center;
+  flex-grow: 2;
 }
 .Notification__content p {
-  width: 23rem;
+  /* width: 23rem; */
   margin-left: 1.5rem;
   font-size: 1.6rem;
   color: var(--black);
@@ -24,6 +25,7 @@
   color: var(--gray);
 }
 .Notification__post {
+  flex-grow: 1;
   cursor: pointer;
   height: 4.4rem;
   width: 4.4rem;
